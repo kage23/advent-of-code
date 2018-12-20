@@ -1,25 +1,15 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div
+        style={{
+          fontFamily: '"Source Code Pro", monospace',
+          fontSize: '15px'
+        }}
+      >
+        <p>These are some of the things I wrote for the 2018 Advent of Code project. I completed the whole thing (hopefully, at least - I'm writing this on the 19th!) but I didn't start saving them to Github until I was a ways into them! Anyway, check out the different branches for the different days.</p>
       </div>
     );
   }
