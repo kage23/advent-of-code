@@ -1,6 +1,4 @@
-const INPUT: {
-  [key:string]: string
-} = {
+const INPUT: { [key:string]: string } = {
 DEMO_0:
 `+1
 -2
