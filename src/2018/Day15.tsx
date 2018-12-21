@@ -25,6 +25,7 @@ interface IField { [key: string]: string }
 interface IRoundResult {
   abandonCombat?: boolean
   roundAbandoned: boolean
+  elvesWin: boolean
   field: IField
   rounds: number
   units: IUnit[]
@@ -63,7 +64,6 @@ opponents.sort((a: number[], b: number[]): number => {
     : a[1] - b[1]
 })
 
-
 const sortByReadingOrder = (a: IPosition, b: IPosition): number => (
   a.y === b.y
   ? a.x < b.x ? -1 : 1
@@ -101,14 +101,12 @@ const getAdjacentSquares = (
   }))
 )
 
-const reset = (input: string[]): IState => {
+const reset = (input: string[], elfPower: number = 3): IState => {
   const fieldHeight: number = input.length
   const fieldWidth: number = input[0].length
   const units: IUnit[] = []
   const field: IField = {}
   const validCells: string[] = []
-
-  let elfPower = 3
 
   for (let y: number = 0; y < fieldHeight; y++) {
     for (let x: number = 0; x < fieldWidth; x++) {
@@ -119,12 +117,12 @@ const reset = (input: string[]): IState => {
         case 'G':
         validCells.push(`${x},${y}`)
         units.push({
+          type: cell,
           attackPower: cell === 'E' ? elfPower : 3,
           hitPoints: 200,
           id: units.length,
           x,
-          y,
-          type: cell
+          y
         })
         break
 
@@ -245,9 +243,10 @@ const roundOfCombat = (
 
   return {
     abandonCombat: killedUnit === 'E',
+    elvesWin: !units.some(unit => unit.type === 'G'),
     roundAbandoned,
     field,
-    rounds: roundAbandoned ? rounds : rounds + 1,
+    rounds: roundAbandoned || (killedUnit === 'E' && breakOnElfDeath) ? rounds : rounds + 1,
     units: units.filter(unit => unit.hitPoints > 0)
   }
 }
@@ -259,6 +258,7 @@ const runCombat = (): IState => {
     units
   } = state
   let result: IRoundResult = {
+    elvesWin: false,
     roundAbandoned: false,
     field,
     rounds,
@@ -270,6 +270,36 @@ const runCombat = (): IState => {
     state.field = result.field
     state.rounds = result.rounds
     state.units = result.units
+  }
+
+  return state
+}
+
+const findElfPower = (state: IState): IState => {
+  const { units, field } = state
+  let rounds = 0
+  let result: IRoundResult = {
+    abandonCombat: false,
+    elvesWin: false,
+    roundAbandoned: false,
+    field,
+    rounds,
+    units
+  }
+
+  while (!result.roundAbandoned) {
+    while (!result.abandonCombat && !result.elvesWin) {
+      result = roundOfCombat(state.units, state.field, state.rounds, true)
+      state.field = result.field
+      state.rounds = result.rounds
+      state.units = result.units
+    }
+    debugger
+    if (!result.elvesWin) {
+      state.elfPower++
+      state = reset(INPUT[prevInputKey].split('\n'), state.elfPower)
+      result.abandonCombat = false
+    }
   }
 
   return state
@@ -295,6 +325,31 @@ const BUTTONS: IButton[] = [
         answer1: (
           <span>
             The{' '}
+            <code>{
+              state.units[0].type === 'E' ? 'Elves' : 'Goblins'
+            }</code>
+            {' '}won after completing{' '}
+            <code>{state.rounds}</code>
+            {' '}rounds of combat, with a combined hit point total of{' '}
+            <code>{hitPointTotal}</code>,
+            {' '}leading to a final outcome of{' '}
+            <code>{state.rounds * hitPointTotal}</code>.
+          </span>
+        )
+      }
+    }
+  },
+  {
+    label: 'Find Elf Power',
+    onClick: (inputKey) => {
+      state = findElfPower(reset(INPUT[inputKey].split('\n')))
+      const hitPointTotal = state.units.reduce((total, unit) => total + unit.hitPoints, 0)
+      return {
+        answer2: (
+          <span>
+            With an attack power of{' '}
+            <code>{state.elfPower}</code>,
+            {' '}the{' '}
             <code>{
               state.units[0].type === 'E' ? 'Elves' : 'Goblins'
             }</code>
@@ -363,10 +418,7 @@ const config: IDayConfig = {
     <span>{answer}</span>
   ),
   answer2Text: (answer) => (
-    <span>
-      The first frequency reached twice is{' '}
-      <code>{answer}</code>.
-    </span>
+    <span>{answer}</span>
   ),
   buttons: BUTTONS,
   day: 15,
