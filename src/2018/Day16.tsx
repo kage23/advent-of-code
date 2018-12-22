@@ -18,6 +18,7 @@ interface ISample {
 }
 
 interface IState {
+  opCodes: string[]
   registers: number[]
   resultsTested: boolean
   samples: ISample[]
@@ -26,6 +27,7 @@ interface IState {
 }
 
 let state: IState = {
+  opCodes: [],
   registers: [0, 0, 0, 0],
   resultsTested: false,
   samples: [],
@@ -86,6 +88,26 @@ const matchingOps = (sample: ISample): string[] => {
 
 const howManyMatchingOps = (sample: ISample): number => matchingOps(sample).length
 
+const figureOutOpCodes = (samples: ISample[]): string[] => {
+  let opCodes: string[] = []
+  let currentSample = samples.shift()
+
+  while (currentSample !== undefined) {
+    const whichMatchingOps = matchingOps(currentSample)
+    .filter(op => {
+      return currentSample && !(opCodes.indexOf(op) !== -1 && opCodes.indexOf(op) !== currentSample.operation.code)
+    })
+
+    if (whichMatchingOps.length === 1) {
+      opCodes[currentSample.operation.code] = whichMatchingOps[0]
+    }
+
+    currentSample = samples.shift()
+  }
+
+  return opCodes
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Three or More Test',
@@ -114,6 +136,13 @@ const BUTTONS: IButton[] = [
       }, new Array(16))
       return {}
     }
+  },
+  {
+    label: 'Figure Out Op Codes',
+    onClick: () => {
+      state.opCodes = figureOutOpCodes(state.samples)
+      return {}
+    }
   }
 ]
 
@@ -134,6 +163,12 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
     </p>
   ))
 
+  const opCodeMap = state.opCodes.map((opCode, index) => (
+    <p key={index}>
+      {index}: {opCode}
+    </p>
+  ))
+
   return (
     <div className="render-box">
       <div>
@@ -147,6 +182,12 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
       {matchingOpsList.length > 0 && (
         <div style={{ marginLeft: '24px' }}>
           {matchingOpsDisplay}
+        </div>
+      )}
+      {state.opCodes.length > 0 && (
+        <div style={{ marginLeft: '24px' }}>
+          <h3>Operation Codes:</h3>
+          {opCodeMap}
         </div>
       )}
     </div>
