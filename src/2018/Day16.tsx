@@ -33,6 +33,7 @@ let state: IState = {
   code: ''
 }
 let prevInputKey = ''
+let matchingOpsList: number[] = []
 
 const parseInputSamples = (input: string): ISample[] => {
   return input.split('\n\n')
@@ -71,6 +72,20 @@ const threeOrMoreOps = (sample: ISample): boolean => {
   return false
 }
 
+const matchingOps = (sample: ISample): string[] => {
+  const result = []
+
+  for (const method in OPERATIONS) {
+    if (
+      numArrEq(sample.after, OPERATIONS[method](sample.operation, sample.before))
+    ) result.push(method)
+  }
+
+  return result
+}
+
+const howManyMatchingOps = (sample: ISample): number => matchingOps(sample).length
+
 const BUTTONS: IButton[] = [
   {
     label: 'Three or More Test',
@@ -82,6 +97,22 @@ const BUTTONS: IButton[] = [
       return {
         answer1: testResults.toString()
       }
+    }
+  },
+  {
+    label: 'How Many Matching Ops',
+    onClick: () => {
+      const { samples } = state
+
+      matchingOpsList = samples
+      .map(sample => howManyMatchingOps(sample))
+      .reduce((results, howMany): number[] => {
+        if (!results[howMany]) results[howMany] = 1
+        else results[howMany]++
+
+        return results
+      }, new Array(16))
+      return {}
     }
   }
 ]
@@ -97,6 +128,12 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
     prevInputKey = inputKey
   }
 
+  const matchingOpsDisplay = matchingOpsList.map((result, index) => (
+    <p key={index}>
+      {result} samples matched {index} operations.
+    </p>
+  ))
+
   return (
     <div className="render-box">
       <div>
@@ -107,6 +144,11 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
         <h3>Code</h3>
         <pre>{state.code}</pre>
       </div>
+      {matchingOpsList.length > 0 && (
+        <div style={{ marginLeft: '24px' }}>
+          {matchingOpsDisplay}
+        </div>
+      )}
     </div>
   )
 }
