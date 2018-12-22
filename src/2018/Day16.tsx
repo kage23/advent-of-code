@@ -108,6 +108,27 @@ const figureOutOpCodes = (samples: ISample[]): string[] => {
   return opCodes
 }
 
+const runInputCode = (code: string): { answer2: string } => {
+  const instructions: IOperation[] = code.split('\n')
+  .map(line => line.split(' '))
+  .map(line => line.map(i => parseInt(i)))
+  .map(line => ({
+    code: line[0],
+    inputA: line[1],
+    inputB: line[2],
+    outputC: line[3]
+  }))
+
+  let registers = [0, 0, 0, 0]
+
+  for (const op of instructions)
+    registers = OPERATIONS[state.opCodes[op.code]](op, registers)
+
+  return {
+    answer2: JSON.stringify(registers)
+  }
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Three or More Test',
@@ -143,6 +164,10 @@ const BUTTONS: IButton[] = [
       state.opCodes = figureOutOpCodes(state.samples)
       return {}
     }
+  },
+  {
+    label: 'Run the Input Code!',
+    onClick: () => runInputCode(state.code)
   }
 ]
 
@@ -202,7 +227,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is{' '}
+      The final register values are{' '}
       <code>{answer}</code>.
     </span>
   ),
