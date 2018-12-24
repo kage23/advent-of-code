@@ -84,11 +84,100 @@ const parseInput = (INPUT: string): IState => {
   }
 }
 
-const BUTTONS: IButton[] = []
+const getNeighbors = (xi: number, yi: number, data: IFieldData): string[] => (
+  [
+    { x: xi - 1, y: yi - 1 },
+    { x: xi,     y: yi - 1 },
+    { x: xi + 1, y: yi - 1 },
+    { x: xi - 1, y: yi },
+    { x: xi + 1, y: yi },
+    { x: xi - 1, y: yi + 1 },
+    { x: xi,     y: yi + 1 },
+    { x: xi + 1, y: yi + 1 },
+  ]
+  .map(({ x, y }) => data[pathKey({ x, y })])
+  .filter(item => typeof item !== 'undefined')
+)
+
+const getNext = (current: string, treeNeighbors: number, lyNeighbors: number): string => {
+  switch (current) {
+    case TYPES.OPEN:
+      return treeNeighbors >= 3 ? TYPES.TREES : TYPES.OPEN
+
+    case TYPES.TREES:
+      return lyNeighbors >= 3 ? TYPES.LY : TYPES.TREES
+
+    case TYPES.LY:
+      return (treeNeighbors >= 1 && lyNeighbors >= 1) ? TYPES.LY : TYPES.OPEN
+
+    default:
+      return ''
+  }
+}
+
+const step = (field: IField)
+: {
+  field: IField
+  trees: number
+  lys: number
+} => {
+  const { data, min, max } = field
+  const newData: IFieldData = {}
+  let trees = 0
+  let lys = 0
+  for (let xi = min.x; xi <= max.x; xi++)
+    for (let yi = min.y; yi <= max.y; yi++) {
+      const neighbors = getNeighbors(xi, yi, data)
+      const treeNeighbors = neighbors.filter(i => i === TYPES.TREES).length
+      const lyNeighbors = neighbors.filter(i => i === TYPES.LY).length
+      const next = getNext(data[pathKey({ x: xi, y: yi })], treeNeighbors, lyNeighbors)
+      newData[pathKey({ x: xi, y: yi })] = next
+      if (next === TYPES.TREES) trees++
+      if (next === TYPES.LY) lys++
+    }
+
+  return {
+    field: {
+      ...field,
+      data: newData
+    },
+    trees,
+    lys
+  }
+}
+
+let answer1_a: undefined | string = undefined
+let answer1_b = ''
+let answer1_c = ''
+
+const BUTTONS: IButton[] = [
+  {
+    label: 'Advance',
+    onClick: () => {
+      state = {
+        time: state.time + 1,
+        ...step(state.field)
+      }
+
+      if (state.time === 10) {
+        answer1_a = (state.trees * state.lys).toString()
+        answer1_b = state.trees.toString()
+        answer1_c = state.lys.toString()
+      }
+
+      return {
+        answer1: answer1_a
+      }
+    }
+  }
+]
 
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (prevInputKey !== inputKey) {
     state = parseInput(dayConfig.INPUT[inputKey])
+    answer1_a = undefined
+    answer1_b = ''
+    answer1_c = ''
     prevInputKey = inputKey
   }
 
@@ -110,16 +199,17 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
 
   return (
     <div className="render-box">
-      <h3>Trees: {trees}. Lumberyards: {lys}. Time: {time}.</h3>
+      <h3>Trees: {trees}. Lumberyards: {lys}. Time: {time} minutes.</h3>
       <div>{displayField}</div>
     </div>
-  )}
+  )
+}
 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The solution is{' '}
-      <code>{answer}</code>.
+      The total resource value after 10 minutes is{' '}
+      <code>{answer}</code> (<code>{answer1_b}</code> x <code>{answer1_c}</code>).
     </span>
   ),
   answer2Text: (answer) => (
