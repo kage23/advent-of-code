@@ -160,24 +160,34 @@ const isFull = (coord: ICoord, occupied: IOccupiedTiles): boolean => (
   || isClay(coord, occupied)
 )
 
-const countWater = (field: IField): number => {
+const countWater = (field: IField): {
+  totalWater: number
+  settledWater: number
+} => {
   const { occupied,
     min: { y: minY },
     max: { y: maxY }
   } = field
-  let waterCount = 0
+  let totalWater = 0
+  let settledWater = 0
 
   for (const xy in occupied) {
     const { y } = getCoord(xy)
     if (
       (y <= maxY && y >= minY)
       && (occupied[xy] === '|' || occupied[xy] === '~')
-    ) waterCount++
+    ) {
+      totalWater++
+      if (occupied[xy] === '~') settledWater++
+    }
   }
 
   answer1_a = (minY - 1).toString()
 
-  return waterCount
+  return {
+    totalWater,
+    settledWater
+  }
 }
 
 const BUTTONS: IButton[] = [
@@ -185,8 +195,13 @@ const BUTTONS: IButton[] = [
     label: 'Flow',
     onClick: () => {
       field = flow(field, { x: 500, y: 0, type: '+' })
+      const {
+        totalWater,
+        settledWater
+      } = countWater(field)
       return {
-        answer1: countWater(field).toString()
+        answer1: totalWater.toString(),
+        answer2: settledWater.toString()
       }
     }
   }
@@ -247,8 +262,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is{' '}
-      <code>{answer}</code>.
+      <code>{answer}</code>
+      {' '}of that water has settled and will not flow away.
     </span>
   ),
   buttons: BUTTONS,
