@@ -25,7 +25,11 @@ interface IFieldData {
 interface IField {
   min: ICoord
   max: ICoord
-  data: IFieldData
+  data: string[]
+}
+
+interface IFieldHash {
+  [key:string]: number
 }
 
 interface IState {
@@ -45,7 +49,7 @@ let state: IState = {
       x: 0,
       y: 0
     },
-    data: {}
+    data: []
   },
   time: 0,
   trees: 0,
@@ -59,19 +63,17 @@ const parseInput = (INPUT: string): IState => {
   const field: IField = {
     min: { x: 0, y: 0 },
     max: { x: 0, y: 0 },
-    data: {}
+    data: INPUT.split('\n')
   }
   let trees = 0
   let lys = 0
 
-  const INPUT_ROWS = INPUT.split('\n')
-  field.max.x = INPUT_ROWS[0].length - 1
-  field.max.y = INPUT_ROWS.length - 1
+  field.max.x = field.data[0].length - 1
+  field.max.y = field.data.length - 1
 
   for (let xi = 0; xi <= field.max.x; xi++)
     for (let yi = 0; yi <= field.max.y; yi++) {
-      const char = INPUT_ROWS[yi].charAt(xi)
-      field.data[pathKey({ x: xi, y: yi })] = char
+      const char = field.data[yi].charAt(xi)
       if (char === TYPES.TREES) trees++
       if (char === TYPES.LY) lys++
     }
@@ -84,7 +86,7 @@ const parseInput = (INPUT: string): IState => {
   }
 }
 
-const getNeighbors = (xi: number, yi: number, data: IFieldData): string[] => (
+const getNeighbors = (xi: number, yi: number, field: IField): string[] => (
   [
     { x: xi - 1, y: yi - 1 },
     { x: xi,     y: yi - 1 },
@@ -95,8 +97,8 @@ const getNeighbors = (xi: number, yi: number, data: IFieldData): string[] => (
     { x: xi,     y: yi + 1 },
     { x: xi + 1, y: yi + 1 },
   ]
-  .map(({ x, y }) => data[pathKey({ x, y })])
-  .filter(item => typeof item !== 'undefined')
+  .filter(({ x, y }) => x >= field.min.x && x <= field.max.x && y >= field.min.y && y <= field.max.y)
+  .map(({ x, y }) => field.data[y].charAt(x))
 )
 
 const getNext = (current: string, treeNeighbors: number, lyNeighbors: number): string => {
@@ -122,16 +124,17 @@ const step = (field: IField)
   lys: number
 } => {
   const { data, min, max } = field
-  const newData: IFieldData = {}
+  const newData: string[] = []
   let trees = 0
   let lys = 0
   for (let xi = min.x; xi <= max.x; xi++)
     for (let yi = min.y; yi <= max.y; yi++) {
-      const neighbors = getNeighbors(xi, yi, data)
+      newData[yi] = newData[yi] || ''
+      const neighbors = getNeighbors(xi, yi, field)
       const treeNeighbors = neighbors.filter(i => i === TYPES.TREES).length
       const lyNeighbors = neighbors.filter(i => i === TYPES.LY).length
-      const next = getNext(data[pathKey({ x: xi, y: yi })], treeNeighbors, lyNeighbors)
-      newData[pathKey({ x: xi, y: yi })] = next
+      const next = getNext(data[yi].charAt(xi), treeNeighbors, lyNeighbors)
+      newData[yi] += next
       if (next === TYPES.TREES) trees++
       if (next === TYPES.LY) lys++
     }
@@ -150,6 +153,10 @@ let answer1_a: undefined | string = undefined
 let answer1_b = ''
 let answer1_c = ''
 
+let answer2_a: undefined | string = undefined
+let answer2_b = ''
+let answer2_c = ''
+
 const BUTTONS: IButton[] = [
   {
     label: 'Advance',
@@ -167,6 +174,53 @@ const BUTTONS: IButton[] = [
 
       return {
         answer1: answer1_a
+      }
+    }
+  },
+  {
+    label: 'Skip to Minute 1,000,000,000',
+    onClick: () => {
+      const {
+        field,
+        time,
+        trees,
+        lys
+      } = state
+
+      const seenBefore: IFieldHash = {}
+      let skippedYet = false
+      seenBefore[field.data.join('')] = time
+
+      const advance = 1000000000 - time
+      let next = {
+        field,
+        trees,
+        lys
+      }
+
+      for (let i = 0; i < advance; i++) {
+        next = step(next.field)
+        if (seenBefore[next.field.data.join('')] && !skippedYet) {
+          const loopLength = i - seenBefore[next.field.data.join('')]
+          const remainingLoops = advance - i
+          i = advance - (remainingLoops % loopLength)
+          skippedYet = true
+        } else seenBefore[next.field.data.join('')] = time + i
+      }
+
+      state = {
+        ...next,
+        time: time + advance
+      }
+
+      if (state.time === 1000000000) {
+        answer2_a = (state.trees * state.lys).toString()
+        answer2_b = state.trees.toString()
+        answer2_c = state.lys.toString()
+      }
+
+      return {
+        answer2: answer2_a
       }
     }
   }
@@ -188,14 +242,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
     lys
   } = state
 
-  const displayField = new Array(field.max.x - field.min.x + 1).fill((() => '')())
-
-  for (let yi = field.min.y; yi <= field.max.y; yi++) {
-    let row = ''
-    for (let xi = field.min.x; xi <= field.max.x; xi++)
-      row += field.data[pathKey({ x: xi, y: yi })]
-    displayField[yi] = <div key={yi}>{row}</div>
-  }
+  const displayField = field.data.map((row, index) => <div key={index}>{row}</div>)
 
   return (
     <div className="render-box">
@@ -214,8 +261,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is{' '}
-      <code>{answer}</code>.
+      The total resource value after 1,000,000,000 minutes is{' '}
+      <code>{answer}</code> (<code>{answer2_b}</code> x <code>{answer2_c}</code>).
     </span>
   ),
   buttons: BUTTONS,
