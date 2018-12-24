@@ -1,5 +1,5 @@
 export interface IOperation {
-  code: number
+  code?: number
   inputA: number
   inputB: number
   outputC: number
