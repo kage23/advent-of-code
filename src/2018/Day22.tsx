@@ -19,7 +19,12 @@ export interface IInput {
 }
 
 interface IMap {
-  [key:string]: IMapSquare
+  depth: number
+  max: ICoord
+  squares: {
+    [key:string]: IMapSquare
+  }
+  target: ICoord
 }
 
 interface IMapSquare extends ICoord {
@@ -27,6 +32,14 @@ interface IMapSquare extends ICoord {
   geologic: number
   type: '.' | '=' | '|'
 }
+
+let map: IMap = {
+  depth: 0,
+  max: { x: 0, y: 0 },
+  squares: {},
+  target: { x: 0, y: 0 }
+}
+let prevInputKey = ''
 
 const parseInput = (input: string): IInput => {
   const [
@@ -45,7 +58,11 @@ const parseInput = (input: string): IInput => {
 
 const pathKey = ({ x, y }: ICoord): string => `${x},${y}`
 
-const getMapSquare = (map: IMap, coord: ICoord, depth: number, target: ICoord): IMapSquare => {
+const getMapSquare = (map: IMap, coord: ICoord): IMapSquare => {
+  const {
+    depth,
+    target
+  } = map
   const { x, y } = coord
   let geologic = 0
   let erosion = 0
@@ -59,7 +76,18 @@ const getMapSquare = (map: IMap, coord: ICoord, depth: number, target: ICoord): 
   // If the region's X coordinate is 0, the geologic index is its Y coordinate times 48271.
   else if (x === 0) geologic = y * 48271
   // Otherwise, the region's geologic index is the result of multiplying the erosion levels of the regions at X-1,Y and X,Y-1.
-  else geologic = map[pathKey({ x: x - 1, y })].erosion * map[pathKey({ x, y: y - 1 })].erosion
+  else {
+    let leftSquare: IMapSquare = map.squares[pathKey({ x: x - 1, y })]
+    let upSquare: IMapSquare = map.squares[pathKey({ x, y: y - 1 })]
+
+    if (leftSquare === undefined)
+      leftSquare = updateMap(getMapSquare(map, { x: x - 1, y }), map).squares[pathKey({ x: x - 1, y })]
+
+    if (upSquare === undefined)
+      upSquare = updateMap(getMapSquare(map, { x: x, y: y - 1 }), map).squares[pathKey({ x: x, y: y - 1 })]
+
+      geologic = leftSquare.erosion * upSquare.erosion
+  }
 
   // A region's erosion level is its geologic index plus the cave system's depth, all modulo 20183.
   erosion = (geologic + depth) % 20183
@@ -78,22 +106,41 @@ const getMapSquare = (map: IMap, coord: ICoord, depth: number, target: ICoord): 
   }
 }
 
+const generateMap = (input: IInput): IMap => {
+  const { depth, target } = input
+  const map: IMap = {
+    depth,
+    max: {
+      x: target.x,
+      y: target.y
+    },
+    squares: {},
+    target
+  }
+
+  for (let yi = 0; yi <= target.y; yi++)
+    for (let xi = 0; xi <= target.x; xi++)
+      updateMap(getMapSquare(map, { x: xi, y: yi }), map)
+
+  return map
+}
+
 const updateMap = (square: IMapSquare, map: IMap): IMap => {
-  map[pathKey({ x: square.x, y: square.y })] = square
+  map.squares[pathKey({ x: square.x, y: square.y })] = square
+  if (square.x > map.max.x) map.max.x = square.x
+  if (square.y > map.max.y) map.max.y = square.y
 
   return map
 }
 
 const assessRisk = (inputKey: string): { answer1: string } => {
   const input: IInput = parseInput(INPUT[inputKey])
-  const { depth, target } = input
-  const map: IMap = {}
+  const { target } = input
   let riskLevel = 0
 
   for (let yi = 0; yi <= target.y; yi++) {
     for (let xi = 0; xi <= target.x; xi++) {
-      const mapSquare = getMapSquare(map, { x: xi, y: yi }, depth, target)
-      updateMap(mapSquare, map)
+      const mapSquare = map.squares[pathKey({ x: xi, y: yi })]
       riskLevel += TYPE_ARRAY.indexOf(mapSquare.type)
     }
   }
@@ -110,12 +157,47 @@ const BUTTONS: IButton[] = [
   }
 ]
 
-export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => (
-  <div className="render-box">
-    <h3>Input:</h3>
-    <pre>{dayConfig.INPUT[inputKey]}</pre>
-  </div>
-)
+export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
+  if (inputKey !== prevInputKey) {
+    map = generateMap(parseInput(dayConfig.INPUT[inputKey]))
+    prevInputKey = inputKey
+  }
+
+  const mapRows: JSX.Element[] = []
+
+  for (let y = 0; y <= map.max.y; y++) {
+    const row: JSX.Element[] = []
+    for (let x = 0; x <= map.max.x; x++) {
+      if (typeof map.squares[pathKey({ x, y })] === 'undefined') debugger
+      const rowContents = map.squares[pathKey({ x, y })].type
+      row.push(
+        x === 0 && y === 0
+          ? <span key={`${x}${y}`}>S</span>
+          : x === map.target.x && y === map.target.y
+            ? <span key={`${x}${y}`}>T</span>
+            : rowContents
+              ? <span key={`${x}${y}`}>{rowContents}</span>
+              : <span key={`${x}${y}`}>&nbsp;</span>
+      )
+    }
+    mapRows.push(<div key={y}>{row}</div>)
+  }
+
+  return (
+    <div className="render-box">
+      <div>
+        <h3>Input:</h3>
+        <pre>{dayConfig.INPUT[inputKey]}</pre>
+      </div>
+      <div className="render-box--left-margin">
+        <h3>Map:</h3>
+        <fieldset>
+          {mapRows}
+        </fieldset>
+      </div>
+    </div>
+  )
+}
 
 const config: IDayConfig = {
   answer1Text: (answer) => (
