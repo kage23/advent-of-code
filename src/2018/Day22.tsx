@@ -33,6 +33,12 @@ interface IMapSquare extends ICoord {
   type: '.' | '=' | '|'
 }
 
+interface IAction {
+  equipment: 'T' | 'G' | ''
+  position: ICoord
+  time: number
+}
+
 let map: IMap = {
   depth: 0,
   max: { x: 0, y: 0 },
@@ -57,6 +63,7 @@ const parseInput = (input: string): IInput => {
 }
 
 const pathKey = ({ x, y }: ICoord): string => `${x},${y}`
+const searchPathKey = (action: IAction): string => `${action.position.x},${action.position.y},${action.equipment}`
 
 const getMapSquare = (map: IMap, coord: ICoord): IMapSquare => {
   const {
@@ -150,10 +157,155 @@ const assessRisk = (inputKey: string): { answer1: string } => {
   }
 }
 
+const getNextActions = (map: IMap, action: IAction)
+: IAction[] => {
+  /**
+   * The potentially possible moves for each position are: move N, W, S, or E, or change equipment and then move NWSE
+   * The limitations are that you can't go x < or y < 0, and you have to have the right equipment for the current room and the next room
+   * Here's a rooms and equipment table:
+   *
+   * Room Type  | Allowed Equipment
+   * ------------------------------
+   * Rocky (.)  | 'G', 'T'
+   * Wet (=)    | 'G', ''
+   * Narrow (|) | 'T', ''
+   *
+   *  */
+  const {
+    equipment,
+    position,
+    time
+  } = action
+  type rooms = '.' | '=' | '|'
+  const ALLOWED_EQUIPMENT_PER_ROOM_TYPE: {
+    [key in rooms]: ('G' | 'T' | '')[]
+  } = {
+    '.': ['G', 'T'],
+    '=': ['G', ''],
+    '|': ['T', '']
+  }
+
+  // First we get the coords of all possible next rooms
+  return [
+    { x: position.x, y: position.y },
+    { x: position.x - 1, y: position.y },
+    { x: position.x + 1, y: position.y },
+    { x: position.x, y: position.y - 1 },
+    { x: position.x, y: position.y + 1 }
+  ]
+  // Filtered by ones actually within the allowed cave area
+  .filter(position => position.x >= 0 && position.y >= 0)
+  // Mapped and reduced to possible actions, including switching equipment and total time
+  .reduce((accumulator: IAction[], nextPosition: ICoord): IAction[] => {
+    const currentRoomType = map.squares[pathKey(position)].type
+    const nextRoomType = map.squares[pathKey(nextPosition)]
+      ? map.squares[pathKey(nextPosition)].type
+      : updateMap(getMapSquare(map, nextPosition), map).squares[pathKey(nextPosition)].type
+    const currentNotEquipped = ALLOWED_EQUIPMENT_PER_ROOM_TYPE[currentRoomType].find(e => e !== equipment)
+
+    // If this is the current room, the action we're examining is switching your equipment with a time of 7
+    if (currentNotEquipped !== undefined && nextPosition.x === position.x && nextPosition.y === position.y) {
+      accumulator.push({
+        equipment: currentNotEquipped,
+        position: nextPosition,
+        time: time + 7
+      })
+    } else {
+
+      // If the currently-equipped item is allowed in the next room, push it with a time of 1 plus current
+      if (ALLOWED_EQUIPMENT_PER_ROOM_TYPE[nextRoomType].indexOf(equipment) !== -1) {
+        accumulator.push({
+          equipment,
+          position: nextPosition,
+          time: time + 1
+        })
+      }
+    }
+
+    return accumulator
+  }, [])
+  // Sorted by time
+  .sort((a, b) => a.time - b.time)
+}
+
+const calculateRescueTime = (caveMap: IMap)
+: {
+  answer: number
+  map: IMap
+} => {
+  let actionsList: IAction[] = [{
+    position: {
+      x: 0,
+      y: 0
+    },
+    equipment: 'T',
+    time: 0
+  }]
+  const visitedMap = new Map()
+  const timeMap = new Map()
+  let shortestTime = Number.MAX_SAFE_INTEGER
+
+  visitedMap.set(searchPathKey(actionsList[0]), false)
+  timeMap.set(pathKey({ x: 0, y: 0 }), 0)
+
+  let currentNode = actionsList.shift()
+
+  nodeLoop:
+  while (currentNode) {
+    if (!visitedMap.get(searchPathKey(currentNode))) {
+      if (currentNode.time > shortestTime) {
+        break nodeLoop
+      }
+      getNextActions(caveMap, currentNode)
+      .filter(action => !visitedMap.get(searchPathKey(action)) )
+      .forEach(action => {
+        if (typeof visitedMap.get(searchPathKey(action)) === 'undefined') {
+          visitedMap.set(searchPathKey(action), false)
+        }
+        if (typeof timeMap.get(pathKey(action.position)) === 'undefined') {
+          timeMap.set(pathKey(action.position), Number.MAX_SAFE_INTEGER)
+        }
+        timeMap.set(pathKey(action.position), Math.min(timeMap.get(pathKey(action.position)), action.time))
+        if (
+          action.position.x === caveMap.target.x
+          && action.position.y === caveMap.target.y
+          && action.equipment === 'T'
+        ) {
+          shortestTime = Math.min(shortestTime, action.time)
+        }
+        actionsList.push(action)
+      })
+      visitedMap.set(searchPathKey(currentNode), true)
+
+      actionsList.sort((a, b) => a.time - b.time)
+    }
+
+    if (actionsList[0] && actionsList[0].time > currentNode.time)
+      console.log(`About to check nodes at time ${actionsList[0].time}. Actions list length: ${actionsList.length}. Current shortest time found: ${shortestTime}.`)
+
+    currentNode = actionsList.shift()
+  }
+
+  return {
+    answer: shortestTime,
+    map: caveMap
+  }
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Assess Risk',
     onClick: assessRisk
+  },
+  {
+    label: 'Calculate Rescue Time',
+    onClick: () => {
+      const result = calculateRescueTime(map)
+      map = result.map
+      return {
+        answer2: result.answer.toString()
+      }
+    }
   }
 ]
 
@@ -165,23 +317,27 @@ export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element 
 
   const mapRows: JSX.Element[] = []
 
-  for (let y = 0; y <= map.max.y; y++) {
-    const row: JSX.Element[] = []
-    for (let x = 0; x <= map.max.x; x++) {
-      if (typeof map.squares[pathKey({ x, y })] === 'undefined') debugger
-      const rowContents = map.squares[pathKey({ x, y })].type
-      row.push(
-        x === 0 && y === 0
-          ? <span key={`${x}${y}`}>S</span>
-          : x === map.target.x && y === map.target.y
-            ? <span key={`${x}${y}`}>T</span>
-            : rowContents
-              ? <span key={`${x}${y}`}>{rowContents}</span>
-              : <span key={`${x}${y}`}>&nbsp;</span>
-      )
+  if (map.max.x <= 50) {
+    for (let y = 0; y <= map.max.y; y++) {
+      const row: JSX.Element[] = []
+      for (let x = 0; x <= map.max.x; x++) {
+        if (typeof map.squares[pathKey({ x, y })] === 'undefined') {
+          map.squares[pathKey({ x, y })] = getMapSquare(map, { x, y })
+        }
+        const rowContents = map.squares[pathKey({ x, y })].type
+        row.push(
+          x === 0 && y === 0
+            ? <span key={`${x}${y}`}>S</span>
+            : x === map.target.x && y === map.target.y
+              ? <span key={`${x}${y}`}>T</span>
+              : rowContents
+                ? <span key={`${x}${y}`}>{rowContents}</span>
+                : <span key={`${x}${y}`}>&nbsp;</span>
+        )
+      }
+      mapRows.push(<div key={y}>{row}</div>)
     }
-    mapRows.push(<div key={y}>{row}</div>)
-  }
+  } else mapRows.push(<div key="sorry"><p>Sorry, the map is too big to display efficiently!</p></div>)
 
   return (
     <div className="render-box">
@@ -194,6 +350,15 @@ export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element 
         <fieldset>
           {mapRows}
         </fieldset>
+      </div>
+      <div
+        style={{
+          flexGrow: 1,
+          flexBasis: 0
+        }}
+        className="render-box--left-margin"
+      >
+        <p>Warning: Calculating the rescue time takes a while! Check your console for proof it's actually running!</p>
       </div>
     </div>
   )
@@ -208,8 +373,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is{' '}
-      <code>{answer}</code>.
+      The rescue will take{' '}
+      <code>{answer}</code> minutes.
     </span>
   ),
   buttons: BUTTONS,
