@@ -11,9 +11,10 @@ let setOther = (other: any): void => {}
 
 let registers: number[] = [0, 0, 0, 0, 0, 0]
 let prevInputKey = ''
+let answer2_a = ''
 
-const runProgram = (inputKey: string, loops?: number): {
-  exitCode: undefined | number
+const runProgram = (inputKey: string, breakOnFirstExitCode: boolean): {
+  exitCodes: number[]
   registers: number[]
 } => {
   // Get the IP_BIND so we can skip to the correct instruction
@@ -22,21 +23,22 @@ const runProgram = (inputKey: string, loops?: number): {
   const ipInstruction = input.split('\n').shift()
   if (ipInstruction) IP_BIND = parseInt(ipInstruction.split(' ')[1])
 
-  const result = runLine(input, registers, loops, registers[IP_BIND])
+  const result = runLines(input, registers, registers[IP_BIND], breakOnFirstExitCode)
+
   return result
 }
 
-const runLine = (
+const runLines = (
   INPUT: string,
   registers: number[],
-  loops?: number,
-  startInstruction?: number
+  startInstruction: number,
+  breakOnFirstExitCode: boolean
 ): {
-  exitCode: undefined | number
+  exitCodes: number[]
   registers: number[]
 } => {
   const instructions = INPUT.split('\n')
-  let exitCode
+  let exitCodes: number[] = []
 
   // First set the Instruction Pointer and its bound
   let IP_BIND: number = NaN
@@ -46,22 +48,23 @@ const runLine = (
 
   // Then do operations
   let nextInstruction = instructions[IP]
-  let count = 0
-  while (nextInstruction && (!loops || count < loops)) {
+  while (nextInstruction) {
     // IP 28 is the line that will lead to exiting, if register 0 matches register 5 at the time
     if (IP === 28) {
-      exitCode = registers[5]
-      break
+      if (exitCodes.indexOf(registers[5]) === -1) {
+        exitCodes.push(registers[5])
+        console.log(`Exit code ${exitCodes.length}: ${registers[5]}`)
+        if (breakOnFirstExitCode) break
+      } else break
     }
     registers[IP_BIND] = IP
     registers = doInstruction(nextInstruction, registers)
     IP = registers[IP_BIND] + 1
     nextInstruction = instructions[IP]
-    count++
   }
 
   return {
-    exitCode,
+    exitCodes,
     registers
   }
 }
@@ -76,17 +79,6 @@ const doInstruction = (inOperation: string, registers: number[]): number[] => {
   return OPERATIONS[operation]({ inputA, inputB, outputC }, registers)
 }
 
-const incrementIPRegister = (inputKey: string) => {
-  let IP_BIND = NaN
-  const input = INPUT[inputKey]
-  const ipInstruction = input.split('\n').shift()
-  if (ipInstruction) IP_BIND = parseInt(ipInstruction.split(' ')[1])
-
-  registers[IP_BIND] = registers[IP_BIND] + 1
-
-  setOther({ registers })
-}
-
 const BUTTONS: IButton[] = [
   {
     label: 'Reset Registers',
@@ -97,56 +89,25 @@ const BUTTONS: IButton[] = [
     }
   },
   {
-    label: 'Increment IP Register',
-    onClick: () => {
-      incrementIPRegister(prevInputKey)
-      return {}
-    }
-  },
-  {
-    label: 'Run One Line',
-    onClick: () => {
-      const next = runProgram(prevInputKey, 1)
-      registers = next.registers
-      setOther({ registers })
-      return {}
-    }
-  },
-  {
-    label: 'Run Ten Lines',
-    onClick: () => {
-      const next = runProgram(prevInputKey, 10)
-      registers = next.registers
-      setOther({ registers })
-      return {}
-    }
-  },
-  {
-    label: 'Run 100 Lines',
-    onClick: () => {
-      const next = runProgram(prevInputKey, 100)
-      registers = next.registers
-      setOther({ registers })
-      return {}
-    }
-  },
-  {
-    label: 'Run 1000 Lines',
-    onClick: () => {
-      const next = runProgram(prevInputKey, 1000)
-      registers = next.registers
-      setOther({ registers })
-      return {}
-    }
-  },
-  {
     label: 'Find First Exit Code',
     onClick: () => {
-      const next = runProgram(prevInputKey)
-      registers = next.registers
+      const result = runProgram(prevInputKey, true)
+      registers = result.registers
       setOther({ registers })
       return {
-        answer1: next.exitCode ? next.exitCode.toString() : undefined
+        answer1: result.exitCodes[0].toString()
+      }
+    }
+  },
+  {
+    label: 'Find Last Exit Code',
+    onClick: () => {
+      const result = runProgram(prevInputKey, false)
+      registers = result.registers
+      setOther({ registers })
+      answer2_a = result.exitCodes.length.toString()
+      return {
+        answer2: result.exitCodes[result.exitCodes.length - 1].toString()
       }
     }
   }
@@ -186,6 +147,12 @@ const renderDay = (
           {registersDisplay}
         </p>
       </div>
+      <div style={{ marginLeft: '24px' }}>
+        <p>
+          WARNING: Finding the last exit code takes a while; check your console{' '}
+          for proof it's really running!
+        </p>
+      </div>
     </div>
   )
 }
@@ -199,8 +166,9 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is{' '}
-      <code>{answer}</code>.
+      The last exit code is{' '}
+      <code>{answer}</code>.{' '}
+      (There were <code>{answer2_a}</code>{' '} exit codes.)
     </span>
   ),
   buttons: BUTTONS,

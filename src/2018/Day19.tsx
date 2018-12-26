@@ -27,11 +27,11 @@ const runProgram = (inputKey: string, loops?: number): number[] => {
     console.log(`IP_BIND: ${IP_BIND}`)
   }
 
-  registers = runLine(input, registers, loops, registers[IP_BIND])
+  registers = runLines(input, registers, loops, registers[IP_BIND])
   return registers
 }
 
-const runLine = (INPUT: string, registers: number[], loops?: number, startInstruction?: number): number[] => {
+const runLines = (INPUT: string, registers: number[], loops?: number, startInstruction?: number): number[] => {
   const instructions = INPUT.split('\n')
 
   // First set the Instruction Pointer and its bound
