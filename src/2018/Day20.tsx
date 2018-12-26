@@ -187,6 +187,26 @@ const BUTTONS: IButton[] = [
         answer1: farthestDistance.toString()
       }
     }
+  },
+  {
+    label: 'Count Far Rooms',
+    onClick: (inputKey: string) => {
+      const input = INPUT[inputKey]
+
+      let farRooms = 0
+      const { map } = createMap(input)
+      const { min, max } = map
+
+      for (let xi = min.x; xi <= max.x; xi++)
+        for (let yi = min.y; yi <= max.y; yi++) {
+          const room = map[pathKey({ x: xi, y: yi })]
+          if (room && room.path && room.path.length >= 1000) farRooms++
+        }
+
+      return {
+        answer2: farRooms.toString()
+      }
+    }
   }
 ]
 
@@ -212,8 +232,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is{' '}
-      <code>{answer}</code>.
+      <code>{answer}</code> rooms have a path that requires passing through at least 1000 doors.
     </span>
   ),
   buttons: BUTTONS,
