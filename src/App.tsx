@@ -14,7 +14,6 @@ class App extends Component<{}, {}> {
         <ul>
           <li>Re-create Days 1-14 and put them on GitHub. (I'm pretty sure at least one of them is still on my laptop in the checkers-fe project.)</li>
           <li>Render the map for Day 20.</li>
-          <li>Render the map for Day 22.</li>
         </ul>
       </div>
     );

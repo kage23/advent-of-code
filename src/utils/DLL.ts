@@ -1,9 +1,9 @@
 class DLL {
-  head: INode | undefined
+  head: IDLLNode | undefined
 
   constructor(value?: any) {
     if (value) {
-      const node: INode = { value }
+      const node: IDLLNode = { value }
       node.next = node
       node.prev = node
       this.head = node
@@ -11,7 +11,7 @@ class DLL {
   }
 
   push = (value: any) => {
-    const node: INode = { value }
+    const node: IDLLNode = { value }
     if (this.head) {
       node.next = this.head
       node.prev = this.head.prev
@@ -24,7 +24,7 @@ class DLL {
     }
   }
 
-  removeNode = (node: INode) => {
+  removeNode = (node: IDLLNode) => {
     if (this.head === node) {
       if (this.head.next === node) {
         this.head = undefined
@@ -46,10 +46,10 @@ class DLL {
   }
 }
 
-export interface INode {
+export interface IDLLNode {
   value: any
-  next?: INode
-  prev?: INode
+  next?: IDLLNode
+  prev?: IDLLNode
 }
 
 export default DLL
