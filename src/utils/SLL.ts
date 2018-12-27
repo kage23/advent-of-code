@@ -7,6 +7,11 @@ class SLL {
     }
   }
 
+  moveToEnd = (node: ISLLNode) => {
+    const value = this.removeNode(node)
+    this.push(value)
+  }
+
   push = (value: any) => {
     const node: ISLLNode = { value }
     if (typeof this.head !== 'undefined') {
@@ -27,6 +32,8 @@ class SLL {
       while (currentNode.next && currentNode.next !== node) currentNode = currentNode.next
       currentNode.next = node.next
     }
+
+    return node.value
   }
 }
 
