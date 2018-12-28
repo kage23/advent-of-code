@@ -33,6 +33,100 @@ export interface IGroup {
 
 let rounds = 0
 
+const fightCombat = (immuneSystem: IGroup[], infection: IGroup[], rounds: number)
+: { immuneSystem: IGroup[], infection: IGroup[], rounds: number } => {
+  let count = rounds
+  let fight = { immuneSystem, infection }
+
+  while (fight.immuneSystem.length > 0 && fight.infection.length > 0) {
+    fight = fightRound(fight.immuneSystem, fight.infection)
+    count++
+  }
+
+  return {
+    immuneSystem: fight.immuneSystem,
+    infection: fight.infection,
+    rounds: count
+  }
+}
+
+const fightRound = (immuneSystem: IGroup[], infection: IGroup[])
+: { immuneSystem: IGroup[], infection: IGroup[] } => {
+  // Target selection phase
+  const groups = [
+    ...immuneSystem,
+    ...infection
+  ]
+  .map(group => ({
+    ...group,
+    effectivePower: group.units * group.attackPower,
+    picked: false
+  }))
+  .sort((a, b) => (
+    a.effectivePower !== b.effectivePower
+      ? b.effectivePower - a.effectivePower
+      : b.initiative - a.initiative
+  ))
+
+  const enemiesMap = new Map()
+
+  for (let i = 0; i < groups.length; i++) {
+    const group = groups[i]
+    let bestEnemy
+    const enemies = groups.filter(fGroup => (
+      // Different type
+      fGroup.type !== group.type
+      // Not already picked
+      && !fGroup.picked
+      // Not immune to attacker's attack type
+      && fGroup.immune.indexOf(group.attackType) === -1
+    ))
+    const enemyDamageMap = new Map()
+    for (let j = 0; j < enemies.length; j++) {
+      const enemy = enemies[j]
+      const damage = calculateHPDamage(group, enemy)
+      enemyDamageMap.set(enemy, damage)
+      if (!bestEnemy || damage >= enemyDamageMap.get(bestEnemy)) {
+        if (damage > enemyDamageMap.get(bestEnemy)) bestEnemy = enemy
+        else if (bestEnemy && enemy.effectivePower !== bestEnemy.effectivePower) {
+          bestEnemy = enemy.effectivePower > bestEnemy.effectivePower ? enemy : bestEnemy
+        } else bestEnemy = bestEnemy && bestEnemy.initiative > enemy.initiative ? bestEnemy : enemy
+      }
+    }
+    if (bestEnemy) {
+      bestEnemy.picked = true
+      enemiesMap.set(group, bestEnemy)
+    }
+  }
+
+  // Attack phase
+  groups.sort((a, b) => b.initiative - a.initiative)
+  .forEach(group => {
+    if (enemiesMap.get(group) && group.units > 0) {
+      const enemy = enemiesMap.get(group)
+      const damage = calculateHPDamage(group, enemy)
+      const unitsLost = Math.floor(damage / enemy.hp)
+      enemy.units -= unitsLost
+
+      // console.log(`${group.type} group ${(group.id || 0) + 1} attacks defending group ${(group.enemy.id || 0) + 1}, killing ${unitsLost} units`)
+
+      enemy.picked = false
+    }
+  })
+
+  return {
+    immuneSystem: groups.filter(group => group.type === UNIT_TYPES.IMMUNE_SYSTEM && group.units > 0),
+    infection: groups.filter(group => group.type === UNIT_TYPES.INFECTION && group.units > 0)
+  }
+}
+
+const calculateHPDamage = (attacker: IGroup, defender: IGroup): number => {
+  let damage = attacker.attackPower * attacker.units
+  if (defender.immune.indexOf(attacker.attackType) !== -1) damage *= 0
+  if (defender.weak.indexOf(attacker.attackType) !== -1) damage *= 2
+  return damage
+}
+
 const getImmunitiesAndWeaknesses = (input: string): {
   immune: DAMAGE_TYPES[]
   weak: DAMAGE_TYPES[]
@@ -142,8 +236,42 @@ const parseInput = (inputKey: string): {
 let prevInputKey = ''
 let immuneSystem: IGroup[] = []
 let infection: IGroup[] = []
+let answer_1a = ''
 
-const BUTTONS: IButton[] = []
+const BUTTONS: IButton[] = [
+  {
+    label: 'Fight Round of Combat',
+    onClick: () => {
+      const next = fightRound(immuneSystem, infection)
+      immuneSystem = next.immuneSystem
+      infection = next.infection
+      rounds++
+      return {
+        answer1: undefined
+      }
+    }
+  },
+  {
+    label: 'Fight Full Combat',
+    onClick: () => {
+      let answer1 = ''
+      const next = fightCombat(immuneSystem, infection, rounds)
+      immuneSystem = next.immuneSystem
+      infection = next.infection
+      rounds = next.rounds
+      if (infection.length) {
+        answer_1a = UNIT_TYPES.INFECTION
+        answer1 = infection.reduce((total, group) => total + group.units, 0).toString()
+      } else if (immuneSystem.length) {
+        answer_1a = UNIT_TYPES.IMMUNE_SYSTEM
+        answer1 = immuneSystem.reduce((total, group) => total + group.units, 0).toString()
+      }
+      return {
+        answer1
+      }
+    }
+  }
+]
 
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (prevInputKey !== inputKey) {
@@ -223,8 +351,8 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The solution is{' '}
-      <code>{answer}</code>.
+      The <code>{answer_1a}</code> wins the combat with{' '}
+      <code>{answer}</code> units remaining.
     </span>
   ),
   answer2Text: (answer) => (
