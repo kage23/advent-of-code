@@ -5,6 +5,7 @@ import {
 } from '../Config'
 
 import INPUT from './Input/Day24'
+import { randInt } from '../utils/Various'
 
 export enum DAMAGE_TYPES {
   RADIATION = 'radiation',
@@ -31,22 +32,82 @@ export interface IGroup {
   initiative: number
 }
 
+interface IFight {
+  immuneSystem: IGroup[]
+  infection: IGroup[]
+  stalemate?: boolean
+  rounds: number
+}
+
 let rounds = 0
 
-const fightCombat = (immuneSystem: IGroup[], infection: IGroup[], rounds: number)
-: { immuneSystem: IGroup[], infection: IGroup[], rounds: number } => {
-  let count = rounds
-  let fight = { immuneSystem, infection }
+const findBoost = (inputKey: string)
+: {
+  immuneSystem: IGroup[],
+  infection: IGroup[],
+  rounds: number,
+  boost: number
+} => {
+  let boost = 0
+  let highestBad = 0
+  let lowestGood = Number.MAX_SAFE_INTEGER
+  let fightInput = parseInput(inputKey, boost)
+  let fightResult: IFight = {
+    immuneSystem: fightInput.immuneSystem,
+    infection: fightInput.infection,
+    rounds: 0
+  }
 
+  while (lowestGood > highestBad + 1) {
+    console.log(`Testing boost ${boost}...`)
+    fightInput = parseInput(inputKey, boost)
+    fightResult = fightCombat(fightInput.immuneSystem, fightInput.infection, 0)
+    if (fightResult.infection.length === 0 && fightResult.immuneSystem.length > 0) {
+      lowestGood = Math.min(lowestGood, boost)
+    }
+    if (
+      (fightResult.infection.length > 0 && fightResult.immuneSystem.length === 0)
+      || fightResult.stalemate
+    ) {
+      highestBad = Math.max(highestBad, boost)
+    }
+    boost = randInt(highestBad, lowestGood)
+  }
+
+  const lastFight = parseInput(inputKey, lowestGood)
+  fightResult = fightCombat(lastFight.immuneSystem, lastFight.infection, 0)
+
+  return {
+    immuneSystem: fightResult.immuneSystem,
+    infection: fightResult.infection,
+    boost: lowestGood,
+    rounds: fightResult.rounds
+  }
+}
+
+const fightCombat = (immuneSystem: IGroup[], infection: IGroup[], rounds: number)
+: IFight => {
+  let fight = { immuneSystem, infection }
+  let stalemate = false
+  let count = rounds
+
+  let prevUnitCount = [ ...immuneSystem, ...infection].reduce((total, group) => total + group.units, 0)
   while (fight.immuneSystem.length > 0 && fight.infection.length > 0) {
     fight = fightRound(fight.immuneSystem, fight.infection)
-    count++
+    const afterUnitCount = [ ...fight.immuneSystem, ...fight.infection].reduce((total, group) => total + group.units, 0)
+    if (afterUnitCount === prevUnitCount) {
+      stalemate = true
+      break
+    }
+    prevUnitCount = afterUnitCount
+    rounds++
   }
 
   return {
     immuneSystem: fight.immuneSystem,
     infection: fight.infection,
-    rounds: count
+    stalemate,
+    rounds
   }
 }
 
@@ -160,7 +221,7 @@ const getImmunitiesAndWeaknesses = (input: string): {
   }
 }
 
-const getGroup = (line: string, type: UNIT_TYPES, id: number): IGroup => {
+const getGroup = (line: string, type: UNIT_TYPES, boost: number, id: number): IGroup => {
   const units = parseInt(line)
   let remain = line.split('units each with ')[1]
   const hp = parseInt(remain)
@@ -192,13 +253,13 @@ const getGroup = (line: string, type: UNIT_TYPES, id: number): IGroup => {
     hp,
     immune,
     weak,
-    attackPower,
+    attackPower: attackPower + (type === UNIT_TYPES.IMMUNE_SYSTEM ? boost : 0),
     attackType,
     initiative
   }
 }
 
-const parseInput = (inputKey: string): {
+const parseInput = (inputKey: string, boost: number): {
   immuneSystem: IGroup[],
   infection: IGroup[]
 } => {
@@ -220,7 +281,7 @@ const parseInput = (inputKey: string): {
           continue inputLoop
         }
       }
-      const group = getGroup(line, currentType, count)
+      const group = getGroup(line, currentType, boost, count)
       if (currentType === UNIT_TYPES.IMMUNE_SYSTEM) immuneSystem.push(group)
       else infection.push(group)
       count++
@@ -237,6 +298,7 @@ let prevInputKey = ''
 let immuneSystem: IGroup[] = []
 let infection: IGroup[] = []
 let answer_1a = ''
+let answer_2a = ''
 
 const BUTTONS: IButton[] = [
   {
@@ -270,12 +332,25 @@ const BUTTONS: IButton[] = [
         answer1
       }
     }
+  },
+  {
+    label: 'Find Boost',
+    onClick: (input) => {
+      const next = findBoost(input)
+      immuneSystem = next.immuneSystem
+      infection = next.infection
+      rounds = next.rounds
+      answer_2a = next.boost.toString()
+      return {
+        answer2: next.immuneSystem.reduce((total, group) => total + group.units, 0).toString()
+      }
+    }
   }
 ]
 
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (prevInputKey !== inputKey) {
-    const groups = parseInput(inputKey)
+    const groups = parseInput(inputKey, 0)
     immuneSystem = groups.immuneSystem
     infection = groups.infection
     prevInputKey = inputKey
@@ -357,8 +432,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is{' '}
-      <code>{answer}</code>.
+      With a boost of <code>{answer_2a}</code>, the Immune System wins with{' '}
+      <code>{answer}</code> units remaining.
     </span>
   ),
   buttons: BUTTONS,

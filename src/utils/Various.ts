@@ -21,3 +21,5 @@ export const numArrEq = (a: number[], b: number[]): boolean => {
   }
   return true
 }
+
+export const randInt = (min: number, max: number): number => Math.floor(Math.random() * max) + min
