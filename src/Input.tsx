@@ -1,1 +1,2 @@
-export const INPUT = ``
+export const INPUT: { [key:string]: string } = {
+}
