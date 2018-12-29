@@ -4,7 +4,7 @@ import {
   IDayConfig
  } from '../Config'
 
-import INPUT from './Input/Day6'
+import INPUT, { DISTANCE } from './Input/Day6'
 
 interface ICoordMap {
   coords: number[][]
@@ -107,6 +107,29 @@ const findArea1 = (inMap: ICoordMap): { answer1: string } => {
   return { answer1: largestArea.toString() }
 }
 
+const findArea2 = (inMap: ICoordMap, targetDistance: number)
+: { answer2: string } => {
+  const { coords, max, min } = inMap
+  let size = 0
+  for (let x = min[0]; x <= max[0]; x++) {
+    for (let y = min[1]; y <= max[1]; y++) {
+      let totalDistance = 0
+      for (const coord of coords) {
+        totalDistance += manhattanDistance(coord, [x,y])
+        if (totalDistance >= targetDistance) break
+      }
+      if (totalDistance < targetDistance) {
+        size++
+        inMap.display[y] = `${inMap.display[y].slice(0, x)}x${inMap.display[y].slice(x + 1)}`
+      }
+    }
+  }
+  markCoordsOnMapDisplay(inMap)
+  map = inMap
+
+  return { answer2: size.toString() }
+}
+
 export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   map = map === undefined || map.inputKey !== inputKey
     ? parseInput(inputKey)
@@ -138,6 +161,10 @@ const BUTTONS: IButton[] = [
   {
     label: 'Find Largest Non-Infinite Area',
     onClick: (inputKey: string) => findArea1(parseInput(inputKey))
+  },
+  {
+    label: 'Find Area Close to Most',
+    onClick: (inputKey: string) => findArea2(parseInput(inputKey), DISTANCE[inputKey])
   }
 ]
 
@@ -148,9 +175,10 @@ const config: IDayConfig = {
       (belonging to coord <code>{answer1_a}</code>) is <code>{answer}</code>.
     </span>
   ),
-  answer2Text: (answer) => (
+  answer2Text: (answer, inputKey) => (
     <span>
-      The solution is <code>{answer}</code>.
+      <code>{answer}</code> locations are under{' '}
+      <code>{DISTANCE[inputKey || '']}</code> total distance from all coordinates.
     </span>
   ),
   buttons: BUTTONS,

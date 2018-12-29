@@ -16,8 +16,8 @@ export interface IButton {
 }
 
 export interface IDayConfig {
-  answer1Text: (input: string) => JSX.Element
-  answer2Text: (input: string) => JSX.Element
+  answer1Text: (answer: string, inputKey?: string) => JSX.Element
+  answer2Text: (answer: string, inputKey?: string) => JSX.Element
   buttons: IButton[]
   day: number
   INPUT: {

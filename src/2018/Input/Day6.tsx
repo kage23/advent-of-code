@@ -1,3 +1,8 @@
+export const DISTANCE: { [key:string]: number } = {
+  DEMO: 32,
+  REAL: 10000
+}
+
 const INPUT: { [key:string]: string } = {
 DEMO:
 `1, 1
