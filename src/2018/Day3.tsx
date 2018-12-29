@@ -48,10 +48,31 @@ const part1 = (input: string) => {
   }
 }
 
+const part2 = (input: string) => {
+  const claims = parseInput(INPUT[input])
+  const claimsMap = makeClaimsMap(claims)
+  const claimOverlaps = [true]
+
+  for (const [, claimIDs] of claimsMap) {
+    if (claimIDs.length === 1) claimOverlaps[claimIDs[0]] = claimOverlaps[claimIDs[0]] || false
+    else claimIDs.forEach(claimID => claimOverlaps[claimID] = true)
+  }
+
+  return {
+    answer2: claimOverlaps.reduce((accumulator, claimDoesOverlap, currentIndex) => {
+      return !claimDoesOverlap ? currentIndex : accumulator
+    }, -1).toString()
+  }
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Determine Fabric Overlap',
     onClick: part1
+  },
+  {
+    label: 'Determine Claim Overlap',
+    onClick: part2
   }
 ]
 
