@@ -26,8 +26,13 @@ const renderDay = (
   )
 }
 
-const reactPolymer = (inputKey: string): { answer1: string } => {
+let answer2_a = ''
+
+const reactPolymer = (inputKey: string, filter?: string): { answer1: string } => {
   let result = INPUT[inputKey]
+    .split('')
+    .filter(letter => !filter || letter.toLowerCase() !== filter.toLowerCase())
+    .join('')
   let i = 0
   while (i < result.length) {
     const currentLetter = result[i]
@@ -42,23 +47,42 @@ const reactPolymer = (inputKey: string): { answer1: string } => {
   }
 }
 
+const findPolymerFilter = (input: string): { answer2: string } => {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  let shortestPolymer = ''
+  let bestFilter = ''
+  for (const letter of alphabet) {
+    const result = reactPolymer(input, letter)
+    if (bestFilter.length === 0 || result.answer1.length < shortestPolymer.length) {
+      shortestPolymer = result.answer1
+      bestFilter = letter
+    }
+  }
+  answer2_a = bestFilter
+  return { answer2: shortestPolymer }
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'React Polymer',
     onClick: reactPolymer
+  },
+  {
+    label: 'Find Polymer Filter',
+    onClick: findPolymerFilter
   }
 ]
 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The resulting polymer length is <code>{answer.length}</code>.
+      The length of the resulting polymer length <code>{answer.length}</code>.
     </span>
   ),
   answer2Text: (answer) => (
     <span>
-      {/* The sleepiest guard-minute is <code>#{answer2_a}-{answer2_b}</code>. */}
-      The solution is <code>{answer}</code>.
+      The best filter for the polymer is <code>{answer2_a}</code>.{' '}
+      The length of the resulting polymer length <code>{answer.length}</code>.
     </span>
   ),
   buttons: BUTTONS,
