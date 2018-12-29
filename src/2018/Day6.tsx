@@ -9,15 +9,20 @@ import INPUT from './Input/Day6'
 interface ICoordMap {
   coords: number[][]
   display: string[]
+  inputKey: string
   max: number[]
   min: number[]
 }
 
-let map: ICoordMap = {
-  coords: [],
-  display: [],
-  max: [0, 0],
-  min: [0, 0]
+let map: undefined | ICoordMap = undefined
+
+let answer1_a = ''
+
+const manhattanDistance = (a: number[], b: number[]): number => {
+  if (a.length !== b.length) throw new Error('The coords must be in the same dimensions!')
+  return a.reduce((distance, currentCoord, currentIndex) => (
+    distance + Math.abs(currentCoord - b[currentIndex])
+  ), 0)
 }
 
 const parseInput = (inputKey: string): ICoordMap => {
@@ -39,7 +44,7 @@ const parseInput = (inputKey: string): ICoordMap => {
     for (let x = 0; x <= max[0] + 1; x++) row += '.'
     return row
   })
-  const map = { coords, max, min, display }
+  const map = { coords, max, min, display, inputKey }
   markCoordsOnMapDisplay(map)
   return map
 }
@@ -56,8 +61,56 @@ const markCoordsOnMapDisplay = (map: ICoordMap) => {
   }
 }
 
+const findArea1 = (inMap: ICoordMap): { answer1: string } => {
+  const { coords, max, min } = inMap
+  const coordSizeMap: Map<number[], number> = new Map()
+  const nearestCoordsMap: Map<number[], number[][]> = new Map()
+  for (let x = min[0]; x <= max[0]; x++) {
+    for (let y = min[1]; y <= max[1]; y++) {
+      const testPoint = [x, y]
+      let nearestCoords: number[][] = []
+      let nearestDistance = Number.MAX_SAFE_INTEGER
+      for (const coord of coords) {
+        const currentDistance = manhattanDistance(testPoint, coord)
+        if (currentDistance < nearestDistance) {
+          nearestCoords = [coord]
+          nearestDistance = currentDistance
+        } else if (currentDistance === nearestDistance) nearestCoords.push(coord)
+      }
+      if (nearestCoords.length === 1) {
+        const nearestCoord = nearestCoords[0]
+        if (x === min[0] || x === max[0] || y === min[1] || y === max[1]) {
+          coordSizeMap.set(nearestCoord, Infinity)
+        } else {
+          let coordSize = (coordSizeMap.get(nearestCoord) || 0) + 1
+          coordSizeMap.set(nearestCoord, coordSize)
+        }
+      }
+      nearestCoordsMap.set(testPoint, nearestCoords)
+    }
+  }
+  let largestArea = 0
+  let bestCoord = [0, 0]
+  for (const [coord, size] of coordSizeMap) {
+    if (size !== Infinity && size > largestArea) {
+      largestArea = size
+      bestCoord = coord
+    }
+  }
+  for (const [coord, nearestCoords] of nearestCoordsMap) {
+    if (nearestCoords.length === 1 && nearestCoords[0] === bestCoord)
+      inMap.display[coord[1]] = `${inMap.display[coord[1]].slice(0, coord[0])}x${inMap.display[coord[1]].slice(coord[0] + 1)}`
+  }
+  markCoordsOnMapDisplay(inMap)
+  map = inMap
+  answer1_a = JSON.stringify(bestCoord)
+  return { answer1: largestArea.toString() }
+}
+
 export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
-  map = parseInput(inputKey)
+  map = map === undefined || map.inputKey !== inputKey
+    ? parseInput(inputKey)
+    : map
 
   return (
     <div>
@@ -81,12 +134,18 @@ export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element 
   )
 }
 
-const BUTTONS: IButton[] = []
+const BUTTONS: IButton[] = [
+  {
+    label: 'Find Largest Non-Infinite Area',
+    onClick: (inputKey: string) => findArea1(parseInput(inputKey))
+  }
+]
 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The solution is <code>{answer}</code>.
+      The size of the largest non-infinite area{' '}
+      (belonging to coord <code>{answer1_a}</code>) is <code>{answer}</code>.
     </span>
   ),
   answer2Text: (answer) => (
