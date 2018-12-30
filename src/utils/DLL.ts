@@ -10,6 +10,17 @@ class DLL {
     }
   }
 
+  insertAfter = (insert: any, after: IDLLNode): IDLLNode => {
+    const node: IDLLNode = {
+      value: insert,
+      next: after.next,
+      prev: after
+    }
+    if (after.next) after.next.prev = node
+    after.next = node
+    return node
+  }
+
   push = (value: any) => {
     const node: IDLLNode = { value }
     if (this.head) {
@@ -24,7 +35,7 @@ class DLL {
     }
   }
 
-  removeNode = (node: IDLLNode) => {
+  removeNode = (node: IDLLNode): IDLLNode | undefined => {
     if (this.head === node) {
       if (this.head.next === node) {
         this.head = undefined
@@ -33,15 +44,11 @@ class DLL {
         if (this.head.prev) this.head.prev.next = this.head.next
         this.head = this.head.next
       }
+      return this.head
     } else {
-      let currentNode = this.head
-      while (currentNode !== node) currentNode = currentNode ? currentNode.next : undefined
-      const currentPrev = currentNode.prev
-      const currentNext = currentNode.next
-      if (currentPrev && currentNext) {
-        currentNext.prev = currentPrev
-        currentPrev.next = currentNext
-      }
+      if (node.next) node.next.prev = node.prev
+      if (node.prev) node.prev.next = node.next
+      return node.next
     }
   }
 }
