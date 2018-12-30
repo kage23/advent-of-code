@@ -42,8 +42,8 @@ export interface IYearConfig {
 }
 
 export const defaultRenderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => (
-  <div>
-    <p>Input:</p>
+  <div className="render-box">
+    <h3>Input:</h3>
     <pre>{dayConfig.INPUT[inputKey]}</pre>
   </div>
 )

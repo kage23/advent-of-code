@@ -22,7 +22,7 @@ a {
 a:hover {
   color: #99ff99;
 }
-h1, h2 {
+h1, h2, h3 {
   font-size: 1em;
   font-weight: normal;
 }
@@ -161,16 +161,6 @@ article h2 a {
   margin-bottom: 4px;
 }
 
-.render-box p:first-child,
-.answers p:first-child {
-  margin-top: 0;
-}
-
-.render-box p:last-child,
-.answers p:last-child {
-  margin-bottom: 0;
-}
-
 code {
   position: relative;
 }
@@ -195,16 +185,23 @@ pre {
 
 .render-box {
   display: flex;
+  flex-wrap: wrap;
   margin: 1em 0px;
-}
-
-.render-box > * {
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
 .render-box > *:not(:first-child) {
   margin-left: 24px;
+}
+
+.render-box--no-wrap {
+  flex-wrap: nowrap;
+}
+
+.render-box h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  flex-basis: 100%;
+  flex-shrink: 0;
 }
 
 .render-box p {
@@ -213,10 +210,22 @@ pre {
 
 .render-box pre {
   flex-shrink: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .render-box pre + div {
   flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
+}
+
+.render-box p:first-child,
+.answers p:first-child {
+  margin-top: 0;
+}
+
+.render-box p:last-child,
+.answers p:last-child {
+  margin-bottom: 0;
 }
