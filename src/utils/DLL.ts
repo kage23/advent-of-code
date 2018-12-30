@@ -2,7 +2,7 @@ class DLL {
   head: IDLLNode | undefined
 
   constructor(value?: any) {
-    if (value) {
+    if (typeof value !== 'undefined') {
       const node: IDLLNode = { value }
       node.next = node
       node.prev = node

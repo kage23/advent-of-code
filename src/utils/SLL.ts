@@ -2,7 +2,7 @@ class SLL {
   head: ISLLNode | undefined
 
   constructor(value?: any) {
-    if (value) {
+    if (typeof value !== 'undefined') {
       this.head = { value }
     }
   }
