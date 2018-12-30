@@ -1,3 +1,15 @@
+export const PART_2_CONFIGS
+: { [key:string]: { baseTime: number, workers: number } } = {
+  DEMO: {
+    baseTime: 1,
+    workers: 2
+  },
+  REAL: {
+    baseTime: 61,
+    workers: 5
+  }
+}
+
 const INPUT: { [key:string]: string } = {
 DEMO:
 `Step C must be finished before step A can begin.

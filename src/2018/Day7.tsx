@@ -5,7 +5,7 @@ import {
   IDayConfig
  } from '../Config'
 
-import INPUT from './Input/Day7'
+import INPUT, { PART_2_CONFIGS } from './Input/Day7'
 
 interface IStep {
   id: string
@@ -51,10 +51,70 @@ const part1 = (inputKey: string): { answer1: string } => {
   }
 }
 
+let answer2_a = ''
+
+const part2 = (inputKey: string): { answer2: string } => {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const { baseTime } = PART_2_CONFIGS[inputKey]
+  const workers = new Array(PART_2_CONFIGS[inputKey].workers)
+  for (let i = 0; i < workers.length; i++) {
+    workers[i] = {
+      duration: 0,
+      stepClaimed: ''
+    }
+  }
+  const steps = parseInput(inputKey)
+  let stepsCompleted = ''
+  let stepsClaimed = ''
+  let time = 0
+  while (true) {
+    // First, advance all worker jobs
+    for (const worker of workers) {
+      if (worker.stepClaimed.length > 0) {
+        const targetDuration = baseTime + alphabet.indexOf(worker.stepClaimed)
+        if (worker.duration < targetDuration) worker.duration++
+        else {
+          stepsCompleted += worker.stepClaimed
+          worker.stepClaimed = ''
+          worker.duration = 0
+          if (stepsCompleted.length === steps.length) {
+            answer2_a = stepsCompleted
+            return {
+              answer2: time.toString()
+            }
+          }
+        }
+      }
+    }
+
+    // Then look for new jobs
+    for (const worker of workers) {
+      if (worker.stepClaimed.length === 0) {
+        for (const step of steps) {
+          if (
+            stepsCompleted.indexOf(step.id) === -1 && stepsClaimed.indexOf(step.id) === -1
+            && step.prereqs.every(prereqStep => stepsCompleted.indexOf(prereqStep) !== -1)
+          ) {
+            stepsClaimed += step.id
+            worker.stepClaimed = step.id
+            worker.duration = 1
+            break
+          }
+        }
+      }
+    }
+    time++
+  }
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Calculate Step Order',
     onClick: part1
+  },
+  {
+    label: 'Calculate Step Order (w/ workers)',
+    onClick: part2
   }
 ]
 
@@ -66,7 +126,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is <code>{answer}</code>.
+      It will take <code>{answer}</code> seconds to complete the steps in the following order:{' '}
+      <code>{answer2_a}</code>.
     </span>
   ),
   buttons: BUTTONS,
