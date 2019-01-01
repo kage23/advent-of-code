@@ -49,6 +49,8 @@ const findRepeatedFrequency__slow = (inputKey: string) => {
   }
 }
 
+const parseInput = (input: string): number[] => INPUT[input].split('\n').map(a => parseInt(a))
+
 const BUTTONS: IButton[] = [
   {
     label: 'Find Frequency',
@@ -63,8 +65,6 @@ const BUTTONS: IButton[] = [
     onClick: findRepeatedFrequency__slow
   }
 ]
-
-const parseInput = (input: string): number[] => INPUT[input].split('\n').map(a => parseInt(a))
 
 const config: IDayConfig = {
   answer1Text: (answer) => (
