@@ -19,9 +19,9 @@ const renderDay = (
       : dayConfig.INPUT[inputKey]
 
   return (
-    <div>
-      <p>Polymer:</p>
-      <pre>{display}</pre>
+    <div className="render-box">
+      <h3>Polymer:</h3>
+      <pre className="render-box--pre-wrap">{display}</pre>
     </div>
   )
 }
