@@ -26,6 +26,34 @@ const findBestGrid = (input: string, size: number = 3): { answer1: string } => {
   }
 }
 
+const findBestVariableSizeGrid = (input: string): { answer2: string } => {
+  const cellPowerMap: Map<string, number> = new Map()
+  let prev = Number.MIN_SAFE_INTEGER
+  for (let x = 1; x <= 300; x++) {
+    for (let y = 1; y <= 300; y++) {
+      for (let size = 1; size <= 300; size++) {
+        if (size + x <= 301 && size + y <= 301) {
+          const power = calculatePowerGrid(x, y, size, input)
+          cellPowerMap.set(`${x},${y},${size}`, power)
+          if (prev > power && size >= 20) break
+          prev = power
+        }
+      }
+    }
+  }
+  let highestPower = Number.MIN_SAFE_INTEGER
+  let bestCell = ''
+  for (const [cell, power] of cellPowerMap) {
+    if (power > highestPower) {
+      highestPower = power
+      bestCell = cell
+    }
+  }
+  return {
+    answer2: bestCell
+  }
+}
+
 const calculatePowerGrid = (x: number, y: number, inSize: number, input: string): number => {
   const size = Math.min(inSize, 301 - x, 301 - y)
   let totalPower = 0
@@ -57,6 +85,10 @@ const BUTTONS: IButton[] = [
   {
     label: 'Find Best 3x3 Grid',
     onClick: findBestGrid
+  },
+  {
+    label: 'Find Best Variable Size Grid',
+    onClick: findBestVariableSizeGrid
   }
 ]
 
@@ -68,7 +100,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is <code>{answer}</code>.
+      The best variable size grid is <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
