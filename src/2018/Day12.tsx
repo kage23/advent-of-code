@@ -7,6 +7,7 @@ import {
 import INPUT from './Input/Day12'
 
 let prevInputKey = ''
+let generation = 0
 
 interface IState {
   bottomPot: number
@@ -37,9 +38,54 @@ const parseInput = (input: string): IState => {
   }
 }
 
+const sum = (pots: string, bottomPot: number): number => (
+  pots.split('').reduce((prevSum, currentPot, index) => (
+    prevSum
+      + (
+        currentPot === '#'
+          ? (index + bottomPot)
+          : 0
+        )
+  ), 0)
+)
+
+const advanceGeneration = (inPots: string, bottomPot: number, rules: IRule[]): {
+  pots: string,
+  bottomPot: number
+} => {
+  const pots = `..${inPots}..`
+  let next = ''
+
+  for (let i = 0; i < pots.length; i++) {
+    let checkString = i >= 2
+      ? pots.slice(i - 2, i + 3)
+      : i === 1
+        ? `.${pots.slice(i - 1, i + 3)}`
+        : i === 0
+          ? `..${pots.slice(i, i + 3)}`
+          : ''
+    while (checkString.length < 5) checkString += '.'
+    const rule = rules.find(aRule => aRule.before === checkString)
+    next += rule ? rule.after : '.'
+  }
+  let nextBottomPot = bottomPot - 2
+  const firstFilledPot = next.indexOf('#') + nextBottomPot
+  nextBottomPot = firstFilledPot
+  next = next.slice(next.indexOf('#'))
+  next = next.slice(0, next.lastIndexOf('#') + 2)
+
+  generation++
+
+  return {
+    pots: next,
+    bottomPot: nextBottomPot
+  }
+}
+
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (inputKey !== prevInputKey) {
     state = parseInput(inputKey)
+    generation = 0
   }
   prevInputKey = inputKey
 
@@ -49,11 +95,11 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   } = state
 
   const spaces = []
-    if (bottomPot < 0) {
-      for (let i = 0; i > bottomPot; i--) {
-        spaces.push(<span key={i}>&nbsp;</span>)
-      }
+  if (bottomPot < 0) {
+    for (let i = 0; i > bottomPot; i--) {
+      spaces.push(<span key={i}>&nbsp;</span>)
     }
+  }
 
   return (
     <div className="render-box render-box--no-wrap">
@@ -62,7 +108,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
         <pre className="render-box--pre-wrap">{dayConfig.INPUT[inputKey]}</pre>
       </div>
       <div className="render-box--left-margin">
-        <h3>Pots:</h3>
+        <h3>Generation {generation}:</h3>
         <fieldset style={{ wordBreak: 'break-word' }}>
           <div>{spaces}0</div>
           <div>{pots}</div>
@@ -72,18 +118,30 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   )
 }
 
-const BUTTONS: IButton[] = []
+const BUTTONS: IButton[] = [
+  {
+    label: 'Advance Generation',
+    onClick: () => {
+      const next = advanceGeneration(state.pots, state.bottomPot, state.rules)
+      state.pots = next.pots
+      state.bottomPot = next.bottomPot
+      return {
+        answer1: sum(state.pots, state.bottomPot).toString()
+      }
+    }
+  }
+]
 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The solution is{' '}
+      The sum of all plant-containing pots is{' '}
       <code>{answer}</code>.
     </span>
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is{' '}
+      The sum of all plant-containing pots is{' '}
       <code>{answer}</code>.
     </span>
   ),
