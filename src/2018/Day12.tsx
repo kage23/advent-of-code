@@ -82,6 +82,40 @@ const advanceGeneration = (inPots: string, bottomPot: number, rules: IRule[]): {
   }
 }
 
+const advanceALot = (inPots: string, bottomPot: number, rules: IRule[]): {
+  pots: string,
+  bottomPot: number
+} => {
+  const seen = []
+  let next = {
+    pots: inPots,
+    bottomPot
+  }
+
+  let g = 0
+  while (g < 50000000000) {
+    seen.push({
+      bottomPot: next.bottomPot,
+      pots: next.pots,
+      time: g
+    })
+
+    g++
+    next = advanceGeneration(next.pots, next.bottomPot, rules)
+    let seenBefore = seen.find(potRecord => potRecord.pots === next.pots)
+    if (seenBefore) {
+      const loopLength = g - seenBefore.time
+      const bottomPotDiffPerLoop = next.bottomPot - seenBefore.bottomPot
+      const remainingTime = 50000000000 - g
+      const remainingLoops = remainingTime / loopLength
+      next.bottomPot = next.bottomPot + (remainingLoops * bottomPotDiffPerLoop)
+      break
+    }
+  }
+
+  return next
+}
+
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (inputKey !== prevInputKey) {
     state = parseInput(inputKey)
@@ -110,7 +144,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
       <div className="render-box--left-margin">
         <h3>Generation {generation}:</h3>
         <fieldset style={{ wordBreak: 'break-word' }}>
-          <div>{spaces}0</div>
+          <div>{spaces}v-- Pot {bottomPot < 0 ? '0' : bottomPot}</div>
           <div>{pots}</div>
         </fieldset>
       </div>
@@ -123,6 +157,17 @@ const BUTTONS: IButton[] = [
     label: 'Advance Generation',
     onClick: () => {
       const next = advanceGeneration(state.pots, state.bottomPot, state.rules)
+      state.pots = next.pots
+      state.bottomPot = next.bottomPot
+      return {
+        answer1: sum(state.pots, state.bottomPot).toString()
+      }
+    }
+  },
+  {
+    label: 'Advance Fifty Billion Generations',
+    onClick: () => {
+      const next = advanceALot(state.pots, state.bottomPot, state.rules)
       state.pots = next.pots
       state.bottomPot = next.bottomPot
       return {
