@@ -6,7 +6,7 @@ import {
 
 interface ICart {
   direction: string
-  position: string
+  position: number[]
   turnsExecuted: number
 }
 

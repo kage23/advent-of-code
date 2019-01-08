@@ -23,6 +23,105 @@ let state: IState = {
 }
 
 let prevInputKey = ''
+let time = 0
+
+const advanceOneTick = (baseTrack: string[], carts: ICart[], time: number): {
+  answer1: undefined | string
+  carts: ICart[]
+  time: number
+} => {
+  const directions = ['^', '<', 'v', '>']
+  const turnMods = [1, 0, -1]
+
+  let answer1: undefined | string = undefined
+  let newCarts: ICart[] = []
+
+  while (carts.length > 0 && !answer1) {
+    const cart = carts.shift()
+
+    if (cart) {
+      let {
+        direction,
+        position,
+        turnsExecuted
+      } = cart
+
+      switch (direction) {
+        case '>':
+        position[0]++
+        break
+
+        case '<':
+        position[0]--
+        break
+
+        case '^':
+        position[1]--
+        break
+
+        case 'v':
+        position[1]++
+        break
+
+        default:
+        break
+      }
+
+      const newTrackAtPos = baseTrack[position[1]].charAt(position[0])
+
+      switch (newTrackAtPos) {
+        case '/':
+        if (direction === '>') direction = '^'
+        else if (direction === '^') direction = '>'
+        else if (direction === '<') direction = 'v'
+        else if (direction === 'v') direction = '<'
+        break
+
+        case '\\':
+        if (direction === '>') direction = 'v'
+        else if (direction === 'v') direction = '>'
+        else if (direction === '<') direction = '^'
+        else if (direction === '^') direction = '<'
+        break
+
+        case '+':
+        const oldDirectionIndex = directions.indexOf(direction)
+        direction = directions[(oldDirectionIndex + turnMods[turnsExecuted % turnMods.length] + directions.length) % directions.length]
+        turnsExecuted++
+        break
+
+        case '-':
+        case '|':
+        default:
+        // Nothing to do here
+        break
+      }
+
+      // Detect collision here
+      let collision = carts.find(fCart => fCart.position[0] === cart.position[0] && fCart.position[1] === cart.position[1])
+      if (!collision) collision = newCarts.find(fCart => fCart.position[0] === cart.position[0] && fCart.position[1] === cart.position[1])
+      if (collision) {
+        answer1 = `${position[0]},${position[1]}`
+        direction = 'X'
+        collision.direction = 'X'
+      }
+
+      newCarts.push({
+        direction,
+        position,
+        turnsExecuted
+      })
+    }
+  }
+
+  newCarts = newCarts.sort(sortCartsByPosition)
+
+  return ({
+    answer1,
+    carts: newCarts,
+    time: time + 1
+  })
+}
 
 const parseInput = (input: string): IState => {
   const carts: ICart[] = []
@@ -78,6 +177,8 @@ const sortCartsByPosition = (a: ICart, b: ICart): number => {
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (prevInputKey !== inputKey) {
     state = parseInput(dayConfig.INPUT[inputKey])
+    prevInputKey = inputKey
+    time = 0
   }
 
   const {
@@ -101,6 +202,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
 
   return (
     <div className="render-box">
+      <p>Time: {time}</p>
       <fieldset>
         {display}
       </fieldset>
@@ -108,13 +210,25 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   )
 }
 
-const BUTTONS: IButton[] = []
+const BUTTONS: IButton[] = [
+  {
+    label: 'Advance One Tick',
+    onClick: () => {
+      debugger
+      const next = advanceOneTick(state.baseTrack, state.carts, time)
+      state.carts = next.carts
+      time = next.time
+      return {
+        answer1: next.answer1
+      }
+    }
+  }
+]
 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The resulting frequency is{' '}
-      <code>{answer}</code>.
+      There was a collision at <code>{answer}</code>!
     </span>
   ),
   answer2Text: (answer) => (
