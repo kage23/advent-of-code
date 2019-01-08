@@ -23,6 +23,41 @@ interface IState {
   recipes: RecipeList
 }
 
+const createRecipesAndAdvance = (elves: [RecipeNode | undefined, RecipeNode | undefined], recipes: RecipeList): {
+  elves: [RecipeNode | undefined, RecipeNode | undefined]
+  newRecipes: number[]
+  recipes: RecipeList
+} => {
+  let [
+    elf1,
+    elf2
+  ] = elves
+  const newRecipes = []
+
+  if (elf1 && elf2) {
+    // Add new recipes
+    const recipeSum = elf1.value + elf2.value
+    if (recipeSum > 9) {
+      recipes.push(Math.floor(recipeSum / 10))
+      newRecipes.push(Math.floor(recipeSum / 10))
+    }
+    recipes.push(recipeSum % 10)
+    newRecipes.push(recipeSum % 10)
+
+    // Advance the elves one plus their current recipe's score
+    const oldElf1 = elf1.value
+    const oldElf2 = elf2.value
+    for (let i = 0; i <= oldElf1; i++) if (elf1) elf1 = elf1.next
+    for (let i = 0; i <= oldElf2; i++) if (elf2) elf2 = elf2.next
+  }
+
+  return {
+    elves: [elf1, elf2],
+    newRecipes,
+    recipes
+  }
+}
+
 const resetRecipes = (): RecipeList => {
   const recipeList = new DLL(3)
   recipeList.push(7)
@@ -42,7 +77,17 @@ const resetState = (): IState => {
 let prevInputKey = ''
 let state: IState = resetState()
 
-const BUTTONS: IButton[] = []
+const BUTTONS: IButton[] = [
+  {
+    label: 'Create Recipes and Advance',
+    onClick: () => {
+      const next = createRecipesAndAdvance(state.elves, state.recipes)
+      state.elves = next.elves
+      state.recipes = next.recipes
+      return {}
+    }
+  }
+]
 
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (inputKey !== prevInputKey) {
@@ -55,29 +100,26 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
     recipes
   } = state
 
-  let recipeText = []
+  let recipeText = ''
   if (recipes.length < 100) {
     const recipeHead = recipes.head
     let recipe = recipes.head
     let i = 0
     while (recipe && (recipeText.length === 0 || recipe !== recipeHead)) {
-      const recipeSpan = recipe === elves[0]
-      ? <span key={i}>({recipe.value})</span>
-      : recipe === elves[1]
-        ? <span key={i}>[{recipe.value}]</span>
-        : <span key={i}>&nbsp;{recipe.value}&nbsp;</span>
-      recipeText.push(recipeSpan)
+      recipeText += recipe === elves[0]
+        ? `(${recipe.value})`
+        : recipe === elves[1]
+          ? `[${recipe.value}]`
+          : `${String.fromCharCode(160)}${recipe.value}${' '}`
       recipe = recipe.next
       i++
     }
   } else {
-    recipeText.push((
-      <span key="too-many-recipes">The elves have generated too many recipes to efficiently display them all!</span>
-    ))
+    recipeText = 'The elves have generated too many recipes to efficiently display them all!'
   }
 
   return (
-    <div className="render-box">
+    <div>
       <p>
         The elves will improve after{' '}
         <code>{dayConfig.INPUT[inputKey]}</code>{' '}
