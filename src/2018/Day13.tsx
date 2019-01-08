@@ -123,6 +123,26 @@ const advanceOneTick = (baseTrack: string[], carts: ICart[], time: number): {
   })
 }
 
+const advanceToCollision = (baseTrack: string[], carts: ICart[], time: number): {
+  carts: ICart[]
+  time: number
+  answer1: undefined | string
+} => {
+  let next: {
+    answer1: undefined | string
+    carts: ICart[]
+    time: number
+  } = {
+    carts,
+    answer1: undefined,
+    time
+  }
+
+  while (!next.answer1) next = advanceOneTick(baseTrack, next.carts, next.time)
+
+  return next
+}
+
 const parseInput = (input: string): IState => {
   const carts: ICart[] = []
   const baseTrack = input.split('\n').map((line, y) => {
@@ -214,8 +234,18 @@ const BUTTONS: IButton[] = [
   {
     label: 'Advance One Tick',
     onClick: () => {
-      debugger
       const next = advanceOneTick(state.baseTrack, state.carts, time)
+      state.carts = next.carts
+      time = next.time
+      return {
+        answer1: next.answer1
+      }
+    }
+  },
+  {
+    label: 'Advance to Collision',
+    onClick: () => {
+      const next = advanceToCollision(state.baseTrack, state.carts, time)
       state.carts = next.carts
       time = next.time
       return {
