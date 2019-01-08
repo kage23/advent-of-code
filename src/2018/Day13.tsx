@@ -26,14 +26,14 @@ let prevInputKey = ''
 let time = 0
 
 const advanceOneTick = (baseTrack: string[], carts: ICart[], time: number): {
-  answer1: undefined | string
+  answer1: undefined | string | JSX.Element
   carts: ICart[]
   time: number
 } => {
   const directions = ['^', '<', 'v', '>']
   const turnMods = [1, 0, -1]
 
-  let answer1: undefined | string = undefined
+  let answer1: undefined | string | JSX.Element = undefined
   let newCarts: ICart[] = []
 
   while (carts.length > 0 && !answer1) {
@@ -126,10 +126,10 @@ const advanceOneTick = (baseTrack: string[], carts: ICart[], time: number): {
 const advanceToCollision = (baseTrack: string[], carts: ICart[], time: number): {
   carts: ICart[]
   time: number
-  answer1: undefined | string
+  answer1: undefined | string | JSX.Element
 } => {
   let next: {
-    answer1: undefined | string
+    answer1: undefined | string | JSX.Element
     carts: ICart[]
     time: number
   } = {
@@ -142,6 +142,132 @@ const advanceToCollision = (baseTrack: string[], carts: ICart[], time: number): 
 
   return next
 }
+
+const advanceOneAndRemove = (baseTrack: string[], carts: ICart[], time: number): {
+  carts: ICart[]
+  time: number
+  answer2: undefined | string | JSX.Element
+} => {
+  const directions = ['^', '<', 'v', '>']
+  const turnMods = [1, 0, -1]
+
+  let newCarts: ICart[] = []
+
+  while (carts.length > 0) {
+    const cart = carts.shift()
+
+    if (cart) {
+      let {
+        direction,
+        position,
+        turnsExecuted
+      } = cart
+
+      switch (direction) {
+        case '>':
+        position[0]++
+        break
+
+        case '<':
+        position[0]--
+        break
+
+        case '^':
+        position[1]--
+        break
+
+        case 'v':
+        position[1]++
+        break
+
+        default:
+        break
+      }
+
+      const newTrackAtPos = baseTrack[position[1]].charAt(position[0])
+
+      switch (newTrackAtPos) {
+        case '/':
+        if (direction === '>') direction = '^'
+        else if (direction === '^') direction = '>'
+        else if (direction === '<') direction = 'v'
+        else if (direction === 'v') direction = '<'
+        break
+
+        case '\\':
+        if (direction === '>') direction = 'v'
+        else if (direction === 'v') direction = '>'
+        else if (direction === '<') direction = '^'
+        else if (direction === '^') direction = '<'
+        break
+
+        case '+':
+        const oldDirectionIndex = directions.indexOf(direction)
+        direction = directions[(oldDirectionIndex + turnMods[turnsExecuted % turnMods.length] + directions.length) % directions.length]
+        turnsExecuted++
+        break
+
+        case '-':
+        case '|':
+        default:
+        // Nothing to do here
+        break
+      }
+
+      // Detect collision here
+      let collision = carts.find(fCart => fCart.position[0] === cart.position[0] && fCart.position[1] === cart.position[1])
+      if (!collision) collision = newCarts.find(fCart => fCart.position[0] === cart.position[0] && fCart.position[1] === cart.position[1])
+      if (collision) {
+        carts = carts.filter(fCart => fCart.position[0] !== cart.position[0] || fCart.position[1] !== cart.position[1])
+        newCarts = newCarts.filter(fCart => fCart.position[0] !== cart.position[0] || fCart.position[1] !== cart.position[1])
+      } else {
+        newCarts.push({
+          direction,
+          position,
+          turnsExecuted
+        })
+      }
+    }
+  }
+
+  newCarts = newCarts.sort(sortCartsByPosition)
+
+  const answer2 = getAnswer2(newCarts)
+
+  return {
+    answer2,
+    carts: newCarts,
+    time: time + 1
+  }
+}
+
+const advanceToFinal = (baseTrack: string[], carts: ICart[], time: number): {
+  carts: ICart[]
+  time: number
+  answer2: undefined | string | JSX.Element
+} => {
+  let next: { carts: ICart[], time: number } = {
+    carts,
+    time
+  }
+
+  while (next.carts.length > 1) next = advanceOneAndRemove(baseTrack, next.carts, next.time)
+
+  const answer2 = getAnswer2(next.carts)
+
+  return {
+    ...next,
+    answer2
+  }
+}
+
+const getAnswer2 = (carts: ICart[]): JSX.Element | undefined => (
+  carts.length > 1
+    ? undefined
+    : carts.length === 1
+      ? <span>The final cart's position is <code>{carts[0].position[0]},{carts[0].position[1]}</code>.</span>
+      : <span>There are no more carts!</span>
+)
 
 const parseInput = (input: string): IState => {
   const carts: ICart[] = []
@@ -252,6 +378,28 @@ const BUTTONS: IButton[] = [
         answer1: next.answer1
       }
     }
+  },
+  {
+    label: 'Advance One Tick (with remove)',
+    onClick: () => {
+      const next = advanceOneAndRemove(state.baseTrack, state.carts, time)
+      state.carts = next.carts
+      time = next.time
+      return {
+        answer2: next.answer2
+      }
+    }
+  },
+  {
+    label: 'Advance to Final (with remove)',
+    onClick: () => {
+      const next = advanceToFinal(state.baseTrack, state.carts, time)
+      state.carts = next.carts
+      time = next.time
+      return {
+        answer2: next.answer2
+      }
+    }
   }
 ]
 
@@ -261,12 +409,12 @@ const config: IDayConfig = {
       There was a collision at <code>{answer}</code>!
     </span>
   ),
-  answer2Text: (answer) => (
-    <span>
-      The first frequency reached twice is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
+  answer2Text: (answer) => {
+    debugger
+    return (
+      <span>{answer}</span>
+    )
+  },
   buttons: BUTTONS,
   day: 13,
   INPUT,

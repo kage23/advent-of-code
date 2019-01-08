@@ -17,14 +17,14 @@ import Day13__2018__Config from './2018/Day13'
 export interface IButton {
   label: string
   onClick: (input: string) => {
-    answer1?: string
-    answer2?: string
+    answer1?: string | JSX.Element
+    answer2?: string | JSX.Element
   }
 }
 
 export interface IDayConfig {
-  answer1Text: (answer: string, inputKey?: string) => JSX.Element
-  answer2Text: (answer: string, inputKey?: string) => JSX.Element
+  answer1Text: (answer: string | JSX.Element, inputKey?: string) => JSX.Element
+  answer2Text: (answer: string | JSX.Element, inputKey?: string) => JSX.Element
   buttons: IButton[]
   day: number
   INPUT: {
@@ -33,8 +33,8 @@ export interface IDayConfig {
   renderDay: (
     dayConfig: IDayConfig,
     input: string,
-    answer1: false | string,
-    answer2: false | string
+    answer1: false | string | JSX.Element,
+    answer2: false | string | JSX.Element
   ) => JSX.Element
   title: string
 }
