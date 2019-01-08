@@ -74,6 +74,34 @@ const resetState = (): IState => {
   }
 }
 
+const part1 = (betterAfter: number, elves: [RecipeNode | undefined, RecipeNode | undefined], recipes: RecipeList): {
+  answer1: undefined | string
+  elves: [RecipeNode | undefined, RecipeNode | undefined]
+  recipes: RecipeList
+} => {
+  let nextSet: {
+    elves: [RecipeNode | undefined, RecipeNode | undefined]
+    recipes: RecipeList
+  } = {
+    elves,
+    recipes
+  }
+
+  while (nextSet.recipes.length < betterAfter + 10) nextSet = createRecipesAndAdvance(nextSet.elves, nextSet.recipes)
+
+  let answer1 = ''
+  let recipe = nextSet.recipes.head
+  for (let i = 0; i < betterAfter + 10; i++) {
+    if (recipe && i >= betterAfter) answer1 += recipe.value.toString()
+    if (recipe) recipe = recipe.next
+  }
+
+  return {
+    answer1,
+    ...nextSet
+  }
+}
+
 let prevInputKey = ''
 let state: IState = resetState()
 
@@ -85,6 +113,17 @@ const BUTTONS: IButton[] = [
       state.elves = next.elves
       state.recipes = next.recipes
       return {}
+    }
+  },
+  {
+    label: 'Find Good Recipes (Part 1)',
+    onClick: (inputKey) => {
+      const result = part1(parseInt(INPUT[inputKey]), state.elves, state.recipes)
+      state.elves = result.elves
+      state.recipes = result.recipes
+      return {
+        answer1: result.answer1
+      }
     }
   }
 ]
@@ -133,7 +172,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The solution is{' '}
+      The ten recipes after they improve are{' '}
       <code>{answer}</code>.
     </span>
   ),
