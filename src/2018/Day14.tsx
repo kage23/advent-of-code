@@ -74,23 +74,18 @@ const resetState = (): IState => {
   }
 }
 
-const part1 = (betterAfter: number, elves: [RecipeNode | undefined, RecipeNode | undefined], recipes: RecipeList): {
+const part1 = (betterAfter: number): {
   answer1: undefined | string
   elves: [RecipeNode | undefined, RecipeNode | undefined]
   recipes: RecipeList
 } => {
-  let nextSet: {
-    elves: [RecipeNode | undefined, RecipeNode | undefined]
-    recipes: RecipeList
-  } = {
-    elves,
-    recipes
-  }
+  let myState: IState = resetState()
 
-  while (nextSet.recipes.length < betterAfter + 10) nextSet = createRecipesAndAdvance(nextSet.elves, nextSet.recipes)
+  while (myState.recipes.length < betterAfter + 10)
+    myState = createRecipesAndAdvance(myState.elves, myState.recipes)
 
   let answer1 = ''
-  let recipe = nextSet.recipes.head
+  let recipe = myState.recipes.head
   for (let i = 0; i < betterAfter + 10; i++) {
     if (recipe && i >= betterAfter) answer1 += recipe.value.toString()
     if (recipe) recipe = recipe.next
@@ -98,7 +93,42 @@ const part1 = (betterAfter: number, elves: [RecipeNode | undefined, RecipeNode |
 
   return {
     answer1,
-    ...nextSet
+    ...myState
+  }
+}
+
+const part2 = (lookingFor: string): {
+  answer2: undefined | string
+  elves: [RecipeNode | undefined, RecipeNode | undefined]
+  recipes: RecipeList
+} => {
+  const targetLength = lookingFor.length
+  let checkString = ''
+
+  let { elves, recipes }: IState = resetState()
+
+  let nextSet: {
+    elves: [RecipeNode | undefined, RecipeNode | undefined]
+    newRecipes: number[]
+    recipes: RecipeList
+  } = {
+    elves,
+    newRecipes: [],
+    recipes
+  }
+
+  while (checkString.indexOf(lookingFor) === -1) {
+    nextSet = createRecipesAndAdvance(nextSet.elves, nextSet.recipes)
+    checkString += nextSet.newRecipes.join('')
+    while (checkString.length > lookingFor.length * 2) checkString = checkString.slice(1)
+  }
+
+  return {
+    answer2: checkString.endsWith(lookingFor)
+      ? (nextSet.recipes.length - targetLength).toString()
+      : (nextSet.recipes.length - targetLength - 1).toString(),
+    elves: nextSet.elves,
+    recipes: nextSet.recipes
   }
 }
 
@@ -118,11 +148,22 @@ const BUTTONS: IButton[] = [
   {
     label: 'Find Good Recipes (Part 1)',
     onClick: (inputKey) => {
-      const result = part1(parseInt(INPUT[inputKey]), state.elves, state.recipes)
+      const result = part1(parseInt(INPUT[inputKey]))
       state.elves = result.elves
       state.recipes = result.recipes
       return {
         answer1: result.answer1
+      }
+    }
+  },
+  {
+    label: 'Find Good Recipes (Part 2)',
+    onClick: (inputKey) => {
+      const result = part2(INPUT[inputKey])
+      state.elves = result.elves
+      state.recipes = result.recipes
+      return {
+        answer2: result.answer2
       }
     }
   }
@@ -176,10 +217,11 @@ const config: IDayConfig = {
       <code>{answer}</code>.
     </span>
   ),
-  answer2Text: (answer) => (
+  answer2Text: (answer, inputKey = '') => (
     <span>
-      The solution is{' '}
-      <code>{answer}</code>.
+      <code>{INPUT[inputKey]}</code>
+      {' '}first appears after{' '}
+      <code>{answer}</code> recipes.
     </span>
   ),
   buttons: BUTTONS,
