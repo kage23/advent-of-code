@@ -4,6 +4,12 @@ import {
   YEARS
 } from './Config'
 
+interface ICart {
+  direction: string
+  position: string
+  turnsExecuted: number
+}
+
 class App extends Component<{}, {
   answer1: false | string
   answer2: false | string
