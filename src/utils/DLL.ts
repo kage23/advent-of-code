@@ -1,5 +1,6 @@
 class DLL {
   head: IDLLNode | undefined
+  length: number
 
   constructor(value?: any) {
     if (typeof value !== 'undefined') {
@@ -7,7 +8,8 @@ class DLL {
       node.next = node
       node.prev = node
       this.head = node
-    }
+      this.length = 1
+    } else this.length = 0
   }
 
   insertAfter = (insert: any, after: IDLLNode): IDLLNode => {
@@ -18,6 +20,7 @@ class DLL {
     }
     if (after.next) after.next.prev = node
     after.next = node
+    this.length++
     return node
   }
 
@@ -33,9 +36,11 @@ class DLL {
       node.prev = node
       this.head = node
     }
+    this.length++
   }
 
   removeNode = (node: IDLLNode): IDLLNode | undefined => {
+    this.length--
     if (this.head === node) {
       if (this.head.next === node) {
         this.head = undefined
