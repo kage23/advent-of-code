@@ -1,0 +1,95 @@
+body {
+  background: #0f0f23; /*337 x 5*/
+  color: #cccccc;
+  font-family: "Source Code Pro", monospace;
+  font-size: 14pt;
+  min-width: 60em;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { border:0; }
+a { outline:0; }
+main, figure, figcaption { display:block; }
+pre, code { font-family: "Source Code Pro", monospace; }
+header, main {
+  -webkit-text-size-adjust: none;
+}
+
+a {
+  text-decoration: none;
+  color: #009900;
+}
+a:hover {
+  color: #99ff99;
+}
+h1, h2 {
+  font-size: 1em;
+  font-weight: normal;
+}
+
+header {
+  white-space: nowrap;
+  cursor: default;
+  z-index: 100;
+  margin-bottom: 2em;
+}
+header h1 {
+  display: inline-block;
+  margin: 0;
+  padding-right: 1em;
+}
+header h1 a, header h1 span {
+  display: inline-block;
+  text-decoration: none;
+  color: #00cc00;
+  text-shadow: 0 0 2px #00cc00, 0 0 5px #00cc00;
+}
+header h1 a:hover {
+  color: #99ff99;
+  text-shadow: 0 0 2px #99ff99, 0 0 5px #99ff99;
+}
+
+header nav {
+  display: inline-block;
+}
+header nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+}
+header nav li {
+  display: inline-block;
+  padding: 0 .6em;
+}
+header nav a {
+  display: inline-block;
+  text-decoration: none;
+  outline: none;
+}
+
+header span.wrapper {
+  color: #009900;
+  opacity: .5;
+}
+
+header select {
+  -webkit-appearance: none;
+  font-size: 14pt;
+  font-family: "Source Code Pro", monospace;
+  background-color: transparent;
+  color: #009900;
+  border: none;
+}
+
+header select:hover {
+  color: #99ff99;
+}
+
+header select:focus {
+  outline: none;
+}
+
+article h2 {
+  color: #ffffff;
+}

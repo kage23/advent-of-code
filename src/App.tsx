@@ -1,63 +1,121 @@
 import React, { Component } from 'react'
-import { INPUT } from './Input'
+import { YEARS } from './Config'
 
 class App extends Component<{}, {
-  input: string
+  day: number
+  year: number
 }> {
   constructor(props: {}) {
     super(props)
 
     this.state = {
-      input: ''
+      day: 0,
+      year: 0
     }
   }
 
-  handleInputChange = (key: string) => {
+  handleDayChange = (e: React.FormEvent<HTMLSelectElement>) => {
+    this.setState({ day: parseInt(e.currentTarget.value) })
+  }
+
+  handleYearChange = (e: React.FormEvent<HTMLSelectElement>) => {
     this.setState({
-      input: key
+      day: 0,
+      year: parseInt(e.currentTarget.value)
     })
   }
 
   render() {
-    const { input } = this.state
+    const {
+      day,
+      year
+    } = this.state
 
-    const inputSelectors = []
+    const yearOptions = YEARS.map(YEAR => (
+      <option key={YEAR.year} value={YEAR.year}>{YEAR.year}</option>
+    ))
 
-    for (const key of Object.keys(INPUT)) {
-      inputSelectors.push(([
-        <label key={key}>
-          <input
-            type="radio"
-            name="inputType"
-            value={key}
-            checked={input === key}
-            onChange={() => this.handleInputChange(key) }
-          />
-          {key}
-        </label>,
-        ' '
-      ]))
+    const yearConfig = YEARS.find(YEAR => YEAR.year === year)
+    let dayOptions: JSX.Element[] = []
+    if (yearConfig) {
+      dayOptions = yearConfig.days.map(day => (
+        <option key={day} value={day}>
+          {day < 10 ? '0' : ''}{day}
+        </option>
+      ))
     }
 
     return (
-      <div
-        style={{
-          fontFamily: '"Source Code Pro", monospace',
-          fontSize: '15px'
-        }}
-      >
-        <p>These are some of the things I wrote for the 2018 Advent of Code project. I completed the whole thing (hopefully, at least - I'm writing this on the 19th!) but I didn't start saving them to Github until I was a ways into them! Anyway, check out the different branches for the different days.</p>
-        {inputSelectors.length > 0 && (
-          <fieldset>{inputSelectors}</fieldset>
+      <div>
+        <header>
+          <h1>
+            <a>Advent of Code</a>
+          </h1>
+          <nav>
+            <span className="wrapper">
+              year=
+            </span>
+            <select
+              onChange={this.handleYearChange}
+              value={year}
+            >
+              <option value={0}>20xx</option>
+              {yearOptions}
+            </select>
+            {' '}
+            <span className="wrapper">
+              day=
+            </span>
+            <select
+              onChange={this.handleDayChange}
+              value={day}
+            >
+              <option value={0}>xx</option>
+              {dayOptions}
+            </select>
+          </nav>
+        </header>
+        {(year === 0 || day === 0) && (
+          <article>
+            <h2>--- Advent of Code ---</h2>
+            <p>
+              Check out my solutions for the{' '}
+              <a href="https://adventofcode.com">Advent of Code</a>
+              {' '}challenges! To get started, select a year and day above.
+            </p>
+          </article>
         )}
-        <p>Bonus Items:</p>
-        <ul>
-          <li>Re-create Days 1-14 and put them on GitHub. (I'm pretty sure at least one of them is still on my laptop in the checkers-fe project.)</li>
-          <li>Render the map for Day 20.</li>
-        </ul>
       </div>
     );
   }
 }
 
 export default App
+
+// const inputSelectors = () => {
+//   const { input } = this.state
+
+//   const inputSelectors = []
+
+//   for (const key of Object.keys(INPUT)) {
+//     inputSelectors.push(([
+//       <label key={key}>
+//         <input
+//           type="radio"
+//           name="inputType"
+//           value={key}
+//           checked={input === key}
+//           onChange={() => this.handleInputChange(key) }
+//         />
+//         {key}
+//       </label>,
+//       ' '
+//     ]))
+//   }
+
+//   return inputSelectors
+// }
+
+// {inputSelectors.length > 0 && (
+//   <fieldset>{inputSelectors}</fieldset>
+// )}
