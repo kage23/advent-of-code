@@ -22,7 +22,7 @@ a {
 a:hover {
   color: #99ff99;
 }
-h1, h2 {
+h1, h2, h3 {
   font-size: 1em;
   font-weight: normal;
 }
@@ -87,6 +87,11 @@ article h2 a {
   display: flex;
 }
 
+.input-selector,
+.control-buttons {
+  flex-shrink: 0;
+}
+
 .input-selector__label,
 .input-selector__item__label {
   display: block;
@@ -146,19 +151,11 @@ article h2 a {
   margin-bottom: 4px;
 }
 
-.answers p:first-child {
-  margin-top: 0;
-}
-
-.answers p:last-child {
-  margin-bottom: 0;
-}
-
-.answers code {
+code {
   position: relative;
 }
 
-.answers code:before {
+code:before {
   z-index: -1;
   content: "";
   position: absolute;
@@ -169,4 +166,61 @@ article h2 a {
   bottom: 0px;
   border: 1px solid #333340;
   background: #10101a;
+}
+
+.render-box {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1em 0px;
+}
+
+.render-box--left-margin {
+  margin-left: 24px;
+}
+
+.render-box--no-wrap {
+  flex-wrap: nowrap;
+}
+
+.render-box h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  flex-basis: 100%;
+  flex-shrink: 0;
+}
+
+.render-box p {
+  flex-basis: 100%;
+}
+
+.render-box pre {
+  flex-shrink: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+pre.render-box--pre-wrap {
+  flex-shrink: 1;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.render-box pre + div {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.render-box p:first-child,
+.answers p:first-child {
+  margin-top: 0;
+}
+
+.render-box p:last-child,
+.answers p:last-child {
+  margin-bottom: 0;
+}
+
+.space-between {
+  justify-content: space-between;
 }
