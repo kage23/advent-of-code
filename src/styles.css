@@ -185,3 +185,8 @@ article h2 a {
   border: 1px solid #333340;
   background: #10101a;
 }
+
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
