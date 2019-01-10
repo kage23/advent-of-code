@@ -5,11 +5,12 @@ import {
 } from './Config'
 
 class App extends Component<{}, {
-  answer1: false | string
-  answer2: false | string
+  answer1: false | string | JSX.Element
+  answer2: false | string | JSX.Element
   day: number
   inputKey: string
   year: number
+  other?: any
 }> {
   constructor(props: {}) {
     super(props)
@@ -24,8 +25,8 @@ class App extends Component<{}, {
   }
 
   handleButtonClick = (onClick: (input: string) => {
-    answer1?: string
-    answer2?: string
+    answer1?: string | JSX.Element
+    answer2?: string | JSX.Element
   }) => {
     const {
       answer1,
@@ -36,8 +37,8 @@ class App extends Component<{}, {
     const result = onClick(inputKey)
 
     this.setState({
-      answer1: typeof result.answer1 === 'string' ? result.answer1 : answer1,
-      answer2: typeof result.answer2 === 'string' ? result.answer2 : answer2
+      answer1: typeof result.answer1 !== 'undefined' ? result.answer1 : answer1,
+      answer2: typeof result.answer2 !== 'undefined' ? result.answer2 : answer2
     })
   }
 
@@ -67,6 +68,8 @@ class App extends Component<{}, {
       year: parseInt(e.currentTarget.value)
     })
   }
+
+  setOther = (other: any) => this.setState({ other })
 
   render() {
     const {
@@ -193,7 +196,13 @@ class App extends Component<{}, {
               >
                 Advent of Code
               </a>
-              {' '}challenges! To get started, select a year and day above.
+              {' '}challenges! To get started, select a year and day above.{' '}
+              Please note that there's no way for you to enter your custom unique{' '}
+              puzzle inputs into my UI here ... If you want to use my package to solve{' '}
+              the challenges and <span style={{ textDecoration: 'line-through' }}>earn</span>{' '}
+              get your stars, you're going to have to go get{' '}
+              <a href="https://github.com/kage23/advent-of-code">the project repository</a>{' '}
+              and figure it out!
             </p>
           ) : (
             <div>
@@ -217,28 +226,31 @@ class App extends Component<{}, {
                     ))}
                   </fieldset>
                 )}
-                {(typeof answer1 === 'string' || typeof answer2 === 'string') && (
+                {(
+                  (answer1 !== false && typeof answer1 !== 'undefined')
+                  || (answer2 !== false && typeof answer2 !== 'undefined')
+                ) && (
                   <div className="answers">
-                    {typeof answer1 === 'string' && (
+                    {answer1 !== false && typeof answer1 !== 'undefined' && (
                       <fieldset>
                         <p>
                           Answer 1:{' '}
-                          {dayConfig.answer1Text(answer1)}
+                          {dayConfig.answer1Text(answer1, inputKey)}
                         </p>
                       </fieldset>
                     )}
-                    {typeof answer2 === 'string' && (
+                    {answer2 !== false && typeof answer2 !== 'undefined' && (
                       <fieldset>
                         <p>
                           Answer 2:{' '}
-                          {dayConfig.answer2Text(answer2)}
+                          {dayConfig.answer2Text(answer2, inputKey)}
                         </p>
                       </fieldset>
                     )}
                   </div>
                 )}
               </div>
-              {inputKey.length > 0 && dayConfig.renderDay(dayConfig, inputKey, answer1, answer2)}
+              {inputKey.length > 0 && dayConfig.renderDay(dayConfig, inputKey, answer1, answer2, this.setOther)}
             </div>
           )}
         </article>
