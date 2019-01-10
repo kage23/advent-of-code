@@ -1,5 +1,7 @@
 import React from 'react'
 
+import Day1__2018__Config from './2018/Day1'
+
 export interface IButton {
   label: string
   onClick: (input: string) => {
@@ -40,6 +42,8 @@ export const defaultRenderDay = (dayConfig: IDayConfig, inputKey: string): JSX.E
 export const YEARS: IYearConfig[] = [
   {
     year: 2018,
-    days: []
+    days: [
+      Day1__2018__Config
+    ]
   }
 ]
