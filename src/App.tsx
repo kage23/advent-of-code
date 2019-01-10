@@ -36,8 +36,8 @@ class App extends Component<{}, {
     const result = onClick(inputKey)
 
     this.setState({
-      answer1: result.answer1 || answer1,
-      answer2: result.answer2 || answer2
+      answer1: typeof result.answer1 === 'string' ? result.answer1 : answer1,
+      answer2: typeof result.answer2 === 'string' ? result.answer2 : answer2
     })
   }
 
@@ -217,9 +217,9 @@ class App extends Component<{}, {
                     ))}
                   </fieldset>
                 )}
-                {(answer1 || answer2) && (
+                {(typeof answer1 === 'string' || typeof answer2 === 'string') && (
                   <div className="answers">
-                    {answer1 && (
+                    {typeof answer1 === 'string' && (
                       <fieldset>
                         <p>
                           Answer 1:{' '}
@@ -227,7 +227,7 @@ class App extends Component<{}, {
                         </p>
                       </fieldset>
                     )}
-                    {answer2 && (
+                    {typeof answer2 === 'string' && (
                       <fieldset>
                         <p>
                           Answer 2:{' '}
@@ -238,7 +238,7 @@ class App extends Component<{}, {
                   </div>
                 )}
               </div>
-              {inputKey.length > 0 && dayConfig.renderDay(dayConfig.INPUT[inputKey])}
+              {inputKey.length > 0 && dayConfig.renderDay(dayConfig, inputKey, answer1, answer2)}
             </div>
           )}
         </article>
