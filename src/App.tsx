@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
-import { YEARS } from './Config'
+import {
+  IDayConfig,
+  YEARS
+} from './Config'
 
 class App extends Component<{}, {
   day: number
+  inputKey: string
   year: number
 }> {
   constructor(props: {}) {
@@ -10,17 +14,28 @@ class App extends Component<{}, {
 
     this.state = {
       day: 0,
+      inputKey: '',
       year: 0
     }
   }
 
   handleDayChange = (e: React.FormEvent<HTMLSelectElement>) => {
-    this.setState({ day: parseInt(e.currentTarget.value) })
+    this.setState({
+      day: parseInt(e.currentTarget.value),
+      inputKey: ''
+    })
+  }
+
+  handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
+    this.setState({
+      inputKey: e.currentTarget.value
+    })
   }
 
   handleYearChange = (e: React.FormEvent<HTMLSelectElement>) => {
     this.setState({
       day: 0,
+      inputKey: '',
       year: parseInt(e.currentTarget.value)
     })
   }
@@ -28,22 +43,73 @@ class App extends Component<{}, {
   render() {
     const {
       day,
+      inputKey,
       year
     } = this.state
 
     const yearOptions = YEARS.map(YEAR => (
-      <option key={YEAR.year} value={YEAR.year}>{YEAR.year}</option>
+      <option
+        key={YEAR.year}
+        value={YEAR.year}
+      >
+        {YEAR.year}
+      </option>
+    ))
+    yearOptions.unshift((
+      <option
+        key="xx"
+        value={0}
+      >
+        20xx
+      </option>
     ))
 
     const yearConfig = YEARS.find(YEAR => YEAR.year === year)
     let dayOptions: JSX.Element[] = []
+    let dayConfig: IDayConfig | undefined = undefined
     if (yearConfig) {
-      dayOptions = yearConfig.days.map(day => (
-        <option key={day} value={day}>
-          {day < 10 ? '0' : ''}{day}
+      dayOptions = yearConfig.days.map(DAY => (
+        <option
+          key={DAY.day}
+          value={DAY.day}
+        >
+          {DAY.day < 10 ? '0' : ''}{DAY.day}
         </option>
       ))
+      dayConfig = yearConfig.days.find(fDay => fDay.day === day)
     }
+    dayOptions.unshift((
+      <option
+        key="xx"
+        value={0}
+      >
+        xx
+      </option>
+    ))
+
+    const inputSelectors: JSX.Element[] = []
+    if (dayConfig) {
+      const { INPUT } = dayConfig
+      for (const key of Object.keys(INPUT)) {
+        inputSelectors.push((
+          <label
+            key={key}
+            className="input-selector__item__label"
+          >
+            <input
+              className="input-selector__item__input"
+              type="radio"
+              name="inputType"
+              value={key}
+              checked={inputKey === key}
+              onChange={this.handleInputChange}
+            />
+            {key}
+          </label>
+        ))
+      }
+    }
+
 
     return (
       <div>
@@ -59,7 +125,6 @@ class App extends Component<{}, {
               onChange={this.handleYearChange}
               value={year}
             >
-              <option value={0}>20xx</option>
               {yearOptions}
             </select>
             {' '}
@@ -70,52 +135,49 @@ class App extends Component<{}, {
               onChange={this.handleDayChange}
               value={day}
             >
-              <option value={0}>xx</option>
               {dayOptions}
             </select>
           </nav>
         </header>
-        {(year === 0 || day === 0) && (
-          <article>
-            <h2>--- Advent of Code ---</h2>
+        <article>
+          <h2>
+            ---{' '}
+            {dayConfig && dayConfig.title.length > 0
+              ? `Day ${day < 10 ? `0${day}` : day}: ${dayConfig.title}`
+              : 'Advent of Code'
+            }
+            {' '}---
+            {' '}
+            {day > 0 && (
+              <a
+                target="_blank"
+                href={`https://adventofcode.com/${year}/day/${day}`}
+              >View Challenge</a>
+            )}
+          </h2>
+          {(year === 0 || day === 0) ? (
             <p>
               Check out my solutions for the{' '}
               <a href="https://adventofcode.com">Advent of Code</a>
               {' '}challenges! To get started, select a year and day above.
             </p>
-          </article>
-        )}
+          ) : (
+            <div>
+              <div className="control-boxes">
+                <fieldset className="input-selector">
+                  <label className="input-selector__label">
+                    Select an input:
+                  </label>
+                  {inputSelectors}
+                </fieldset>
+              </div>
+              {dayConfig && inputKey.length > 0 && dayConfig.renderDay(dayConfig.INPUT[inputKey])}
+            </div>
+          )}
+        </article>
       </div>
     );
   }
 }
 
 export default App
-
-// const inputSelectors = () => {
-//   const { input } = this.state
-
-//   const inputSelectors = []
-
-//   for (const key of Object.keys(INPUT)) {
-//     inputSelectors.push(([
-//       <label key={key}>
-//         <input
-//           type="radio"
-//           name="inputType"
-//           value={key}
-//           checked={input === key}
-//           onChange={() => this.handleInputChange(key) }
-//         />
-//         {key}
-//       </label>,
-//       ' '
-//     ]))
-//   }
-
-//   return inputSelectors
-// }
-
-// {inputSelectors.length > 0 && (
-//   <fieldset>{inputSelectors}</fieldset>
-// )}

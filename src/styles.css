@@ -93,3 +93,23 @@ header select:focus {
 article h2 {
   color: #ffffff;
 }
+
+article h2 a {
+  opacity: .5;
+}
+
+.control-boxes {
+  display: flex;
+}
+
+.input-selector__label,
+.input-selector__item__label {
+  display: block;
+  line-height: 20pt;
+}
+
+.input-selector__item__input {
+  margin: 3px 1ex;
+  position: relative;
+  top: -1px;
+}
