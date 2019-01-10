@@ -5,6 +5,8 @@ import {
 } from './Config'
 
 class App extends Component<{}, {
+  answer1: false | string
+  answer2: false | string
   day: number
   inputKey: string
   year: number
@@ -13,14 +15,36 @@ class App extends Component<{}, {
     super(props)
 
     this.state = {
+      answer1: false,
+      answer2: false,
       day: 0,
       inputKey: '',
       year: 0
     }
   }
 
+  handleButtonClick = (onClick: (input: string) => {
+    answer1?: string
+    answer2?: string
+  }) => {
+    const {
+      answer1,
+      answer2,
+      inputKey
+    } = this.state
+
+    const result = onClick(inputKey)
+
+    this.setState({
+      answer1: result.answer1 || answer1,
+      answer2: result.answer2 || answer2
+    })
+  }
+
   handleDayChange = (e: React.FormEvent<HTMLSelectElement>) => {
     this.setState({
+      answer1: false,
+      answer2: false,
       day: parseInt(e.currentTarget.value),
       inputKey: ''
     })
@@ -28,12 +52,16 @@ class App extends Component<{}, {
 
   handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
     this.setState({
+      answer1: false,
+      answer2: false,
       inputKey: e.currentTarget.value
     })
   }
 
   handleYearChange = (e: React.FormEvent<HTMLSelectElement>) => {
     this.setState({
+      answer1: false,
+      answer2: false,
       day: 0,
       inputKey: '',
       year: parseInt(e.currentTarget.value)
@@ -42,6 +70,8 @@ class App extends Component<{}, {
 
   render() {
     const {
+      answer1,
+      answer2,
       day,
       inputKey,
       year
@@ -110,7 +140,6 @@ class App extends Component<{}, {
       }
     }
 
-
     return (
       <div>
         <header>
@@ -155,7 +184,7 @@ class App extends Component<{}, {
               >View Challenge</a>
             )}
           </h2>
-          {(year === 0 || day === 0) ? (
+          {!dayConfig ? (
             <p>
               Check out my solutions for the{' '}
               <a
@@ -175,8 +204,41 @@ class App extends Component<{}, {
                   </label>
                   {inputSelectors}
                 </fieldset>
+                {dayConfig.buttons.length > 0 && (
+                  <fieldset className="control-buttons">
+                    {dayConfig.buttons.map((buttonConfig, i) => (
+                      <button
+                        key={i}
+                        onClick={() => this.handleButtonClick(buttonConfig.onClick)}
+                        disabled={inputKey.length === 0}
+                      >
+                        {buttonConfig.label}
+                      </button>
+                    ))}
+                  </fieldset>
+                )}
+                {(answer1 || answer2) && (
+                  <div className="answers">
+                    {answer1 && (
+                      <fieldset>
+                        <p>
+                          Answer 1:{' '}
+                          {dayConfig.answer1Text(answer1)}
+                        </p>
+                      </fieldset>
+                    )}
+                    {answer2 && (
+                      <fieldset>
+                        <p>
+                          Answer 2:{' '}
+                          {dayConfig.answer2Text(answer2)}
+                        </p>
+                      </fieldset>
+                    )}
+                  </div>
+                )}
               </div>
-              {dayConfig && inputKey.length > 0 && dayConfig.renderDay(dayConfig.INPUT[inputKey])}
+              {inputKey.length > 0 && dayConfig.renderDay(dayConfig.INPUT[inputKey])}
             </div>
           )}
         </article>

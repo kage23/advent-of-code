@@ -2,7 +2,18 @@ import React from 'react'
 
 import Input__Day1__2018 from './2018/day1/Input'
 
+export interface IButton {
+  label: string
+  onClick: (input: string) => {
+    answer1?: string
+    answer2?: string
+  }
+}
+
 export interface IDayConfig {
+  answer1Text: (input: string) => JSX.Element
+  answer2Text: (input: string) => JSX.Element
+  buttons: IButton[]
   day: number
   INPUT: {
     [key:string]: string
@@ -16,7 +27,7 @@ export interface IYearConfig {
   days: IDayConfig[]
 }
 
-const defaultRenderDay = (input: string): JSX.Element => (
+export const defaultRenderDay = (input: string): JSX.Element => (
   <div>
     <p>Input:</p>
     <pre>{input}</pre>

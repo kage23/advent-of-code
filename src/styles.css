@@ -135,8 +135,13 @@ article h2 a {
   -moz-appearance: none;
 }
 
-.control-buttons button:hover,
-.control-buttons button:focus {
+.control-buttons button:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.control-buttons button:hover:not(:disabled),
+.control-buttons button:focus:not(:disabled) {
   background: #333333;
 }
 
@@ -146,4 +151,37 @@ article h2 a {
 
 .control-buttons button:active {
   transform: scale(0.95);
+}
+
+.answers {
+  flex-grow: 1;
+}
+
+.answers fieldset {
+  margin-bottom: 4px;
+}
+
+.answers p:first-child {
+  margin-top: 0;
+}
+
+.answers p:last-child {
+  margin-bottom: 0;
+}
+
+.answers code {
+  position: relative;
+}
+
+.answers code:before {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  display: block;
+  left: -2px;
+  right: -2px;
+  top: 3px;
+  bottom: 0px;
+  border: 1px solid #333340;
+  background: #10101a;
 }
