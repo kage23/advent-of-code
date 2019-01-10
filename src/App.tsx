@@ -223,7 +223,7 @@ class App extends Component<{}, {
                       <fieldset>
                         <p>
                           Answer 1:{' '}
-                          {dayConfig.answer1Text(answer1)}
+                          {dayConfig.answer1Text(answer1, inputKey)}
                         </p>
                       </fieldset>
                     )}
@@ -231,7 +231,7 @@ class App extends Component<{}, {
                       <fieldset>
                         <p>
                           Answer 2:{' '}
-                          {dayConfig.answer2Text(answer2)}
+                          {dayConfig.answer2Text(answer2, inputKey)}
                         </p>
                       </fieldset>
                     )}

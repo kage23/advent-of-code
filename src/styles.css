@@ -146,10 +146,12 @@ article h2 a {
   margin-bottom: 4px;
 }
 
+.render-box p:first-child,
 .answers p:first-child {
   margin-top: 0;
 }
 
+.render-box p:last-child,
 .answers p:last-child {
   margin-bottom: 0;
 }
@@ -174,4 +176,32 @@ article h2 a {
 pre {
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.render-box {
+  display: flex;
+  margin: 1em 0px;
+}
+
+.render-box > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.render-box > *:not(:first-child) {
+  margin-left: 24px;
+}
+
+.render-box p {
+  flex-basis: 100%;
+}
+
+.render-box pre {
+  flex-shrink: 0;
+}
+
+.render-box pre + div {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
 }
