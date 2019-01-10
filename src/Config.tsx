@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Input__Day1__2018 from './2018/day1/Input'
+import Day1__2018__Config from './2018/Day1'
 
 export interface IButton {
   label: string
@@ -38,12 +38,7 @@ export const YEARS: IYearConfig[] = [
   {
     year: 2018,
     days: [
-      {
-        day: 1,
-        INPUT: Input__Day1__2018,
-        renderDay: defaultRenderDay,
-        title: 'Chronal Calibration'
-      }
+      Day1__2018__Config
     ]
   }
 ]
