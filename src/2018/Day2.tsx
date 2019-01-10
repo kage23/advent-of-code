@@ -32,10 +32,47 @@ const findChecksum = (inputKey: string) => {
   }
 }
 
+const findCommonLetters = (inputKey: string): { answer2: string | undefined } => {
+  const boxIDs = INPUT[inputKey].split('\n')
+  const n = boxIDs.length
+  const l = boxIDs[0].length
+  for (const boxID of boxIDs) {
+    for (let i = 0; i < n; i++) {
+      const searchBoxID = boxIDs[i]
+      if (searchBoxID !== boxID) {
+        let diffs = 0
+        for (let j = 0; j < l; j++) {
+          if (boxID[j] !== searchBoxID[j]) diffs++
+          if (diffs > 1) break
+        }
+        if (diffs === 1) {
+          return {
+            answer2: [boxID, searchBoxID].reduce((a, b) => {
+              let result = ''
+              const n = a.length
+
+              for (let i = 0; i < n; i++) if (a[i] === b[i]) result += a[i]
+
+              return result
+            })
+          }
+        }
+      }
+    }
+  }
+  return {
+    answer2: undefined
+  }
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Find Checksum',
     onClick: findChecksum
+  },
+  {
+    label: 'Find Common Letters',
+    onClick: findCommonLetters
   }
 ]
 
