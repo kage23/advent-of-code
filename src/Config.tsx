@@ -1,6 +1,7 @@
 import React from 'react'
 
 import Day1__2018__Config from './2018/Day1'
+import Day2__2018__Config from './2018/Day2'
 
 export interface IButton {
   label: string
@@ -43,7 +44,8 @@ export const YEARS: IYearConfig[] = [
   {
     year: 2018,
     days: [
-      Day1__2018__Config
+      Day1__2018__Config,
+      Day2__2018__Config
     ]
   }
 ]
