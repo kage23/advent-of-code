@@ -113,3 +113,37 @@ article h2 a {
   position: relative;
   top: -1px;
 }
+
+.control-buttons button {
+  display: block;
+  border-width: 2px;
+  border-style: groove;
+  border-color: threedface;
+  border-image: initial;
+  margin: 0;
+  margin-bottom: 8px;
+  text-decoration: none;
+  background: #0f0f23;
+  color: #cccccc;
+  font-family: "Source Code Pro", monospace;
+  font-size: 14pt;
+  cursor: pointer;
+  text-align: center;
+  transition: background 250ms ease-in-out,
+              transform 150ms ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.control-buttons button:hover,
+.control-buttons button:focus {
+  background: #333333;
+}
+
+.control-buttons button:focus {
+  outline: none;
+}
+
+.control-buttons button:active {
+  transform: scale(0.95);
+}

@@ -158,7 +158,12 @@ class App extends Component<{}, {
           {(year === 0 || day === 0) ? (
             <p>
               Check out my solutions for the{' '}
-              <a href="https://adventofcode.com">Advent of Code</a>
+              <a
+                target="_blank"
+                href="https://adventofcode.com"
+              >
+                Advent of Code
+              </a>
               {' '}challenges! To get started, select a year and day above.
             </p>
           ) : (
