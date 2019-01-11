@@ -9,6 +9,7 @@ import Day6__2018__Config from './2018/Day6'
 import Day7__2018__Config from './2018/Day7'
 import Day8__2018__Config from './2018/Day8'
 import Day9__2018__Config from './2018/Day9'
+import Day10__2018__Config from './2018/Day10'
 
 export interface IButton {
   label: string
@@ -41,8 +42,8 @@ export interface IYearConfig {
 }
 
 export const defaultRenderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => (
-  <div>
-    <p>Input:</p>
+  <div className="render-box">
+    <h3>Input:</h3>
     <pre>{dayConfig.INPUT[inputKey]}</pre>
   </div>
 )
@@ -59,7 +60,8 @@ export const YEARS: IYearConfig[] = [
       Day6__2018__Config,
       Day7__2018__Config,
       Day8__2018__Config,
-      Day9__2018__Config
+      Day9__2018__Config,
+      Day10__2018__Config
     ]
   }
 ]
