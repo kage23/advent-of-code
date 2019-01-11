@@ -156,11 +156,11 @@ article h2 a {
   margin-bottom: 0;
 }
 
-.answers code {
+code {
   position: relative;
 }
 
-.answers code:before {
+code:before {
   z-index: -1;
   content: "";
   position: absolute;
