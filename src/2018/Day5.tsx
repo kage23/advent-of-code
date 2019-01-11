@@ -9,8 +9,8 @@ import INPUT from './Input/Day5'
 const renderDay = (
   dayConfig: IDayConfig,
   inputKey: string,
-  answer1: false | string,
-  answer2: false | string
+  answer1: false | string | JSX.Element,
+  answer2: false | string | JSX.Element
 ): JSX.Element => {
   const display = typeof answer2 === 'string'
     ? answer2
@@ -74,17 +74,25 @@ const BUTTONS: IButton[] = [
 ]
 
 const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The length of the resulting polymer length <code>{answer.length}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The best filter for the polymer is <code>{answer2_a}</code>.{' '}
-      The length of the resulting polymer length <code>{answer.length}</code>.
-    </span>
-  ),
+  answer1Text: (answer) => {
+    const answerStr = JSON.stringify(answer)
+
+    return (
+      <span>
+        The length of the resulting polymer length <code>{answerStr.length}</code>.
+      </span>
+    )
+  },
+  answer2Text: (answer) => {
+    const answerStr = JSON.stringify(answer)
+
+    return (
+      <span>
+        The best filter for the polymer is <code>{answer2_a}</code>.{' '}
+        The length of the resulting polymer length <code>{answerStr.length}</code>.
+      </span>
+    )
+  },
   buttons: BUTTONS,
   day: 5,
   INPUT,
