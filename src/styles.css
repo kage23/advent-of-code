@@ -163,18 +163,13 @@ code:before {
   background: #10101a;
 }
 
-pre {
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
 .render-box {
   display: flex;
   flex-wrap: wrap;
   margin: 1em 0px;
 }
 
-.render-box > *:not(:first-child) {
+.render-box--left-margin {
   margin-left: 24px;
 }
 
@@ -197,6 +192,12 @@ pre {
   flex-shrink: 0;
   margin-top: 0;
   margin-bottom: 0;
+}
+
+pre.render-box--pre-wrap {
+  flex-shrink: 1;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .render-box pre + div {
