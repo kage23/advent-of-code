@@ -5,8 +5,8 @@ import {
 } from './Config'
 
 class App extends Component<{}, {
-  answer1: false | string
-  answer2: false | string
+  answer1: false | string | JSX.Element
+  answer2: false | string | JSX.Element
   day: number
   inputKey: string
   year: number
@@ -24,8 +24,8 @@ class App extends Component<{}, {
   }
 
   handleButtonClick = (onClick: (input: string) => {
-    answer1?: string
-    answer2?: string
+    answer1?: string | JSX.Element
+    answer2?: string | JSX.Element
   }) => {
     const {
       answer1,
@@ -36,8 +36,8 @@ class App extends Component<{}, {
     const result = onClick(inputKey)
 
     this.setState({
-      answer1: typeof result.answer1 === 'string' ? result.answer1 : answer1,
-      answer2: typeof result.answer2 === 'string' ? result.answer2 : answer2
+      answer1: typeof result.answer1 !== 'undefined' ? result.answer1 : answer1,
+      answer2: typeof result.answer2 !== 'undefined' ? result.answer2 : answer2
     })
   }
 
@@ -76,8 +76,6 @@ class App extends Component<{}, {
       inputKey,
       year
     } = this.state
-    const min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]
-    const max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
 
     const yearOptions = YEARS.map(YEAR => (
       <option
@@ -219,9 +217,12 @@ class App extends Component<{}, {
                     ))}
                   </fieldset>
                 )}
-                {(typeof answer1 === 'string' || typeof answer2 === 'string') && (
+                {(
+                  (answer1 !== false && typeof answer1 !== 'undefined')
+                  || (answer2 !== false && typeof answer2 !== 'undefined')
+                ) && (
                   <div className="answers">
-                    {typeof answer1 === 'string' && (
+                    {answer1 !== false && typeof answer1 !== 'undefined' && (
                       <fieldset>
                         <p>
                           Answer 1:{' '}
@@ -229,7 +230,7 @@ class App extends Component<{}, {
                         </p>
                       </fieldset>
                     )}
-                    {typeof answer2 === 'string' && (
+                    {answer2 !== false && typeof answer2 !== 'undefined' && (
                       <fieldset>
                         <p>
                           Answer 2:{' '}
