@@ -141,7 +141,7 @@ export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element 
         <p>Input:</p>
         <p>{dayConfig.INPUT[inputKey]}</p>
       </pre>
-      <div>
+      <div className="render-box--left-margin">
         <p>
           Min: {JSON.stringify(map.min)}
           {' '}

@@ -179,6 +179,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
         <p>{dayConfig.INPUT[inputKey]}</p>
       </pre>
       <div
+        className="render-box--left-margin"
         style={{
           display: 'block',
           flex: 0
