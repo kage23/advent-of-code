@@ -76,6 +76,8 @@ class App extends Component<{}, {
       inputKey,
       year
     } = this.state
+    const min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]
+    const max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
 
     const yearOptions = YEARS.map(YEAR => (
       <option

@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  defaultRenderDay,
   IButton,
   IDayConfig
  } from '../Config'
@@ -58,6 +57,13 @@ const calculateNodeValue = (numbers: number[]): number => {
   return total
 }
 
+export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => (
+  <div className="render-box">
+    <h3>Input:</h3>
+    <p>{dayConfig.INPUT[inputKey]}</p>
+  </div>
+)
+
 const BUTTONS: IButton[] = [
   {
     label: 'Calculate Checksum',
@@ -83,7 +89,7 @@ const config: IDayConfig = {
   buttons: BUTTONS,
   day: 8,
   INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+  renderDay,
   title: 'Memory Maneuver'
 }
 

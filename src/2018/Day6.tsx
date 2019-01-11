@@ -136,22 +136,20 @@ export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element 
     : map
 
   return (
-    <div>
-      <div className="render-box">
-        <pre>
-          <p>Input:</p>
-          <p>{dayConfig.INPUT[inputKey]}</p>
-        </pre>
-        <div>
-          <p>
-            Min: {JSON.stringify(map.min)}
-            {' '}
-            Max: {JSON.stringify(map.max)}
-          </p>
-          <fieldset>
-            {map.display.map((line, i) => <div key={i}>{line}</div>)}
-          </fieldset>
-        </div>
+    <div className="render-box render-box--no-wrap">
+      <pre>
+        <p>Input:</p>
+        <p>{dayConfig.INPUT[inputKey]}</p>
+      </pre>
+      <div>
+        <p>
+          Min: {JSON.stringify(map.min)}
+          {' '}
+          Max: {JSON.stringify(map.max)}
+        </p>
+        <fieldset>
+          {map.display.map((line, i) => <div key={i}>{line}</div>)}
+        </fieldset>
       </div>
     </div>
   )
