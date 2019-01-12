@@ -1,5 +1,8 @@
 import React from 'react'
 
+// TODO: Import the Year config instead of each Day config
+// TODO: Add a cover image to the IYearConfig to display on the home page when year but not day is selected
+
 import Day1__2018__Config from './2018/Day1'
 import Day2__2018__Config from './2018/Day2'
 import Day3__2018__Config from './2018/Day3'
@@ -15,6 +18,7 @@ import Day12__2018__Config from './2018/Day12'
 import Day13__2018__Config from './2018/Day13'
 import Day14__2018__Config from './2018/Day14'
 import Day15__2018__Config from './2018/Day15'
+import Day16__2018__Config from './2018/Day16'
 
 export interface IButton {
   label: string
@@ -71,7 +75,8 @@ export const YEARS: IYearConfig[] = [
       Day12__2018__Config,
       Day13__2018__Config,
       Day14__2018__Config,
-      Day15__2018__Config
+      Day15__2018__Config,
+      Day16__2018__Config
     ]
   }
 ]
