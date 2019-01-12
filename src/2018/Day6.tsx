@@ -6,6 +6,8 @@ import {
 
 import INPUT, { DISTANCE } from './Input/Day6'
 
+import { manhattanDistance } from '../utils/Various'
+
 interface ICoordMap {
   coords: number[][]
   display: string[]
@@ -17,13 +19,6 @@ interface ICoordMap {
 let map: undefined | ICoordMap = undefined
 
 let answer1_a = ''
-
-const manhattanDistance = (a: number[], b: number[]): number => {
-  if (a.length !== b.length) throw new Error('The coords must be in the same dimensions!')
-  return a.reduce((distance, currentCoord, currentIndex) => (
-    distance + Math.abs(currentCoord - b[currentIndex])
-  ), 0)
-}
 
 const parseInput = (inputKey: string): ICoordMap => {
   const coords = []
