@@ -87,6 +87,11 @@ article h2 a {
   display: flex;
 }
 
+.input-selector,
+.control-buttons {
+  flex-shrink: 0;
+}
+
 .input-selector__label,
 .input-selector__item__label {
   display: block;
@@ -214,4 +219,8 @@ pre.render-box--pre-wrap {
 .render-box p:last-child,
 .answers p:last-child {
   margin-bottom: 0;
+}
+
+.space-between {
+  justify-content: space-between;
 }
