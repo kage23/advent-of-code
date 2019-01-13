@@ -21,6 +21,7 @@ import Day15__2018__Config from './2018/Day15'
 import Day16__2018__Config from './2018/Day16'
 import Day17__2018__Config from './2018/Day17'
 import Day18__2018__Config from './2018/Day18'
+import Day19__2018__Config from './2018/Day19'
 
 export interface IButton {
   label: string
@@ -42,7 +43,8 @@ export interface IDayConfig {
     dayConfig: IDayConfig,
     input: string,
     answer1: false | string | JSX.Element,
-    answer2: false | string | JSX.Element
+    answer2: false | string | JSX.Element,
+    setOther: (other: any) => void
   ) => JSX.Element
   title: string
 }
@@ -80,7 +82,8 @@ export const YEARS: IYearConfig[] = [
       Day15__2018__Config,
       Day16__2018__Config,
       Day17__2018__Config,
-      Day18__2018__Config
+      Day18__2018__Config,
+      Day19__2018__Config
     ]
   }
 ]

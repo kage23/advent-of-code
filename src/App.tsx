@@ -10,6 +10,7 @@ class App extends Component<{}, {
   day: number
   inputKey: string
   year: number
+  other?: any
 }> {
   constructor(props: {}) {
     super(props)
@@ -67,6 +68,8 @@ class App extends Component<{}, {
       year: parseInt(e.currentTarget.value)
     })
   }
+
+  setOther = (other: any) => this.setState({ other })
 
   render() {
     const {
@@ -241,7 +244,7 @@ class App extends Component<{}, {
                   </div>
                 )}
               </div>
-              {inputKey.length > 0 && dayConfig.renderDay(dayConfig, inputKey, answer1, answer2)}
+              {inputKey.length > 0 && dayConfig.renderDay(dayConfig, inputKey, answer1, answer2, this.setOther)}
             </div>
           )}
         </article>

@@ -98,7 +98,7 @@ const figureOutOpCodes = (samples: ISample[]): string[] => {
       return currentSample && !(opCodes.indexOf(op) !== -1 && opCodes.indexOf(op) !== currentSample.operation.code)
     })
 
-    if (whichMatchingOps.length === 1) {
+    if (whichMatchingOps.length === 1 && currentSample.operation.code) {
       opCodes[currentSample.operation.code] = whichMatchingOps[0]
     }
 
@@ -122,7 +122,7 @@ const runInputCode = (code: string): { answer2: string } => {
   let registers = [0, 0, 0, 0]
 
   for (const op of instructions)
-    registers = OPERATIONS[state.opCodes[op.code]](op, registers)
+    if (op.code) registers = OPERATIONS[state.opCodes[op.code]](op, registers)
 
   return {
     answer2: JSON.stringify(registers)
