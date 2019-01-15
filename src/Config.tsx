@@ -27,6 +27,7 @@ import Day20__2018__Config from './2018/Day20'
 import Day21__2018__Config from './2018/Day21'
 import Day22__2018__Config from './2018/Day22'
 import Day23__2018__Config from './2018/Day23'
+import Day24__2018__Config from './2018/Day24'
 
 export interface IButton {
   label: string
@@ -92,7 +93,8 @@ export const YEARS: IYearConfig[] = [
       Day20__2018__Config,
       Day21__2018__Config,
       Day22__2018__Config,
-      Day23__2018__Config
+      Day23__2018__Config,
+      Day24__2018__Config
     ]
   }
 ]
