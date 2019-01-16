@@ -69,6 +69,8 @@ class App extends Component<{}, {
     })
   }
 
+  reset = () => this.setState({ year: 0, day: 0})
+
   setOther = (other: any) => this.setState({ other })
 
   render() {
@@ -147,7 +149,7 @@ class App extends Component<{}, {
       <div>
         <header>
           <h1>
-            <a>Advent of Code</a>
+            <a onClick={this.reset}>Advent of Code</a>
           </h1>
           <nav>
             <span className="wrapper">
@@ -187,7 +189,7 @@ class App extends Component<{}, {
               >View Challenge</a>
             )}
           </h2>
-          {!dayConfig ? (
+          {!yearConfig && (
             <p>
               Check out my solutions for the{' '}
               <a
@@ -204,7 +206,21 @@ class App extends Component<{}, {
               <a href="https://github.com/kage23/advent-of-code">the project repository</a>{' '}
               and figure it out!
             </p>
-          ) : (
+          )}
+          {yearConfig && !dayConfig && (
+            <div>
+              <p>
+                Welcome to my {year} Advent of Code solution suite! Select a day above to see my solution{' '}
+                for that day's challenges. Check out my overall year progress:
+              </p>
+              <img
+                className="year-cover-image"
+                src={yearConfig.cover}
+              />
+              {yearConfig.extraText && <p>{yearConfig.extraText}</p>}
+            </div>
+          )}
+          {dayConfig && (
             <div>
               <div className="control-boxes">
                 <fieldset className="input-selector">
