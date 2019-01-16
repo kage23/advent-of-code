@@ -34,6 +34,8 @@ export interface IDayConfig {
 
 export interface IYearConfig {
   year: number
+  cover: string
+  extraText?: JSX.Element | string
   days: IDayConfig[]
 }
 

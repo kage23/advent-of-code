@@ -1,4 +1,8 @@
+import React from 'react'
+
 import { IYearConfig } from '../Config'
+
+import coverImage from './cover.png'
 
 import Day1__2018__Config from './Day1'
 import Day2__2018__Config from './Day2'
@@ -28,6 +32,14 @@ import Day25__2018__Config from './Day25'
 
 const CONFIG_2018: IYearConfig = {
   year: 2018,
+  cover: coverImage,
+  extraText: (
+    <span>
+      On the <a href="https://adventofcode.com">Advent of Code</a> site, that image{' '}
+      is actually animated! But if you want to see the animation, you'll have to go{' '}
+      complete the challenges yourself!
+    </span>
+  ),
   days: [
     Day1__2018__Config,
     Day2__2018__Config,
