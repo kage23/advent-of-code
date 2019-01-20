@@ -69,6 +69,8 @@ class App extends Component<{}, {
     })
   }
 
+  reset = () => this.setState({ year: 0, day: 0})
+
   setOther = (other: any) => this.setState({ other })
 
   render() {
@@ -147,7 +149,7 @@ class App extends Component<{}, {
       <div>
         <header>
           <h1>
-            <a>Advent of Code</a>
+            <a onClick={this.reset}>Advent of Code</a>
           </h1>
           <nav>
             <span className="wrapper">
