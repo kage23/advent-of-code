@@ -6,7 +6,24 @@ import {
 
 import INPUT from './Input/Day1'
 
+const solveCaptcha = (inputKey: string): { answer1: string } => {
+  const input = INPUT[inputKey]
+  let result = 0
+  for (let i = 0; i < input.length; i++) {
+    const number = parseInt(input[i])
+    const nextNumber = parseInt(input[(i + 1) % input.length])
+    if (number === nextNumber) result += number
+  }
+  return {
+    answer1: result.toString()
+  }
+}
+
 const BUTTONS: IButton[] = [
+  {
+    label: 'Solve Captcha',
+    onClick: solveCaptcha
+  }
 ]
 
 export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => (
@@ -19,7 +36,7 @@ export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The solution is{' '}
+      The captcha solution is{' '}
       <code>{answer}</code>.
     </span>
   ),
