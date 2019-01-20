@@ -203,7 +203,7 @@ class App extends Component<{}, {
               puzzle inputs into my UI here ... If you want to use my package to solve{' '}
               the challenges and <span style={{ textDecoration: 'line-through' }}>earn</span>{' '}
               get your stars, you're going to have to go get{' '}
-              <a href="https://github.com/kage23/advent-of-code">the project repository</a>{' '}
+              <a href="https://github.com/kage23/advent-of-code">my repository</a>{' '}
               and figure it out!
             </p>
           )}
