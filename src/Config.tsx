@@ -1,5 +1,6 @@
 import React from 'react'
 
+import CONFIG_2017 from './2017/Config'
 import CONFIG_2018 from './2018/Config'
 
 // TODO: Import the Year config instead of each Day config
@@ -47,5 +48,6 @@ export const defaultRenderDay = (dayConfig: IDayConfig, inputKey: string): JSX.E
 )
 
 export const YEARS: IYearConfig[] = [
+  CONFIG_2017,
   CONFIG_2018
 ]
