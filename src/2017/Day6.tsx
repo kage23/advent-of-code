@@ -7,12 +7,12 @@ import {
 import INPUT from './Input/Day6'
 
 let prevInputKey = ''
-let steps = 0
+let cycles = 0
 let memoryBanks: number[] = []
 
 const parseInput = (input: string): number[] => input.split(/\s/).map(x => parseInt(x))
 
-const step = () => {
+const cycle = () => {
   const redistributeCount = Math.max(...memoryBanks)
   let i = memoryBanks.indexOf(redistributeCount)
   memoryBanks[i] = 0
@@ -20,31 +20,32 @@ const step = () => {
     i = (i + 1) % memoryBanks.length
     memoryBanks[i]++
   }
-  steps++
+  cycles++
 }
 
 const BUTTONS: IButton[] = [
   {
-    label: 'Step',
+    label: 'Cycle',
     onClick: () => {
-      step()
+      cycle()
       return { answer1: undefined }
     }
   },
   {
     label: 'Find Loop',
     onClick: () => {
-      const stateMap: Map<string, boolean> = new Map()
+      const stateAtTimeMap: Map<string, number> = new Map()
 
       let memBanksStr = JSON.stringify(memoryBanks)
-      while (typeof stateMap.get(memBanksStr) === 'undefined') {
-        stateMap.set(memBanksStr, true)
-        step()
+      while (typeof stateAtTimeMap.get(memBanksStr) === 'undefined') {
+        stateAtTimeMap.set(memBanksStr, cycles)
+        cycle()
         memBanksStr = JSON.stringify(memoryBanks)
       }
 
       return {
-        answer1: steps.toString()
+        answer1: cycles.toString(),
+        answer2: (cycles - (stateAtTimeMap.get(memBanksStr) || 0)).toString()
       }
     }
   }
@@ -52,14 +53,14 @@ const BUTTONS: IButton[] = [
 
 export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (prevInputKey !== inputKey) {
-    steps = 0
+    cycles = 0
     memoryBanks = parseInput(dayConfig.INPUT[inputKey])
     prevInputKey = inputKey
   }
 
   return (
     <div>
-      <h3 style={{ marginBottom: 0 }}>Steps: {steps}</h3>
+      <h3 style={{ marginBottom: 0 }}>Steps: {cycles}</h3>
       {memoryBanks.map(number => <div>{number}</div>)}
     </div>
   )
@@ -68,12 +69,12 @@ export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      It takes <code>{answer}</code> steps to detect a loop.
+      It takes <code>{answer}</code> cycles to detect a loop.
     </span>
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The loop is <code>{answer}</code> cycles long.
     </span>
   ),
   buttons: BUTTONS,
