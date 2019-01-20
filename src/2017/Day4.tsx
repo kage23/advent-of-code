@@ -7,6 +7,27 @@ import {
 
 import INPUT from './Input/Day4'
 
+const areAnagrams = (word1: string, word2: string): boolean => {
+  if (word1.length !== word2.length) return false
+  else {
+    let testWord = word2.split('')
+    for (let i = 0; i < word1.length; i++) {
+      const foundIndex = testWord.indexOf(word1[i])
+      if (foundIndex !== -1) testWord.splice(foundIndex, 1)
+    }
+    return testWord.length === 0
+  }
+}
+
+const noAnagramsValidity = (passphrase: string): boolean => {
+  const words = passphrase.split(' ')
+  return !(
+    words.some((word, i) => (
+      words.some((someWord, j) => i !== j && areAnagrams(word, someWord))
+    ))
+  )
+}
+
 const noRepeatedWordsValidity = (passphrase: string): boolean => {
   const words = passphrase.split(' ')
   return !words.some(word => words.indexOf(word) !== words.lastIndexOf(word))
@@ -22,6 +43,16 @@ const BUTTONS: IButton[] = [
         .length
         .toString()
     })
+  },
+  {
+    label: 'Count Valid Passphrases (No Anagrams)',
+    onClick: (inputKey) => ({
+      answer2: INPUT[inputKey]
+        .split('\n')
+        .filter(passphrase => noAnagramsValidity(passphrase))
+        .length
+        .toString()
+    })
   }
 ]
 
@@ -33,7 +64,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      <code>{answer}</code> passphrases are valid.
     </span>
   ),
   buttons: BUTTONS,

@@ -1,8 +1,16 @@
 const INPUT: { [key:string]: string } = {
-DEMO:
+DEMO_1:
 `aa bb cc dd ee
 aa bb cc dd aa
 aa bb cc dd aaa`,
+
+DEMO_2:
+`abcde fghij
+abcde xyz ecdab
+a ab abc abd abf abj
+iiii oiii ooii oooi oooo
+oiii ioii iioi iiio`,
+
 REAL:
 `pphsv ojtou brvhsj cer ntfhlra udeh ccgtyzc zoyzmh jum lugbnk
 vxjnf fzqitnj uyfck blnl impo kxoow nngd worcm bdesehw
