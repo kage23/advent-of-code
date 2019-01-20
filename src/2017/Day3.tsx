@@ -12,14 +12,36 @@ const Directions: Array<'R' | 'U' | 'L' | 'D'> = [
   'R', 'U', 'L', 'D'
 ]
 
-const figurePositionOfSquare = (input: number): number[] => {
+const getAdjacentSquares = (position: number[]): number[][] => [
+  [position[0] - 1, position[1] - 1],
+  [position[0]    , position[1] - 1],
+  [position[0] + 1, position[1] - 1],
+  [position[0] - 1, position[1]    ],
+  // [position[0]    , position[1]    ],
+  [position[0] + 1, position[1]    ],
+  [position[0] - 1, position[1] + 1],
+  [position[0]    , position[1] + 1],
+  [position[0] + 1, position[1] + 1]
+]
+
+const figureSolution = (input: number, whichPart: 1 | 2): {
+  answer1?: string
+  answer2?: string
+} => {
   let currentId = 1
   let currentPosition = [0, 0]
+  let currentValue = 1
   let max = [0, 0]
   let min = [0, 0]
   let directionIndex = 0
+  const posValueMap: { [key:string]: number } = {
+    [`${JSON.stringify(currentPosition)}`]: 1
+  }
 
-  while (currentId < input) {
+  while (
+    (whichPart === 1 && currentId < input)
+    || (whichPart === 2 && currentValue <= input)
+  ) {
     switch (Directions[directionIndex]) {
       case 'R':
       currentPosition[0]++
@@ -53,20 +75,33 @@ const figurePositionOfSquare = (input: number): number[] => {
       }
       break
     }
+    currentValue = getAdjacentSquares(currentPosition).reduce((value, position) => (
+      value + (posValueMap[`${JSON.stringify(position)}`] || 0)
+    ), 0)
+    posValueMap[JSON.stringify(currentPosition)] = currentValue
     currentId++
   }
 
-  return currentPosition
+  return whichPart === 1
+  ? {
+    answer1: manhattanDistance(currentPosition, [0, 0]).toString()
+  }
+  : {
+    answer2: currentValue.toString()
+  }
 }
 
 const BUTTONS: IButton[] = [
   {
     label: 'Calculate Distance to Access Port',
     onClick: (inputKey) => ({
-      answer1: manhattanDistance(
-        figurePositionOfSquare(parseInt(INPUT[inputKey])),
-        [0, 0]
-      ).toString()
+      ...figureSolution(parseInt(INPUT[inputKey]), 1)
+    })
+  },
+  {
+    label: 'Find Value Larger than Input',
+    onClick: (inputKey) => ({
+      ...figureSolution(parseInt(INPUT[inputKey]), 2)
     })
   }
 ]
@@ -79,7 +114,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The final result is{' '}
+      The first value written larger than the input is{' '}
       <code>{answer}</code>.
     </span>
   ),
