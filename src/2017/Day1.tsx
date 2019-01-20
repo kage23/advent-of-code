@@ -6,7 +6,7 @@ import {
 
 import INPUT from './Input/Day1'
 
-const solveCaptcha = (inputKey: string): { answer1: string } => {
+const solveCaptcha1 = (inputKey: string): { answer1: string } => {
   const input = INPUT[inputKey]
   let result = 0
   for (let i = 0; i < input.length; i++) {
@@ -19,10 +19,28 @@ const solveCaptcha = (inputKey: string): { answer1: string } => {
   }
 }
 
+const solveCaptcha2 = (inputKey: string): { answer2: string } => {
+  const input = INPUT[inputKey]
+  const len = input.length
+  let result = 0
+  for (let i = 0; i < len; i++) {
+    const number = parseInt(input[i])
+    const nextNumber = parseInt(input[(i + (len / 2)) % len])
+    if (number === nextNumber) result += number
+  }
+  return {
+    answer2: result.toString()
+  }
+}
+
 const BUTTONS: IButton[] = [
   {
-    label: 'Solve Captcha',
-    onClick: solveCaptcha
+    label: 'Solve Captcha (First Half)',
+    onClick: solveCaptcha1
+  },
+  {
+    label: 'Solve Captcha (Second Half)',
+    onClick: solveCaptcha2
   }
 ]
 
@@ -36,13 +54,13 @@ export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The captcha solution is{' '}
+      The solution to the first half of the captcha is{' '}
       <code>{answer}</code>.
     </span>
   ),
   answer2Text: (answer) => (
     <span>
-      The solution is{' '}
+      The solution to the second half of the captcha is{' '}
       <code>{answer}</code>.
     </span>
   ),
