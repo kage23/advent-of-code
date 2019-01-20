@@ -1,10 +1,7 @@
 import React from 'react'
 
+import CONFIG_2017 from './2017/Config'
 import CONFIG_2018 from './2018/Config'
-
-// TODO: Import the Year config instead of each Day config
-// TODO: Add a cover image to the IYearConfig to display on the home page when year but not day is selected (part of year config) - also a text/JSX.Element
-// TODO: Clicking on the header title link whatever should reset day and year to 0
 
 export interface IButton {
   label: string
@@ -47,5 +44,6 @@ export const defaultRenderDay = (dayConfig: IDayConfig, inputKey: string): JSX.E
 )
 
 export const YEARS: IYearConfig[] = [
+  CONFIG_2017,
   CONFIG_2018
 ]
