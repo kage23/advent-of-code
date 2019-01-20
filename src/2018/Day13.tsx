@@ -410,7 +410,6 @@ const config: IDayConfig = {
     </span>
   ),
   answer2Text: (answer) => {
-    debugger
     return (
       <span>{answer}</span>
     )
