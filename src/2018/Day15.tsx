@@ -294,7 +294,6 @@ const findElfPower = (state: IState): IState => {
       state.rounds = result.rounds
       state.units = result.units
     }
-    debugger
     if (!result.elvesWin) {
       state.elfPower++
       state = reset(INPUT[prevInputKey].split('\n'), state.elfPower)
