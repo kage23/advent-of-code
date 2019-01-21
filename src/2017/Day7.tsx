@@ -12,32 +12,35 @@ interface IProgram {
   children: string[]
   parent?: string
   weight?: number
+  totalWeight?: number
 }
 
-const parseInput = (input: string): IProgram[] => {
-  const programs: IProgram[] = []
+const parseInput = (input: string): Map<string, IProgram> => {
+  const programs: Map<string, IProgram> = new Map()
 
   input.split('\n').forEach(row => {
     const name = row.split(' ')[0]
-    let program = programs.find(program => program.name === name)
+    let program = programs.get(name)
     if (!program) {
-      program = programs[programs.push({
+      programs.set(name, {
         name,
         children: []
-      }) - 1]
+      })
+      program = programs.get(name)
     }
-    program.weight = parseInt(row.split('(')[1])
+    if (program) program.weight = parseInt(row.split('(')[1])
     if (row.indexOf('->') !== -1) {
       row.split('-> ')[1].split(', ').forEach(child => {
         if (program) program.children.push(child)
-        let childProgram = programs.find(fProgram => fProgram.name === child)
+        let childProgram = programs.get(child)
         if (!childProgram) {
-          childProgram = programs[programs.push({
+          programs.set(child, {
             name: child,
             children: []
-          }) - 1]
+          })
+          childProgram = programs.get(child)
         }
-        childProgram.parent = name
+        if (childProgram) childProgram.parent = name
       })
     }
   })
@@ -45,15 +48,70 @@ const parseInput = (input: string): IProgram[] => {
   return programs
 }
 
+const calculateTotalWeight = (node: IProgram | undefined, nodes: Map<string, IProgram>): number => {
+  if (node === undefined) return NaN
+  if (node.children.length === 0) {
+    node.totalWeight = node.weight || 0
+    return node.totalWeight
+  }
+  node.totalWeight = node.children.reduce((totalWeight, childNode) => (
+    totalWeight + calculateTotalWeight(nodes.get(childNode), nodes)
+  ), node.weight || 0)
+  return node.totalWeight
+}
+
+const findWrongNode = (nodes: Map<string, IProgram>, bottomNode: IProgram, inWeight: number): {
+  node: IProgram
+  weight: number
+} => {
+  let childrenWeights = bottomNode.children.map(node => {
+    const childNode = nodes.get(node)
+    return childNode ? childNode.totalWeight : 0
+  })
+  for (let i = 0; i < childrenWeights.length; i++) {
+    const childWeight = childrenWeights[i]
+    if (childrenWeights.indexOf(childWeight) === childrenWeights.lastIndexOf(childWeight)) {
+      // This is the odd one out so we have to determine if it's wrong or if one of its children is wrong
+      const oddNode = nodes.get(bottomNode ? bottomNode.children[i] : '')
+      if (oddNode) {
+        return findWrongNode(nodes, oddNode, (childWeight || 0) - (childrenWeights[(i + 1) % childrenWeights.length] || 0))
+      }
+    }
+  }
+  return {
+    node: bottomNode,
+    weight: bottomNode.weight ? bottomNode.weight - inWeight : 0
+  }
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Find Bottom Program',
     onClick: (inputKey) => {
-      const program = parseInput(INPUT[inputKey]).find(program => !program.parent)
+      const programs = parseInput(INPUT[inputKey])
+
+      for (const [, program] of programs)
+        if (!program.parent) return { answer1: program.name }
 
       return {
-        answer1: program ? program.name : undefined
+        answer1: undefined
       }
+    }
+  },
+  {
+    label: 'Balance Tower',
+    onClick: (inputKey) => {
+      const nodes = parseInput(INPUT[inputKey])
+      let bottomNode: IProgram | undefined
+      for (const [, node] of nodes) if (!node.parent) bottomNode = node
+      if (bottomNode) {
+        calculateTotalWeight(bottomNode, nodes)
+        return {
+          answer2: findWrongNode(nodes, bottomNode, 0).weight.toString()
+        }
+      }
+
+      return {}
     }
   }
 ]
@@ -66,7 +124,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The weight of the incorrect node should be{' '}
+      <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
