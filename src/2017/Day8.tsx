@@ -9,8 +9,12 @@ import INPUT from './Input/Day8'
 const registers: Map<string, number> = new Map()
 let prevInputKey = ''
 let answer1_a = ''
+let answer2_a = ''
 
-const processCode = (input: string) => {
+const processCode = (input: string): {
+  maxEver: number
+} => {
+  let maxEver = Number.MIN_SAFE_INTEGER
   input.split('\n').forEach(line => {
     const [
       registerToActOn,
@@ -59,8 +63,13 @@ const processCode = (input: string) => {
       if (action === 'dec') {
         registers.set(registerToActOn, (registers.get(registerToActOn) || 0) - parseInt(amount))
       }
+      if ((registers.get(registerToActOn) || 0) > maxEver) {
+        maxEver = registers.get(registerToActOn) || 0
+        answer2_a = registerToActOn
+      }
     }
   })
+  return { maxEver }
 }
 
 const BUTTONS: IButton[] = [
@@ -68,7 +77,8 @@ const BUTTONS: IButton[] = [
     label: 'Process Code',
     onClick: (inputKey) => {
       registers.clear()
-      processCode(INPUT[inputKey])
+
+      const result = processCode(INPUT[inputKey])
 
       let max = Number.MIN_SAFE_INTEGER
 
@@ -79,7 +89,10 @@ const BUTTONS: IButton[] = [
         }
       }
 
-      return { answer1: max.toString() }
+      return {
+        answer1: max.toString(),
+        answer2: result.maxEver.toString()
+      }
     }
   }
 ]
@@ -88,6 +101,7 @@ export const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element 
   if (prevInputKey !== inputKey) {
     registers.clear()
     answer1_a = ''
+    answer2_a = ''
     prevInputKey = inputKey
   }
 
@@ -119,7 +133,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The largest value ever held was <code>{answer}</code>, held by register <code>{answer2_a}</code>.
     </span>
   ),
   buttons: BUTTONS,
