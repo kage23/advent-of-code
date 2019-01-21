@@ -10,9 +10,13 @@ import INPUT from './Input/Day9'
 let groups = 0
 let prevInputKey = ''
 
-const processStream = (input: string): number => {
+const processStream = (input: string): {
+  score: number
+  garbage: number
+} => {
   let len = input.length
   let score = 0
+  let garbage = 0
   let parentScore = 0
   let inGarbage = false
 
@@ -24,13 +28,16 @@ const processStream = (input: string): number => {
         parentScore++
         score += parentScore
       }
+      if (inGarbage) garbage++
       break
 
       case '}':
       if (!inGarbage) parentScore--
+      if (inGarbage) garbage++
       break
 
       case '<':
+      if (inGarbage) garbage++
       inGarbage = true
       break
 
@@ -43,19 +50,28 @@ const processStream = (input: string): number => {
       break
 
       default:
+      if (inGarbage) garbage++
       break
     }
   }
 
-  return score
+  return {
+    score,
+    garbage
+  }
 }
 
 const BUTTONS: IButton[] = [
   {
     label: 'Process Stream',
-    onClick: (inputKey) => ({
-      answer1: processStream(INPUT[inputKey]).toString()
-    })
+    onClick: (inputKey) => {
+      const result = processStream(INPUT[inputKey])
+
+      return {
+        answer1: result.score.toString(),
+        answer2: result.garbage.toString()
+      }
+    }
   }
 ]
 
@@ -82,7 +98,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      There was <code>{answer}</code> uncancelled garbage.
     </span>
   ),
   buttons: BUTTONS,
