@@ -49,7 +49,7 @@ const twistAndAdvance = (length: number): void => {
 
 const BUTTONS: IButton[] = [
   {
-    label: 'Apply Twists',
+    label: 'Apply Twists (One Round)',
     onClick: (inputKey) => {
       INPUT[inputKey].split(',').forEach(x => twistAndAdvance(parseInt(x)))
 
@@ -62,11 +62,53 @@ const BUTTONS: IButton[] = [
           : undefined
       }
     }
+  },
+  {
+    label: 'Apply Twists (Full Algorithm)',
+    onClick: (inputKey) => {
+      const lengths = (
+        inputKey === 'DEMO_1'
+          ? INPUT[inputKey].split(',').map(x => parseInt(x))
+          : INPUT[inputKey].split('').map(x => x.charCodeAt(0))
+        ).concat(17, 31, 73, 47, 23)
+
+      const runs = 64
+      for (let i = 0; i < runs; i++) {
+        lengths.forEach(x => twistAndAdvance(x))
+      }
+
+      // Now you should have the sparse hash; make the dense hash
+      let currentNode = list.head
+      const denseHashArray = []
+      let currentSubHash = 0
+      for (let count = 0; count < list.length; count++) {
+        if (currentNode) {
+          currentSubHash = currentSubHash ^ currentNode.value
+          currentNode = currentNode.next
+        }
+        if (count % 16 === 15) {
+          denseHashArray.push(currentSubHash)
+          currentSubHash = 0
+        }
+      }
+
+      // Now use the dense hash to make the hex string
+      let result = ''
+      denseHashArray.forEach(x => {
+        let hexStr = x.toString(16)
+        if (hexStr.length % 2) hexStr = `0${hexStr}`
+        result += hexStr
+      })
+
+      return {
+        answer2: result
+      }
+    }
   }
 ]
 
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
-  const listSize = inputKey === 'REAL' ? 256 : 5
+  const listSize = inputKey === 'DEMO_1' ? 5 : 256
   if (prevInputKey != inputKey) {
     list = new NumberDLL()
     currentPosition = 0
@@ -89,7 +131,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
 
   return (
     <div className="render-box">
-      <h3>Lengths:</h3>
+      <h3>Input:</h3>
       <p style={{ marginTop: 0 }}>{dayConfig.INPUT[inputKey]}</p>
       <h3>List:</h3>
       <p style={{ marginTop: 0 }}>
@@ -108,7 +150,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The final hash is{' '}
+      <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
