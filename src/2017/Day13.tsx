@@ -5,6 +5,7 @@ import {
 } from '../Config'
 
 import INPUT from './Input/Day13'
+import { cpus } from 'os';
 
 interface ILayer {
   range: number
@@ -14,7 +15,9 @@ interface ILayer {
 
 let firewall: Map<number, ILayer> = new Map()
 let totalFirewallDepth = 0
-let time = 0
+let time = -1
+let currentPosition = -1
+let ongoingSeverity = 0
 let prevInputKey = ''
 
 const parseInput = (input: string): Map<number, ILayer> => {
@@ -52,13 +55,36 @@ const advanceScanners = (): void => {
   }
 }
 
+const judgeSeverity = (): void => {
+  const layer = firewall.get(currentPosition)
+  if (layer && layer.scannerPos === 0) {
+    ongoingSeverity = ongoingSeverity + (currentPosition * layer.range)
+  }
+}
+
 const BUTTONS: IButton[] = [
   {
-    label: 'Advance Scanners',
+    label: 'Step',
     onClick: () => {
+      currentPosition++
+      judgeSeverity()
       advanceScanners()
       time++
       return {}
+    }
+  },
+  {
+    label: 'Take Trip',
+    onClick: () => {
+      while (currentPosition < totalFirewallDepth) {
+        currentPosition++
+        judgeSeverity()
+        advanceScanners()
+        time++
+      }
+      return {
+        answer1: ongoingSeverity.toString()
+      }
     }
   }
 ]
@@ -67,7 +93,9 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (prevInputKey !== inputKey) {
     totalFirewallDepth = 0
     firewall = parseInput(dayConfig.INPUT[inputKey])
-    time = 0
+    time = -1
+    currentPosition = -1
+    ongoingSeverity = 0
     prevInputKey = inputKey
   }
 
@@ -79,9 +107,9 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
       for (let j = 0; j < layer.range; j++) {
         ranges.push((
           <div key={j}>
-            [{
+            {currentPosition === i && j === 0 ? '(' : '['}{
               layer.scannerPos === j ? 'S' : ' '
-            }]&nbsp;
+            }{currentPosition === i && j === 0 ? ')' : ']'}&nbsp;
           </div>
         ))
       }
@@ -101,7 +129,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
             {i < 10 ? <span>&nbsp;</span> : ''}
             {i}&nbsp;&nbsp;
           </div>
-          <div>...&nbsp;</div>
+          <div>{currentPosition === i ? '(' : '.'}.{currentPosition === i ? ')' : '.'}&nbsp;</div>
         </div>
       ))
     }
@@ -114,7 +142,8 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
         <pre>{dayConfig.INPUT[inputKey]}</pre>
       </div>
       <div className="render-box--left-margin">
-        <h3>Picoseconds: {time}</h3>
+        <h3>Picosecond: {time}</h3>
+        <h3>Total Ongoing Severity: {ongoingSeverity}</h3>
         <div
           style={{
             display: 'flex'
@@ -130,6 +159,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
+      The total trip severity is{' '}
       <code>{answer}</code>
     </span>
   ),
