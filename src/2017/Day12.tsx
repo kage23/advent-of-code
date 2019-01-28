@@ -6,7 +6,6 @@ import {
 } from '../Config'
 
 import INPUT from './Input/Day12'
-import { number } from 'prop-types';
 
 interface IProgram {
   connectedTo: number[]
