@@ -5,7 +5,6 @@ import {
 } from '../Config'
 
 import INPUT from './Input/Day13'
-import { cpus } from 'os';
 
 interface ILayer {
   range: number
@@ -19,22 +18,33 @@ let time = -1
 let currentPosition = -1
 let ongoingSeverity = 0
 let prevInputKey = ''
+const startingInputWithDelay: Map<number, string> = new Map()
 
 const parseInput = (input: string): Map<number, ILayer> => {
   const firewall: Map<number, ILayer> = new Map()
   input.split('\n').forEach(line => {
     const [
       depthStr,
-      rangeStr
+      rangeStr,
+      posStr,
+      dir
     ] = line.split(': ')
     firewall.set(parseInt(depthStr), {
       range: parseInt(rangeStr),
-      scannerPos: 0,
-      scannerDir: '+'
+      scannerPos: posStr ? parseInt(posStr) : 0,
+      scannerDir: dir === '+' || dir === '-' ? dir : '+'
     })
     totalFirewallDepth = Math.max(totalFirewallDepth, parseInt(depthStr))
   })
   return firewall
+}
+
+const reset = (inputKey: string): void => {
+  totalFirewallDepth = 0
+  firewall = parseInput(INPUT[inputKey])
+  time = -1
+  currentPosition = -1
+  ongoingSeverity = 0
 }
 
 const advanceScanners = (): void => {
@@ -55,11 +65,27 @@ const advanceScanners = (): void => {
   }
 }
 
-const judgeSeverity = (): void => {
+const judgeSeverity = (): boolean => {
   const layer = firewall.get(currentPosition)
   if (layer && layer.scannerPos === 0) {
     ongoingSeverity = ongoingSeverity + (currentPosition * layer.range)
+    return true
   }
+  return false
+}
+
+const readFirewallIntoInputString = (firewall: Map<number, ILayer>): string => {
+  let result: string[] = []
+  for (const [depth, layer] of firewall) {
+    result.push(`${depth}: ${layer.range}: ${layer.scannerPos}: ${layer.scannerDir}`)
+  }
+  return result.join('\n')
+}
+
+const isCaught = (range: number, time: number): boolean => {
+  const position = time % ((range - 1) * 2)
+
+  return position === 0
 }
 
 const BUTTONS: IButton[] = [
@@ -86,16 +112,80 @@ const BUTTONS: IButton[] = [
         answer1: ongoingSeverity.toString()
       }
     }
+  },
+  {
+    label: 'Find Delay (Slow Method)',
+    onClick: () => {
+      let delay = 0
+      let answer2: undefined | string = undefined
+
+      while (!answer2) {
+        currentPosition = -1
+        time = -1
+        let caught = false
+        const firewallInput = startingInputWithDelay.get(delay)
+        if (firewallInput) {
+          firewall = parseInput(firewallInput)
+        } else {
+          const prevFirewallInput = startingInputWithDelay.get(delay - 1)
+          if (prevFirewallInput) {
+            firewall = parseInput(prevFirewallInput)
+            advanceScanners()
+            startingInputWithDelay.set(delay, readFirewallIntoInputString(firewall))
+          }
+        }
+        while (currentPosition < totalFirewallDepth && !caught) {
+          currentPosition++
+          caught = judgeSeverity()
+          advanceScanners()
+          time++
+        }
+        if (!caught) {
+          answer2 = delay.toString()
+        } else delay++
+      }
+
+      return {
+        answer2
+      }
+    }
+  },
+  {
+    label: 'Find Delay (Fast Method)',
+    onClick: (inputKey) => {
+      let delay = 0
+      const input = INPUT[inputKey]
+
+      // [ depth, range ]
+      const guards: number[][] = input.split('\n').map(s => {
+        const guard = s.match(/\d+/g)
+        return guard ? guard.map(Number) : [0]
+      })
+
+      const caughtByGuard = (delay: number) => {
+        let caught = false
+        for (let i = 0; i < guards.length; i++) {
+          const [depth, range] = guards[i]
+          caught = caught || isCaught(range, delay + depth)
+          if (caught) break
+        }
+        return caught
+      }
+
+      while (caughtByGuard(delay)) delay++
+
+      return {
+        answer2: delay.toString()
+      }
+    }
   }
 ]
 
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (prevInputKey !== inputKey) {
-    totalFirewallDepth = 0
-    firewall = parseInput(dayConfig.INPUT[inputKey])
-    time = -1
-    currentPosition = -1
-    ongoingSeverity = 0
+    startingInputWithDelay.clear()
+    reset(inputKey)
+    startingInputWithDelay.set(0, dayConfig.INPUT[inputKey])
     prevInputKey = inputKey
   }
 
@@ -160,12 +250,13 @@ const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
       The total trip severity is{' '}
-      <code>{answer}</code>
+      <code>{answer}</code>.
     </span>
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      You will be safe if you delay{' '}
+      <code>{answer}</code> picoseconds.
     </span>
   ),
   buttons: BUTTONS,
