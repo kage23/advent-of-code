@@ -14,6 +14,15 @@ const generateNext = (input: number, genKey: 'a' | 'b'): number => (
   (input * (genKey === 'a' ? 16807 : genKey === 'b' ? 48271 : 0)) % 2147483647
 )
 
+const generateNextPart2 = (input: number, genKey: 'a' | 'b'): number => {
+  let next = generateNext(input, genKey)
+  while (
+    genKey === 'a' && next % 4 !== 0
+    || genKey === 'b' && next % 8 !== 0
+  ) next = generateNext(next, genKey)
+  return next
+}
+
 const compareGeneratorNumbers = (): boolean => {
   const compareStringA = genA.toString(2).slice(-16)
   const compareStringB = genB.toString(2).slice(-16)
@@ -31,6 +40,25 @@ const BUTTONS: IButton[] = [
         genA = generateNext(genA, 'a')
         genB = generateNext(genB, 'b')
         if (compareGeneratorNumbers()) matchCount++
+      }
+      return {
+        answer1: matchCount.toString()
+      }
+    }
+  },
+  {
+    label: 'Solve Part 2',
+    onClick: () => {
+      const target = 5000000
+      let matchCount = 0
+      for (let i = 0; i < target; i++) {
+        if (i % 10000 === 0) console.log(i, matchCount)
+        genA = generateNextPart2(genA, 'a')
+        genB = generateNextPart2(genB, 'b')
+        if (compareGeneratorNumbers()) {
+          matchCount++
+          console.log(i, matchCount)
+        }
       }
       return {
         answer1: matchCount.toString()
