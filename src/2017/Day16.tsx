@@ -76,6 +76,38 @@ const BUTTONS: IButton[] = [
         answer1: programs
       }
     }
+  },
+  {
+    label: 'Dance a Billion',
+    onClick: (inputKey) => {
+      const danceCount = 1000000000
+      const instructions = INPUT[inputKey].split(',')
+      const instrLen = instructions.length
+      let count = 0
+      const programsAtTime: string[] = []
+      const seenBefore: Map<string, number> = new Map()
+      programs = inputKey === 'DEMO'
+        ? 'abcde'
+        : 'abcdefghijklmnop'
+      while (count < danceCount && typeof seenBefore.get(programs) === 'undefined') {
+        seenBefore.set(programs, count)
+        programsAtTime.push(programs)
+        for (let i = 0; i < instrLen; i++) {
+          programs = dance(programs, instructions[i])
+        }
+        count++
+      }
+      if (count < danceCount) {
+        const seenAt = seenBefore.get(programs) || 0
+        const loopSize = count - seenAt
+        const remaining = danceCount - count
+        programs = programsAtTime[seenAt + (remaining % loopSize)]
+        count = danceCount
+      }
+      return {
+        answer2: programs
+      }
+    }
   }
 ]
 
@@ -106,7 +138,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      After a billion dances, the programs' final order is{' '}
+      <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
