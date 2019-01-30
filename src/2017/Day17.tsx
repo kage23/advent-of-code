@@ -14,6 +14,7 @@ const createNodes = (max: number, skipSize: number): DLL => {
   let numbers = new DLL(0)
   let currentNode = numbers.head
   for (let i = 1; i <= max; i++) {
+    if (i % 10000 === 0) console.log(i)
     for (let j = 0; j < skipSize; j++) {
       if (currentNode) {
         currentNode = currentNode.next
@@ -37,6 +38,19 @@ const BUTTONS: IButton[] = [
       while (currentNode && currentNode.value !== max) currentNode = currentNode.next
       return {
         answer1: currentNode && currentNode.next ? currentNode.next.value.toString() : undefined
+      }
+    }
+  },
+  {
+    label: 'Solve Part 2',
+    onClick: (inputKey) => {
+      const max = 50000000
+      const skipSize = parseInt(INPUT[inputKey])
+      numbers = createNodes(max, skipSize)
+      let currentNode = numbers.head
+      while (currentNode && currentNode.value !== 0) currentNode = currentNode.next
+      return {
+        answer2: currentNode && currentNode.next ? currentNode.next.value.toString() : undefined
       }
     }
   }
@@ -83,6 +97,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
+      The value after <code>0</code> is{' '}
       <code>{answer}</code>
     </span>
   ),
