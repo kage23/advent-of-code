@@ -52,6 +52,7 @@ const BUTTONS: IButton[] = [
     label: 'Follow Path',
     onClick: (inputKey) => {
       let answer1 = ''
+      let steps = 0
       const map = INPUT[inputKey].split('\n')
       const position: number[] = [0, map[0].indexOf('|')] // y, x
       let direction: 'U' | 'R' | 'D' | 'L' = 'D'
@@ -62,11 +63,13 @@ const BUTTONS: IButton[] = [
           case '|':
           case '-':
           move(position, direction)
+          steps++
           break
 
           case '+':
           direction = findNewDirection(position, map, direction)
           move(position, direction)
+          steps++
           break
 
           case ' ':
@@ -75,11 +78,15 @@ const BUTTONS: IButton[] = [
           default:
           answer1 += map[position[0]].charAt(position[1])
           move(position, direction)
+          steps++
           break
         }
       }
 
-      return { answer1 }
+      return {
+        answer1,
+        answer2: steps.toString()
+      }
     }
   }
 ]
@@ -93,7 +100,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The packet took <code>{answer}</code> steps.
     </span>
   ),
   buttons: BUTTONS,
