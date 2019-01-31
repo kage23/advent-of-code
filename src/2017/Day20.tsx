@@ -7,6 +7,8 @@ import {
 
 import INPUT from './Input/Day20'
 
+import { manhattanDistance } from '../utils/Various'
+
 interface IParticle {
   id: number
   position: number[]
@@ -14,6 +16,7 @@ interface IParticle {
   acceleration: number[]
 }
 
+const pathKey = (position: number[]) => `${position[0]},${position[1]},${position[2]}`
 const sumAbs = (numbers: number[]): number => numbers.reduce((a, b) => Math.abs(a) + Math.abs(b))
 
 const parseInput = (input: string): IParticle[] => (
@@ -44,6 +47,61 @@ const parseInput = (input: string): IParticle[] => (
   })
 )
 
+const testForFurtherCollisions = (particles: IParticle[]): boolean => {
+  // Check each particle's velocity relative to each other particle.
+  // If they are all positive (moving away) from all others, there are no further collisions.
+
+  return particles.some(particleA => (
+    particles.some(particleB => {
+      if (particleA.id === particleB.id) return false
+      // Find current and next distance of particle A and B, then compare them to find relative velocity
+      const currentDistance = manhattanDistance(particleA.position, particleB.position)
+      const nextDistance = manhattanDistance(
+        [
+          particleA.position[0] + particleA.velocity[0] + particleA.acceleration[0],
+          particleA.position[1] + particleA.velocity[1] + particleA.acceleration[1],
+          particleA.position[2] + particleA.velocity[2] + particleA.acceleration[2]
+        ],
+        [
+          particleB.position[0] + particleB.velocity[0] + particleB.acceleration[0],
+          particleB.position[1] + particleB.velocity[1] + particleB.acceleration[1],
+          particleB.position[2] + particleB.velocity[2] + particleB.acceleration[2]
+        ]
+      )
+      return nextDistance < currentDistance
+    })
+  ))
+}
+
+const advanceParticles = (particles: IParticle[]): IParticle[] => {
+  particles.forEach(particle => {
+    particle.velocity[0] += particle.acceleration[0]
+    particle.velocity[1] += particle.acceleration[1]
+    particle.velocity[2] += particle.acceleration[2]
+
+    particle.position[0] += particle.velocity[0]
+    particle.position[1] += particle.velocity[1]
+    particle.position[2] += particle.velocity[2]
+  })
+  return removeCollisions(particles)
+}
+
+const removeCollisions = (particles: IParticle[]): IParticle[] => {
+  const positionMap: Map<string, number[]> = new Map()
+  const removeIdsMap: Map<number, boolean> = new Map()
+  particles.forEach((particle) => {
+    const posArr = positionMap.get(pathKey(particle.position)) || []
+    posArr.push(particle.id)
+    positionMap.set(pathKey(particle.position), posArr)
+  })
+  for (const particleIds of positionMap.values()) {
+    if (particleIds.length > 1) {
+      for (const particleId of particleIds) removeIdsMap.set(particleId, true)
+    }
+  }
+  return particles.filter(particle => !removeIdsMap.get(particle.id))
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Find Closest Particle (Long-Term)',
@@ -68,6 +126,20 @@ const BUTTONS: IButton[] = [
         answer1: particles[0].id.toString()
       }
     }
+  },
+  {
+    label: 'Run Simulation',
+    onClick: (inputKey) => {
+      let particles: IParticle[] = parseInput(INPUT[inputKey])
+
+      while (testForFurtherCollisions(particles)) {
+        particles = advanceParticles(particles)
+      }
+
+      return {
+        answer2: particles.length.toString()
+      }
+    }
   }
 ]
 
@@ -80,7 +152,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      After all collisions, there are{' '}
+      <code>{answer}</code> particles remaining.
     </span>
   ),
   buttons: BUTTONS,
