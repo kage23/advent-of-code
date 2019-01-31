@@ -153,11 +153,17 @@ const BUTTONS: IButton[] = [
     label: 'Step',
     onClick: (inputKey) => {
       step(inputKey)
-      return {
-        answer1: steps === 5
-          ? patternStr.split('').filter(x => x === '#').length.toString()
-          : undefined
+      let answer1: string | undefined
+      let answer2: string | undefined
+      if (steps === 5) {
+        answer1 = patternStr.split('').filter(x => x === '#').length.toString()
       }
+      if (steps === 18) {
+        answer2 = patternStr.split('').filter(x => x === '#').length.toString()
+      }
+      if (answer1) return { answer1 }
+      else if (answer2) return { answer2 }
+      else return {}
     }
   }
 ]
@@ -197,6 +203,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
+      After <code>18</code> iterations,{' '}
       <code>{answer}</code>
     </span>
   ),
