@@ -1,5 +1,5 @@
 const INPUT: { [key:string]: string } = {
-DEMO:
+DEMO_1:
 `set a 1
 add a 2
 mul a a
@@ -10,6 +10,15 @@ rcv a
 jgz a -1
 set a 1
 jgz a -2`,
+
+DEMO_2:
+`snd 1
+snd 2
+snd p
+rcv a
+rcv b
+rcv c
+rcv d`,
 
 REAL:
 `set i 31
