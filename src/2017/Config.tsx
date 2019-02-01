@@ -24,6 +24,7 @@ import Day17 from './Day17'
 import Day18 from './Day18'
 import Day19 from './Day19'
 import Day20 from './Day20'
+import Day21 from './Day21'
 
 const CONFIG_2017: IYearConfig = {
   year: 2017,
@@ -53,7 +54,8 @@ const CONFIG_2017: IYearConfig = {
     Day17,
     Day18,
     Day19,
-    Day20
+    Day20,
+    Day21
   ]
 }
 
