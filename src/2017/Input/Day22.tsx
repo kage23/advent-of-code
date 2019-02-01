@@ -1,5 +1,5 @@
 const INPUT: { [key:string]: string } = {
-DEMO_1:
+DEMO:
 `..#
 #..
 ...`,
