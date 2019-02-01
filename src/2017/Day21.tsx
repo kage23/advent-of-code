@@ -165,6 +165,26 @@ const BUTTONS: IButton[] = [
       else if (answer2) return { answer2 }
       else return {}
     }
+  },
+  {
+    label: 'Step to Eighteen',
+    onClick: (inputKey) => {
+      let answer1: string | undefined
+      let answer2: string | undefined
+      while (steps < 18) {
+        console.log(`Round ${steps + 1}...`)
+        step(inputKey)
+        if (steps === 5) {
+          answer1 = patternStr.split('').filter(x => x === '#').length.toString()
+        }
+        if (steps === 18) {
+          answer2 = patternStr.split('').filter(x => x === '#').length.toString()
+        }
+      }
+      return {
+        answer1, answer2
+      }
+    }
   }
 ]
 
@@ -187,8 +207,8 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
         <pre>{dayConfig.INPUT[inputKey]}</pre>
       </div>
       <div className="render-box--left-margin">
-        <p>Pattern: (Steps: {steps}) (On lights: {onCount})</p>
-        <pre>{patternStr}</pre>
+        <p>Pattern: (Steps: {steps}) (On pixels: {onCount})</p>
+        <pre>{steps < 10 ? patternStr : 'The pattern is too big to display!'}</pre>
       </div>
     </div>
   )
@@ -204,7 +224,7 @@ const config: IDayConfig = {
   answer2Text: (answer) => (
     <span>
       After <code>18</code> iterations,{' '}
-      <code>{answer}</code>
+      <code>{answer}</code> pixels are on.
     </span>
   ),
   buttons: BUTTONS,
