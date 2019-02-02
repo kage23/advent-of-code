@@ -6,6 +6,8 @@ import {
 
 import INPUT from './Input/Day23'
 
+import { detectPrime } from '../utils/Various'
+
 interface IInstruction {
   command: string
   x: string
@@ -47,10 +49,26 @@ class Program {
     this.instructions = []
     this.lastPlayed = NaN
     if (typeof id === 'number') this.id = id
-    if (part === 1) this.registers = {}
+    if (part === 1) this.registers = {
+      a: 0,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: 0,
+      f: 0,
+      g: 0,
+      h: 0
+    }
     else {
       this.registers = {
-        p: id || 0
+        a: 1,
+        b: 0,
+        c: 0,
+        d: 0,
+        e: 0,
+        f: 0,
+        g: 0,
+        h: 0
       }
     }
   }
@@ -89,14 +107,13 @@ class Program {
 let REGISTERS = new Program(1)
 
 const executeInstruction = (program: Program, command: string, x: string, inY: string | number | undefined) => {
-  if (!REGISTERS.registers[x]) REGISTERS.registers[x] = 0
   const y = typeof inY === 'undefined' ? '' : inY
   switch (command) {
     case 'set':
     case 'sub':
     case 'mul':
     case 'jnz':
-    return program[command](x, y)
+    program[command](x, y)
 
     default:
     break
@@ -104,6 +121,49 @@ const executeInstruction = (program: Program, command: string, x: string, inY: s
 }
 
 const BUTTONS: IButton[] = [
+  {
+    label: 'Run One Instruction',
+    onClick: () => {
+      let {
+        command,
+        x,
+        y
+      } = REGISTERS.instructions[REGISTERS.currentInstruction]
+
+      console.group(`${REGISTERS.currentInstruction}: ${command} ${x} ${y}`)
+      console.log(`Registers before: ${JSON.stringify(REGISTERS.registers)}`)
+      executeInstruction(REGISTERS, command, x, y)
+      console.log(`Registers after: ${JSON.stringify(REGISTERS.registers)}`)
+      console.groupEnd()
+      REGISTERS.currentInstruction++
+
+      return {}
+    }
+  },
+  {
+    label: 'Run 1000 Instructions',
+    onClick: () => {
+      let {
+        command,
+        x,
+        y
+      } = REGISTERS.instructions[REGISTERS.currentInstruction]
+
+      for (let i = 0; i < 1000; i++) {
+        command = REGISTERS.instructions[REGISTERS.currentInstruction].command
+        x = REGISTERS.instructions[REGISTERS.currentInstruction].x
+        y = REGISTERS.instructions[REGISTERS.currentInstruction].y
+        console.group(`${REGISTERS.currentInstruction}: ${command} ${x} ${y}`)
+        console.log(`Registers before: ${JSON.stringify(REGISTERS.registers)}`)
+        executeInstruction(REGISTERS, command, x, y)
+        console.log(`Registers after: ${JSON.stringify(REGISTERS.registers)}`)
+        console.groupEnd()
+        REGISTERS.currentInstruction++
+      }
+
+      return {}
+    }
+  },
   {
     label: 'Run Program',
     onClick: () => {
@@ -125,6 +185,36 @@ const BUTTONS: IButton[] = [
         answer1: mulCount.toString()
       }
     }
+  },
+  {
+    label: 'Reset to Part 1',
+    onClick: (inputKey) => {
+      mulCount = 0
+      REGISTERS = new Program(1)
+      REGISTERS.instructions = parseInput(INPUT[inputKey])
+      return {
+        answer1: undefined,
+        answer2: undefined
+      }
+    }
+  },
+  {
+    label: 'Reset to Part 2',
+    onClick: (inputKey) => {
+      mulCount = 0
+      REGISTERS = new Program(2)
+      REGISTERS.instructions = parseInput(INPUT[inputKey])
+      return {
+        answer2: ' '
+      }
+    }
+  },
+  {
+    label: 'Set a Register',
+    onClick: () => {
+      REGISTERS.registers[prompt('Which register? (Default a)') || 'a'] = parseInt(prompt('What value?') || '0')
+      return {}
+    }
   }
 ]
 
@@ -143,18 +233,34 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
     ))
   }
 
+  let nonPrimes = 0
+  let primes = 0
+  for (let i = 106500; i <= 123500; i += 17) {
+    const isPrime = detectPrime(i)
+    console.log(`detectPrime ${i}`, isPrime)
+    if (isPrime) primes++
+    else nonPrimes++
+  }
+  console.log(`Total primes: ${primes}. Total non-primes: ${nonPrimes}.`)
+
   return (
     <div className="render-box">
       <div>
         <h3>Input:</h3>
-        <pre>{dayConfig.INPUT[inputKey]}</pre>
+        <div>
+          {
+            dayConfig.INPUT[inputKey].split('\n').map((line, i) => (
+              <div key={i}>{i}: {line}</div>
+            ))
+          }
+        </div>
       </div>
       <div className="render-box--left-margin">
-        <h3>Registers (Part 1):</h3>
+        <h3>Registers:</h3>
         {registerDisplay}
       </div>
       <div className="render-box--left-margin">
-        <h3>Next Instruction (Part 1):</h3>
+        <h3>Next Instruction:</h3>
         {REGISTERS.instructions[REGISTERS.currentInstruction] && (
           <h3>
             {REGISTERS.currentInstruction}:{' '}
@@ -175,9 +281,10 @@ const config: IDayConfig = {
       <code>{answer}</code> times.
     </span>
   ),
-  answer2Text: (answer) => (
+  answer2Text: () => (
     <span>
-      <code>{answer}</code>
+      Solving Part 2 (i.e. optimizing the code and figuring out what it does and what the final value{' '}
+      of Register <code>h</code> will be) is left as a challenge to the reader!
     </span>
   ),
   buttons: BUTTONS,
