@@ -1,5 +1,12 @@
 import DLL from './DLL'
 
+export const detectPrime = (x: number): boolean => {
+  for (let i = 2; i < x; i++) {
+    if ((x / i) === Math.floor(x / i)) return false
+  }
+  return true
+}
+
 export const generateKnotHash = (input: string, listSize: number, readAsNumbers?: boolean): string => {
   const list = new DLL()
   let currentPosition = 0
