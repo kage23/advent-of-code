@@ -59,17 +59,44 @@ const getCurrentNode = (field: IField): string => {
   return field.map[positionToGet[1]].charAt(positionToGet[0])
 }
 
-const toggleCurrentPosition = (field: IField) => {
+// Returns whether a node was _infected_
+const toggleCurrentPosition = (field: IField): boolean => {
   const currentNode = getCurrentNode(field)
   const positionInField = [field.currentPosition[0] - field.min[0], field.currentPosition[1] - field.min[1]]
+  const newNode = currentNode === '.' ? '#' : '.'
 
   field.map[positionInField[1]] = `${
     field.map[positionInField[1]].slice(0, positionInField[0])
   }${
-    currentNode === '.' ? '#' : '.'
+    newNode
   }${
     field.map[positionInField[1]].slice(positionInField[0] + 1)
   }`
+
+  return newNode === '#'
+}
+
+// Returns whether a node was _infected_
+const evolveCurrentPosition = (field: IField): boolean => {
+  const currentNode = getCurrentNode(field)
+  const positionInField = [field.currentPosition[0] - field.min[0], field.currentPosition[1] - field.min[1]]
+  const newNode = currentNode === '.'
+    ? 'W'
+    : currentNode === 'W'
+      ? '#'
+      : currentNode === '#'
+        ? 'F'
+        : '.'
+
+  field.map[positionInField[1]] = `${
+    field.map[positionInField[1]].slice(0, positionInField[0])
+  }${
+    newNode
+  }${
+    field.map[positionInField[1]].slice(positionInField[0] + 1)
+  }`
+
+  return newNode === '#'
 }
 
 const updatePosition = (field: IField) => {
@@ -93,27 +120,30 @@ const updatePosition = (field: IField) => {
 }
 
 // Performs the burst and returns whether a node was _infected_
-const burst = (field: IField): boolean => {
+const burst = (field: IField, part: 1 | 2): boolean => {
   let infected = false
   const currentNode = getCurrentNode(field)
   // Change direction based on current location
-  // If infect, increment newInfectionCount
   switch (currentNode) {
     case '.':
-    field.currentDirection = field.currentDirection - 1
-    if (field.currentDirection < 0) field.currentDirection = DIRECTIONS.length - 1
-    infected = true
+    field.currentDirection = (field.currentDirection + 3) % DIRECTIONS.length
     break
 
     case '#':
     field.currentDirection = (field.currentDirection + 1) % DIRECTIONS.length
     break
 
+    case 'F':
+    field.currentDirection = (field.currentDirection + 2) % DIRECTIONS.length
+    break
+
+    case 'W':
     default:
     break
   }
   // Clean or infect current location
-  toggleCurrentPosition(field)
+  if (part === 1) infected = toggleCurrentPosition(field)
+  if (part === 2) infected = evolveCurrentPosition(field)
   // Change current location based on (new) direction
   updatePosition(field)
 
@@ -124,25 +154,42 @@ const BUTTONS: IButton[] = [
   {
     label: 'Single Burst of Activity',
     onClick: () => {
-      burst(field)
+      burst(field, 1)
       bursts++
       return {}
     }
   },
   {
-    label: 'Burst to 10,000',
+    label: 'Burst to 10,000 (Part 1)',
     onClick: (inputKey) => {
       let infectionCount = 0
       bursts = 0
       field = parseInput(INPUT[inputKey])
 
       while (bursts !== 10000) {
-        if (burst(field)) infectionCount++
+        if (burst(field, 1)) infectionCount++
         bursts++
       }
 
       return {
         answer1: infectionCount.toString()
+      }
+    }
+  },
+  {
+    label: 'Burst to 10,000,000 (Part 2)',
+    onClick: (inputKey) => {
+      let infectionCount = 0
+      bursts = 0
+      field = parseInput(INPUT[inputKey])
+
+      while (bursts !== 10000000) {
+        if (burst(field, 2)) infectionCount++
+        bursts++
+      }
+
+      return {
+        answer2: infectionCount.toString()
       }
     }
   }
@@ -176,7 +223,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      After <code>10,000,000</code> bursts of evolved activity,{' '}
+      <code>{answer}</code> bursts caused a node to become infected.
     </span>
   ),
   buttons: BUTTONS,
