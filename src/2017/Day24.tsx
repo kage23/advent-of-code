@@ -113,6 +113,24 @@ const BUTTONS: IButton[] = [
         answer1: totalBridgeStrength(possibleBridges[0].ports).toString()
       }
     }
+  },
+  {
+    label: 'Find Longest Bridge',
+    onClick: (inputKey) => {
+      const ports: number[][] = parseInput(INPUT[inputKey])
+      const possibleBridges = findBridges(ports)
+      .sort((a, b) => {
+        return a.ports.length > b.ports.length
+          ? -1
+          : a.ports.length < b.ports.length
+            ? 1
+            : totalBridgeStrength(b.ports) - totalBridgeStrength(a.ports)
+      })
+
+      return {
+        answer2: totalBridgeStrength(possibleBridges[0].ports).toString()
+      }
+    }
   }
 ]
 
@@ -125,7 +143,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The strength of the longest bridge you can build is{' '}
+      <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
