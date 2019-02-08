@@ -7,11 +7,12 @@ import {
 
 import INPUT from './Input/Day24'
 
-import SLL, { ISLLNode } from '../utils/SLL'
+import SLL from '../utils/SLL'
 
-// port: number[]
-// bridge: number[][]
-// possibleBridges: number[][][]
+interface IBridge {
+  connectionType: number
+  ports: number[][]
+}
 
 const parseInput = (input: string): number[][] => (
   input.split('\n').map(line => {
@@ -48,30 +49,33 @@ const findBridges__recursive = (startingPortType: number, ports: number[][], inB
   return result
 }
 
-const findBridges = (ports: number[][]): number[][][] => {
-  debugger
-  const completeBridges: number[][][] = []
+const findBridges = (ports: number[][]): IBridge[] => {
+  const completeBridges: IBridge[] = []
   const bridges = new SLL()
-  let prevConnectionType = 0
-  ports.filter(port => port[0] === 0).forEach(port => bridges.push([port]))
+  ports.filter(port => port[0] === 0).forEach(port => {
+    bridges.push({
+      connectionType: port[1],
+      ports: [port]
+    } as IBridge)
+  })
 
   let bridge = bridges.shift()
 
   let i = 0
   while (bridge) {
-    // if (i % 10000 === 0)
+    if (i % 10000 === 0)
     console.log(`Complete bridges: ${completeBridges.length}. Bridges remaining: ${bridges.length}. Total bridges: ${completeBridges.length + bridges.length}.`)
     i++
-    const connectionPort = bridge[bridge.length - 1]
     for (let i = 0; i < ports.length; i++) {
       const port = ports[i]
       // For each port, if it's not already in the bridge, ...
-      if (!bridge.some((bridgePort: number[]) => bridgePort[0] === port[0] && bridgePort[1] === port[1])) {
+      if (!bridge.ports.some((bridgePort: number[]) => bridgePort[0] === port[0] && bridgePort[1] === port[1])) {
         // Try to extend the bridge with it and if it's a valid extension, add it to the bridges list
-        if (port[0] !== 0 && (connectionPort.indexOf(port[0]) !== -1 || connectionPort.indexOf(port[1]) !== -1)) {
-          // THE ABOVE IS WRONG AND WILL MAKE BAD BRIDGES LIKE: [0, 2] [2, 3] [3, 5] [3, 4] . The middle three is connecting to both but that's illegal.
-          // Keeping track of the bridge's connection type is fucky. I guess maybe make a method that you can just pass the thing to, and re-figure connection type each bridge loop
-          bridges.push([...bridge, port])
+        if (port[0] !== 0 && (port.indexOf(bridge.connectionType) !== -1)) {
+          bridges.push({
+            connectionType: port[(port.indexOf(bridge.connectionType) + 1) % 2],
+            ports: [...bridge.ports, port]
+          } as IBridge)
         }
       }
     }
@@ -100,12 +104,13 @@ const BUTTONS: IButton[] = [
     label: 'Find Strongest Bridge (Non-Recursively)',
     onClick: (inputKey) => {
       const ports: number[][] = parseInput(INPUT[inputKey])
-      const possibleBridges = findBridges(ports).sort((a, b) => {
-        return totalBridgeStrength(b) - totalBridgeStrength(a)
+      const possibleBridges = findBridges(ports)
+      .sort((a, b) => {
+        return totalBridgeStrength(b.ports) - totalBridgeStrength(a.ports)
       })
 
       return {
-        answer1: totalBridgeStrength(possibleBridges[0]).toString()
+        answer1: totalBridgeStrength(possibleBridges[0].ports).toString()
       }
     }
   }
