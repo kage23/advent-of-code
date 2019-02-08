@@ -5,6 +5,7 @@ import { IYearConfig } from '../Config'
 import coverImage from './cover.png'
 
 import Day1 from './Day1'
+import Day2 from './Day2'
 
 const CONFIG: IYearConfig = {
   year: 2016,
@@ -15,7 +16,8 @@ const CONFIG: IYearConfig = {
     </span>
   ),
   days: [
-    Day1
+    Day1,
+    Day2
   ]
 }
 
