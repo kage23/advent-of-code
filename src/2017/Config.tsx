@@ -35,7 +35,8 @@ const CONFIG_2017: IYearConfig = {
   cover: coverImage,
   extraText: (
     <span>
-      I'm still working on 2017!
+      Go do it yourself to see the stars glow, the list print, and the other names on the list!{' '}
+      The thing changes each time you reload the page!
     </span>
   ),
   days: [
