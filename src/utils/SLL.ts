@@ -1,15 +1,25 @@
 class SLL {
   head: ISLLNode | undefined
+  length: number
 
   constructor(value?: any) {
     if (typeof value !== 'undefined') {
       this.head = { value }
-    }
+      this.length = 1
+    } else this.length = 0
   }
 
   moveToEnd = (node: ISLLNode) => {
     const value = this.removeNode(node)
     this.push(value)
+  }
+
+  pop = () => {
+    let currentNode = this.head
+    while (currentNode && currentNode.next) currentNode = currentNode.next
+    if (currentNode) {
+      return this.removeNode(currentNode)
+    }
   }
 
   push = (value: any) => {
@@ -21,6 +31,7 @@ class SLL {
     } else {
       this.head = node
     }
+    this.length++
   }
 
   removeNode = (node: ISLLNode) => {
@@ -33,7 +44,20 @@ class SLL {
       currentNode.next = node.next
     }
 
+    this.length--
     return node.value
+  }
+
+  shift = () => {
+    if (this.head) return this.removeNode(this.head)
+  }
+
+  unshift = (value: any) => {
+    const node: ISLLNode = { value }
+    const oldHead = this.head
+    node.next = oldHead
+    this.head = node
+    this.length++
   }
 }
 
