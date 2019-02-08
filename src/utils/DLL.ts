@@ -69,7 +69,7 @@ class DLL {
       return node
     }
   }
-  
+
   setNewHead = (node: IDLLNode | undefined) => {
     this.head = node
   }
