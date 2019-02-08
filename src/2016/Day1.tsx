@@ -18,7 +18,7 @@ const DIRECTIONS = [
 
 const BUTTONS: IButton[] = [
   {
-    label: 'Find Easter Bunny HQ',
+    label: 'Find End of Path',
     onClick: inputKey => {
       const directions = INPUT[inputKey].split(', ')
       const currentPosition = [0, 0]
@@ -41,6 +41,43 @@ const BUTTONS: IButton[] = [
         answer1: manhattanDistance(currentPosition, [0, 0]).toString()
       }
     }
+  },
+  {
+    label: 'Find First Repeat Location',
+    onClick: inputKey => {
+      const directions = INPUT[inputKey].split(', ')
+      const currentPosition = [0, 0]
+      let currentDirectionIndex = 0
+      const visitedBefore: Map<string, boolean> = new Map()
+      visitedBefore.set(JSON.stringify(currentPosition), true)
+
+      mainLoop:
+      for (const directionRaw of directions) {
+        // Turn
+        currentDirectionIndex += directionRaw.charAt(0) === 'R'
+          ? 1 : -1
+        currentDirectionIndex = currentDirectionIndex % DIRECTIONS.length
+        if (currentDirectionIndex < 0) currentDirectionIndex = DIRECTIONS.length - 1
+
+        // Then move
+        const numberOfBlocks = parseInt(directionRaw.slice(1))
+        for (let i = 0; i < numberOfBlocks; i++) {
+          currentPosition[0] += DIRECTIONS[currentDirectionIndex][0]
+          currentPosition[1] += DIRECTIONS[currentDirectionIndex][1]
+
+          // Then check if we've been here before and either stop, or mark it
+          if (visitedBefore.get(JSON.stringify(currentPosition))) {
+            break mainLoop
+          } else {
+            visitedBefore.set(JSON.stringify(currentPosition), true)
+          }
+        }
+      }
+
+      return {
+        answer2: manhattanDistance(currentPosition, [0, 0]).toString()
+      }
+    }
   }
 ]
 
@@ -60,7 +97,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The first location that you visit twice is{' '}
+      <code>{answer}</code> blocks away.
     </span>
   ),
   buttons: BUTTONS,
