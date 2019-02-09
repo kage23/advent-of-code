@@ -7,7 +7,7 @@ import {
 
 import INPUT from './Input/Day3'
 
-const getTriangle = (input: string): number[] => {
+const getTrianglePart1 = (input: string): number[] => {
   const regexp = /[\d]+/g
   const sides = input.match(regexp)
 
@@ -30,7 +30,7 @@ const BUTTONS: IButton[] = [
   {
     label: 'Evaluate Triangles',
     onClick: inputKey => ({
-      answer1: INPUT[inputKey].split('\n').map(getTriangle).filter(isTriangleValid).length.toString()
+      answer1: INPUT[inputKey].split('\n').map(getTrianglePart1).filter(isTriangleValid).length.toString()
     })
   }
 ]
