@@ -16,6 +16,28 @@ const getTrianglePart1 = (input: string): number[] => {
   return []
 }
 
+const getVerticalTriangles = (input: string[]): number[][] => {
+  const result: number[][] = []
+
+  if (input.length % 3 !== 0) throw new Error(`Something's wrong with this input data.`)
+
+  const inputNumbers = input.map(line => getTrianglePart1(line))
+
+  for (let col = 0; col < input[0].length; col++) {
+    for (let row = 0; row < input.length; row += 3) {
+      const triangle = [
+        inputNumbers[row][col],
+        inputNumbers[row + 1][col],
+        inputNumbers[row + 2][col]
+      ]
+
+      if (isTriangleValid(triangle)) result.push(triangle)
+    }
+  }
+
+  return result
+}
+
 const isTriangleValid = (input: number[]): boolean => {
   if (input.length !== 3) return false
 
@@ -32,6 +54,12 @@ const BUTTONS: IButton[] = [
     onClick: inputKey => ({
       answer1: INPUT[inputKey].split('\n').map(getTrianglePart1).filter(isTriangleValid).length.toString()
     })
+  },
+  {
+    label: 'Evaluate Triangles (Vertically)',
+    onClick: inputKey => ({
+      answer2: getVerticalTriangles(INPUT[inputKey].split('\n')).length.toString()
+    })
   }
 ]
 
@@ -44,7 +72,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      Of the triangles listed when you read the list by columns, only{' '}
+      <code>{answer}</code> of them are actually possible.
     </span>
   ),
   buttons: BUTTONS,
