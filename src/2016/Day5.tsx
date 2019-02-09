@@ -29,6 +29,30 @@ const BUTTONS: IButton[] = [
         answer1: password
       }
     }
+  },
+  {
+    label: 'Find Password, v. 2',
+    onClick: inputKey => {
+      const input = INPUT[inputKey]
+      let password = '________'
+
+      letterLoop:
+      for (let i = 0; true; i++) {
+        const hash = md5(`${input}${i}`)
+        if (hash.startsWith('00000') && parseInt(hash.charAt(5)) < 8) {
+          const index = parseInt(hash.charAt(5))
+          if (password.charAt(index) === '_') {
+            password = `${password.slice(0, index)}${hash.charAt(6)}${password.slice(index + 1)}`
+            console.log(`Hash found at index ${i}: ${hash}. Password: ${password}.`)
+            if (password.indexOf('_') === -1) break letterLoop
+          }
+        } else if (i % 10000 === 0) console.log('Searching...')
+      }
+
+      return {
+        answer1: password
+      }
+    }
   }
 ]
 
