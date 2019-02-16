@@ -9,7 +9,7 @@ import INPUT from './Input/Day6'
 
 const BUTTONS: IButton[] = [
   {
-    label: 'Find Error-Corrected Message',
+    label: 'Find Highest-Count Message',
     onClick: (inputKey) => {
       let message = ''
       const letterCountMaps: Map<string, number>[] = []
@@ -42,6 +42,41 @@ const BUTTONS: IButton[] = [
         answer1: message
       }
     }
+  },
+  {
+    label: 'Find Lowest-Count Message',
+    onClick: (inputKey) => {
+      let message = ''
+      const letterCountMaps: Map<string, number>[] = []
+      const input = INPUT[inputKey]
+      input.split('\n').forEach(line => {
+        for (let i = 0; i < line.length; i++) {
+          if (!letterCountMaps[i]) letterCountMaps[i] = new Map()
+          const letter = line[i]
+          const letterMap = letterCountMaps[i]
+          if (letterMap) {
+            const letterCount = letterMap.get(letter) || 0
+            letterMap.set(letter, letterCount + 1)
+          }
+        }
+      })
+
+      for (const letterCountMap of letterCountMaps) {
+        let lowestCount = Number.MAX_SAFE_INTEGER
+        let lowestLetter = ''
+        for (const [letter, count] of letterCountMap.entries()) {
+          if (count < lowestCount) {
+            lowestCount = count
+            lowestLetter = letter
+          }
+        }
+        message += lowestLetter
+      }
+
+      return {
+        answer2: message
+      }
+    }
   }
 ]
 
@@ -54,7 +89,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The message is{' '}
+      <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
