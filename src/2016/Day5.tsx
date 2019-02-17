@@ -50,7 +50,7 @@ const BUTTONS: IButton[] = [
       }
 
       return {
-        answer1: password
+        answer2: password
       }
     }
   }
@@ -65,7 +65,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The password is{' '}
+      <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
