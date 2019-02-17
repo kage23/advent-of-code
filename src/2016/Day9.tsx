@@ -9,13 +9,33 @@ import INPUT from './Input/Day9'
 let prevInputKey = ''
 let answer1_a = ''
 
+const getDecompressedLength = (input: string): number => {
+  let remaining = input
+  let length = 0
+
+  while (remaining.length > 0) {
+    const character = remaining.charAt(0)
+    remaining = remaining.slice(1)
+
+    if (!/\s/.test(character)) {
+      if (character === '(') {
+        const charsToRepeat = parseInt(remaining)
+        const timesToRepeat = parseInt(remaining.split('x')[1])
+        const repetitionGroup = remaining.slice(remaining.indexOf(')') + 1).substring(0, charsToRepeat)
+        remaining = remaining.slice(remaining.indexOf(')') + 1 + charsToRepeat)
+        length += (getDecompressedLength(repetitionGroup) * timesToRepeat)
+      } else { length++ }
+    }
+  }
+
+  return length
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Decompress Sequence',
     onClick: inputKey => {
       const input = INPUT[inputKey]
-      let charsToRepeat = 0
-      let timesToRepeat = 0
 
       answer1_a = ''
 
@@ -23,8 +43,8 @@ const BUTTONS: IButton[] = [
         const character = input[i]
         if (!/\s/.test(character)) {
           if (character === '(') {
-            charsToRepeat = parseInt(input.slice(i + 1))
-            timesToRepeat = parseInt(input.slice(i + 1).split('x')[1])
+            const charsToRepeat = parseInt(input.slice(i + 1))
+            const timesToRepeat = parseInt(input.slice(i + 1).split('x')[1])
             const inputSlice = input.slice(i + 1)
             i = inputSlice.indexOf(')') + i + charsToRepeat + 1
             const repetitionGroup = inputSlice.slice(inputSlice.indexOf(')') + 1).substring(0, charsToRepeat)
@@ -39,6 +59,12 @@ const BUTTONS: IButton[] = [
         answer1: answer1_a.length.toString()
       }
     }
+  },
+  {
+    label: 'Get Length of Final Decompression',
+    onClick: inputKey => ({
+      answer2: getDecompressedLength(INPUT[inputKey]).toString()
+    })
   }
 ]
 
@@ -52,11 +78,11 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
     <div className="render-box">
       <h3>Input:</h3>
       <pre className="render-box--pre-wrap">{dayConfig.INPUT[inputKey]}</pre>
-      {inputKey.indexOf('DEMO') !== -1 && answer1_a.length > 0 && (
+      {answer1_a.length > 0 && (
         <h3>Decompressed:</h3>
       )}
-      {inputKey.indexOf('DEMO') !== -1 && answer1_a.length > 0 && (
-        <pre>{answer1_a}</pre>
+      {answer1_a.length > 0 && (
+        <pre className="render-box--pre-wrap">{answer1_a}</pre>
       )}
     </div>
   )
@@ -71,7 +97,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      <code>{answer}</code>
+      The totally decompressed sequence is{' '}
+      <code>{answer}</code> characters long.
     </span>
   ),
   buttons: BUTTONS,
