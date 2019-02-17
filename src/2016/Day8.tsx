@@ -70,7 +70,8 @@ const BUTTONS: IButton[] = [
       }
 
       return {
-        answer1: litPixelCount.toString()
+        answer1: litPixelCount.toString(),
+        answer2: ''
       }
     }
   }
@@ -104,9 +105,9 @@ const config: IDayConfig = {
       <code>{answer}</code> pixels are lit.
     </span>
   ),
-  answer2Text: (answer) => (
+  answer2Text: () => (
     <span>
-      <code>{answer}</code>
+      I hope you can read it below!
     </span>
   ),
   buttons: BUTTONS,
