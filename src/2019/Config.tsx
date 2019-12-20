@@ -5,7 +5,7 @@ import { IYearConfig } from '../Config'
 import coverImage from './cover.png'
 
 import Day1__2019__Config from './Day1'
-// import Day2__2019__Config from './Day2'
+import Day2__2019__Config from './Day2'
 // import Day3__2019__Config from './Day3'
 // import Day4__2019__Config from './Day4'
 // import Day5__2019__Config from './Day5'
@@ -43,7 +43,7 @@ const CONFIG_2019: IYearConfig = {
   ),
   days: [
     Day1__2019__Config,
-    // Day2__2019__Config,
+    Day2__2019__Config,
     // Day3__2019__Config,
     // Day4__2019__Config,
     // Day5__2019__Config,

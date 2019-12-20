@@ -101,3 +101,39 @@ export const numArrEq = (a: number[], b: number[]): boolean => {
 }
 
 export const randInt = (min: number, max: number): number => Math.floor(Math.random() * max) + min
+
+export const intcodeComputer2019 = (program: number[]): number[] => {
+  const NUMBER_OF_PARAMETERS_PER_OPCODE: {
+    [key:string]: number
+  } = {
+    '1': 3,
+    '2': 3,
+    '99': 0
+  }
+
+  let instructionPointer = 0
+
+  mainLoop:
+  while (program[instructionPointer] !== 99) {
+    switch (program[instructionPointer]) {
+      case 1:
+        program[program[instructionPointer + 3]] =
+          program[program[instructionPointer + 1]] + program[program[instructionPointer + 2]]
+        break
+
+      case 2:
+        program[program[instructionPointer + 3]] =
+          program[program[instructionPointer + 1]] * program[program[instructionPointer + 2]]
+          break
+
+      case 99:
+        break mainLoop
+
+      default:
+        throw Error(`Unknown opcode ${program[instructionPointer]} encountered at position ${instructionPointer}!\n${JSON.stringify(program)}`)
+    }
+    instructionPointer += NUMBER_OF_PARAMETERS_PER_OPCODE[program[instructionPointer]] + 1
+  }
+
+  return program
+}
