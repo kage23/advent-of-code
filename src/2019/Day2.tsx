@@ -19,7 +19,7 @@ const BUTTONS: IButton[] = [
       input[1] = 12
       input[2] = 2
 
-      const result = intcodeComputer2019(input)
+      const { result } = intcodeComputer2019(input)
 
       return {
         answer1: result[0].toString()
@@ -39,7 +39,7 @@ const BUTTONS: IButton[] = [
           const input = parseInput(inputKey)
           input[1] = noun
           input[2] = verb
-          const result = intcodeComputer2019(input)
+          const { result } = intcodeComputer2019(input)
           console.log(`noun ${noun} verb ${verb} result ${result[0]}`)
           if (result[0] === target) {
             break nounLoop

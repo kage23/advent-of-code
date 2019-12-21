@@ -102,38 +102,201 @@ export const numArrEq = (a: number[], b: number[]): boolean => {
 
 export const randInt = (min: number, max: number): number => Math.floor(Math.random() * max) + min
 
-export const intcodeComputer2019 = (program: number[]): number[] => {
-  const NUMBER_OF_PARAMETERS_PER_OPCODE: {
-    [key:string]: number
-  } = {
-    '1': 3,
-    '2': 3,
-    '99': 0
-  }
-
-  let instructionPointer = 0
-
-  mainLoop:
-  while (program[instructionPointer] !== 99) {
-    switch (program[instructionPointer]) {
-      case 1:
-        program[program[instructionPointer + 3]] =
-          program[program[instructionPointer + 1]] + program[program[instructionPointer + 2]]
-        break
-
-      case 2:
-        program[program[instructionPointer + 3]] =
-          program[program[instructionPointer + 1]] * program[program[instructionPointer + 2]]
-          break
-
-      case 99:
-        break mainLoop
-
-      default:
-        throw Error(`Unknown opcode ${program[instructionPointer]} encountered at position ${instructionPointer}!\n${JSON.stringify(program)}`)
+export const intcodeComputer2019 = (program: number[], input?: number): {
+  output: number | undefined
+  result: number[]
+} => {
+  interface IOPCODE {
+    method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[], input?: number) => {
+      instructionPointerOffset?: number
+      output?: number
+      program: number[]
     }
-    instructionPointer += NUMBER_OF_PARAMETERS_PER_OPCODE[program[instructionPointer]] + 1
+    numOfParameters: number
   }
 
-  return program
+  const OPCODES: {
+    [key:number]: IOPCODE
+  } = {
+    // Addition
+    1: {
+      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[]) => {
+        const resultProgram = program.map(num => num)
+        const parameter1 = parameterModes[0] === 'position' || parameterModes[0] === undefined
+          ? program[program[instructionPointer + 1]]
+          : program[instructionPointer + 1]
+        const parameter2 = parameterModes[1] === 'position' || parameterModes[1] === undefined
+          ? program[program[instructionPointer + 2]]
+          : program[instructionPointer + 2]
+        resultProgram[program[instructionPointer + 3]] = parameter1 + parameter2
+        return {
+          instructionPointerOffset: 4,
+          program: resultProgram
+        }
+      },
+      numOfParameters: 3
+    },
+    // Multiplication
+    2: {
+      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[]) => {
+        const resultProgram = program.map(num => num)
+        const parameter1 = parameterModes[0] === 'position' || parameterModes[0] === undefined
+          ? program[program[instructionPointer + 1]]
+          : program[instructionPointer + 1]
+        const parameter2 = parameterModes[1] === 'position' || parameterModes[1] === undefined
+          ? program[program[instructionPointer + 2]]
+          : program[instructionPointer + 2]
+
+        resultProgram[program[instructionPointer + 3]] = parameter1 * parameter2
+        return {
+          instructionPointerOffset: 4,
+          program: resultProgram
+        }
+      },
+      numOfParameters: 3
+    },
+    // Write input to parameter address
+    3: {
+      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[], input?: number) => {
+        const resultProgram = program.map(num => num)
+        resultProgram[program[instructionPointer + 1]] = typeof input === 'number' ? input : NaN
+        return {
+          instructionPointerOffset: 2,
+          program: resultProgram
+        }
+      },
+      numOfParameters: 1
+    },
+    // Output from parameter address
+    4: {
+      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[]) => {
+        const parameter1 = parameterModes[0] === 'position' || parameterModes[0] === undefined
+          ? program[program[instructionPointer + 1]]
+          : program[instructionPointer + 1]
+        return {
+          instructionPointerOffset: 2,
+          output: parameter1,
+          program
+        }
+      },
+      numOfParameters: 1
+    },
+    // Jump if true
+    5: {
+      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[]) => {
+        const parameter1 = parameterModes[0] === 'position' || parameterModes[0] === undefined
+          ? program[program[instructionPointer + 1]]
+          : program[instructionPointer + 1]
+        const parameter2 = parameterModes[1] === 'position' || parameterModes[1] === undefined
+          ? program[program[instructionPointer + 2]]
+          : program[instructionPointer + 2]
+
+        return {
+          instructionPointerOffset: parameter1 !== 0 ? parameter2 - instructionPointer : 3,
+          program
+        }
+      },
+      numOfParameters: 2
+    },
+    // Jump if false
+    6: {
+      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[]) => {
+        const parameter1 = parameterModes[0] === 'position' || parameterModes[0] === undefined
+          ? program[program[instructionPointer + 1]]
+          : program[instructionPointer + 1]
+        const parameter2 = parameterModes[1] === 'position' || parameterModes[1] === undefined
+          ? program[program[instructionPointer + 2]]
+          : program[instructionPointer + 2]
+
+        return {
+          instructionPointerOffset: parameter1 === 0 ? parameter2 - instructionPointer : 3,
+          program
+        }
+      },
+      numOfParameters: 2
+    },
+    // Less than
+    7: {
+      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[]) => {
+        const resultProgram = program.map(num => num)
+        const parameter1 = parameterModes[0] === 'position' || parameterModes[0] === undefined
+          ? program[program[instructionPointer + 1]]
+          : program[instructionPointer + 1]
+        const parameter2 = parameterModes[1] === 'position' || parameterModes[1] === undefined
+          ? program[program[instructionPointer + 2]]
+          : program[instructionPointer + 2]
+
+        resultProgram[program[instructionPointer + 3]] = parameter1 < parameter2 ? 1 : 0
+
+        return {
+          instructionPointerOffset: 4,
+          program: resultProgram
+        }
+      },
+      numOfParameters: 3
+    },
+    // Equals
+    8: {
+      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[]) => {
+        const resultProgram = program.map(num => num)
+        const parameter1 = parameterModes[0] === 'position' || parameterModes[0] === undefined
+          ? program[program[instructionPointer + 1]]
+          : program[instructionPointer + 1]
+        const parameter2 = parameterModes[1] === 'position' || parameterModes[1] === undefined
+          ? program[program[instructionPointer + 2]]
+          : program[instructionPointer + 2]
+
+        resultProgram[program[instructionPointer + 3]] = parameter1 === parameter2 ? 1 : 0
+
+        return {
+          instructionPointerOffset: 4,
+          program: resultProgram
+        }
+      },
+      numOfParameters: 3
+    },
+    99: {
+      method: (program: number[]) => ({ program }),
+      numOfParameters: 0
+    }
+  }
+
+  const getOpcode = (number: number): number => parseInt(number.toString().slice(-2))
+  const getParameterModes = (program: number[], instructionPointer: number): ('position' | 'immediate')[] => {
+    const PARAMETER_MODES: {
+      [key:number]: 'position' | 'immediate'
+    } = {
+      0: 'position',
+      1: 'immediate'
+    }
+
+    const number = program[instructionPointer]
+    const opcode = getOpcode(number)
+    const { numOfParameters } = OPCODES[opcode]
+    return number
+        .toString()
+        .slice(0, -2)
+        .split('')
+        .map(x => PARAMETER_MODES[parseInt(x)])
+        .reverse()
+  }
+
+  let result = JSON.parse(JSON.stringify(program))
+  let instructionPointer = 0
+  let opcode = getOpcode(result[instructionPointer])
+  let parameterModes = getParameterModes(result, instructionPointer)
+  let output: number | undefined = undefined
+
+  while (opcode !== 99) {
+    const { method } = OPCODES[opcode]
+    const methodOutput = method(result, instructionPointer, parameterModes, input)
+    result = methodOutput.program
+    output = methodOutput.output || output
+    if (output) console.log('output', output)
+    instructionPointer += methodOutput.instructionPointerOffset || 0
+    opcode = getOpcode(result[instructionPointer])
+    parameterModes = getParameterModes(result, instructionPointer)
+  }
+
+  return { output, result }
 }
