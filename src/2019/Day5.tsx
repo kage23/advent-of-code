@@ -17,7 +17,7 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey: string) => {
       const input = parseInput(inputKey)
 
-      const { output } = intcodeComputer2019(input, 1)
+      const { output } = intcodeComputer2019(input,[1])
 
       return output !== undefined ? {
         answer1: output.toString()
@@ -29,7 +29,7 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey: string) => {
       const input = parseInput(inputKey)
 
-      const { output } = intcodeComputer2019(input, 5)
+      const { output } = intcodeComputer2019(input, [5])
 
       return output !== undefined ? {
         answer2: output.toString()

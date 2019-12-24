@@ -102,12 +102,12 @@ export const numArrEq = (a: number[], b: number[]): boolean => {
 
 export const randInt = (min: number, max: number): number => Math.floor(Math.random() * max) + min
 
-export const intcodeComputer2019 = (program: number[], input?: number): {
+export const intcodeComputer2019 = (program: number[], input?: number[]): {
   output: number | undefined
   result: number[]
 } => {
   interface IOPCODE {
-    method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[], input?: number) => {
+    method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[], input?: number[]) => {
       instructionPointerOffset?: number
       output?: number
       program: number[]
@@ -157,9 +157,9 @@ export const intcodeComputer2019 = (program: number[], input?: number): {
     },
     // Write input to parameter address
     3: {
-      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[], input?: number) => {
+      method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[], input?: number[]) => {
         const resultProgram = program.map(num => num)
-        resultProgram[program[instructionPointer + 1]] = typeof input === 'number' ? input : NaN
+        resultProgram[program[instructionPointer + 1]] = Array.isArray(input) ? input.shift() || NaN : NaN
         return {
           instructionPointerOffset: 2,
           program: resultProgram
@@ -291,8 +291,8 @@ export const intcodeComputer2019 = (program: number[], input?: number): {
     const { method } = OPCODES[opcode]
     const methodOutput = method(result, instructionPointer, parameterModes, input)
     result = methodOutput.program
-    output = methodOutput.output || output
-    if (output) console.log('output', output)
+    output = typeof methodOutput.output === 'number' ? methodOutput.output : output
+    if (typeof output === 'number') console.log('output', output)
     instructionPointer += methodOutput.instructionPointerOffset || 0
     opcode = getOpcode(result[instructionPointer])
     parameterModes = getParameterModes(result, instructionPointer)
