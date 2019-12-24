@@ -1,0 +1,251 @@
+import React from 'react'
+import {
+  defaultRenderDay,
+  IButton,
+  IDayConfig
+} from '../Config'
+import { intcodeComputer2019, IIntcodeComputerResults } from '../utils/Various'
+
+import INPUT from './Input/Day7'
+
+const parseInput = (inputKey: string): number[] =>
+  INPUT[inputKey].split(',').map(inputStr => parseInt(inputStr))
+
+const runAmplifiersOnce = (program: number[], phaseSettingSequence: string): {
+  output: number
+  result: number[]
+} => {
+  let resultProgram = program.map(num => num)
+  const phaseSettings = phaseSettingSequence.split('').map(x => parseInt(x))
+  let input = 0
+
+  // Amp A
+  let phaseSetting = phaseSettings.shift()
+  if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
+  let results = intcodeComputer2019(resultProgram, [phaseSetting, input])
+  resultProgram = results.result
+  if (results.output === undefined) throw new Error('Undefined output')
+  input = results.output
+
+  // Amp B
+  phaseSetting = phaseSettings.shift()
+  if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
+  results = intcodeComputer2019(resultProgram, [phaseSetting, input])
+  resultProgram = results.result
+  if (results.output === undefined) throw new Error('Undefined output')
+  input = results.output
+
+  // Amp C
+  phaseSetting = phaseSettings.shift()
+  if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
+  results = intcodeComputer2019(resultProgram, [phaseSetting, input])
+  resultProgram = results.result
+  if (results.output === undefined) throw new Error('Undefined output')
+  input = results.output
+
+  // Amp D
+  phaseSetting = phaseSettings.shift()
+  if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
+  results = intcodeComputer2019(resultProgram, [phaseSetting, input])
+  resultProgram = results.result
+  if (results.output === undefined) throw new Error('Undefined output')
+  input = results.output
+
+  // Amp E
+  phaseSetting = phaseSettings.shift()
+  if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
+  results = intcodeComputer2019(resultProgram, [phaseSetting, input])
+  resultProgram = results.result
+  if (results.output === undefined) throw new Error('Undefined output')
+  input = results.output
+
+  return {
+    output: input,
+    result: results.result
+  }
+}
+
+const runAmplifiers = (program: number[], phaseSettingSequence: string): {
+  output: number
+  result: number[]
+} => {
+  interface IAmplifier {
+    inputs: number[]
+    instructionPointer: number
+    program: number[]
+  }
+
+  const phaseSettings = phaseSettingSequence.split('').map(x => parseInt(x))
+
+  let ampA: IAmplifier = {
+    inputs: [phaseSettings[0], 0],
+    instructionPointer: 0,
+    program: JSON.parse(JSON.stringify(program))
+  }
+  let ampB: IAmplifier = {
+    inputs: [phaseSettings[1]],
+    instructionPointer: 0,
+    program: JSON.parse(JSON.stringify(program))
+  }
+  let ampC: IAmplifier = {
+    inputs: [phaseSettings[2]],
+    instructionPointer: 0,
+    program: JSON.parse(JSON.stringify(program))
+  }
+  let ampD: IAmplifier = {
+    inputs: [phaseSettings[3]],
+    instructionPointer: 0,
+    program: JSON.parse(JSON.stringify(program))
+  }
+  let ampE: IAmplifier = {
+    inputs: [phaseSettings[4]],
+    instructionPointer: 0,
+    program: JSON.parse(JSON.stringify(program))
+  }
+
+  let resultsA: IIntcodeComputerResults = {
+    instructionPointer: 0,
+    output: undefined,
+    result: JSON.parse(JSON.stringify(program))
+  }
+  let resultsB: IIntcodeComputerResults = {
+    instructionPointer: 0,
+    output: undefined,
+    result: JSON.parse(JSON.stringify(program))
+  }
+  let resultsC: IIntcodeComputerResults = {
+    instructionPointer: 0,
+    output: undefined,
+    result: JSON.parse(JSON.stringify(program))
+  }
+  let resultsD: IIntcodeComputerResults = {
+    instructionPointer: 0,
+    output: undefined,
+    result: JSON.parse(JSON.stringify(program))
+  }
+  let resultsE: IIntcodeComputerResults = {
+    instructionPointer: 0,
+    output: undefined,
+    result: JSON.parse(JSON.stringify(program))
+  }
+
+  while (!resultsE.finished) {
+    if (!resultsA.finished) {
+      resultsA = intcodeComputer2019(ampA.program, ampA.inputs, true, ampA.instructionPointer)
+      ampA.instructionPointer = resultsA.instructionPointer
+      if (typeof resultsA.output === 'number') ampB.inputs.push(resultsA.output)
+      ampA.program = resultsA.result
+    }
+
+    if (!resultsB.finished) {
+      resultsB = intcodeComputer2019(ampB.program, ampB.inputs, true, ampB.instructionPointer)
+      ampB.instructionPointer = resultsB.instructionPointer
+      if (typeof resultsB.output === 'number') ampC.inputs.push(resultsB.output)
+      ampB.program = resultsB.result
+    }
+
+    if (!resultsC.finished) {
+      resultsC = intcodeComputer2019(ampC.program, ampC.inputs, true, ampC.instructionPointer)
+      ampC.instructionPointer = resultsC.instructionPointer
+      if (typeof resultsC.output === 'number') ampD.inputs.push(resultsC.output)
+      ampC.program = resultsC.result
+    }
+
+    if (!resultsD.finished) {
+      resultsD = intcodeComputer2019(ampD.program, ampD.inputs, true, ampD.instructionPointer)
+      ampD.instructionPointer = resultsD.instructionPointer
+      if (typeof resultsD.output === 'number') ampE.inputs.push(resultsD.output)
+      ampD.program = resultsD.result
+    }
+
+    resultsE = intcodeComputer2019(ampE.program, ampE.inputs, true, ampE.instructionPointer)
+    ampE.instructionPointer = resultsE.instructionPointer
+    if (typeof resultsE.output === 'number') ampA.inputs.push(resultsE.output)
+    ampE.program = resultsE.result
+  }
+
+  return {
+    output: ampA.inputs[0],
+    result: resultsE.result
+  }
+}
+
+const BUTTONS: IButton[] = [
+  {
+    label: 'Find Max Amplifier Signal',
+    onClick: (inputKey: string) => {
+      const inputProgram = parseInput(inputKey)
+
+      let ampSignal = ''
+      let maxThrusterSignal = Number.MIN_SAFE_INTEGER
+      for (let a = 0; a <= 4; a++) {
+        for (let b = 0; b <= 4; b++) {
+          for (let c = 0; c <= 4; c++) {
+            for (let d = 0; d <= 4; d++) {
+              for (let e = 0; e <= 4; e++) {
+                ampSignal = [a, b, c, d, e].filter((x, i, self) => self.indexOf(x) === i).join('')
+                if (ampSignal.length === 5) {
+                  const result = runAmplifiersOnce(inputProgram, ampSignal)
+                  maxThrusterSignal = Math.max(maxThrusterSignal, result.output)
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return {
+        answer1: maxThrusterSignal.toString()
+      }
+    }
+  },
+  {
+    label: 'Find Max Amplifier Signal (Part 2)',
+    onClick: (inputKey: string) => {
+      const inputProgram = parseInput(inputKey)
+
+      let ampSignal = ''
+      let maxThrusterSignal = Number.MIN_SAFE_INTEGER
+      for (let a = 5; a <= 9; a++) {
+        for (let b = 5; b <= 9; b++) {
+          for (let c = 5; c <= 9; c++) {
+            for (let d = 5; d <= 9; d++) {
+              for (let e = 5; e <= 9; e++) {
+                ampSignal = [a, b, c, d, e].filter((x, i, self) => self.indexOf(x) === i).join('')
+                if (ampSignal.length === 5) {
+                  const result = runAmplifiers(inputProgram, ampSignal)
+                  maxThrusterSignal = Math.max(maxThrusterSignal, result.output)
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return {
+        answer2: maxThrusterSignal.toString()
+      }
+    }
+  }
+]
+
+const config: IDayConfig = {
+  answer1Text: (answer) => (
+    <span>
+      The highest signal that can be sent to the thrusters is <code>{answer}</code>.
+    </span>
+  ),
+  answer2Text: (answer) => (
+    <span>
+      The highest signal that can be sent to the thrusters is{' '}
+      <code>{answer}</code>.
+    </span>
+  ),
+  buttons: BUTTONS,
+  day: 7,
+  INPUT,
+  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+  title: 'Amplification Circuit'
+}
+
+export default config

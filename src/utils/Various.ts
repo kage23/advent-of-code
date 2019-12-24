@@ -102,10 +102,18 @@ export const numArrEq = (a: number[], b: number[]): boolean => {
 
 export const randInt = (min: number, max: number): number => Math.floor(Math.random() * max) + min
 
-export const intcodeComputer2019 = (program: number[], input?: number[]): {
+export interface IIntcodeComputerResults {
+  finished?: boolean
+  instructionPointer: number
   output: number | undefined
   result: number[]
-} => {
+}
+export const intcodeComputer2019 = (
+  program: number[],
+  input?: number[],
+  chainedMode?: boolean,
+  initialInstructionPointer?: number
+): IIntcodeComputerResults => {
   interface IOPCODE {
     method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[], input?: number[]) => {
       instructionPointerOffset?: number
@@ -159,7 +167,8 @@ export const intcodeComputer2019 = (program: number[], input?: number[]): {
     3: {
       method: (program: number[], instructionPointer: number, parameterModes: ('position' | 'immediate')[], input?: number[]) => {
         const resultProgram = program.map(num => num)
-        resultProgram[program[instructionPointer + 1]] = Array.isArray(input) ? input.shift() || NaN : NaN
+        const inputNumber = Array.isArray(input) && input.length >= 1 ? input.shift() : NaN
+        resultProgram[program[instructionPointer + 1]] = inputNumber !== undefined ? inputNumber : NaN
         return {
           instructionPointerOffset: 2,
           program: resultProgram
@@ -282,7 +291,7 @@ export const intcodeComputer2019 = (program: number[], input?: number[]): {
   }
 
   let result = JSON.parse(JSON.stringify(program))
-  let instructionPointer = 0
+  let instructionPointer = initialInstructionPointer || 0
   let opcode = getOpcode(result[instructionPointer])
   let parameterModes = getParameterModes(result, instructionPointer)
   let output: number | undefined = undefined
@@ -292,11 +301,14 @@ export const intcodeComputer2019 = (program: number[], input?: number[]): {
     const methodOutput = method(result, instructionPointer, parameterModes, input)
     result = methodOutput.program
     output = typeof methodOutput.output === 'number' ? methodOutput.output : output
-    if (typeof output === 'number') console.log('output', output)
     instructionPointer += methodOutput.instructionPointerOffset || 0
+    if (typeof output === 'number') console.log('output', output)
+    if (typeof output === 'number' && chainedMode) {
+      return { finished: false, instructionPointer, output, result }
+    }
     opcode = getOpcode(result[instructionPointer])
     parameterModes = getParameterModes(result, instructionPointer)
   }
 
-  return { output, result }
+  return { finished: true, instructionPointer, output, result }
 }
