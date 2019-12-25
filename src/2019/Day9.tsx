@@ -4,38 +4,50 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-
-import INPUT from './Input/Day5'
 import { intcodeComputer2019 } from '../utils/Various'
+
+import INPUT from './Input/Day9'
 
 const parseInput = (inputKey: string): number[] =>
   INPUT[inputKey].split(',').map(inputStr => parseInt(inputStr))
 
 const BUTTONS: IButton[] = [
   {
-    label: 'Run AC Diagnostic',
+    label: 'Run Program, No Input',
     onClick: (inputKey: string) => {
       const input = parseInput(inputKey)
 
-      const { outputs } = intcodeComputer2019(input,[1])
-      const output = outputs.pop()
+      const results = intcodeComputer2019(input)
 
-      return output !== undefined ? {
-        answer1: output.toString()
-      } : {}
+      return {
+        answer1: JSON.stringify(results.outputs)
+      }
     }
   },
   {
-    label: 'Get Radiator Code',
+    label: 'Run Test Mode (Input 1)',
     onClick: (inputKey: string) => {
       const input = parseInput(inputKey)
 
-      const { outputs } = intcodeComputer2019(input, [5])
-      const output = outputs.pop()
+      const results = intcodeComputer2019(input, [1])
 
-      return output !== undefined ? {
-        answer2: output.toString()
-      } : {}
+      return {
+        answer1: JSON.stringify(results.outputs)
+      }
+    }
+  },
+  {
+    label: 'Run Sensor Mode (Input 2)',
+    onClick: (inputKey: string) => {
+      const input = parseInput(inputKey)
+
+      const results = intcodeComputer2019(input, [2])
+
+      debugger
+
+      return {
+        answer2: JSON.stringify(results.outputs)
+      }
     }
   }
 ]
@@ -43,20 +55,20 @@ const BUTTONS: IButton[] = [
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The final output code is <code>{answer}</code>.
+      The outputs were <code>{answer}</code>.
     </span>
   ),
   answer2Text: (answer) => (
     <span>
-      The diagnostic code for system ID <code>5</code> is{' '}
+      The coordinates of the distress signal are{' '}
       <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
-  day: 5,
+  day: 9,
   INPUT,
   renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Sunny with a Chance of Asteroids'
+  title: 'Sensor Boost'
 }
 
 export default config
