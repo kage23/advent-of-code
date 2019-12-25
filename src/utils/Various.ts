@@ -414,3 +414,12 @@ export const intcodeComputer2019 = (
 
   return { finished: true, instructionPointer, outputs, result }
 }
+
+// Reduce a fraction by finding the Greatest Common Divisor and dividing by it.
+export const reduce = (numerator: number, denominator: number) => {
+  const gcdFunc = (a: number, b: number): number => {
+    return b ? gcdFunc(b, a % b) : a
+  }
+  const gcd = gcdFunc(numerator, denominator);
+  return [numerator/gcd, denominator/gcd];
+}
