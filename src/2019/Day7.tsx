@@ -106,26 +106,31 @@ const runAmplifiers = (program: number[], phaseSettingSequence: string): {
   let resultsA: IIntcodeComputerResults = {
     instructionPointer: 0,
     outputs: [],
+    relativeBase: 0,
     result: JSON.parse(JSON.stringify(program))
   }
   let resultsB: IIntcodeComputerResults = {
     instructionPointer: 0,
     outputs: [],
+    relativeBase: 0,
     result: JSON.parse(JSON.stringify(program))
   }
   let resultsC: IIntcodeComputerResults = {
     instructionPointer: 0,
     outputs: [],
+    relativeBase: 0,
     result: JSON.parse(JSON.stringify(program))
   }
   let resultsD: IIntcodeComputerResults = {
     instructionPointer: 0,
     outputs: [],
+    relativeBase: 0,
     result: JSON.parse(JSON.stringify(program))
   }
   let resultsE: IIntcodeComputerResults = {
     instructionPointer: 0,
     outputs: [],
+    relativeBase: 0,
     result: JSON.parse(JSON.stringify(program))
   }
 

@@ -106,6 +106,7 @@ export interface IIntcodeComputerResults {
   finished?: boolean
   instructionPointer: number
   outputs: number[]
+  relativeBase: number
   result: number[]
 }
 export const intcodeComputer2019 = (
@@ -404,15 +405,15 @@ export const intcodeComputer2019 = (
     if (typeof methodOutput.output === 'number') outputs.push(methodOutput.output)
     instructionPointer += methodOutput.instructionPointerOffset || 0
     relativeBase += methodOutput.relativeBaseOffset || 0
-    if (typeof methodOutput.output === 'number') console.log('output', methodOutput.output)
+    // if (typeof methodOutput.output === 'number') console.log('output', methodOutput.output)
     if (typeof methodOutput.output === 'number' && chainedMode) {
-      return { finished: false, instructionPointer, outputs, result }
+      return { finished: false, instructionPointer, outputs, relativeBase, result }
     }
     opcode = getOpcode(result[instructionPointer])
     parameterModes = getParameterModes(result, instructionPointer)
   }
 
-  return { finished: true, instructionPointer, outputs, result }
+  return { finished: true, instructionPointer, outputs, relativeBase, result }
 }
 
 // Reduce a fraction by finding the Greatest Common Divisor and dividing by it.

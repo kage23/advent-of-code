@@ -43,8 +43,6 @@ const BUTTONS: IButton[] = [
 
       const results = intcodeComputer2019(input, [2])
 
-      debugger
-
       return {
         answer2: JSON.stringify(results.outputs)
       }
