@@ -57,7 +57,6 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string) => {
     <div>
       <h3>Program:</h3>
       <p>{dayConfig.INPUT[inputKey]}</p>
-      <p>Joystick Input (-1, 0, 1): <input type="text" id="joystickInput" size={5} /></p>
       <h3>Render:</h3>
       <pre>
         {screenArray.map(row => (
