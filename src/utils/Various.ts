@@ -118,6 +118,7 @@ export const intcodeComputer2019 = (
 ): IIntcodeComputerResults => {
   interface IOPCODE {
     method: (program: number[], instructionPointer: number, relativeBase: number, parameterModes: ('position' | 'immediate' | 'relative')[], input?: number[]) => {
+      breakWaitingForInput?: boolean
       instructionPointerOffset?: number
       output?: number
       program: number[]
@@ -198,6 +199,11 @@ export const intcodeComputer2019 = (
       method: (program: number[], instructionPointer: number, relativeBase: number, parameterModes: ('position' | 'immediate' | 'relative')[], input?: number[]) => {
         const resultProgram = program.map(num => num)
         const inputNumber = Array.isArray(input) && input.length >= 1 ? input.shift() : NaN
+
+        if (inputNumber === undefined || isNaN(inputNumber)) {
+          return { breakWaitingForInput: true, program }
+        }
+
         const writeAddress = parameterModes[0] === 'position' || parameterModes[0] === undefined
           ? program[instructionPointer + 1] || 0
           : parameterModes[0] === 'immediate'
@@ -401,6 +407,10 @@ export const intcodeComputer2019 = (
   while (opcode !== 99) {
     const { method } = OPCODES[opcode]
     const methodOutput = method(result, instructionPointer, relativeBase, parameterModes, input)
+    if (methodOutput.breakWaitingForInput) {
+      console.log('BREAK: Waiting for input. Intcode did not run.')
+      return { finished: false, instructionPointer, outputs, relativeBase, result: program }
+    }
     result = methodOutput.program
     if (typeof methodOutput.output === 'number') outputs.push(methodOutput.output)
     instructionPointer += methodOutput.instructionPointerOffset || 0
