@@ -240,7 +240,6 @@ const renderGrid = () => {
     const [ x, y ] = parseGridString(key)
     const fieldX = x + xOffset
     const fieldY = y + yOffset
-    // if (value === 'X') debugger
     if (!field[fieldY]) field[fieldY] = []
     field[fieldY][fieldX] = value
   }
