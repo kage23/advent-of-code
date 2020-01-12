@@ -103,18 +103,20 @@ export const numArrEq = (a: number[], b: number[]): boolean => {
 export const randInt = (min: number, max: number): number => Math.floor(Math.random() * max) + min
 
 export interface IIntcodeComputerResults {
+  breakWaitingForInput?: boolean
   finished?: boolean
   instructionPointer: number
   outputs: number[]
+  program: number[]
   relativeBase: number
-  result: number[]
 }
 export const intcodeComputer2019 = (
   program: number[],
   input?: number[],
   chainedMode?: boolean,
   initialInstructionPointer?: number,
-  initialRelativeBase?: number
+  initialRelativeBase?: number,
+  stepMode?: boolean
 ): IIntcodeComputerResults => {
   interface IOPCODE {
     method: (program: number[], instructionPointer: number, relativeBase: number, parameterModes: ('position' | 'immediate' | 'relative')[], input?: number[]) => {
@@ -198,7 +200,9 @@ export const intcodeComputer2019 = (
     3: {
       method: (program: number[], instructionPointer: number, relativeBase: number, parameterModes: ('position' | 'immediate' | 'relative')[], input?: number[]) => {
         const resultProgram = program.map(num => num)
-        const inputNumber = Array.isArray(input) && input.length >= 1 ? input.shift() : NaN
+        const inputNumber = Array.isArray(input) && input.length >= 1
+          ? input.shift()
+          : NaN
 
         if (inputNumber === undefined || isNaN(inputNumber)) {
           return { breakWaitingForInput: true, program }
@@ -408,22 +412,25 @@ export const intcodeComputer2019 = (
     const { method } = OPCODES[opcode]
     const methodOutput = method(result, instructionPointer, relativeBase, parameterModes, input)
     if (methodOutput.breakWaitingForInput) {
-      console.log('BREAK: Waiting for input. Intcode did not run.')
-      return { finished: false, instructionPointer, outputs, relativeBase, result: program }
+      // console.log('BREAK: Waiting for input. Intcode did not run.')
+      return { breakWaitingForInput: true, finished: false, instructionPointer, outputs, relativeBase, program: result }
     }
     result = methodOutput.program
     if (typeof methodOutput.output === 'number') outputs.push(methodOutput.output)
     instructionPointer += methodOutput.instructionPointerOffset || 0
     relativeBase += methodOutput.relativeBaseOffset || 0
     // if (typeof methodOutput.output === 'number') console.log('output', methodOutput.output)
-    if (typeof methodOutput.output === 'number' && chainedMode) {
-      return { finished: false, instructionPointer, outputs, relativeBase, result }
+    if (
+      (typeof methodOutput.output === 'number' && chainedMode)
+      || stepMode
+    ) {
+      return { finished: false, instructionPointer, outputs, relativeBase, program: result }
     }
     opcode = getOpcode(result[instructionPointer])
     parameterModes = getParameterModes(result, instructionPointer)
   }
 
-  return { finished: true, instructionPointer, outputs, relativeBase, result }
+  return { finished: true, instructionPointer, outputs, relativeBase, program: result }
 }
 
 export const gcdTwoNumbers = (x: number, y: number): number => {

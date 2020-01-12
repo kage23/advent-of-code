@@ -23,7 +23,7 @@ const runAmplifiersOnce = (program: number[], phaseSettingSequence: string): {
   let phaseSetting = phaseSettings.shift()
   if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
   let results = intcodeComputer2019(resultProgram, [phaseSetting, input])
-  resultProgram = results.result
+  resultProgram = results.program
   if (results.outputs[0] === undefined) throw new Error('Undefined output')
   input = results.outputs[0]
 
@@ -31,7 +31,7 @@ const runAmplifiersOnce = (program: number[], phaseSettingSequence: string): {
   phaseSetting = phaseSettings.shift()
   if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
   results = intcodeComputer2019(resultProgram, [phaseSetting, input])
-  resultProgram = results.result
+  resultProgram = results.program
   if (results.outputs[0] === undefined) throw new Error('Undefined output')
   input = results.outputs[0]
 
@@ -39,7 +39,7 @@ const runAmplifiersOnce = (program: number[], phaseSettingSequence: string): {
   phaseSetting = phaseSettings.shift()
   if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
   results = intcodeComputer2019(resultProgram, [phaseSetting, input])
-  resultProgram = results.result
+  resultProgram = results.program
   if (results.outputs[0] === undefined) throw new Error('Undefined output')
   input = results.outputs[0]
 
@@ -47,7 +47,7 @@ const runAmplifiersOnce = (program: number[], phaseSettingSequence: string): {
   phaseSetting = phaseSettings.shift()
   if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
   results = intcodeComputer2019(resultProgram, [phaseSetting, input])
-  resultProgram = results.result
+  resultProgram = results.program
   if (results.outputs[0] === undefined) throw new Error('Undefined output')
   input = results.outputs[0]
 
@@ -55,13 +55,13 @@ const runAmplifiersOnce = (program: number[], phaseSettingSequence: string): {
   phaseSetting = phaseSettings.shift()
   if (phaseSetting === undefined) throw new Error('You ran out of phase settings!')
   results = intcodeComputer2019(resultProgram, [phaseSetting, input])
-  resultProgram = results.result
+  resultProgram = results.program
   if (results.outputs[0] === undefined) throw new Error('Undefined output')
   input = results.outputs[0]
 
   return {
     output: input,
-    result: results.result
+    result: results.program
   }
 }
 
@@ -107,31 +107,31 @@ const runAmplifiers = (program: number[], phaseSettingSequence: string): {
     instructionPointer: 0,
     outputs: [],
     relativeBase: 0,
-    result: JSON.parse(JSON.stringify(program))
+    program: JSON.parse(JSON.stringify(program))
   }
   let resultsB: IIntcodeComputerResults = {
     instructionPointer: 0,
     outputs: [],
     relativeBase: 0,
-    result: JSON.parse(JSON.stringify(program))
+    program: JSON.parse(JSON.stringify(program))
   }
   let resultsC: IIntcodeComputerResults = {
     instructionPointer: 0,
     outputs: [],
     relativeBase: 0,
-    result: JSON.parse(JSON.stringify(program))
+    program: JSON.parse(JSON.stringify(program))
   }
   let resultsD: IIntcodeComputerResults = {
     instructionPointer: 0,
     outputs: [],
     relativeBase: 0,
-    result: JSON.parse(JSON.stringify(program))
+    program: JSON.parse(JSON.stringify(program))
   }
   let resultsE: IIntcodeComputerResults = {
     instructionPointer: 0,
     outputs: [],
     relativeBase: 0,
-    result: JSON.parse(JSON.stringify(program))
+    program: JSON.parse(JSON.stringify(program))
   }
 
   while (!resultsE.finished) {
@@ -139,39 +139,39 @@ const runAmplifiers = (program: number[], phaseSettingSequence: string): {
       resultsA = intcodeComputer2019(ampA.program, ampA.inputs, true, ampA.instructionPointer)
       ampA.instructionPointer = resultsA.instructionPointer
       if (typeof resultsA.outputs[0] === 'number') ampB.inputs.push(resultsA.outputs[0])
-      ampA.program = resultsA.result
+      ampA.program = resultsA.program
     }
 
     if (!resultsB.finished) {
       resultsB = intcodeComputer2019(ampB.program, ampB.inputs, true, ampB.instructionPointer)
       ampB.instructionPointer = resultsB.instructionPointer
       if (typeof resultsB.outputs[0] === 'number') ampC.inputs.push(resultsB.outputs[0])
-      ampB.program = resultsB.result
+      ampB.program = resultsB.program
     }
 
     if (!resultsC.finished) {
       resultsC = intcodeComputer2019(ampC.program, ampC.inputs, true, ampC.instructionPointer)
       ampC.instructionPointer = resultsC.instructionPointer
       if (typeof resultsC.outputs[0] === 'number') ampD.inputs.push(resultsC.outputs[0])
-      ampC.program = resultsC.result
+      ampC.program = resultsC.program
     }
 
     if (!resultsD.finished) {
       resultsD = intcodeComputer2019(ampD.program, ampD.inputs, true, ampD.instructionPointer)
       ampD.instructionPointer = resultsD.instructionPointer
       if (typeof resultsD.outputs[0] === 'number') ampE.inputs.push(resultsD.outputs[0])
-      ampD.program = resultsD.result
+      ampD.program = resultsD.program
     }
 
     resultsE = intcodeComputer2019(ampE.program, ampE.inputs, true, ampE.instructionPointer)
     ampE.instructionPointer = resultsE.instructionPointer
     if (typeof resultsE.outputs[0] === 'number') ampA.inputs.push(resultsE.outputs[0])
-    ampE.program = resultsE.result
+    ampE.program = resultsE.program
   }
 
   return {
     output: ampA.inputs[0],
-    result: resultsE.result
+    result: resultsE.program
   }
 }
 

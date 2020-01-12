@@ -85,7 +85,7 @@ let result: IIntcodeComputerResults = {
   instructionPointer: 0,
   outputs: [],
   relativeBase: 0,
-  result: program
+  program
 }
 
 let score = 0
@@ -99,13 +99,13 @@ const BUTTONS: IButton[] = [
         instructionPointer: 0,
         outputs: [],
         relativeBase: 0,
-        result: program
+        program
       }
 
       mainLoop:
       for (let i = 0; i < 1036; i++) {
         while (outputs.length < 3) {
-          result = intcodeComputer2019(result.result, undefined, true, result.instructionPointer, result.relativeBase)
+          result = intcodeComputer2019(result.program, undefined, true, result.instructionPointer, result.relativeBase)
           if (result.outputs !== undefined) {
             if (!result.outputs.length) break mainLoop
             outputs.push(...result.outputs)
@@ -134,7 +134,7 @@ const BUTTONS: IButton[] = [
 
       mainLoop:
       while (outputs.length < 3) {
-        result = intcodeComputer2019(result.result, input, true, result.instructionPointer, result.relativeBase)
+        result = intcodeComputer2019(result.program, input, true, result.instructionPointer, result.relativeBase)
         if (result.outputs !== undefined) {
           if (!result.outputs.length) break mainLoop
           outputs.push(...result.outputs)

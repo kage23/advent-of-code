@@ -19,7 +19,7 @@ let intcodeComputerResults: IIntcodeComputerResults = {
   instructionPointer: 0,
   outputs: [],
   relativeBase: 0,
-  result: program
+  program
 }
 
 // D for the droid
@@ -210,7 +210,7 @@ const repairDroidLoop = (input: number): { response: number } => {
   instructionPointer = intcodeComputerResults.instructionPointer
   outputs = intcodeComputerResults.outputs
   relativeBase = intcodeComputerResults.relativeBase
-  program = intcodeComputerResults.result
+  program = intcodeComputerResults.program
 
   // Report on the status of the repair droid via an output instruction.
   return {
@@ -360,7 +360,7 @@ const BUTTONS: IButton[] = [
         instructionPointer: 0,
         outputs: [],
         relativeBase: 0,
-        result: program
+        program
       }
       stepsTaken = 0
 

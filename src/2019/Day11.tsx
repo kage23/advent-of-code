@@ -56,13 +56,13 @@ const robotLoop = (robotPosition: number[], grid: Map<string, number>, program: 
   grid.set(getGridString(robotPosition[0], robotPosition[1]), intcodeResults.outputs[0])
 
   // Get the number to turn the bot --- 0: turn left, 1: turn right
-  intcodeResults = intcodeComputer2019(intcodeResults.result, [], true, intcodeResults.instructionPointer, intcodeResults.relativeBase)
+  intcodeResults = intcodeComputer2019(intcodeResults.program, [], true, intcodeResults.instructionPointer, intcodeResults.relativeBase)
 
   return {
     finished: intcodeResults.finished,
     grid,
     instructionPointer: intcodeResults.instructionPointer,
-    program: intcodeResults.result,
+    program: intcodeResults.program,
     relativeBase: intcodeResults.relativeBase,
     robotDirection: intcodeResults.outputs[0]
   }

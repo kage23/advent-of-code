@@ -16,7 +16,7 @@ let intcodeComputerResults: IIntcodeComputerResults = {
   instructionPointer: 0,
   outputs: [],
   relativeBase: 0,
-  result: program
+  program
 }
 
 const map: Map<string, '.' | '#'> = new Map()
@@ -150,7 +150,7 @@ const runUntilComplete = (input?: number[]) => {
   instructionPointer = intcodeComputerResults.instructionPointer
   relativeBase = intcodeComputerResults.relativeBase
   outputs = intcodeComputerResults.outputs
-  program = intcodeComputerResults.result
+  program = intcodeComputerResults.program
 
   if (outputs.length) {
     // Parse the outputs into the map
@@ -202,7 +202,7 @@ const BUTTONS: IButton[] = [
         instructionPointer: 0,
         outputs: [],
         relativeBase: 0,
-        result: program
+        program
       }
 
       return {}

@@ -16,7 +16,7 @@ let intcodeComputerResults: IIntcodeComputerResults = {
   instructionPointer: 0,
   outputs: [],
   relativeBase: 0,
-  result: program
+  program
 }
 
 let parsedOutput: string = ''
@@ -63,7 +63,7 @@ const BUTTONS: IButton[] = [
         instructionPointer: 0,
         outputs: [],
         relativeBase: 0,
-        result: program
+        program
       }
 
       parsedOutput = ''
@@ -81,7 +81,7 @@ const BUTTONS: IButton[] = [
         : []
 
       intcodeComputerResults = intcodeComputer2019(
-        intcodeComputerResults.result,
+        intcodeComputerResults.program,
         input,
         false,
         intcodeComputerResults.instructionPointer,
