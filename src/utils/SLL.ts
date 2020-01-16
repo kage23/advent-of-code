@@ -2,11 +2,28 @@ class SLL {
   head: ISLLNode | undefined
   length: number
 
+  private includeValues: Map<any, boolean>
+
   constructor(value?: any) {
     if (typeof value !== 'undefined') {
       this.head = { value }
       this.length = 1
     } else this.length = 0
+    this.includeValues = new Map()
+    this.includeValues.set(value, true)
+  }
+
+  includes = (value: any): boolean => this.includeValues.has(value)
+
+  insertAfter = (insert: any, after: ISLLNode): ISLLNode => {
+    const node: ISLLNode = {
+      value: insert,
+      next: after.next
+    }
+    after.next = node
+    this.length++
+    this.includeValues.set(insert, true)
+    return node
   }
 
   moveToEnd = (node: ISLLNode) => {
@@ -32,6 +49,7 @@ class SLL {
       this.head = node
     }
     this.length++
+    this.includeValues.set(value, true)
   }
 
   removeNode = (node: ISLLNode) => {
@@ -45,6 +63,7 @@ class SLL {
     }
 
     this.length--
+    this.includeValues.delete(node.value)
     return node.value
   }
 
@@ -58,6 +77,7 @@ class SLL {
     node.next = oldHead
     this.head = node
     this.length++
+    this.includeValues.set(value, true)
   }
 }
 
