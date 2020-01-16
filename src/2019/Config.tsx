@@ -28,17 +28,18 @@ import Day21__2019__Config from './Day21'
 import Day22__2019__Config from './Day22'
 import Day23__2019__Config from './Day23'
 import Day24__2019__Config from './Day24'
-// import Day25__2019__Config from './Day25'
+import Day25__2019__Config from './Day25'
 
 const CONFIG_2019: IYearConfig = {
   year: 2019,
   cover: coverImage,
   extraText: (
     <span>
-      {/* On the <a href="https://adventofcode.com">Advent of Code</a> site, that image{' '}
-      is actually animated! But if you want to see the animation, you'll have to go{' '}
-      complete the challenges yourself! */}
-      Still in progress!
+      Woo! On the actual <a href="https://adventofcode.com">Advent of Code</a> site, you can see{' '}
+      the shooting stars and a representation of the journey through the solar system, but if you're{' '}
+      looking at my thing here, all you get is this static screenshot!{' '}
+      Please note that the <code>intcode computer</code> changed a fair amount over the course of{' '}
+      the project, so it might no longer work properly for the earlier ones!
     </span>
   ),
   days: [
@@ -66,7 +67,7 @@ const CONFIG_2019: IYearConfig = {
     Day22__2019__Config,
     Day23__2019__Config,
     Day24__2019__Config,
-    // Day25__2019__Config
+    Day25__2019__Config
   ]
 }
 
