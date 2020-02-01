@@ -22,6 +22,11 @@ export class TreeNode {
     this.value = value
   }
 
+  assignChildNode(newChild: TreeNode): void {
+    this.branches.push(newChild)
+    this.tree.values.set(newChild.value, newChild)
+  }
+
   getDepth = (): number => this.getPathToHead().length - 1
 
   getPathToHead(): unknown[] {
@@ -48,6 +53,7 @@ export class TreeNode {
   reassignParent(newParent: TreeNode): void {
     if (this.tree !== newParent.tree) throw new Error('fuck')
     this.parent = newParent
+    newParent.assignChildNode(this)
   }
 }
 

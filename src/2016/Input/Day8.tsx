@@ -1,0 +1,9 @@
+const INPUT: { [key:string]: string } = {
+DEMO:
+`rect 3x2
+rotate column x=1 by 1
+rotate row y=0 by 4
+rotate column x=1 by 1`,
+}
+
+export default INPUT

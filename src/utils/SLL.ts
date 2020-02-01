@@ -26,6 +26,14 @@ class SLL {
     return node
   }
 
+  insertAfterNode = (value: any, insertAfter: ISLLNode): ISLLNode => {
+    const node: ISLLNode = { value }
+    if (insertAfter.next) node.next = insertAfter.next
+    insertAfter.next = node
+    this.length++
+    return node
+  }
+
   moveToEnd = (node: ISLLNode) => {
     const value = this.removeNode(node)
     this.push(value)
@@ -39,7 +47,7 @@ class SLL {
     }
   }
 
-  push = (value: any) => {
+  push = (value: any): number => {
     const node: ISLLNode = { value }
     if (typeof this.head !== 'undefined') {
       let currentNode: ISLLNode = this.head
@@ -50,6 +58,7 @@ class SLL {
     }
     this.length++
     this.includeValues.set(value, true)
+    return this.length
   }
 
   removeNode = (node: ISLLNode) => {
