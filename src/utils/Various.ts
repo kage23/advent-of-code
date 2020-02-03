@@ -471,3 +471,10 @@ export const reduce = (numerator: number, denominator: number) => {
   const gcd = gcdFunc(numerator, denominator);
   return [numerator/gcd, denominator/gcd];
 }
+
+export const isPrime = (num: number): boolean => {
+  for (let i = 2; i < num; i++) {
+    if (num % i === 0) return false
+  }
+  return num > 1
+}
