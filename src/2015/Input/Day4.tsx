@@ -1,0 +1,6 @@
+const INPUT: { [key:string]: string } = {
+DEMO_0: 'abcdef',
+DEMO_1: 'pqrstuv',
+}
+
+export default INPUT
