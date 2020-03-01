@@ -1,6 +1,6 @@
 body {
   background: #0f0f23; /*337 x 5*/
-  color: #cccccc;
+  color: #eee;
   font-family: "Source Code Pro", monospace;
   font-size: 14pt;
   min-width: 60em;
@@ -17,10 +17,10 @@ header, main {
 
 a {
   text-decoration: none;
-  color: #009900;
+  color: #1E90FF;
 }
 a:hover {
-  color: #99ff99;
+  color: #00BFFF;
 }
 h1, h2, h3 {
   font-size: 1em;
@@ -40,19 +40,19 @@ header h1 {
 header h1 a {
   display: inline-block;
   text-decoration: none;
-  color: #00cc00;
-  text-shadow: 0 0 2px #00cc00, 0 0 5px #00cc00;
+  color: #1E90FF;
+  text-shadow: 0 0 2px #1E90FF, 0 0 5px #1E90FF;
 }
 header h1 a:hover {
-  color: #99ff99;
-  text-shadow: 0 0 2px #99ff99, 0 0 5px #99ff99;
+  color: #00BFFF;
+  text-shadow: 0 0 2px #00BFFF, 0 0 5px #00BFFF;
 }
 
 header nav {
   padding-left: 33px;
 }
 header span.wrapper {
-  color: #009900;
+  color: #1E90FF;
   opacity: .5;
 }
 
@@ -61,14 +61,14 @@ header select {
   font-size: 14pt;
   font-family: "Source Code Pro", monospace;
   background-color: transparent;
-  color: #00cc00;
-  text-shadow: 0 0 2px #00cc00, 0 0 5px #00cc00;
+  color: #1E90FF;
+  text-shadow: 0 0 2px #1E90FF, 0 0 5px #1E90FF;
   border: none;
 }
 
 header select:hover {
-  color: #99ff99;
-  text-shadow: 0 0 2px #99ff99, 0 0 5px #99ff99;
+  color: #00BFFF;
+  text-shadow: 0 0 2px #00BFFF, 0 0 5px #00BFFF;
 }
 
 header select:focus {
@@ -76,7 +76,7 @@ header select:focus {
 }
 
 article h2 {
-  color: #ffffff;
+  color: #fff;
 }
 
 article h2 a {
