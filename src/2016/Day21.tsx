@@ -70,13 +70,14 @@ const performScramble = (toScramble: string, instruction: string): string => {
     default:
       return toScramble
   }
+  throw new Error('the default in the switch should prevent this error')
 }
 
 const performUnscramble = (toUnscramble: string, instruction: string): string => {
   const instructionWords = instruction.split(' ')
   switch (instructionWords[0]) {
     case 'rotate':
-      switch(instructionWords[1]) {
+      switch (instructionWords[1]) {
         case 'left':
         case 'right':
           const newDir = instructionWords[1] === 'left' ? 'right' : 'left'
@@ -106,6 +107,7 @@ const performUnscramble = (toUnscramble: string, instruction: string): string =>
     default:
       return performScramble(toUnscramble, instruction)
   }
+  throw new Error('the default in the switch should prevent this error')
 }
 
 const BUTTONS: IButton[] = [

@@ -41,7 +41,7 @@ class Program {
   currentInstruction: number
   instructions: IInstruction[]
   lastPlayed: number
-  registers: { [key:string]: number }
+  registers: { [key: string]: number }
   id?: number
 
   constructor(part: 1 | 2, id?: number) {
@@ -113,10 +113,10 @@ const executeInstruction = (program: Program, command: string, x: string, inY: s
     case 'sub':
     case 'mul':
     case 'jnz':
-    program[command](x, y)
+      program[command](x, y)
 
     default:
-    break
+      break
   }
 }
 
