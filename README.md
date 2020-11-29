@@ -1,1 +1,1 @@
-These are some of the things I wrote for December-Holiday-Approaching-Time Coding Challenge. It's a typical [Create React App](https://github.com/facebook/create-react-app) project, so it you want to run it locally, run `npm install` and then `npm start`.
+These are some of the things I wrote for Advent of Code Coding Challenge. It's a typical [Create React App](https://github.com/facebook/create-react-app) project, so it you want to run it locally, run `npm install` and then `npm start`.

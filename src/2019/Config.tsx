@@ -35,7 +35,7 @@ const CONFIG_2019: IYearConfig = {
   cover: coverImage,
   extraText: (
     <span>
-      Woo! On the actual <a href="https://adventofcode.com">December-Holiday-Approaching-Time Coding Challenge</a> site, you can see{' '}
+      Woo! On the actual <a href="https://adventofcode.com">Advent of Code Coding Challenge</a> site, you can see{' '}
       the shooting stars and a representation of the journey through the solar system, but if you're{' '}
       looking at my thing here, all you get is this static screenshot!{' '}
       Please note that the <code>intcode computer</code> changed a fair amount over the course of{' '}

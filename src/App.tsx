@@ -149,7 +149,7 @@ class App extends Component<{}, {
       <div>
         <header>
           <h1>
-            <a onClick={this.reset}>December-Holiday-Approaching-Time Coding Challenge</a>
+            <a onClick={this.reset}>Coding Advent Challenge Solution Suite</a>
           </h1>
           <nav>
             <span className="wrapper">
@@ -178,7 +178,7 @@ class App extends Component<{}, {
             ---{' '}
             {dayConfig && dayConfig.title.length > 0
               ? `Day ${day < 10 ? `0${day}` : day}: ${dayConfig.title}`
-              : 'December-Holiday-Approaching-Time Coding Challenge'
+              : 'Advent of Code Coding Challenge'
             }
             {' '}---
             {' '}
@@ -196,7 +196,7 @@ class App extends Component<{}, {
                 target="_blank"
                 href="https://adventofcode.com"
               >
-                December-Holiday-Approaching-Time Coding Challenge
+                Advent of Code Coding Challenge
               </a>
               {' '}challenges! To get started, select a year and day above.{' '}
               Please note that there's no way for you to enter your custom unique{' '}
@@ -210,7 +210,7 @@ class App extends Component<{}, {
           {yearConfig && !dayConfig && (
             <div>
               <p>
-                Welcome to my {year} December-Holiday-Approaching-Time Coding Challenge solution suite! Select a day above to see my solution{' '}
+                Welcome to my {year} Advent of Code Coding Challenge solution suite! Select a day above to see my solution{' '}
                 for that day's challenges. Check out my overall year progress:
               </p>
               <img
