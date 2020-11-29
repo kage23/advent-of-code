@@ -35,7 +35,7 @@ const CONFIG_2018: IYearConfig = {
   cover: coverImage,
   extraText: (
     <span>
-      On the <a href="https://adventofcode.com">December-Holiday-Approaching-Time Coding Challenge</a> site, that image{' '}
+      On the <a href="https://adventofcode.com">Advent of Code Coding Challenge</a> site, that image{' '}
       is actually animated! But if you want to see the animation, you'll have to go{' '}
       complete the challenges yourself!
     </span>
