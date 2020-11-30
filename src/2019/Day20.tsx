@@ -49,7 +49,7 @@ const parseInput = (inputKey: string): IMap => {
     const charAt = x + (width * y) + y
     return input.charAt(charAt)
   }
-  
+
   const getPortalName = ([x, y]: [number, number], inputKey: string): string => {
     const firstLetter = getSpotFromInput([x, y], inputKey)
     const secondLetterPositions = [
@@ -57,7 +57,7 @@ const parseInput = (inputKey: string): IMap => {
       [x, y + 1]
     ]
     const secondLetters = secondLetterPositions.map(([x, y]: number[]) => getSpotFromInput([x, y], inputKey))
-    
+
     let secondLetterPosition = -1
     if ('A' <= secondLetters[0] && secondLetters[0] <= 'Z') {
       secondLetterPosition = 0
@@ -65,9 +65,9 @@ const parseInput = (inputKey: string): IMap => {
       secondLetterPosition = 1
     }
     seenPortals.push(renderGridString(secondLetterPositions[secondLetterPosition]))
-    
+
     const portalName = `${firstLetter}${secondLetters[secondLetterPosition]}`
-    
+
     if (!map.grid[y]) map.grid[y] = []
     map.grid[y][x] = {
       distanceFromStart: Number.MAX_SAFE_INTEGER,
@@ -80,10 +80,10 @@ const parseInput = (inputKey: string): IMap => {
       portal: portalName,
       spot: secondLetters[secondLetterPosition]
     }
-    
+
     return portalName
   }
-  
+
   const getPortalSpot = ([x, y]: [number, number], inputKey: string): string => {
     const potentialSpots: [number, number][] = [
       [x, y - 1,],
@@ -98,18 +98,18 @@ const parseInput = (inputKey: string): IMap => {
     }
     throw new Error('fuck')
   }
-  
+
   const seenPortals: string[] = []
 
   let x = 0
   let y = 0
-  
+
   let width = 0
   let height = 0
 
   INPUT[inputKey].split('').forEach(char => {
     if (!map.grid[y]) map.grid[y] = []
-    
+
     if (!seenPortals.includes(renderGridString([x, y]))) {
       if (char === '\n') {
         y++
@@ -137,35 +137,39 @@ const parseInput = (inputKey: string): IMap => {
   })
 
   height = map.grid.length
-  
+
   map.edgeColumns = [2, width - 3]
   map.edgeRows = [2, height - 3]
 
+  const portalEndsForEach = (portalEnd: string, portalName: string) => {
+    const [pex, pey] = parseGridString(portalEnd)
+    const name = `${portalName}${isOuterLayer(pex, pey) ? '-' : '+'}`
+    for (let [otherPortalName, otherPortalEnds] of map.portals) {
+      if (portalName !== otherPortalName) {
+        otherPortalEnds.forEach(otherPortalEnd => { otherPortalEndsForEach(otherPortalEnd, name, otherPortalName, portalEnd) }
+        )
+      }
+    }
+    if (portalName !== 'AA' && portalName !== 'ZZ') {
+      const prevConnections = map.portalConnections.get(name) || new Map()
+      const otherEnd = `${portalName}${name.slice(-1) === '-' ? '+' : '-'}`
+      prevConnections.set(otherEnd, 1)
+      map.portalConnections.set(name, prevConnections)
+    }
+  }
+  const otherPortalEndsForEach = (otherPortalEnd: string, name: string, otherPortalName: string, portalEnd: string) => {
+    const prevConnections = map.portalConnections.get(name) || new Map()
+    const [opex, opey] = parseGridString(otherPortalEnd)
+    const otherPortalEndName = `${otherPortalName}${isOuterLayer(opex, opey) ? '-' : '+'}`
+    const pathLength = findShortestPathLength(`${portalEnd},0`, `${otherPortalEnd},0`, false, false)
+    if (pathLength && pathLength < Number.MAX_SAFE_INTEGER) {
+      prevConnections.set(otherPortalEndName, pathLength)
+      map.portalConnections.set(name, prevConnections)
+    }
+  }
+
   for (let [portalName, portalEnds] of map.portals) {
-    portalEnds.forEach(portalEnd => {
-      const [pex, pey] = parseGridString(portalEnd)
-      const name = `${portalName}${isOuterLayer(pex, pey) ? '-' : '+'}`
-      for (let [otherPortalName, otherPortalEnds] of map.portals) {
-        if (portalName !== otherPortalName) {
-          otherPortalEnds.forEach(otherPortalEnd => {
-            const prevConnections = map.portalConnections.get(name) || new Map()
-            const [opex, opey] = parseGridString(otherPortalEnd)
-            const otherPortalEndName = `${otherPortalName}${isOuterLayer(opex, opey) ? '-' : '+'}`
-            const pathLength = findShortestPathLength(`${portalEnd},0`, `${otherPortalEnd},0`, false, false)
-            if (pathLength && pathLength < Number.MAX_SAFE_INTEGER) {
-              prevConnections.set(otherPortalEndName, pathLength)
-              map.portalConnections.set(name, prevConnections)
-            }
-          })
-        }
-      }
-      if (portalName !== 'AA' && portalName !== 'ZZ') {
-        const prevConnections = map.portalConnections.get(name) || new Map()
-        const otherEnd = `${portalName}${name.slice(-1) === '-' ? '+' : '-'}`
-        prevConnections.set(otherEnd, 1)
-        map.portalConnections.set(name, prevConnections)
-      }
-    })
+    portalEnds.forEach(portalEnd => { portalEndsForEach(portalEnd, portalName) })
   }
 
   return map
@@ -194,14 +198,14 @@ const findShortestPathLength = (start: string, end: string, portals = true, recu
       const [ax, ay] = adjacent
       if (map.grid[ay] === undefined || map.grid[ay][ax] === undefined) return false
       const { spot } = map.grid[ay][ax]
-      
+
       return !['#', ' ', undefined].includes(spot)
     })
     // Then map portals to their other ends
     .map(adjacent => {
       const [ax, ay] = adjacent
       const { portal: portalName } = map.grid[ay][ax]
-      
+
       if (portals && portalName) {
         // If they're a portal, the other side of that portal is the actual adjacent.
         // Unless the portal is AA, which is the entrance and it has no other side. So that's just an invalid adjacent.
@@ -248,7 +252,6 @@ const findShortestPathLength = (start: string, end: string, portals = true, recu
   // Make a shortestKnownPathLength set to Number.MAX
   let shortestKnownPathLength = Number.MAX_SAFE_INTEGER
 
-  mainLoop:
   while (searchQueue.length) {
     // Shift the first node off the search queue
     const currentNode: ISearchNode = searchQueue.shift()
@@ -258,7 +261,7 @@ const findShortestPathLength = (start: string, end: string, portals = true, recu
       // Check its length against the shortest known path length ...
       shortestKnownPathLength = Math.min(shortestKnownPathLength, currentNode.distance)
       // ... then continue with the next node.
-      continue mainLoop
+      continue
     } else {
       // If it's not the end node ...
       if (currentNode.distance + 1 < shortestKnownPathLength) {
@@ -323,7 +326,6 @@ const findShortestRecursiveNodePath = (): number | undefined => {
   } as ISearchNode)
   const visitedNodes: Map<string, true> = new Map()
 
-  mainLoop:
   while (searchQueue.length) {
     const currentNode: ISearchNode = searchQueue.shift()
     if (!visitedNodes.get(currentNode.position)) {
@@ -400,11 +402,11 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey: string) => {
       map.grid.length = 0
       map.portals.clear()
-      
+
       const startTime = new Date().getTime()
       map = parseInput(inputKey)
       console.log(`Total parsing time: ${new Date().getTime() - startTime}.`)
-      
+
       return {}
     }
   },

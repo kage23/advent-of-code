@@ -18,10 +18,6 @@ interface ICoord {
   type?: TYPES
 }
 
-interface IFieldData {
-  [key:string]: string
-}
-
 interface IField {
   min: ICoord
   max: ICoord
@@ -56,8 +52,6 @@ let state: IState = {
   lys: 0
 }
 let prevInputKey = ''
-
-const pathKey = ({ x, y }: ICoord): string => `${x},${y}`
 
 const parseInput = (INPUT: string): IState => {
   const field: IField = {

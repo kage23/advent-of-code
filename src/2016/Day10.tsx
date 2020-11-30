@@ -70,9 +70,8 @@ const runBots = (inputKey: string): {
   : [17, 61]
 
   while (bots.some(bot => bot.numbers ? bot.numbers.length === 2 : false)) {
-    botLoop:
     for (const bot of bots) {
-      if (!bot.numbers || bot.numbers.length !== 2) continue botLoop
+      if (!bot.numbers || bot.numbers.length !== 2) continue
       const low = Math.min(...bot.numbers)
       const high = Math.max(...bot.numbers)
       bot.numbers = []
@@ -105,7 +104,7 @@ const runBots = (inputKey: string): {
       if (low === comparisonNumbers[0] && high === comparisonNumbers[1]) {
         answer1 = bot.id.toString()
       }
-      break botLoop
+      break
     }
   }
 

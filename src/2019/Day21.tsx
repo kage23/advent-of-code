@@ -8,9 +8,6 @@ import { intcodeComputer2019, IIntcodeComputerResults } from '../utils/Various'
 import INPUT from './Input/Day21'
 
 let program: number[] = []
-let instructionPointer = 0
-let relativeBase = 0
-let outputs: number[] = []
 let intcodeComputerResults: IIntcodeComputerResults = {
   finished: false,
   instructionPointer: 0,
@@ -55,9 +52,6 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey: string) => {
       program = parseInput(inputKey)
 
-      instructionPointer = 0
-      relativeBase = 0
-      outputs = []
       intcodeComputerResults = {
         finished: false,
         instructionPointer: 0,

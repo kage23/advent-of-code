@@ -4,7 +4,6 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import DLL, { IDLLNode } from '../utils/DLL'
 
 import INPUT from './Input/Day22'
 
@@ -18,13 +17,13 @@ const convertToLCF = (instruction: string): [BigInt, BigInt] => {
     const cutBy = parseInt(instruction.slice(4))
     return [BigInt(1), BigInt(cutBy * -1)]
   }
-  
+
   return [BigInt(NaN), BigInt(NaN)]
 }
 
 const getNewCardPosition = (origPosition: BigInt, deckSize: BigInt, shuffleLCF: [BigInt, BigInt]): BigInt => {
   const newPosition = (BigInt(BigInt(shuffleLCF[0]) * BigInt(origPosition)) + BigInt(shuffleLCF[1])) % BigInt(deckSize)
-  
+
   return newPosition >= 0 ? newPosition : BigInt(deckSize) + BigInt(newPosition)
 }
 
@@ -39,7 +38,7 @@ const simplifyInstructions = (instructions: string[], deckSize: BigInt): [BigInt
       ((BigInt(newLCF[1]) * BigInt(nextLCF[0])) + BigInt(nextLCF[1])) % BigInt(deckSize)
     ]
   }
-  
+
   return newLCF
 }
 
@@ -63,7 +62,7 @@ const BUTTONS: IButton[] = [
       const input = INPUT[inputKey]
       const deckSize: BigInt = inputKey.startsWith('DEMO') ? BigInt(10) : BigInt(10007)
       const instructionLCF = simplifyInstructions(input.split('\n'), deckSize)
-      
+
       if (deckSize === BigInt(10)) {
         const newDeck: BigInt[] = []
         for (let i = BigInt(0); i < deckSize; i++) {
@@ -72,7 +71,7 @@ const BUTTONS: IButton[] = [
         console.log('Shuffled demo deck:', newDeck)
         return {}
       }
-      
+
       return {
         answer1: getNewCardPosition(BigInt(2019), deckSize, instructionLCF).toString()
       }

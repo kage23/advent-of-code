@@ -89,7 +89,6 @@ const fightCombat = (immuneSystem: IGroup[], infection: IGroup[], rounds: number
 : IFight => {
   let fight = { immuneSystem, infection }
   let stalemate = false
-  let count = rounds
 
   let prevUnitCount = [ ...immuneSystem, ...infection].reduce((total, group) => total + group.units, 0)
   while (fight.immuneSystem.length > 0 && fight.infection.length > 0) {

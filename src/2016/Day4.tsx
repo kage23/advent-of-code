@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  defaultRenderDay,
   IButton,
   IDayConfig
 } from '../Config'
@@ -58,7 +57,7 @@ const BUTTONS: IButton[] = [
     onClick: inputKey => {
       INPUT[inputKey].split('\n')
       .filter(room => isRealRoom(room))
-      .map(roomLine => {
+      .forEach(roomLine => {
         const split = roomLine.split('-')
         const rotate = parseInt(split[split.length - 1])
         let result = ''

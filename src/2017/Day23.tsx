@@ -114,6 +114,7 @@ const executeInstruction = (program: Program, command: string, x: string, inY: s
     case 'mul':
     case 'jnz':
       program[command](x, y)
+      break
 
     default:
       break

@@ -132,11 +132,10 @@ const BUTTONS: IButton[] = [
     onClick: () => {
       let input: number[] = [ getInput() ]
 
-      mainLoop:
       while (outputs.length < 3) {
         result = intcodeComputer2019(result.program, input, true, result.instructionPointer, result.relativeBase)
         if (result.outputs !== undefined) {
-          if (!result.outputs.length) break mainLoop
+          if (!result.outputs.length) break
           outputs.push(...result.outputs)
         }
       }

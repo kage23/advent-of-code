@@ -25,11 +25,6 @@ const maxX = 31
 const maxY = 29
 
 const findShortestPath = (grid: Map<string, INode>, inputKey: string): number => {
-  interface ISearchNode {
-    gridStr: string
-    pathLength: number
-  }
-
   const visited: Map<string, true> = new Map()
 
   const queue = new SLL({
@@ -73,7 +68,7 @@ const getPossibleNexts = (gridStr: string, inputKey: string, visited: Map<string
   // Find the x,y coords of the empty node and the G node
   const emptyIndex = gridStr.indexOf('_')
   const [ emptyX, emptyY ] = getCoordsFromStringIndex(emptyIndex, localMaxX + 1)
-  
+
   // From there, you can get possible next steps (i.e. move empty up, down, left, right)
   return [
     [emptyX - 1, emptyY] as [number, number],

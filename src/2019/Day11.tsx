@@ -128,6 +128,7 @@ const BUTTONS: IButton[] = [
             break
           case '<':
             robotPosition[0]--
+            break
           default:
             break
         }
@@ -185,6 +186,7 @@ const BUTTONS: IButton[] = [
             break
           case '<':
             robotPosition[0]--
+            break
           default:
             break
         }

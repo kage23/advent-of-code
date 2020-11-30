@@ -184,7 +184,6 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   if (recipes.length < 100) {
     const recipeHead = recipes.head
     let recipe = recipes.head
-    let i = 0
     while (recipe && (recipeText.length === 0 || recipe !== recipeHead)) {
       recipeText += recipe === elves[0]
         ? `(${recipe.value})`
@@ -192,7 +191,6 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
           ? `[${recipe.value}]`
           : `${String.fromCharCode(160)}${recipe.value}${' '}`
       recipe = recipe.next
-      i++
     }
   } else {
     recipeText = 'The elves have generated too many recipes to efficiently display them all!'

@@ -149,7 +149,7 @@ class App extends Component<{}, {
       <div>
         <header>
           <h1>
-            <a onClick={this.reset}>Coding Advent Challenge Solution Suite</a>
+            <button onClick={this.reset}>Coding Advent Challenge Solution Suite</button>
           </h1>
           <nav>
             <span className="wrapper">
@@ -184,6 +184,7 @@ class App extends Component<{}, {
             {' '}
             {day > 0 && (
               <a
+                rel="noreferrer"
                 target="_blank"
                 href={`https://adventofcode.com/${year}/day/${day}`}
               >View Challenge</a>
@@ -193,6 +194,7 @@ class App extends Component<{}, {
             <p>
               Check out my solutions for the{' '}
               <a
+                rel="noreferrer"
                 target="_blank"
                 href="https://adventofcode.com"
               >
@@ -214,6 +216,7 @@ class App extends Component<{}, {
                 for that day's challenges. Check out my overall year progress:
               </p>
               <img
+                alt="screenshot of cover from Advent of Code website"
                 className="year-cover-image"
                 src={yearConfig.cover}
               />

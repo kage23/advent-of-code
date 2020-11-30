@@ -76,7 +76,7 @@ const BUTTONS: IButton[] = [
 
 const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   const listSize = inputKey === 'DEMO_1' ? 5 : 256
-  if (prevInputKey != inputKey) {
+  if (prevInputKey !== inputKey) {
     list = new NumberDLL()
     currentPosition = 0
     skipSize = 0

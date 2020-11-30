@@ -83,11 +83,10 @@ const BUTTONS: IButton[] = [
       for (let i = 0; i < sues.length; i++) {
         const sue = sues[i]
         let theRightSue = true
-        keyLoop:
         for (let key of Object.keys(sue)) {
           if (sue[key] !== analysis[key] && key !== 'number') {
             theRightSue = false
-            break keyLoop
+            break
           }
         }
         if (theRightSue) {
