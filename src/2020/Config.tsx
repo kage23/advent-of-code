@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import { IYearConfig } from '../Config'
 
@@ -9,7 +9,7 @@ import Day2__2020__Config from './Day2'
 import Day3__2020__Config from './Day3'
 import Day4__2020__Config from './Day4'
 import Day5__2020__Config from './Day5'
-// import Day6__2020__Config from './Day6'
+import Day6__2020__Config from './Day6'
 // import Day7__2020__Config from './Day7'
 // import Day8__2020__Config from './Day8'
 // import Day9__2020__Config from './Day9'
@@ -34,9 +34,14 @@ const CONFIG_2020: IYearConfig = {
   year: 2020,
   cover: coverImage,
   extraText: (
-    <span>
-      I think we're seeing a map of the sledding path...
-    </span>
+    <Fragment>
+      <p>
+        I think we're seeing a map of the sledding path...
+      </p>
+      <p>
+        And that must have been the flight's path...
+      </p>
+    </Fragment>
   ),
   days: [
     Day1__2020__Config,
@@ -44,7 +49,7 @@ const CONFIG_2020: IYearConfig = {
     Day3__2020__Config,
     Day4__2020__Config,
     Day5__2020__Config,
-    // Day6__2020__Config,
+    Day6__2020__Config,
     // Day7__2020__Config,
     // Day8__2020__Config,
     // Day9__2020__Config,
