@@ -11,7 +11,7 @@ import Day4__2020__Config from './Day4'
 import Day5__2020__Config from './Day5'
 import Day6__2020__Config from './Day6'
 import Day7__2020__Config from './Day7'
-// import Day8__2020__Config from './Day8'
+import Day8__2020__Config from './Day8'
 // import Day9__2020__Config from './Day9'
 // import Day10__2020__Config from './Day10'
 // import Day11__2020__Config from './Day11'
@@ -51,7 +51,7 @@ const CONFIG_2020: IYearConfig = {
     Day5__2020__Config,
     Day6__2020__Config,
     Day7__2020__Config,
-    // Day8__2020__Config,
+    Day8__2020__Config,
     // Day9__2020__Config,
     // Day10__2020__Config,
     // Day11__2020__Config,
