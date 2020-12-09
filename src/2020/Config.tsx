@@ -12,7 +12,7 @@ import Day5__2020__Config from './Day5'
 import Day6__2020__Config from './Day6'
 import Day7__2020__Config from './Day7'
 import Day8__2020__Config from './Day8'
-// import Day9__2020__Config from './Day9'
+import Day9__2020__Config from './Day9'
 // import Day10__2020__Config from './Day10'
 // import Day11__2020__Config from './Day11'
 // import Day12__2020__Config from './Day12'
@@ -41,6 +41,9 @@ const CONFIG_2020: IYearConfig = {
       <p>
         And that must have been the flight's path...
       </p>
+      <p>
+        And the next flight...
+      </p>
     </Fragment>
   ),
   days: [
@@ -52,7 +55,7 @@ const CONFIG_2020: IYearConfig = {
     Day6__2020__Config,
     Day7__2020__Config,
     Day8__2020__Config,
-    // Day9__2020__Config,
+    Day9__2020__Config,
     // Day10__2020__Config,
     // Day11__2020__Config,
     // Day12__2020__Config,
