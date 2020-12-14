@@ -1,5 +1,11 @@
 import DLL from './DLL'
 
+export const binToDec = (x: string): number =>
+  parseInt(x, 2)
+
+export const decToBin = (x: number): string =>
+  x.toString(2)
+
 export const detectPrime = (x: number): boolean => {
   for (let i = 2; i < x; i++) {
     if ((x / i) === Math.floor(x / i)) return false
