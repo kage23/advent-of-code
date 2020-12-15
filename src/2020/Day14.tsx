@@ -32,7 +32,6 @@ const applyMask__v2 = (origValue: string, mask: string): string => {
 }
 
 const getMemAddresses = (mask: string[], memAddresses?: number[]): number[] => {
-  debugger
   memAddresses = memAddresses || [] as number[]
 
   if (!mask.includes('X')) {
