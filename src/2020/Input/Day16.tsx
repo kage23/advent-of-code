@@ -1,5 +1,5 @@
 const INPUT: { [key: string]: string } = {
-DEMO_0: `class: 1-3 or 5-7
+  DEMO_0: `class: 1-3 or 5-7
 row: 6-11 or 33-44
 seat: 13-40 or 45-50
 
@@ -12,7 +12,7 @@ nearby tickets:
 55,2,20
 38,6,12`,
 
-DEMO_1: `class: 0-1 or 4-19
+  DEMO_1: `class: 0-1 or 4-19
 row: 0-5 or 8-19
 seat: 0-13 or 16-19
 
@@ -24,7 +24,26 @@ nearby tickets:
 15,1,5
 5,14,9`,
 
-REAL: `departure location: 31-538 or 546-960
+  // dp, dt, ap, al, dl
+  // 2,  4,  3,  1,  0
+  // answer: 697
+  K_TEST: `departure location: 1-3 or 5-7
+arrival location: 9-11 or 13-15
+departure platform: 17-19 or 21-31
+arrival platform: 33-35 or 37-39
+departure track: 41-43 or 45-47
+
+your ticket:
+17,41,33,9,1
+
+nearby tickets:
+18,42,34,10,2
+19,43,35,11,3
+21,45,37,13,5
+22,46,38,14,6
+23,47,39,15,7`,
+
+  REAL: `departure location: 31-538 or 546-960
 departure station: 39-660 or 673-960
 departure platform: 35-731 or 745-968
 departure track: 43-179 or 185-953

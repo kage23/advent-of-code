@@ -4,10 +4,9 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import { permutatorGenerator } from '../utils/Various'
 import INPUT from './Input/Day16'
 
-const getTicketError = (ticket: string, fieldRanges: [number, number][]): number => {
+const getTicketErrorRate = (ticket: string, fieldRanges: [number, number][]): number => {
   let errorRate = 0
   ticket.split(',').map(x => parseInt(x)).forEach(value => {
     if (fieldRanges.every(([min, max]) => value < min || value > max)) {
@@ -15,6 +14,16 @@ const getTicketError = (ticket: string, fieldRanges: [number, number][]): number
     }
   })
   return errorRate
+}
+
+const getTicketHasError = (ticket: string, fieldRanges: [number, number][]): boolean => {
+  let hasError = false
+  ticket.split(',').map(x => parseInt(x)).forEach(value => {
+    if (fieldRanges.every(([min, max]) => value < min || value > max)) {
+      hasError = true
+    }
+  })
+  return hasError
 }
 
 const BUTTONS: IButton[] = [
@@ -39,7 +48,7 @@ const BUTTONS: IButton[] = [
 
       return {
         answer1: nearbyTickets.reduce((errorRate, ticket) =>
-          errorRate + getTicketError(ticket, fieldRanges), 0).toString()
+          errorRate + getTicketErrorRate(ticket, fieldRanges), 0).toString()
       }
     }
   },
@@ -51,6 +60,7 @@ const BUTTONS: IButton[] = [
       myTicket.shift()
       nearbyTickets.shift()
 
+      const myTicketValues = myTicket[0].split(',').map(x => parseInt(x))
       const fieldRanges: [number, number][] = fields.reduce((fieldRanges, field) => {
         const ranges = field.split(': ')[1].split(' or ')
 
@@ -62,37 +72,59 @@ const BUTTONS: IButton[] = [
         return fieldRanges
       }, [] as [number, number][])
 
-      const goodTickets = nearbyTickets.filter(ticket => getTicketError(ticket, fieldRanges) === 0)
-      const allTickets = myTicket.concat(goodTickets)
+      const goodTickets = nearbyTickets.filter(ticket => !getTicketHasError(ticket, fieldRanges)).map(ticket => (
+        ticket.split(',').map(x => parseInt(x))
+      ))
 
-      for (let possiblePosition of permutatorGenerator(fields.map((field, i) => i))) {
-        if (allTickets.every(ticket =>
-          ticket.split(',').map(x => parseInt(x)).every((value, i) =>
-            (
-              value >= fieldRanges[(possiblePosition as number[])[i] * 2][0] &&
-              value <= fieldRanges[(possiblePosition as number[])[i] * 2][1]
-            ) || (
-              value >= fieldRanges[((possiblePosition as number[])[i] * 2) + 1][0] &&
-              value <= fieldRanges[((possiblePosition as number[])[i] * 2) + 1][1]
+      let possiblePositions: Array<number[]> = []
+
+      // For the i-th value of each ticket
+      for (let i = 0; i < fields.length; i++) {
+        if (!possiblePositions[i]) possiblePositions[i] = []
+
+        // We check if the j-th field is a possibility
+        for (let j = 0; j < fields.length; j++) {
+          const lowerRange = fieldRanges[j * 2]
+          const upperRange = fieldRanges[(j * 2) + 1]
+
+          if (goodTickets.every(ticket => {
+            const value = ticket[i]
+            return (
+              (value >= lowerRange[0] && value <= lowerRange[1]) ||
+              (value >= upperRange[0] && value <= upperRange[1])
             )
-          )
-        )) {
-          if (inputKey.startsWith('DEMO')) {
-            return {
-              answer2: 'DEMO'
-            }
-          } else {
-            const departurePositions = possiblePosition.slice(0, 6) as number[]
-
-            return {
-              answer2: departurePositions.reduce((value, departurePosition) =>
-                value * parseInt(myTicket[0].split(',')[departurePosition]), 1).toString()
-            }
+          })) {
+            possiblePositions[i].push(j)
           }
         }
       }
 
-      return {}
+      const actualPositions: number[] = []
+
+      while (!possiblePositions.every(x => x.length === 0)) {
+        const currentPosition = (possiblePositions.find(x => x.length === 1) || [])[0]
+        actualPositions.push(currentPosition)
+        possiblePositions = possiblePositions.map(x => x.filter(y => y !== currentPosition))
+      }
+
+      if (inputKey.startsWith('DEMO')) {
+        return {
+          answer2: 'DEMO'
+        }
+      } else {
+        const values = fields.reduce((values, field, idx) => {
+          if (field.startsWith('departure')) {
+            const position = actualPositions.findIndex(x => x === idx)
+            values.push(BigInt(myTicketValues[position]))
+          }
+          return values
+        }, [] as bigint[])
+        // 116807698361 too low
+
+        return {
+          answer2: values.reduce((a, b) => a * b).toString()
+        }
+      }
     }
   }
 ]
