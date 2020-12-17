@@ -45,7 +45,6 @@ const BUTTONS: IButton[] = [
     label: 'Sum Input, No Red',
     onClick: (inputKey) => {
       const input = JSON.parse(INPUT[inputKey])
-      debugger
       const sum = findSum(input, 0, 2)
       return {
         answer2: sum.toString()

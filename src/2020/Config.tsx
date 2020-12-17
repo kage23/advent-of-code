@@ -20,7 +20,7 @@ import Day13__2020__Config from './Day13'
 import Day14__2020__Config from './Day14'
 import Day15__2020__Config from './Day15'
 import Day16__2020__Config from './Day16'
-// import Day17__2020__Config from './Day17'
+import Day17__2020__Config from './Day17'
 // import Day18__2020__Config from './Day18'
 // import Day19__2020__Config from './Day19'
 // import Day20__2020__Config from './Day20'
@@ -47,6 +47,9 @@ const CONFIG_2020: IYearConfig = {
       <p>
         And now we're taking a ferry...
       </p>
+      <p>
+        Busses and more flights... The whole thing is traveling to the vacation, LOL.
+      </p>
     </Fragment>
   ),
   days: [
@@ -66,7 +69,7 @@ const CONFIG_2020: IYearConfig = {
     Day14__2020__Config,
     Day15__2020__Config,
     Day16__2020__Config,
-    // Day17__2020__Config,
+    Day17__2020__Config,
     // Day18__2020__Config,
     // Day19__2020__Config,
     // Day20__2020__Config,
