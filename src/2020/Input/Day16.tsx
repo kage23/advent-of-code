@@ -24,6 +24,19 @@ nearby tickets:
 15,1,5
 5,14,9`,
 
+// 0, 1, 2
+DEMO_1_REORDERED: `class: 0-1 or 4-19
+row: 0-5 or 8-19
+seat: 0-13 or 16-19
+
+your ticket:
+11,12,13
+
+nearby tickets:
+14,5,9
+9,3,18
+1,15,5`,
+
   // dp, dt, ap, al, dl
   // 2,  4,  3,  1,  0
   // answer: 697

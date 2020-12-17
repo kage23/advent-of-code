@@ -99,11 +99,12 @@ const BUTTONS: IButton[] = [
         }
       }
 
-      const actualPositions: number[] = []
+      const actualPositions: number[] = Array(myTicketValues.length)
 
       while (!possiblePositions.every(x => x.length === 0)) {
-        const currentPosition = (possiblePositions.find(x => x.length === 1) || [])[0]
-        actualPositions.push(currentPosition)
+        const currentPositionIndex = possiblePositions.findIndex(x => x.length === 1)
+        const currentPosition = possiblePositions[currentPositionIndex][0]
+        actualPositions[currentPositionIndex] = currentPosition
         possiblePositions = possiblePositions.map(x => x.filter(y => y !== currentPosition))
       }
 
