@@ -131,7 +131,7 @@ const config: IDayConfig = {
   day: 22,
   INPUT,
   renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: ''
+  title: 'Crab Combat'
 }
 
 export default config
