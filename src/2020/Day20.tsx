@@ -308,7 +308,7 @@ const config: IDayConfig = {
   day: 20,
   INPUT,
   renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: ''
+  title: 'Jurassic Jigsaw'
 }
 
 export default config
