@@ -28,7 +28,7 @@ import Day21__2020__Config from './Day21'
 import Day22__2020__Config from './Day22'
 import Day23__2020__Config from './Day23'
 import Day24__2020__Config from './Day24'
-// import Day25__2020__Config from './Day25'
+import Day25__2020__Config from './Day25'
 
 const CONFIG_2020: IYearConfig = {
   year: 2020,
@@ -36,22 +36,7 @@ const CONFIG_2020: IYearConfig = {
   extraText: (
     <Fragment>
       <p>
-        I think we're seeing a map of the sledding path...
-      </p>
-      <p>
-        And that must have been the flight's path...
-      </p>
-      <p>
-        And the next flight...
-      </p>
-      <p>
-        And now we're taking a ferry...
-      </p>
-      <p>
-        Busses and more flights... The whole thing is traveling to the vacation, LOL.
-      </p>
-      <p>
-        On a raft, nearly there...
+        It was a harrowing journey, involving tobaggans, airplanes, ferries, busses, and rafts, but we made it!!
       </p>
     </Fragment>
   ),
@@ -80,7 +65,7 @@ const CONFIG_2020: IYearConfig = {
     Day22__2020__Config,
     Day23__2020__Config,
     Day24__2020__Config,
-    // Day25__2020__Config
+    Day25__2020__Config
   ]
 }
 
