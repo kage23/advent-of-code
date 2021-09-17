@@ -22,11 +22,6 @@ const getNeighbors = ([x, y]: [number, number], grid: Map<string, string>): [num
 )
 
 const getDistanceBetweenNodes = (grid: Map<string, string>, start: [number, number], end: [number, number]): number => {
-  interface ISearchNode {
-    gridNode: [number, number]
-    pathLength: number
-  }
-
   const queue: SLL = new SLL(
     {
       gridNode: start,

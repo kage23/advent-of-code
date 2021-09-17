@@ -53,7 +53,6 @@ const doTheBadWhiteElephant_v2 = (inputKey: string): { answer2?: string } => {
   for (let i = 0; i < stealFromCount; i++)
     if (stealFrom && stealFrom.next) stealFrom = stealFrom.next
 
-  searchLoop:
   while (circle.length > 1) {
     if (currentElf && stealFrom) {
       currentElf.value.giftCount += stealFrom.value.giftCount

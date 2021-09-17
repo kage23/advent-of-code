@@ -17,8 +17,8 @@ const generateNext = (input: number, genKey: 'a' | 'b'): number => (
 const generateNextPart2 = (input: number, genKey: 'a' | 'b'): number => {
   let next = generateNext(input, genKey)
   while (
-    genKey === 'a' && next % 4 !== 0
-    || genKey === 'b' && next % 8 !== 0
+    (genKey === 'a' && next % 4 !== 0)
+    || (genKey === 'b' && next % 8 !== 0)
   ) next = generateNext(next, genKey)
   return next
 }

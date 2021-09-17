@@ -15,13 +15,12 @@ const BUTTONS: IButton[] = [
       const input = INPUT[inputKey]
       let password = ''
 
-      letterLoop:
       for (let i = 0; true; i++) {
         const hash = md5(`${input}${i}`)
         if (hash.startsWith('00000')) {
           password += hash.charAt(5)
           console.log(`Hash found at index ${i}: ${hash}. Password: ${password}.`)
-          if (password.length === 8) break letterLoop
+          if (password.length === 8) break
         } else if (i % 10000 === 0) console.log('Searching...')
       }
 
@@ -36,7 +35,6 @@ const BUTTONS: IButton[] = [
       const input = INPUT[inputKey]
       let password = '________'
 
-      letterLoop:
       for (let i = 0; true; i++) {
         const hash = md5(`${input}${i}`)
         if (hash.startsWith('00000') && parseInt(hash.charAt(5)) < 8) {
@@ -44,7 +42,7 @@ const BUTTONS: IButton[] = [
           if (password.charAt(index) === '_') {
             password = `${password.slice(0, index)}${hash.charAt(6)}${password.slice(index + 1)}`
             console.log(`Hash found at index ${i}: ${hash}. Password: ${password}.`)
-            if (password.indexOf('_') === -1) break letterLoop
+            if (password.indexOf('_') === -1) break
           }
         } else if (i % 10000 === 0) console.log('Searching...')
       }

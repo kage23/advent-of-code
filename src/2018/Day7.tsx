@@ -33,13 +33,15 @@ const parseInput = (inputKey: string): IStep[] => {
   return steps
 }
 
+
 const part1 = (inputKey: string): { answer1: string } => {
   const steps = parseInput(inputKey)
   let stepsCompleted = ''
   let i = 0
+  const preReqCompleted = (prereqStep: string) => stepsCompleted.indexOf(prereqStep) !== -1
   while (stepsCompleted.length !== steps.length) {
     const step = steps[i]
-    const prereqsComplete = step.prereqs.every(prereqStep => stepsCompleted.indexOf(prereqStep) !== -1)
+    const prereqsComplete = step.prereqs.every(preReqCompleted)
     if (prereqsComplete && stepsCompleted.indexOf(step.id) === -1) {
       stepsCompleted += step.id
       i = 0
@@ -67,6 +69,7 @@ const part2 = (inputKey: string): { answer2: string } => {
   let stepsCompleted = ''
   let stepsClaimed = ''
   let time = 0
+  const preReqCompleted = (prereqStep: string) => stepsCompleted.indexOf(prereqStep) !== -1
   while (true) {
     // First, advance all worker jobs
     for (const worker of workers) {
@@ -93,7 +96,7 @@ const part2 = (inputKey: string): { answer2: string } => {
         for (const step of steps) {
           if (
             stepsCompleted.indexOf(step.id) === -1 && stepsClaimed.indexOf(step.id) === -1
-            && step.prereqs.every(prereqStep => stepsCompleted.indexOf(prereqStep) !== -1)
+            && step.prereqs.every(preReqCompleted)
           ) {
             stepsClaimed += step.id
             worker.stepClaimed = step.id

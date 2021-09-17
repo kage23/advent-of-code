@@ -52,18 +52,21 @@ function * generatePossibleNexts(molecule: string, replacements: Map<string, str
 const getPossibleNextMolecules = (molecule: string, replacements: Map<string, string[]>): string[] => {
   // Generate possible molecules
   let nextMolecules: string[] = []
+  const currentReplacementsForEach = (replacement: string, i: number, plusValue: number) => {
+    nextMolecules.push(`${molecule.slice(0, i)}${replacement}${molecule.slice(i + plusValue)}`)
+  }
   for (let i = 0; i < molecule.length; i++) {
     const char = molecule.charAt(i)
     let currentReplacements = replacements.get(char)
     if (currentReplacements) {
       currentReplacements.forEach(replacement => {
-        nextMolecules.push(`${molecule.slice(0, i)}${replacement}${molecule.slice(i + 1)}`)
+        currentReplacementsForEach(replacement, i, 1)
       })
     } else {
       currentReplacements = replacements.get(molecule.slice(i, i + 2))
       if (currentReplacements) {
         currentReplacements.forEach(replacement => {
-          nextMolecules.push(`${molecule.slice(0, i)}${replacement}${molecule.slice(i + 2)}`)
+          currentReplacementsForEach(replacement, i, 2)
         })
         i++
       }

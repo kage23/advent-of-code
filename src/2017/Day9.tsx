@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  defaultRenderDay,
   IButton,
   IDayConfig
 } from '../Config'

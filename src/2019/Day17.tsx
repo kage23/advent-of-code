@@ -180,6 +180,7 @@ const runUntilComplete = (input?: number[]) => {
         case '\n':
           x = 0
           y++
+          break
 
         default:
           break

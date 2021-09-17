@@ -93,6 +93,11 @@ const advanceALot = (inPots: string, bottomPot: number, rules: IRule[]): {
   }
 
   let g = 0
+  const findRecord = (potRecord: {
+    bottomPot: number;
+    pots: string;
+    time: number;
+  }) => potRecord.pots === next.pots
   while (g < 50000000000) {
     seen.push({
       bottomPot: next.bottomPot,
@@ -102,7 +107,7 @@ const advanceALot = (inPots: string, bottomPot: number, rules: IRule[]): {
 
     g++
     next = advanceGeneration(next.pots, next.bottomPot, rules)
-    let seenBefore = seen.find(potRecord => potRecord.pots === next.pots)
+    let seenBefore = seen.find(findRecord)
     if (seenBefore) {
       const loopLength = g - seenBefore.time
       const bottomPotDiffPerLoop = next.bottomPot - seenBefore.bottomPot

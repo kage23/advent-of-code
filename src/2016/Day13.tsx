@@ -14,7 +14,7 @@ const renderGridString = (coords: number[]): string => coords.join(',')
 
 const isNotAWall = (coords: number[], favoriteNumber: number): boolean => {
   const [x, y] = coords
-  const binaryNumber = new Number((x * x) + (3 * x) + (2 * x * y) + y + (y * y) + favoriteNumber).toString(2)
+  const binaryNumber = Number((x * x) + (3 * x) + (2 * x * y) + y + (y * y) + favoriteNumber).toString(2)
   const oneCount = binaryNumber.split('').filter(x => x === '1').length
 
   return oneCount % 2 === 0
@@ -25,7 +25,7 @@ const getAnswer = (start: string, end: string, favoriteNumber: number, part: 1 |
   const endCoords = parseGridString(end)
   const parents: Map<string, string> = new Map([[start, '']])
   const visited: Map<string, true> = new Map()
-  
+
   const getPathLength = (current: any) => {
     let pathLength = 0
       let parent = parents.get(current)

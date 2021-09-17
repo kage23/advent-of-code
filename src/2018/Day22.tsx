@@ -250,31 +250,31 @@ const calculateRescueTime = (caveMap: IMap)
 
   let currentNode = actionsList.shift()
 
-  nodeLoop:
+  const forEachAction = (action: IAction) => {
+    if (typeof visitedMap.get(searchPathKey(action)) === 'undefined') {
+      visitedMap.set(searchPathKey(action), false)
+    }
+    if (typeof timeMap.get(pathKey(action.position)) === 'undefined') {
+      timeMap.set(pathKey(action.position), Number.MAX_SAFE_INTEGER)
+    }
+    timeMap.set(pathKey(action.position), Math.min(timeMap.get(pathKey(action.position)), action.time))
+    if (
+      action.position.x === caveMap.target.x
+      && action.position.y === caveMap.target.y
+      && action.equipment === 'T'
+    ) {
+      shortestTime = Math.min(shortestTime, action.time)
+    }
+    actionsList.push(action)
+  }
   while (currentNode) {
     if (!visitedMap.get(searchPathKey(currentNode))) {
       if (currentNode.time > shortestTime) {
-        break nodeLoop
+        break
       }
       getNextActions(caveMap, currentNode)
       .filter(action => !visitedMap.get(searchPathKey(action)) )
-      .forEach(action => {
-        if (typeof visitedMap.get(searchPathKey(action)) === 'undefined') {
-          visitedMap.set(searchPathKey(action), false)
-        }
-        if (typeof timeMap.get(pathKey(action.position)) === 'undefined') {
-          timeMap.set(pathKey(action.position), Number.MAX_SAFE_INTEGER)
-        }
-        timeMap.set(pathKey(action.position), Math.min(timeMap.get(pathKey(action.position)), action.time))
-        if (
-          action.position.x === caveMap.target.x
-          && action.position.y === caveMap.target.y
-          && action.equipment === 'T'
-        ) {
-          shortestTime = Math.min(shortestTime, action.time)
-        }
-        actionsList.push(action)
-      })
+      .forEach(forEachAction)
       visitedMap.set(searchPathKey(currentNode), true)
 
       actionsList.sort((a, b) => a.time - b.time)

@@ -1,0 +1,13 @@
+const INPUT: { [key: string]: string } = {
+  DEMO_0: 'FBFBBFFRLR',
+  DEMO_1: 'BFFFBBFRRR',
+  DEMO_2: 'FFFBBBFRRR',
+  DEMO_3: 'BBFFBBFRLL',
+
+  DEMO_SANITY_CHECK: `FBFBBFFRLR
+BFFFBBFRRR
+FFFBBBFRRR
+BBFFBBFRLL`,
+}
+
+export default INPUT
