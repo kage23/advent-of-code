@@ -2,15 +2,23 @@ class DLL {
   head: IDLLNode | undefined
   length: number
 
+  private map: Map<any, IDLLNode>
+
   constructor(value?: any) {
+    this.map = new Map()
+
     if (typeof value !== 'undefined') {
       const node: IDLLNode = { value }
       node.next = node
       node.prev = node
       this.head = node
       this.length = 1
+      this.map.set(value, node)
     } else this.length = 0
   }
+
+  getNode = (value: any): IDLLNode | undefined =>
+    this.map.get(value)
 
   insertAfter = (insert: any, after: IDLLNode): IDLLNode => {
     const node: IDLLNode = {
@@ -21,6 +29,7 @@ class DLL {
     if (after.next) after.next.prev = node
     after.next = node
     this.length++
+    this.map.set(insert, node)
     return node
   }
 
@@ -33,6 +42,7 @@ class DLL {
     if (before.prev) before.prev.next = node
     before.prev = node
     this.length++
+    this.map.set(insert, node)
     return node
   }
 
@@ -48,12 +58,15 @@ class DLL {
       node.prev = node
       this.head = node
     }
+    this.map.set(value, node)
     this.length++
   }
 
   removeNode = (node: IDLLNode | undefined): IDLLNode | undefined => {
     if (node === undefined) return undefined
+
     this.length--
+    this.map.delete(node.value)
     if (this.head === node) {
       if (this.head.next === node) {
         this.head = undefined

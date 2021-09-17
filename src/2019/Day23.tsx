@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import { intcodeComputer2019, IIntcodeComputerResults } from '../utils/Various'
+import { intcodeComputer2019 } from '../utils/Various'
 
 import INPUT from './Input/Day23'
 
@@ -58,7 +58,6 @@ const BUTTONS: IButton[] = [
       let lastYSentFromNAT = NaN
 
       while (true) {
-        computerLoop:
         for (let i = 0; i < computers.length; i++) {
           const computer = computers[i]
           if (!computer.idle) {
@@ -83,7 +82,7 @@ const BUTTONS: IButton[] = [
                 )
               } else {
                 computer.idle = true
-                continue computerLoop
+                continue
               }
             }
             computer.finished = result.finished || false

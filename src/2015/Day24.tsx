@@ -4,7 +4,6 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import SLL from '../utils/SLL'
 
 import INPUT from './Input/Day24'
 

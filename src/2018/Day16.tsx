@@ -92,11 +92,10 @@ const figureOutOpCodes = (samples: ISample[]): string[] => {
   let opCodes: string[] = []
   let currentSample = samples.shift()
 
+  const filterOp = (op: string) => currentSample && !(opCodes.indexOf(op) !== -1 && opCodes.indexOf(op) !== currentSample.operation.code)
   while (currentSample !== undefined) {
     const whichMatchingOps = matchingOps(currentSample)
-    .filter(op => {
-      return currentSample && !(opCodes.indexOf(op) !== -1 && opCodes.indexOf(op) !== currentSample.operation.code)
-    })
+    .filter(filterOp)
 
     if (whichMatchingOps.length === 1 && currentSample.operation.code) {
       opCodes[currentSample.operation.code] = whichMatchingOps[0]

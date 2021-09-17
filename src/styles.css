@@ -22,6 +22,22 @@ a {
 a:hover {
   color: #00BFFF;
 }
+
+button {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: "Source Code Pro", monospace;
+  font-size: 14pt;
+  /*input has OS specific font-family*/
+  color: #1E90FF;
+  cursor: pointer;
+}
+button:hover {
+  color: #00BFFF;
+}
+
 h1, h2, h3 {
   font-size: 1em;
   font-weight: normal;
@@ -141,7 +157,7 @@ article h2 a {
   background: #333333;
 }
 
-.control-buttons button:focus {
+button:focus {
   outline: none;
 }
 

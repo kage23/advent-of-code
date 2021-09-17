@@ -21,6 +21,21 @@ const findPath = (passcode: string, lookingForLongest?: boolean): string => {
 
   let longestPathLength = 0
 
+  const nextStepsForEach = (nextStep: ISearchNode) => {
+    let i = 0
+    while (
+      i < queue.length
+      && queue[i]
+      && queue[i + 1]
+      && queue[i].path.length <= nextStep.path.length
+      && queue[i + 1].path.length <= nextStep.path.length
+    ) i++
+    queue = [
+      ...queue.slice(0, i + 1),
+      nextStep,
+      ...queue.slice(i + 1)
+    ]
+  }
   while (queue.length) {
     const current = queue.shift()
     if (current) {
@@ -32,21 +47,7 @@ const findPath = (passcode: string, lookingForLongest?: boolean): string => {
         }
       } else {
         const nextSteps = getNextSteps(current, passcode)
-        nextSteps.forEach(nextStep => {
-          let i = 0
-          while (
-            i < queue.length
-            && queue[i]
-            && queue[i + 1]
-            && queue[i].path.length <= nextStep.path.length
-            && queue[i + 1].path.length <= nextStep.path.length
-          ) i++
-          queue = [
-            ...queue.slice(0, i + 1),
-            nextStep,
-            ...queue.slice(i + 1)
-          ]
-        })
+        nextSteps.forEach(nextStepsForEach)
       }
     }
   }
@@ -75,7 +76,7 @@ const getNextSteps = ({ path, position }: ISearchNode, passcode: string): ISearc
       path: `${path}${nextStep.direction}`,
       position: nextStep.position.join(',')
     }))
-    
+
   return nextSteps
 }
 

@@ -1,4 +1,3 @@
-import md5 from 'md5'
 import React from 'react'
 import {
   defaultRenderDay,
@@ -45,10 +44,10 @@ const BUTTONS: IButton[] = [
       const discs = parseInput(inputKey)
 
       let t = 0
-      ballCheck:
+      const getDiscPositionAtBallTime = (disc: IDisc, i: number) => getPositionAtBallTime(disc, i, t)
       while (true) {
-        const positionsAtBallTime = discs.map((disc, i) => getPositionAtBallTime(disc, i, t))
-        if (positionsAtBallTime.every(pos => pos === 0)) break ballCheck
+        const positionsAtBallTime = discs.map(getDiscPositionAtBallTime)
+        if (positionsAtBallTime.every(pos => pos === 0)) break
         t++
       }
 

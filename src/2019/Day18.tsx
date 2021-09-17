@@ -115,6 +115,26 @@ const getBestPathToAllKeys = (): {
   let shortestPath = ''
   let shortestPathLength = Number.MAX_SAFE_INTEGER
 
+  const robotsForEach = (robot: IRobot, idx: number, nextStates: IStateSearchObject[]) => {
+    if (currentNode === undefined) throw new Error('fuck')
+    // ... get a list of reachable keys from the potential next state collected list
+    const reachableKeysFromCollected = getReachableFromCollected(idx, currentNode.collected, currentNode.positions)
+    reachableKeysFromCollected.split('').forEach(key => {
+      if (currentNode === undefined) throw new Error('fuck')
+      // For each reachable key, examine the path from the robot's current position to the key
+      // That path will provide the distance
+      const path = robot.keyToKeyPaths.get(`${currentNode.positions.charAt(idx)}${key}`)
+      if (path === undefined) throw new Error('fuck')
+      const nextDistance = currentNode.distance + path.path.length
+      if (nextDistance < shortestPathLength) {
+        nextStates.push({
+          collected: `${currentNode.collected}${key}`,
+          distance: nextDistance,
+          positions: `${currentNode.positions.slice(0, idx)}${key}${currentNode.positions.slice(idx + 1)}`
+        })
+      }
+    })
+  }
   while (currentNode) {
     const searchStateKey = `${currentNode.positions}:${currentNode.collected}`
     if (!statesSearched.get(searchStateKey)) {
@@ -133,26 +153,7 @@ const getBestPathToAllKeys = (): {
             // Get potential next states
             const nextStates: IStateSearchObject[] = []
             // For each robot ...
-            robots.forEach((robot, idx) => {
-              if (currentNode === undefined) throw new Error('fuck')
-              // ... get a list of reachable keys from the potential next state collected list
-              const reachableKeysFromCollected = getReachableFromCollected(idx, currentNode.collected, currentNode.positions)
-              reachableKeysFromCollected.split('').forEach(key => {
-                if (currentNode === undefined) throw new Error('fuck')
-                // For each reachable key, examine the path from the robot's current position to the key
-                // That path will provide the distance
-                const path = robot.keyToKeyPaths.get(`${currentNode.positions.charAt(idx)}${key}`)
-                if (path === undefined) throw new Error('fuck')
-                const nextDistance = currentNode.distance + path.path.length
-                if (nextDistance < shortestPathLength) {
-                  nextStates.push({
-                    collected: `${currentNode.collected}${key}`,
-                    distance: nextDistance,
-                    positions: `${currentNode.positions.slice(0, idx)}${key}${currentNode.positions.slice(idx + 1)}`
-                  })
-                }
-              })
-            })
+            robots.forEach((robot, idx) => { robotsForEach(robot, idx, nextStates) })
             // Add each next state to the search queue, in priority order
             nextStates.forEach(nextState => {
               if (!searchQueue.length) {
@@ -247,11 +248,11 @@ const findShortestPath = (start: string, end: string, map: Map<string, string>):
   const visited: Map<string, boolean> = new Map()
 
   let current: TreeNode = searchTree.head
-  mainLoop:
+  const pushAdjacentToCurrent = (adjacent: string) => { current.push(adjacent) }
   while (current.value !== end) {
     if (typeof current.value === 'string') {
       if (map.get(current.value) === undefined) {
-        break mainLoop
+        break
       }
       visited.set(current.value, true)
       // First step
@@ -265,7 +266,7 @@ const findShortestPath = (start: string, end: string, map: Map<string, string>):
           manhattanDistance(parseGridString(end), parseGridString(a))
             - manhattanDistance(parseGridString(end), parseGridString(b))
         ))
-      adjacents.forEach(adjacent => { current.push(adjacent) })
+      adjacents.forEach(pushAdjacentToCurrent)
     }
     const indexOfNextBranch = current.branches.findIndex(
       branch => typeof branch.value === 'string' && !visited.get(branch.value)

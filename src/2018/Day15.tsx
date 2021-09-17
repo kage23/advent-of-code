@@ -58,16 +58,16 @@ const pathKey = (x: number, y: number): string => `${x},${y}`
 
 // This sorts them by reading order
 const sortOpponents = (opponents: number[][]): number[][] =>
-opponents.sort((a: number[], b: number[]): number => {
-  return a[1] === b[1]
-    ? a[0] - b[0]
-    : a[1] - b[1]
-})
+  opponents.sort((a: number[], b: number[]): number => {
+    return a[1] === b[1]
+      ? a[0] - b[0]
+      : a[1] - b[1]
+  })
 
 const sortByReadingOrder = (a: IPosition, b: IPosition): number => (
   a.y === b.y
-  ? a.x < b.x ? -1 : 1
-  : a.y < b.y ? -1 : 1
+    ? a.x < b.x ? -1 : 1
+    : a.y < b.y ? -1 : 1
 )
 
 const getAdjacentSquares = (
@@ -81,25 +81,25 @@ const getAdjacentSquares = (
   ny: number,
   value: string
 }[] => (
-  [
-    { x, y: y - 1 },
-    { x: x - 1, y },
-    { x: x + 1, y },
-    { x, y: y + 1 }
-  ]
-  .filter(cell => (
-    (
-      field[pathKey(cell.x, cell.y)] === '.'
-      || field[pathKey(cell.x, cell.y)] === opponent
-    )
-    && visited[pathKey(cell.x, cell.y)] !== true
-  ))
-  .map(cell => ({
-    nx: cell.x,
-    ny: cell.y,
-    value: field[pathKey(cell.x, cell.y)]
-  }))
-)
+    [
+      { x, y: y - 1 },
+      { x: x - 1, y },
+      { x: x + 1, y },
+      { x, y: y + 1 }
+    ]
+      .filter(cell => (
+        (
+          field[pathKey(cell.x, cell.y)] === '.'
+          || field[pathKey(cell.x, cell.y)] === opponent
+        )
+        && visited[pathKey(cell.x, cell.y)] !== true
+      ))
+      .map(cell => ({
+        nx: cell.x,
+        ny: cell.y,
+        value: field[pathKey(cell.x, cell.y)]
+      }))
+  )
 
 const reset = (input: string[], elfPower: number = 3): IState => {
   const fieldHeight: number = input.length
@@ -115,23 +115,23 @@ const reset = (input: string[], elfPower: number = 3): IState => {
       switch (cell) {
         case 'E':
         case 'G':
-        validCells.push(`${x},${y}`)
-        units.push({
-          type: cell,
-          attackPower: cell === 'E' ? elfPower : 3,
-          hitPoints: 200,
-          id: units.length,
-          x,
-          y
-        })
-        break
+          validCells.push(`${x},${y}`)
+          units.push({
+            type: cell,
+            attackPower: cell === 'E' ? elfPower : 3,
+            hitPoints: 200,
+            id: units.length,
+            x,
+            y
+          })
+          break
 
         case '.':
-        validCells.push(`${x},${y}`)
-        // fallthrough
+          validCells.push(`${x},${y}`)
+          break
 
         default:
-        break
+          break
       }
     }
   }
@@ -157,7 +157,7 @@ const move = (unit: IUnit, field: IField, rounds: number) => {
   while (true) {
     const current: number[] | undefined = queue.shift()
     if (current === undefined) break
-    const [ destX, destY, startX, startY, distance ] = current
+    const [destX, destY, startX, startY, distance] = current
     if (distance >= firstOpponentFoundAt) break
     for (const { nx, ny, value } of getAdjacentSquares(destX, destY, field, visited, opponent)) {
       if (value === opponent) {
@@ -172,7 +172,7 @@ const move = (unit: IUnit, field: IField, rounds: number) => {
   if (opponents.length > 0) {
     if (opponents.length > 1)
       opponents = sortOpponents(opponents)
-    const [ , , toX, toY ] = opponents[0]
+    const [, , toX, toY] = opponents[0]
     if (toX === unit.x && toY === unit.y) return
     field[pathKey(unit.x, unit.y)] = '.'
     field[pathKey(toX, toY)] = unit.type
@@ -184,24 +184,24 @@ const move = (unit: IUnit, field: IField, rounds: number) => {
 const attack = (unit: IUnit, units: IUnit[], field: IField): 'E' | 'G' | null => {
   let opponentType: 'E' | 'G' = unit.type === 'E' ? 'G' : 'E'
   let opponent: IUnit = units
-  .filter(u => (
-    u.type === opponentType
-    // Adjacent check
-    && (
-      (
-        u.x === unit.x
-        && (u.y === unit.y + 1 || u.y === unit.y - 1)
+    .filter(u => (
+      u.type === opponentType
+      // Adjacent check
+      && (
+        (
+          u.x === unit.x
+          && (u.y === unit.y + 1 || u.y === unit.y - 1)
+        )
+        || (
+          u.y === unit.y
+          && (u.x === unit.x + 1 || u.x === unit.x - 1)
+        )
       )
-      || (
-        u.y === unit.y
-        && (u.x === unit.x + 1 || u.x === unit.x - 1)
-      )
-    )
-  ))
-  .sort(sortByReadingOrder)
-  .reduce((prev, current) => (
-    current.hitPoints < prev.hitPoints ? current : prev
-  ), { hitPoints: Number.MAX_SAFE_INTEGER } as IUnit)
+    ))
+    .sort(sortByReadingOrder)
+    .reduce((prev, current) => (
+      current.hitPoints < prev.hitPoints ? current : prev
+    ), { hitPoints: Number.MAX_SAFE_INTEGER } as IUnit)
 
   if (opponent.type) {
     opponent.hitPoints -= unit.attackPower

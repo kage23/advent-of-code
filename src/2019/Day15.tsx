@@ -12,7 +12,6 @@ let program: number[] = []
 let instructionPointer = 0
 let relativeBase = 0
 let outputs: number[] = []
-let stepsTaken = 0
 let timeSinceRepair = 0
 let intcodeComputerResults: IIntcodeComputerResults = {
   finished: false,
@@ -61,16 +60,17 @@ const advanceOxygen = () => {
   timeSinceRepair++
   const squaresToUpdate: string[] = []
 
+  const forEachAdjacent = (adjacent: string) => {
+    if (
+      (grid.get(adjacent) === '.' || grid.get(adjacent) === 'D')
+      && !squaresToUpdate.includes(adjacent)
+    ) {
+      squaresToUpdate.push(adjacent)
+    }
+  }
   for (let [key, value] of grid.entries()) {
     if (value === 'O') {
-      getAdjacentPositionsArray(key).forEach(adjacent => {
-        if (
-          (grid.get(adjacent) === '.' || grid.get(adjacent) === 'D')
-          && !squaresToUpdate.includes(adjacent)
-        ) {
-          squaresToUpdate.push(adjacent)
-        }
-      })
+      getAdjacentPositionsArray(key).forEach(forEachAdjacent)
     }
   }
 
@@ -87,6 +87,17 @@ const fullOfOxygen = (): boolean => {
 const findNearestUnknownSquare = (): string => {
   let searchQueue = [droidPosition]
   const searched = new Map()
+  const forEachAdjacent = (adjacent: string) => {
+    const [ x, y ] = parseGridString(adjacent)
+      if (
+        !searched.get(adjacent)
+        && !searchQueue.includes(adjacent)
+        && !forbidden.includes(adjacent)
+        && (x >= goodXMin && x <= goodXMax && y >= goodYMin && y <= goodYMax)
+      ) {
+        searchQueue.push(adjacent)
+      }
+  }
   while (searchQueue.length) {
     const current = searchQueue.shift()
     if (typeof current !== 'string') throw new Error('fuck')
@@ -97,17 +108,7 @@ const findNearestUnknownSquare = (): string => {
       return current
     }
     searched.set(current, true)
-    getAdjacentPositionsArray(current).forEach(adjacent => {
-      const [ x, y ] = parseGridString(adjacent)
-      if (
-        !searched.get(adjacent)
-        && !searchQueue.includes(adjacent)
-        && !forbidden.includes(adjacent)
-        && (x >= goodXMin && x <= goodXMax && y >= goodYMin && y <= goodYMax)
-      ) {
-        searchQueue.push(adjacent)
-      }
-    })
+    getAdjacentPositionsArray(current).forEach(forEachAdjacent)
   }
   return ''
 }
@@ -117,17 +118,18 @@ const findShortestPath = (start: string, end: string): string[] | undefined => {
   const visited: Map<string, boolean> = new Map()
 
   let current: TreeNode = searchTree.head
-  mainLoop:
+  const filterOutWalls = (pos: string) => grid.get(pos) !== '#'
+  const pushAdjacentToCurrent = (adjacent: string) => { current.push(adjacent) }
   while (current.value !== end) {
     if (typeof current.value === 'string') {
       if (grid.get(current.value) === ' ' || grid.get(current.value) === undefined) {
-        break mainLoop
+        break
       }
       visited.set(current.value, true)
       // First step
       const adjacents = getAdjacentPositionsArray(current.value)
         // No walls
-        .filter(pos => grid.get(pos) !== '#')
+        .filter(filterOutWalls)
         // Nowhere we've already been on this search
         .filter(pos => !visited.get(pos))
         // Sort by distance from the target
@@ -135,7 +137,7 @@ const findShortestPath = (start: string, end: string): string[] | undefined => {
           manhattanDistance(parseGridString(end), parseGridString(a))
             - manhattanDistance(parseGridString(end), parseGridString(b))
         ))
-      adjacents.forEach(adjacent => { current.push(adjacent) })
+      adjacents.forEach(pushAdjacentToCurrent)
     }
     const indexOfNextBranch = current.branches.findIndex(
       branch => typeof branch.value === 'string' && !visited.get(branch.value)
@@ -293,8 +295,6 @@ const takeOneStep = (): boolean => {
   setUnknownAdjacentsToUnknown()
   const adjacentPositions = getAdjacentPositions(droidPosition)
 
-  stepsTaken++
-
   const newPosition = droidResult.response === 0
     ? droidPosition
     : input === 1
@@ -333,9 +333,14 @@ const takeOneStep = (): boolean => {
 
     case 2: // ...new position is the location of the oxygen system.
       oxyPosition = newPosition
+      // Moved one step in the requested direction...
+      const oldPositionCase2 = droidPosition === oxyPosition ? 'X' : '.'
+      grid.set(droidPosition, oldPositionCase2)
+      grid.set(newPosition, 'D')
+      droidPosition = newPosition
+      break
 
     case 1: // Moved one step in the requested direction
-    case 2: // Moved one step in the requested direction...
       const oldPosition = droidPosition === oxyPosition ? 'X' : '.'
       grid.set(droidPosition, oldPosition)
       grid.set(newPosition, 'D')
@@ -362,7 +367,6 @@ const BUTTONS: IButton[] = [
         relativeBase: 0,
         program
       }
-      stepsTaken = 0
 
       grid = new Map()
       droidPosition = '0,0'

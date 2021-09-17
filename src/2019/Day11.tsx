@@ -13,7 +13,7 @@ import INPUT from './Input/Day11'
 // 0 Turn Left
 // 1 Turn Right
 
-const DIRECTIONS = ['^', '>' , 'v' , '<']
+const DIRECTIONS = ['^', '>', 'v', '<']
 
 const getGridNumbers = (xy: string): number[] => xy.split(',').map(i => parseInt(i))
 const getGridString = (x: number, y: number): string => `${x},${y}`
@@ -25,7 +25,7 @@ const paintGrid = (grid: Map<string, number>): (' ' | '█')[][] => {
   let minX = Number.MAX_SAFE_INTEGER
   let minY = Number.MAX_SAFE_INTEGER
   Array.from(grid.keys()).forEach(key => {
-    const [ x, y ] = getGridNumbers(key)
+    const [x, y] = getGridNumbers(key)
     minX = Math.min(x, minX)
     minY = Math.min(y, minY)
   })
@@ -34,7 +34,7 @@ const paintGrid = (grid: Map<string, number>): (' ' | '█')[][] => {
 
   // Render
   Array.from(grid.entries()).forEach(([key, value]) => {
-    const [ x, y ] = getGridNumbers(key)
+    const [x, y] = getGridNumbers(key)
     if (!painting[y + yOffset]) painting[y + yOffset] = []
     painting[y + yOffset][x + xOffset] = value ? ' ' : '█'
   })
@@ -128,6 +128,7 @@ const BUTTONS: IButton[] = [
             break
           case '<':
             robotPosition[0]--
+            break
           default:
             break
         }
@@ -185,6 +186,7 @@ const BUTTONS: IButton[] = [
             break
           case '<':
             robotPosition[0]--
+            break
           default:
             break
         }

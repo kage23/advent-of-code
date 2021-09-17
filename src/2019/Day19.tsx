@@ -13,9 +13,6 @@ let program: number[] = []
 
 let map: string[][] = []
 
-const parseGridString = (str: string): number[] => str.split(',').map(i => parseInt(i))
-const renderGridString = (pos: number[]): string => pos.join(',')
-
 const parseInput = (inputKey: string): number[] =>
   INPUT[inputKey].split(',').map(inputStr => parseInt(inputStr))
 

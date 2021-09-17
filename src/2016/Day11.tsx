@@ -152,7 +152,7 @@ const isValidFacility = (facilityString: string): boolean => {
 
   let isValid = true
   const facility = JSON.parse(facilityString)
-  const elevatorFloor = facility.shift()
+  facility.shift()
 
   // The first item in the facility is the elevator floor number.
   // The other items represent itemPairs - [generator floor, microchip floor]

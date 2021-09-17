@@ -1,5 +1,11 @@
 import DLL from './DLL'
 
+export const binToDec = (x: string): number =>
+  parseInt(x, 2)
+
+export const decToBin = (x: number): string =>
+  x.toString(2)
+
 export const detectPrime = (x: number): boolean => {
   for (let i = 2; i < x; i++) {
     if ((x / i) === Math.floor(x / i)) return false
@@ -477,4 +483,39 @@ export const isPrime = (num: number): boolean => {
     if (num % i === 0) return false
   }
   return num > 1
+}
+
+export const permutator = (inputArr: Array<unknown>): Array<Array<unknown>> => {
+  let result: Array<Array<unknown>> = []
+
+  const permute = (arr: Array<unknown>, m = [] as Array<unknown>) => {
+    if (arr.length === 0) {
+      result.push(m)
+    } else {
+      for (let i = 0; i < arr.length; i++) {
+        let curr = arr.slice()
+        let next = curr.splice(i, 1)
+        permute(curr.slice(), m.concat(next))
+      }
+    }
+  }
+
+  permute(inputArr)
+
+  return result
+}
+
+export function* permutatorGenerator(inputArr: Array<unknown>): Generator<Array<unknown>, void, undefined> {
+  if (inputArr.length === 1) {
+    yield inputArr
+  } else {
+    let [first, ...rest] = inputArr
+    for (let perm of permutatorGenerator(rest)) {
+      for (let i = 0; i < inputArr.length; i++) {
+        let start = perm.slice(0, i)
+        let rest = perm.slice(i)
+        yield [...start, first, ...rest]
+      }
+    }
+  }
 }

@@ -48,6 +48,7 @@ const performScramble = (toScramble: string, instruction: string): string => {
           r = (letterIndex + (letterIndex >= 4 ? 2 : 1)) % toScramble.length
           return performScramble(toScramble, `rotate right ${r} steps`)
       }
+      break
 
     case 'reverse':
       const begin = parseInt(instructionWords[2])
@@ -70,13 +71,14 @@ const performScramble = (toScramble: string, instruction: string): string => {
     default:
       return toScramble
   }
+  return ''
 }
 
 const performUnscramble = (toUnscramble: string, instruction: string): string => {
   const instructionWords = instruction.split(' ')
   switch (instructionWords[0]) {
     case 'rotate':
-      switch(instructionWords[1]) {
+      switch (instructionWords[1]) {
         case 'left':
         case 'right':
           const newDir = instructionWords[1] === 'left' ? 'right' : 'left'
@@ -97,7 +99,8 @@ const performUnscramble = (toUnscramble: string, instruction: string): string =>
           }
           return performScramble(toUnscramble, `rotate left ${r}`)
       }
-      
+      break
+
     case 'move':
       const fromPosX = parseInt(instructionWords[5])
       const toPosY = parseInt(instructionWords[2])
@@ -106,6 +109,7 @@ const performUnscramble = (toUnscramble: string, instruction: string): string =>
     default:
       return performScramble(toUnscramble, instruction)
   }
+  return ''
 }
 
 const BUTTONS: IButton[] = [
