@@ -20,7 +20,7 @@ class App extends Component<{}, {
       answer2: false,
       day: 0,
       inputKey: '',
-      year: 2020
+      year: 2021
     }
   }
 
