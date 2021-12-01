@@ -10,67 +10,57 @@ import INPUT from './Input/Day1'
 const parseInput = (inputKey: string): number[] =>
   INPUT[inputKey].split('\n').map(inputStr => parseInt(inputStr))
 
-const checkExpenseReport = (inputKey: string) => {
-  const inputNumbers = parseInput(inputKey)
-  for (let idx1 = 0; idx1 < inputNumbers.length; idx1++) {
-    for (let idx2 = idx1 + 1; idx2 < inputNumbers.length; idx2++) {
-      if (inputNumbers[idx1] + inputNumbers[idx2] === 2020) {
-        return {
-          answer1: (inputNumbers[idx1] * inputNumbers[idx2]).toString()
-        }
-      }
-    }
-  }
-
-  return {}
-}
-
-const checkExpenseReportHarder = (inputKey: string) => {
-  const inputNumbers = parseInput(inputKey)
-  for (let idx1 = 0; idx1 < inputNumbers.length; idx1++) {
-    for (let idx2 = idx1 + 1; idx2 < inputNumbers.length; idx2++) {
-      for (let idx3 = idx2 + 1; idx3 < inputNumbers.length; idx3++) {
-        if (inputNumbers[idx1] + inputNumbers[idx2] + inputNumbers[idx3] === 2020) {
-          return {
-            answer2: (inputNumbers[idx1] * inputNumbers[idx2] * inputNumbers[idx3]).toString()
-          }
-        }
-      }
-    }
-  }
-
-  return {}
-}
-
 const BUTTONS: IButton[] = [
   {
-    label: 'Check Expense Report',
-    onClick: checkExpenseReport
+    label: 'Check Depth Increases',
+    onClick: (inputKey: string) => {
+      const numbers = parseInput(inputKey)
+      let count = 0
+      numbers.forEach((number, i, array) => {
+        if (i > 0 && number > array[i - 1]) count++
+      })
+      return {
+        answer1: count.toString()
+      }
+    }
   },
   {
-    label: 'Check Expense Report Closer',
-    onClick: checkExpenseReportHarder
+    label: 'Check Depth Increases in 3-Windows',
+    onClick: (inputKey: string) => {
+      const numbers = parseInput(inputKey)
+      let count = 0
+      numbers.forEach((number, i, array) => {
+        if (i > 0) {
+          const currentSum = number + array[i + 1] + array[i + 2]
+          const prevSum = number + array[i - 1] + array[i + 1]
+          if (currentSum > prevSum) count ++
+        }
+      })
+      return {
+        answer2: count.toString()
+      }
+    }
   }
 ]
 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The product of the two numbers is{' '}
-      <code>{answer}</code>.
+      The depth increases{' '}
+      <code>{answer}</code> times.
     </span>
   ),
   answer2Text: (answer) => (
     <span>
-      The product of the three numbers is{' '}
-      <code>{answer}</code>.
+      The summed depth increases{' '}
+      <code>{answer}</code> times.
     </span>
   ),
   buttons: BUTTONS,
   day: 1,
   INPUT,
   renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Report Repair'
+  title: 'Sonar Sweep'
 }
 
 export default config
