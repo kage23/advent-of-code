@@ -7,7 +7,7 @@ import coverImage from './cover.png'
 import Day1__2021__Config from './Day1'
 import Day2__2021__Config from './Day2'
 import Day3__2021__Config from './Day3'
-// import Day4__2021__Config from './Day4'
+import Day4__2021__Config from './Day4'
 // import Day5__2021__Config from './Day5'
 // import Day6__2021__Config from './Day6'
 // import Day7__2021__Config from './Day7'
@@ -42,7 +42,7 @@ const CONFIG_2021: IYearConfig = {
     Day1__2021__Config,
     Day2__2021__Config,
     Day3__2021__Config,
-    // Day4__2021__Config,
+    Day4__2021__Config,
     // Day5__2021__Config,
     // Day6__2021__Config,
     // Day7__2021__Config,
