@@ -89,26 +89,6 @@ const drawDiagLine = (
       map.set(key, prev + 1)
     }
   }
-
-  // const xWillIncrease = x2 > x1
-  // const yWillIncrease = y2 > y1
-  // if (xWillIncrease) {
-  //   let y = y1
-  //   for (let x = x1; x < x2; x++) {
-  //     const key = `${x},${y}`
-  //     const prev = map.get(key) || 0
-  //     map.set(key, prev + 1)
-  //     y += yWillIncrease ? 1 : -1
-  //   }
-  // } else {
-  //   let y = y1
-  //   for (let x = x1; x > x2; x--) {
-  //     const key = `${x},${y}`
-  //     const prev = map.get(key) || 0
-  //     map.set(key, prev + 1)
-  //     y += yWillIncrease ? 1 : -1
-  //   }
-  // }
 }
 
 const countIntersections = (map: Map<string, number>) => {
@@ -171,7 +151,6 @@ const BUTTONS: IButton[] = [
 
       return {
         answer2: intersectionCount.toString()
-        // 19350 is too low
       }
     }
   }
