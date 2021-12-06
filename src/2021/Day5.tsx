@@ -42,7 +42,7 @@ const drawDiagLine = (
   { x1, x2, y1, y2 }: Line
 ) => {
   // Up and to the right
-  if (x1 < x2 && y1 < y1) {
+  if (x1 < x2 && y1 < y2) {
     for (
       let x = x1, y = y1;
       x <= x2 && y <= y2;
