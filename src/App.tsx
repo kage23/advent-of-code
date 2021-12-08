@@ -18,7 +18,7 @@ class App extends Component<{}, {
     this.state = {
       answer1: false,
       answer2: false,
-      day: 7,
+      day: 8,
       inputKey: '',
       year: 2021
     }
