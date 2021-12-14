@@ -62,7 +62,10 @@ const findThePaths = (caves: Map<string, Cave>, part: 1 | 2): {
     revisitSmallsAllowed: part === 2
   }))
 
+  let pathCheckCount = 0
+
   while (possiblePaths.length) {
+    pathCheckCount++
     const currentPossiblePath = possiblePaths.shift()
     if (currentPossiblePath === undefined) throw new Error('something fucked up')
     const cave = caves.get(currentPossiblePath.path[currentPossiblePath.path.length - 1])
@@ -85,7 +88,6 @@ const findThePaths = (caves: Map<string, Cave>, part: 1 | 2): {
           break
 
         case 2:
-          // debugger
           possiblePaths.push(
             ...cave.neighbors.reduce((pathList, neighborId) => {
               let { revisitSmallsAllowed } = currentPossiblePath
@@ -117,6 +119,8 @@ const findThePaths = (caves: Map<string, Cave>, part: 1 | 2): {
     }
   }
 
+  console.log(`We checked ${pathCheckCount} possible paths.`)
+
   return paths
 }
 
@@ -137,7 +141,6 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey: string) => {
       const caves = mapTheCaves(INPUT[inputKey].split('\n'))
       const startTime = new Date()
-      // debugger
       const paths = findThePaths(caves, 2)
       const endTime = new Date()
       console.log(`Total time: ${(endTime.getTime() - startTime.getTime()) / 1000} seconds.`)
