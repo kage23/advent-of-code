@@ -69,7 +69,7 @@ const drawTheFieldInConsole = (field: Field) => {
   let drawing = ''
   for (let y = minY; y <= maxY; y++) {
     for (let x = minX; x <= maxX; x++) {
-      const value = actualField.get(`${x},${y}`) || '.'
+      const value = actualField.get(`${x},${y}`) || ' '
       drawing += value
     }
     drawing += '\n'
