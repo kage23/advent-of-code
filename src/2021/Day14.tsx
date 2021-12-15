@@ -14,6 +14,37 @@ const polymerize = (polymer: string, rulesMap: Map<string, string>): string =>
     return `${poly}${newText}`
   }, '')
 
+const getInitialPairsCount = (polymer: string): Map<string, number> => {
+  const pairs = polymer.split('').reduce((pairList, char, i, polyArr) => {
+    const pair = polyArr.slice(i, i + 2).join('')
+    pairList.push(pair)
+
+    return pairList
+  }, [] as string[])
+  const countMap: Map<string, number> = new Map()
+  pairs.forEach(pair => {
+    const count = countMap.get(pair) || 0
+    countMap.set(pair, count + 1)
+  })
+  return countMap
+}
+
+const polymerizeEfficiently = (pairsCount: Map<string, number>, rulesMap: Map<string, string>) => {
+  const newPairCountMap: Map<string, number> = new Map()
+  pairsCount.forEach((count, pair) => {
+    const insertion = rulesMap.get(pair)
+    if (insertion !== undefined) {
+      const newPairA = `${pair.charAt(0)}${insertion}`
+      const newPairACount = newPairCountMap.get(newPairA) || 0
+      newPairCountMap.set(newPairA, count + newPairACount)
+      const newPairB = `${insertion}${pair.charAt(1)}`
+      const newPairBCount = newPairCountMap.get(newPairB) || 0
+      newPairCountMap.set(newPairB, count + newPairBCount)
+    }
+  })
+  return newPairCountMap
+}
+
 const getPolymerHashsum = (polymer: string): number => {
   const charCount: Map<string, number> = new Map()
   polymer.split('').forEach(char => {
@@ -54,15 +85,23 @@ const BUTTONS: IButton[] = [
         return ruleMap
       }, new Map<string, string>())
 
+      let pairsCount = getInitialPairsCount(polymer)
+
+      debugger
+
       for (let i = 0; i < 40; i++) {
-        console.log(`Polymerized ${i} times. Current length: ${polymer.length}.`)
-        polymer = polymerize(polymer, rulesMap)
+        pairsCount = polymerizeEfficiently(pairsCount, rulesMap)
       }
 
-      console.log(`Total run time: ${new Date().getTime() - startTime} seconds.`)
+      debugger
+
+
+
+
+
 
       return {
-        answer2: getPolymerHashsum(polymer).toString()
+        // answer2: getPolymerHashsum(polymer).toString()
       }
     }
   },
