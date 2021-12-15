@@ -7,12 +7,21 @@ import {
 
 import INPUT from './Input/Day14'
 
-const polymerize = (polymer: string, rulesMap: Map<string, string>): string =>
-  polymer.split('').reduce((poly, char, i, polyArray) => {
-    const pair = polyArray.slice(i, i + 2).join('')
-    const newText = `${char}${rulesMap.get(pair) || ''}`
-    return `${poly}${newText}`
-  }, '')
+// const polymerize = (polymer: string, rulesMap: Map<string, string>): string =>
+//   polymer.split('').reduce((poly, char, i, polyArray) => {
+//     const pair = polyArray.slice(i, i + 2).join('')
+//     const newText = `${char}${rulesMap.get(pair) || ''}`
+//     return `${poly}${newText}`
+//   }, '')
+
+// const getPolymerHashsum = (polymer: string): number => {
+//   const charCount: Map<string, number> = new Map()
+//   polymer.split('').forEach(char => {
+//     const count = charCount.get(char) || 0
+//     charCount.set(char, count + 1)
+//   })
+//   return Math.max(...charCount.values()) - Math.min(...charCount.values())
+// }
 
 const getInitialPairsCount = (polymer: string): Map<string, number> => {
   const pairs = polymer.split('').reduce((pairList, char, i, polyArr) => {
@@ -45,13 +54,19 @@ const polymerizeEfficiently = (pairsCount: Map<string, number>, rulesMap: Map<st
   return newPairCountMap
 }
 
-const getPolymerHashsum = (polymer: string): number => {
-  const charCount: Map<string, number> = new Map()
-  polymer.split('').forEach(char => {
-    const count = charCount.get(char) || 0
-    charCount.set(char, count + 1)
+const analyzePairsCount = (pairsCount: Map<string, number>, polymer: string): string => {
+  const lettersCount: Map<string, number> = new Map()
+
+  pairsCount.forEach((count, pair) => {
+    const letter = pair.charAt(0)
+    const letterCount = lettersCount.get(letter) || 0
+    lettersCount.set(letter, letterCount + count)
   })
-  return Math.max(...charCount.values()) - Math.min(...charCount.values())
+
+  const finalLetterCount = lettersCount.get(polymer.charAt(polymer.length - 1)) || 0
+  lettersCount.set(polymer.charAt(polymer.length - 1), finalLetterCount + 1)
+
+  return (Math.max(...lettersCount.values()) - Math.min(...lettersCount.values())).toString()
 }
 
 const BUTTONS: IButton[] = [
@@ -65,12 +80,16 @@ const BUTTONS: IButton[] = [
         return ruleMap
       }, new Map<string, string>())
 
+      let pairsCount = getInitialPairsCount(polymer)
+
       for (let i = 0; i < 10; i++) {
-        polymer = polymerize(polymer, rulesMap)
+        // polymer = polymerize(polymer, rulesMap)
+        pairsCount = polymerizeEfficiently(pairsCount, rulesMap)
       }
 
       return {
-        answer1: getPolymerHashsum(polymer).toString()
+        // answer1: getPolymerHashsum(polymer).toString()
+        answer1: analyzePairsCount(pairsCount, polymer)
       }
     }
   },
@@ -87,21 +106,14 @@ const BUTTONS: IButton[] = [
 
       let pairsCount = getInitialPairsCount(polymer)
 
-      debugger
-
       for (let i = 0; i < 40; i++) {
         pairsCount = polymerizeEfficiently(pairsCount, rulesMap)
       }
 
-      debugger
-
-
-
-
-
+      console.log(`Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`)
 
       return {
-        // answer2: getPolymerHashsum(polymer).toString()
+        answer2: analyzePairsCount(pairsCount, polymer)
       }
     }
   },
