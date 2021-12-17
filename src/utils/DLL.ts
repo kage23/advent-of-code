@@ -1,14 +1,14 @@
-class DLL {
-  head: IDLLNode | undefined
+class DLL<T = any> {
+  head: IDLLNode<T> | undefined
   length: number
 
-  private map: Map<any, IDLLNode>
+  private map: Map<T, IDLLNode<T>>
 
-  constructor(value?: any) {
-    this.map = new Map()
+  constructor(value?: T) {
+    this.map = new Map<T, IDLLNode<T>>()
 
     if (typeof value !== 'undefined') {
-      const node: IDLLNode = { value }
+      const node: IDLLNode<T> = { value }
       node.next = node
       node.prev = node
       this.head = node
@@ -17,14 +17,13 @@ class DLL {
     } else this.length = 0
   }
 
-  getNode = (value: any): IDLLNode | undefined =>
-    this.map.get(value)
+  getNode = (value: T): IDLLNode<T> | undefined => this.map.get(value)
 
-  insertAfter = (insert: any, after: IDLLNode): IDLLNode => {
-    const node: IDLLNode = {
+  insertAfter = (insert: T, after: IDLLNode<T>): IDLLNode<T> => {
+    const node: IDLLNode<T> = {
       value: insert,
       next: after.next,
-      prev: after
+      prev: after,
     }
     if (after.next) after.next.prev = node
     after.next = node
@@ -33,21 +32,24 @@ class DLL {
     return node
   }
 
-  insertBefore = (insert: any, before: IDLLNode): IDLLNode => {
-    const node: IDLLNode = {
+  insertBefore = (insert: T, before: IDLLNode<T>): IDLLNode<T> => {
+    const node: IDLLNode<T> = {
       value: insert,
       prev: before.prev,
-      next: before
+      next: before,
     }
     if (before.prev) before.prev.next = node
     before.prev = node
     this.length++
     this.map.set(insert, node)
+    if (before === this.head) {
+      this.setNewHead(node)
+    }
     return node
   }
 
-  push = (value: any) => {
-    const node: IDLLNode = { value }
+  push = (value: T) => {
+    const node: IDLLNode<T> = { value }
     if (this.head) {
       node.next = this.head
       node.prev = this.head.prev
@@ -62,7 +64,7 @@ class DLL {
     this.length++
   }
 
-  removeNode = (node: IDLLNode | undefined): IDLLNode | undefined => {
+  removeNode = (node: IDLLNode<T> | undefined): IDLLNode<T> | undefined => {
     if (node === undefined) return undefined
 
     this.length--
@@ -83,15 +85,15 @@ class DLL {
     }
   }
 
-  setNewHead = (node: IDLLNode | undefined) => {
+  setNewHead = (node: IDLLNode<T> | undefined) => {
     this.head = node
   }
 }
 
-export interface IDLLNode {
-  value: any
-  next?: IDLLNode
-  prev?: IDLLNode
+export interface IDLLNode<T = any> {
+  value: T
+  next?: IDLLNode<T>
+  prev?: IDLLNode<T>
 }
 
 export default DLL
