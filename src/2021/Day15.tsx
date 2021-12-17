@@ -21,116 +21,26 @@ const parseInput = (input: string): Map<string, number> => {
   return map
 }
 
-interface PathNode_ {
-  path: string[]
-  risk: number
-}
-const findLowestRiskPath_ = (map: Map<string, number>): number => {
-  const possiblePaths: DLL<PathNode_> = new DLL({
-    path: ['0,0'],
-    risk: 0
-  })
-  const size = map.get('size')
-  if (size === undefined) throw new Error('something fucked up')
-  const destinationPosition = `${size - 1},${size - 1}`
-  const minRiskToPosition: Map<string, number> = new Map()
+const getTheBigMap = (input: string): Map<string, number> => {
+  const smallMap = parseInput(input)
+  const smallMapSize = smallMap.get('size') as number
+  const bigMapSize = smallMapSize * 5
+  const bigMap: Map<string, number> = new Map([['size', bigMapSize]])
 
-  // Start from the starting node
-  let currentNode = possiblePaths.head
-  if (currentNode === undefined) throw new Error('something fucked up')
-  let { path: currentPossiblePath, risk: currentRisk } = currentNode.value
-  let currentPosition = currentPossiblePath[currentPossiblePath.length - 1]
-  let whileLoopRuns = 0
-  let dllStepThroughs = 0
-  let lowestRiskToDestination = Number.MAX_SAFE_INTEGER
-  while (
-    currentNode &&
-    possiblePaths.length
-    // currentPosition !== destinationPosition
-  ) {
-    if (currentPosition === destinationPosition) {
-      lowestRiskToDestination = Math.min(lowestRiskToDestination, currentRisk)
+  for (let y = 0; y < bigMapSize; y++) {
+    for (let x = 0; x < bigMapSize; x++) {
+      const highestRisk = 9
+      const mapXOffset = Math.floor(x / smallMapSize)
+      const mapYOffset = Math.floor(y / smallMapSize)
+      const smallMapX = x % smallMapSize
+      const smallMapY = y % smallMapSize
+      let value = ((smallMap.get(`${smallMapX},${smallMapY}`) as number) + mapXOffset + mapYOffset) % highestRisk
+      if (value === 0) value = highestRisk
+      bigMap.set(`${x},${y}`, value)
     }
-    // Set risk to current position if necessary
-    if (minRiskToPosition.get(currentPosition) === undefined) {
-      minRiskToPosition.set(currentPosition, currentRisk)
-    }
-    // Get neighbors of the current node ...
-    const nextPossiblePaths = getNeighbors_(currentPosition, currentPossiblePath, map)
-      // eslint-disable-next-line
-      .filter(({ key, risk }) => {
-        return (
-          minRiskToPosition.get(key) === undefined &&
-          currentRisk + risk <= lowestRiskToDestination
-        )
-      })
-      // eslint-disable-next-line
-      .map(({ key, risk }): PathNode_ => ({
-        path: [...currentPossiblePath, key],
-        risk: currentRisk + risk
-      }))
-    // ... and enter them into the DLL which is sorted by total path risk
-    // Actually, instead of sorting by total path risk, we should just go to the next cheapest node next
-    // aka prioritizing following the current path (depth instead of breadth I guess)
-    // eslint-disable-next-line
-    nextPossiblePaths.forEach(nextPossiblePath => {
-      let nextNode = currentNode?.next
-      while (
-        nextNode &&
-        nextNode !== possiblePaths.head &&
-        nextNode.value.risk < nextPossiblePath.risk
-      ) {
-        nextNode = nextNode.next
-        dllStepThroughs++
-      }
-      if (nextNode) possiblePaths.insertBefore(nextPossiblePath, nextNode)
-    })
-    // Then select the next possible path and continue
-    currentNode = currentNode.next
-    if (currentNode === undefined) throw new Error('something fucked up')
-    possiblePaths.removeNode(currentNode.prev)
-    currentPossiblePath = currentNode.value.path
-    currentRisk = currentNode.value.risk
-    currentPosition = currentPossiblePath[currentPossiblePath.length - 1]
-    whileLoopRuns++
   }
 
-  console.log(`The main while loop ran ${whileLoopRuns} times.`)
-  console.log(`We took ${dllStepThroughs} individual steps through the DLL.`)
-  return lowestRiskToDestination
-}
-
-const getNeighbors_ = (
-  currentPosition: string,
-  currentPossiblePath: string[],
-  map: Map<string, number>
-): {
-  key: string
-  risk: number
-}[] => {
-  const [x, y] = currentPosition.split(',').map(n => Number(n))
-  return ([
-    [x + 1, y], [x, y + 1], [x - 1, y], [x, y - 1]
-  ])
-    .filter(([nx, ny]) => {
-      const key = `${nx},${ny}`
-      return (
-        map.get(key) !== undefined &&
-        !currentPossiblePath.includes(key)
-      )
-    })
-    .map(([nx, ny]) => {
-      const key = `${nx},${ny}`
-      return {
-        key,
-        risk: map.get(key) as number
-      }
-    })
-}
-
-interface PathNode {
-  key: string
-  riskToNode: number
+  return bigMap
 }
 
 // A* finds a path from start to goal.
@@ -276,7 +186,7 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey: string) => {
       const map = parseInput(INPUT[inputKey])
       const startTime = new Date().getTime()
-      const path = findLowestRiskPath(map)
+      const pathRiskLevel = findLowestRiskPath(map)
       console.log(`Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`)
       // Breadth-first sample data
       // The main while loop ran 36105 times.
@@ -298,10 +208,23 @@ const BUTTONS: IButton[] = [
       // We took 497 individual steps through the DLL.
       // Total run time: 0.003 seconds.
       return {
-        answer1: path.toString()
+        answer1: pathRiskLevel.toString()
       }
     }
   },
+  {
+    label: 'Find Lowest-Risk Path Through the Big Map',
+    onClick: (inputKey: string) => {
+      const map = getTheBigMap(INPUT[inputKey])
+      const startTime = new Date().getTime()
+      const pathRiskLevel = findLowestRiskPath(map)
+      console.log(`Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`)
+
+      return {
+        answer2: pathRiskLevel.toString()
+      }
+    }
+  }
 ]
 
 const config: IDayConfig = {
@@ -312,7 +235,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      There are <code>{answer}</code> valid paths through the cave system under the new rules.
+      The least-risky path through the big map has a risk level of <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
