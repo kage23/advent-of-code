@@ -71,16 +71,20 @@ const getMaxHeight = (y: number): number => {
   return sum
 }
 
-const findTrickShot = (targetArea: TargetArea): number => {
+const findTrickShot = (targetArea: TargetArea): { yVelocity: number, yHeight: number } => {
   const goodShots: { yVelocity: number, yHeight: number }[] = []
 
   for (let y = 0; y <= targetArea.minY * -1; y++) {
     if (doesItFallThrough(targetArea, y)) {
-      goodShots.push({ yVelocity: y, yHeight: getMaxHeight(y)})
+      goodShots.push({ yVelocity: y, yHeight: getMaxHeight(y) })
     }
   }
 
-  return Math.max(...goodShots.map(({ yHeight }) => yHeight))
+  const maxYHeight = Math.max(...goodShots.map(({ yHeight }) => yHeight))
+
+  return goodShots.find(
+    ({ yHeight }) => yHeight === maxYHeight
+  ) as { yVelocity: number, yHeight: number }
 }
 
 const findAllShots = (targetArea: TargetArea): number => {
@@ -89,29 +93,17 @@ const findAllShots = (targetArea: TargetArea): number => {
     yHeight: number
   }[] = []
 
-  let x = 0
-  let y = targetArea.minY
+  const { yVelocity: maxY } = findTrickShot(targetArea)
+  for (let x = 0; x <= targetArea.maxX; x++) {
+    for (let y = targetArea.minY; y <= maxY; y++) {
+      const shotResult = fireShot(targetArea, x, y)
 
-  while (true) {
-    const shotResult = fireShot(targetArea, x, y)
-
-    if (shotResult.hit) {
-      goodShots.push({
-        velocity: [x, y],
-        yHeight: Math.max(...shotResult.path.map(s => JSON.parse(s)).map(([, y]) => y))
-      })
-    }
-
-
-    if (shotResult.overshot) {
-      x = 0
-      y++
-    } else {
-      x++
-    }
-
-    if (y > (targetArea.minY * -1) + 1) {
-      break
+      if (shotResult.hit) {
+        goodShots.push({
+          velocity: [x, y],
+          yHeight: Math.max(...shotResult.path.map(s => JSON.parse(s)).map(([, y]) => y))
+        })
+      }
     }
   }
 
@@ -141,7 +133,7 @@ const BUTTONS: IButton[] = [
       const targetArea = parseInput(INPUT[inputKey])
 
       return {
-        answer1: findTrickShot(targetArea).toString()
+        answer1: findTrickShot(targetArea).yHeight.toString()
       }
     }
   },
