@@ -1,13 +1,4 @@
 const INPUT: { [key: string]: string } = {
-  DEMO_0: `--- scanner 0 ---
-0,2
-4,1
-3,3
-
---- scanner 1 ---
--1,-1
--5,0
--2,1`,
   DEMO_1: `--- scanner 0 ---
 404,-588,-901
 528,-643,409
