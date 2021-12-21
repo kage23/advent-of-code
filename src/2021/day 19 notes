@@ -1,0 +1,36 @@
+x y z
+x z y
+y x z
+y z x
+z x y
+z y x
+
++ + +
++ + -
++ - +
++ - -
+- + +
+- + -
+- - +
+- - -
+
+
+
+6 xyzs * 8 +-s = 48 combinations
+but there are only 24, bc half of these are mirrors
+(maybe doesn't matter if we just go with all 48 anyway, just will take longer)
+
+
+
+the orientation of scanner 0 is the "canonical" orientation
+
+
+
+
+
+algorithm:
+for each scanner:
+  for each beacon:
+    store distances to all other beacons in the scanner set
+
+if one scanner set has exactly 11 distances that match another scanner set, those sets overlap
