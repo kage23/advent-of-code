@@ -137,32 +137,12 @@ const BUTTONS: IButton[] = [
         }) as [Player, Player]
       let currentPlayer: 0 | 1 = 0
 
+      const startTime = new Date().getTime()
+
       const [player0Wins, player1Wins] = recurseGame({ players, currentPlayer }, new Map(), [0, 0])
 
-      // const gamesToDevelop: Game[] = [{
-      //   players: JSON.parse(JSON.stringify(players)) as [Player, Player],
-      //   currentPlayer: 0
-      // }]
-
-      // let player0Wins = 0
-      // let player1Wins = 0
-
-      // while (gamesToDevelop.length) {
-      //   const game = gamesToDevelop.pop() as Game
-      //   const winner = game.players.findIndex(({ score: pScore }) => pScore >= 21)
-      //   if (winner === 0) player0Wins++
-      //   else if (winner === 1) player1Wins++
-      //   else {
-      //     // Develop the game
-      //     const nextGames = developTheGame(game)
-      //     gamesToDevelop.push(...nextGames)
-      //   }
-      //   if ((player0Wins + player1Wins) % 1000000 === 0) {
-      //     console.log(`Total games completed: ${player0Wins + player1Wins}. Games to develop: ${gamesToDevelop.length}.`)
-      //   }
-      // }
-
       console.log([player0Wins, player1Wins])
+      console.log(`Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`)
 
       return {
         answer2: Math.max(player0Wins, player1Wins).toString()
