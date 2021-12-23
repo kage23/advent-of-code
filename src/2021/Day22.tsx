@@ -11,47 +11,91 @@ interface Cuboid {
   x: [number, number],
   // y: [number, number],
   // z: [number, number],
+  id?: string
 }
 
-const doTheyIntersect = (a: Cuboid, b: Cuboid): boolean => {
-  const { x: [axMin, axMax] } = a
-  const { x: [bxMin, bxMax] } = b
-
-  return (
-    bxMin <= axMax && bxMax >= axMin
-  )
+interface Checkpoint {
+  value: number
+  start: boolean
+  id: string[]
 }
+const combineThese = (cuboids: Cuboid[]): Cuboid[] => {
+  const newCuboids: Cuboid[] = []
 
-const subtractTheIntersections = (cuboid: Cuboid, intersections: Cuboid[]): Cuboid[] => {
-  const cuboids: Cuboid[] = []
+  const checkpoints: Checkpoint[] = cuboids
+    .reduce((list, cuboid, id) => {
+      const { x: [xMin, xMax] } = cuboid
 
-  intersections.forEach(intersection => {
-    const identical = JSON.stringify(cuboid) === JSON.stringify(intersection)
-    const toTheLeftOfTheIntersection = (
-      cuboid.x[0] < intersection.x[0]
-    )
-    const toTheRightOfTheIntersection = (
-      cuboid.x[1] > intersection.x[1]
-    )
-
-    if (!identical) {
-      if (toTheLeftOfTheIntersection) {
-        // We should just add the unadded bit to the left
-        cuboids.push({
-          x: [cuboid.x[0], intersection.x[0] - 1]
+      const existingStartPoint = list.find(({ start, value }) => start && value === xMin)
+      if (existingStartPoint) {
+        existingStartPoint.id.push(id.toString())
+      } else {
+        list.push({
+          value: xMin,
+          start: true,
+          id: [id.toString()]
         })
       }
-      if (toTheRightOfTheIntersection) {
-        // We should just add the unadded bit to the right
-        cuboids.push({
-          x: [intersection.x[1] + 1, cuboid.x[1]]
+
+      const existingEndPoint = list.find(({ start, value }) => !start && value === xMax)
+      if (existingEndPoint) {
+        existingEndPoint.id.push(id.toString())
+      } else {
+        list.push({
+          value: xMax,
+          start: false,
+          id: [id.toString()]
         })
       }
+
+      return list
+    }, [] as Checkpoint[])
+    .sort(({ value: a }, { value: b }) => a - b)
+
+  let workingCuboid: Cuboid
+
+  let openIntervals: string[] = []
+  checkpoints.forEach(({ value, start, id }, i) => {
+    if (start) {
+      if (openIntervals.length) {
+        workingCuboid.x[1] = value - 1
+        newCuboids.push(JSON.parse(JSON.stringify(workingCuboid)))
+      }
+      openIntervals.push(...id)
+      workingCuboid = {
+        x: [value, value],
+        id: openIntervals.join(',')
+      }
+    } else {
+      openIntervals = openIntervals.filter(x => !id.includes(x))
+      workingCuboid.x[1] = value
+      newCuboids.push(JSON.parse(JSON.stringify(workingCuboid)))
+      workingCuboid.x[0] = value + 1
     }
   })
 
-  return cuboids
+  return newCuboids
 }
+
+const subtractACuboid = ({ x: [xMin, xMax] }: Cuboid, cuboids: Cuboid[]): Cuboid[] =>
+  cuboids.reduce((list, cuboid) => {
+    // debugger
+
+    // If it's not entirely within the subtraction zone
+    if (cuboid.x[0] < xMin || cuboid.x[1] > xMax) {
+      const newCuboid = JSON.parse(JSON.stringify(cuboid))
+      if (newCuboid.x[0] < xMin) newCuboid.x[1] = Math.min(xMin - 1, newCuboid.x[1])
+      if (newCuboid.x[1] > xMax) newCuboid.x[0] = Math.max(xMax + 1, newCuboid.x[0])
+      list.push(newCuboid)
+    }
+
+    return list
+  }, [] as Cuboid[])
+
+const countCuboids = (cuboids: Cuboid[]): number =>
+  cuboids.reduce((sum, cuboid) => (
+    sum + (cuboid.x[1] - cuboid.x[0] + 1)
+  ), 0)
 
 const BUTTONS: IButton[] = [
   {
@@ -99,21 +143,16 @@ const BUTTONS: IButton[] = [
           // z: [zMin, zMax]
         }
 
-        debugger
+        // debugger
 
-        switch(state) {
+        switch (state) {
           case 'on': {
-            const intersections = onSegments.filter((c) => doTheyIntersect(c, cuboid))
-            if (!intersections.length) {
-              onSegments.push(cuboid)
-            } else {
-              onSegments.push(...subtractTheIntersections(cuboid, intersections))
-            }
+            onSegments = combineThese([cuboid, ...onSegments])
             break
           }
 
           case 'off':
-            debugger
+            onSegments = subtractACuboid(cuboid, onSegments)
             break
 
           default:
@@ -122,7 +161,7 @@ const BUTTONS: IButton[] = [
       })
 
       return {
-        // answer2: onCount.toString()
+        answer2: countCuboids(onSegments).toString()
       }
     }
   }
