@@ -7,6 +7,52 @@ import {
 
 import INPUT from './Input/Day22'
 
+interface Cuboid {
+  x: [number, number],
+  // y: [number, number],
+  // z: [number, number],
+}
+
+const doTheyIntersect = (a: Cuboid, b: Cuboid): boolean => {
+  const { x: [axMin, axMax] } = a
+  const { x: [bxMin, bxMax] } = b
+
+  return (
+    bxMin <= axMax && bxMax >= axMin
+  )
+}
+
+const subtractTheIntersections = (cuboid: Cuboid, intersections: Cuboid[]): Cuboid[] => {
+  const cuboids: Cuboid[] = []
+
+  intersections.forEach(intersection => {
+    const identical = JSON.stringify(cuboid) === JSON.stringify(intersection)
+    const toTheLeftOfTheIntersection = (
+      cuboid.x[0] < intersection.x[0]
+    )
+    const toTheRightOfTheIntersection = (
+      cuboid.x[1] > intersection.x[1]
+    )
+
+    if (!identical) {
+      if (toTheLeftOfTheIntersection) {
+        // We should just add the unadded bit to the left
+        cuboids.push({
+          x: [cuboid.x[0], intersection.x[0] - 1]
+        })
+      }
+      if (toTheRightOfTheIntersection) {
+        // We should just add the unadded bit to the right
+        cuboids.push({
+          x: [intersection.x[1] + 1, cuboid.x[1]]
+        })
+      }
+    }
+  })
+
+  return cuboids
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Initialize the Reboot',
@@ -38,49 +84,42 @@ const BUTTONS: IButton[] = [
   {
     label: 'Actually Do the Reboot',
     onClick: (inputKey: string) => {
-      const core: Map<string, 0 | 1> = new Map()
+      let onSegments: Cuboid[] = []
 
-      const overallXMin = Math.min(...INPUT[inputKey].split('\n').map(instruction => {
-        const xMin = instruction.split('x=')[1]
-        return parseInt(xMin)
-      }))
-      const overallYMin = Math.min(...INPUT[inputKey].split('\n').map(instruction => {
-        const yMin = instruction.split('y=')[1]
-        return parseInt(yMin)
-      }))
-      const overallZMin = Math.min(...INPUT[inputKey].split('\n').map(instruction => {
-        const zMin = instruction.split('z=')[1]
-        return parseInt(zMin)
-      }))
-      const overallXMax = Math.max(...INPUT[inputKey].split('\n').map(instruction => {
-        const xMax = instruction.split(' ')[1].split(',')[0].split('..')[1]
-        return parseInt(xMax)
-      }))
-      const overallYMax = Math.max(...INPUT[inputKey].split('\n').map(instruction => {
-        const yMax = instruction.split(' ')[1].split(',')[1].split('..')[1]
-        return parseInt(yMax)
-      }))
-      const overallZMax = Math.max(...INPUT[inputKey].split('\n').map(instruction => {
-        const zMax = instruction.split(' ')[1].split(',')[2].split('..')[1]
-        return parseInt(zMax)
-      }))
+      INPUT[inputKey].split('\n').forEach(instruction => {
+        const [state, area] = instruction.split(' ')
+        const [xRange, yRange, zRange] = area.split(',').map(a => a.split('=')[1])
+        const [xMin, xMax] = xRange.split('..').map(n => Number(n))
+        // const [yMin, yMax] = yRange.split('..').map(n => Number(n))
+        // const [zMin, zMax] = zRange.split('..').map(n => Number(n))
 
-      // INPUT[inputKey].split('\n').forEach(instruction => {
-      //   const [state, area] = instruction.split(' ')
-      //   const [xRange, yRange, zRange] = area.split(',').map(a => a.split('=')[1])
-      //   const [xMin, xMax] = xRange.split('..').map(n => Number(n))
-      //   const [yMin, yMax] = yRange.split('..').map(n => Number(n))
-      //   const [zMin, zMax] = zRange.split('..').map(n => Number(n))
+        const cuboid: Cuboid = {
+          x: [xMin, xMax],
+          // y: [yMin, yMax],
+          // z: [zMin, zMax]
+        }
 
-      //   for (let x = xMin; x <= xMax; x++) {
-      //     for (let y = yMin; y <= yMax; y++) {
-      //       for (let z = zMin; z <= zMax; z++) {
-      //         const key = `${x},${y},${z}`
-      //         core[key] = state === 'on' ? 1 : 0
-      //       }
-      //     }
-      //   }
-      // })
+        debugger
+
+        switch(state) {
+          case 'on': {
+            const intersections = onSegments.filter((c) => doTheyIntersect(c, cuboid))
+            if (!intersections.length) {
+              onSegments.push(cuboid)
+            } else {
+              onSegments.push(...subtractTheIntersections(cuboid, intersections))
+            }
+            break
+          }
+
+          case 'off':
+            debugger
+            break
+
+          default:
+            throw new Error('fuck')
+        }
+      })
 
       return {
         // answer2: onCount.toString()
