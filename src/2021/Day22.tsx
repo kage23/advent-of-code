@@ -14,10 +14,10 @@ interface Interval extends Pair {
 
 interface Cuboid {
   x: Pair,
-  // y: Pair,
+  y: Pair,
   // z: Pair,
   xIds: number[]
-  // yIds: number[]
+  yIds: number[]
   // zIds: number[]
 }
 
@@ -28,43 +28,34 @@ interface Checkpoint {
 }
 
 const getCheckpoints = (intervals: Cuboid[], whichDimension: 'x' | 'y'): Checkpoint[] => intervals
-  .reduce((list, interval) => {
-    // const dimension = whichDimension === 'x' ? interval.x : interval.y
-    const dimension = interval.x
-    // const id = whichDimension === 'x' ? interval.xIds : interval.yIds
-    const id = interval.xIds
+  .reduce((list, interval, id) => {
+    const dimension = whichDimension === 'x' ? interval.x : interval.y
 
     const [min, max] = dimension
 
-    // debugger
-
     const existingStartPoint = list.find(({ value }) => value === min)
     if (existingStartPoint) {
-      id.forEach(x => {
-        if (!existingStartPoint.start.includes(x)) {
-          existingStartPoint.start.push(x)
-        }
-      })
+      if (!existingStartPoint.start.includes(id)) {
+        existingStartPoint.start.push(id)
+      }
     } else {
       list.push({
         value: min,
-        start: [...id],
+        start: [id],
         end: []
       })
     }
 
     const existingEndPoint = list.find(({ value }) => value === max)
     if (existingEndPoint) {
-      id.forEach(x => {
-        if (!existingEndPoint.end.includes(x)) {
-          existingEndPoint.end.push(x)
-        }
-      })
+      if (!existingEndPoint.end.includes(id)) {
+        existingEndPoint.end.push(id)
+      }
     } else {
       list.push({
         value: max,
         start: [],
-        end: [...id]
+        end: [id]
       })
     }
 
@@ -75,7 +66,6 @@ const getCheckpoints = (intervals: Cuboid[], whichDimension: 'x' | 'y'): Checkpo
   })
 
 const getIntervals = (checkpoints: Checkpoint[]): Interval[] => {
-  // debugger
   const intervals: Interval[] = []
   let workingInterval: Interval = [0, 0]
   let openIntervalIds: number[] = []
@@ -121,71 +111,46 @@ const getIntervals = (checkpoints: Checkpoint[]): Interval[] => {
   }, [] as Interval[])
 }
 
-const combineThese = (cuboids: Cuboid[], instructionId: number): Cuboid[] => {
+const combineThese = (cuboids: Cuboid[]): Cuboid[] => {
   const newCuboids: Cuboid[] = []
 
   const xIntervals = getIntervals(getCheckpoints(cuboids, 'x'))
-  // const yIntervals = getIntervals(getCheckpoints(cuboids, 'y'))
+  const yIntervals = getIntervals(getCheckpoints(cuboids, 'y'))
 
   xIntervals.forEach(xInterval => {
-    // yIntervals.forEach(yInterval => {
+    yIntervals.forEach(yInterval => {
       const [xMin, xMax] = xInterval
       const { id: xId } = xInterval
 
-      // const [yMin, yMax] = yInterval
-      // const { id: yId } = yInterval
+      const [yMin, yMax] = yInterval
+      const { id: yId } = yInterval
 
-      // if (xId?.some(xId => yId?.includes(xId))) {
+      if (xId?.some(xId => yId?.includes(xId))) {
         newCuboids.push({
           x: [xMin, xMax],
           xIds: [...(xId as number[])],
-          // y: [yMin, yMax],
-          // yIds: [...(yId as number[])]
+          y: [yMin, yMax],
+          yIds: [...(yId as number[])]
         })
-      // }
-    // })
+      }
+    })
   })
 
   return newCuboids
 }
 
-const subtractACuboid = (cuboid: Cuboid, cuboids: Cuboid[], instructionId: number): Cuboid[] => {
-  // debugger
-  const intersections = combineThese([cuboid, ...cuboids], instructionId)
-  // debugger
-  return intersections
-    .filter(({ xIds }) => !xIds.includes(instructionId))
-}
-// cuboids.reduce((list, cuboid) => {
-//   debugger
-
-//   // If it's not entirely within the subtraction zone
-//   if (
-//     (cuboid.x[0] < xMin || cuboid.x[1] > xMax) &&
-//     (cuboid.y[0] < yMin || cuboid.y[1] > yMax)
-//   ) {
-//     const intersections = combineThese
-
-
-
-
-
-//     // const newCuboid = JSON.parse(JSON.stringify(cuboid))
-//     // if (newCuboid.x[0] < xMin) newCuboid.x[1] = Math.min(xMin - 1, newCuboid.x[1])
-//     // if (newCuboid.x[1] > xMax) newCuboid.x[0] = Math.max(xMax + 1, newCuboid.x[0])
-//     // list.push(newCuboid)
-//   }
-
-//   return list
-// }, [] as Cuboid[])
+const subtractACuboid = (cuboid: Cuboid, cuboids: Cuboid[]): Cuboid[] =>
+  combineThese([cuboid, ...cuboids]).filter(({ xIds, yIds }) => (
+    !xIds.includes(0) || !yIds.includes(0)
+  ))
 
 const countCuboids = (cuboids: Cuboid[]): number =>
   cuboids.reduce((sum, cuboid) => {
     const xValue = cuboid.x[1] - cuboid.x[0] + 1
-    // const yValue = cuboid.y[1] - cuboid.y[0] + 1
+    const yValue = cuboid.y[1] - cuboid.y[0] + 1
 
     return (
-      sum + (xValue /* * yValue */)
+      sum + (xValue * yValue)
     )
   }, 0)
 
@@ -224,30 +189,28 @@ const BUTTONS: IButton[] = [
 
       INPUT[inputKey].split('\n').forEach((instruction, i) => {
         const [state, area] = instruction.split(' ')
-        const [xRange /* , yRange, zRange */ ] = area.split(',').map(a => a.split('=')[1])
+        const [xRange, yRange /* , zRange */ ] = area.split(',').map(a => a.split('=')[1])
         const [xMin, xMax] = xRange.split('..').map(n => Number(n))
-        // const [yMin, yMax] = yRange.split('..').map(n => Number(n))
+        const [yMin, yMax] = yRange.split('..').map(n => Number(n))
         // const [zMin, zMax] = zRange.split('..').map(n => Number(n))
 
         const cuboid: Cuboid = {
           x: [xMin, xMax],
           xIds: [i],
-          // y: [yMin, yMax],
-          // yIds: [i],
+          y: [yMin, yMax],
+          yIds: [i],
           // z: [zMin, zMax]
           // zIds: [i],
         }
 
-        // debugger
-
         switch (state) {
           case 'on': {
-            onSegments = combineThese([cuboid, ...onSegments], i)
+            onSegments = combineThese([cuboid, ...onSegments])
             break
           }
 
           case 'off':
-            onSegments = subtractACuboid(cuboid, onSegments, i)
+            onSegments = subtractACuboid(cuboid, onSegments)
             break
 
           default:
