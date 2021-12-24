@@ -15,8 +15,8 @@ interface Interval extends Pair {
 interface Cuboid {
   x: Pair,
   xIds: number[]
-  // y: Pair,
-  // yIds: number[]
+  y: Pair,
+  yIds: number[]
   // z: Pair,
   // zIds: number[]
 }
@@ -32,7 +32,7 @@ const getCheckpoints = (intervals: Cuboid[], whichDimension: 'x' | 'y' | 'z'): C
     // const dimension = whichDimension === 'x' ?
     //   interval.x : whichDimension === 'y' ?
     //   interval.y : interval.z
-    const dimension = interval.x
+    const dimension = whichDimension === 'x' ? interval.x : interval.y
 
     const [min, max] = dimension
 
@@ -118,33 +118,33 @@ const combineThese = (cuboids: Cuboid[]): Cuboid[] => {
   const newCuboids: Cuboid[] = []
 
   const xIntervals = getIntervals(getCheckpoints(cuboids, 'x'))
-  // const yIntervals = getIntervals(getCheckpoints(cuboids, 'y'))
+  const yIntervals = getIntervals(getCheckpoints(cuboids, 'y'))
   // const zIntervals = getIntervals(getCheckpoints(cuboids, 'z'))
 
   xIntervals.forEach(xInterval => {
-    // yIntervals.forEach(yInterval => {
+    yIntervals.forEach(yInterval => {
     //   zIntervals.forEach(zInterval => {
         const [xMin, xMax] = xInterval
         const { id: xId } = xInterval
 
-        // const [yMin, yMax] = yInterval
-        // const { id: yId } = yInterval
+        const [yMin, yMax] = yInterval
+        const { id: yId } = yInterval
 
         // const [zMin, zMax] = zInterval
         // const { id: zId } = zInterval
 
-        // if (xId?.some(xId => yId?.includes(xId) && zId?.includes(xId))) {
+        if (xId?.some(xId => yId?.includes(xId) /* && zId?.includes(xId) */ )) {
           newCuboids.push({
             x: [xMin, xMax],
             xIds: [...(xId as number[])],
-            // y: [yMin, yMax],
-            // yIds: [...(yId as number[])],
+            y: [yMin, yMax],
+            yIds: [...(yId as number[])],
             // z: [zMin, zMax],
             // zIds: [...(zId as number[])]
           })
-        // }
+        }
     //   })
-    // })
+    })
   })
 
   return newCuboids
@@ -156,11 +156,17 @@ const mergeCuboids = (cuboids: Cuboid[]): Cuboid[] => cuboids
       list.push(cuboid)
     } else {
       // If these two cuboids match up, we should combine them
-      // For 1d, that's easy
+      // For 1d, that's easy, but how do we deal with two and three?
+      // I think for 2d, one dimension has to match, then the other has to touch
       const prevCuboid = list[list.length - 1]
-      if (cuboid.x[0] === prevCuboid.x[1] + 1) {
-        // The x's touch
-        prevCuboid.x[1] = cuboid.x[1]
+      if (cuboid.x[0] === prevCuboid.x[0] && cuboid.x[1] === prevCuboid.x[1]) {
+        // The x's match, do the y's touch?
+        if (cuboid.y[0] === prevCuboid.y[1] + 1) {
+          // The y's touch, merge them
+          prevCuboid.y[1] = cuboid.y[1]
+        } else {
+          list.push(cuboid)
+        }
       } else {
         list.push(cuboid)
       }
@@ -170,18 +176,18 @@ const mergeCuboids = (cuboids: Cuboid[]): Cuboid[] => cuboids
   }, [] as Cuboid[])
 
 const subtractACuboid = (cuboid: Cuboid, cuboids: Cuboid[]): Cuboid[] =>
-  combineThese([cuboid, ...cuboids]).filter(({ xIds /* , yIds, zIds */ }) => (
-    !xIds.includes(0) // || !yIds.includes(0) || !zIds.includes(0)
+  combineThese([cuboid, ...cuboids]).filter(({ xIds, yIds /* , zIds */ }) => (
+    !xIds.includes(0) || !yIds.includes(0) // || !zIds.includes(0)
   ))
 
 const countCuboids = (cuboids: Cuboid[]): number =>
   cuboids.reduce((sum, cuboid) => {
     const xValue = cuboid.x[1] - cuboid.x[0] + 1
-    // const yValue = cuboid.y[1] - cuboid.y[0] + 1
+    const yValue = cuboid.y[1] - cuboid.y[0] + 1
     // const zValue = cuboid.z[1] - cuboid.z[0] + 1
 
     return (
-      sum + (xValue /* * yValue * zValue */ )
+      sum + (xValue * yValue /* * zValue */ )
     )
   }, 0)
 
@@ -220,21 +226,29 @@ const BUTTONS: IButton[] = [
 
       const startTime = new Date().getTime()
 
-      INPUT[inputKey].split('\n').forEach((instruction, i) => {
-        console.log(`Processing: ${instruction}. Total cuboids before processing: ${
+      const instructions = INPUT[inputKey].split('\n')
+
+      let prevTime = new Date().getTime()
+
+      instructions.forEach((instruction, i) => {
+        const currentTime = new Date().getTime()
+        console.log(`Processing ${i + 1} of ${instructions.length}: ${instruction}. Total cuboids before processing: ${
           onSegments.length
-        }. Total runtime so far: ${(new Date().getTime() - startTime) / 1000} seconds.`)
+        }. Total runtime so far: ${(currentTime - startTime) / 1000} seconds. Time since prev instruction: ${
+          (currentTime - prevTime) / 1000
+        } seconds.`)
+        prevTime = currentTime
         const [state, area] = instruction.split(' ')
-        const [xRange /* , yRange, zRange */ ] = area.split(',').map(a => a.split('=')[1])
+        const [xRange, yRange /* , zRange */ ] = area.split(',').map(a => a.split('=')[1])
         const [xMin, xMax] = xRange.split('..').map(n => Number(n))
-        // const [yMin, yMax] = yRange.split('..').map(n => Number(n))
+        const [yMin, yMax] = yRange.split('..').map(n => Number(n))
         // const [zMin, zMax] = zRange.split('..').map(n => Number(n))
 
         const cuboid: Cuboid = {
           x: [xMin, xMax],
           xIds: [i],
-          // y: [yMin, yMax],
-          // yIds: [i],
+          y: [yMin, yMax],
+          yIds: [i],
           // z: [zMin, zMax],
           // zIds: [i],
         }
