@@ -82,7 +82,7 @@ const BUTTONS: IButton[] = [
       console.log(`Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`)
 
       return {
-        answer1: sumPathDistance(path, map).toString()
+        answer1: path.distance.toString()
       }
     }
   },
@@ -105,7 +105,7 @@ const BUTTONS: IButton[] = [
       console.log(`Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`)
 
       return {
-        answer2: sumPathDistance(path, map).toString()
+        answer2: path.distance.toString()
       }
     }
   }

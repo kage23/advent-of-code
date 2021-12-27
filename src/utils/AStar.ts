@@ -1,14 +1,23 @@
 import DLL from './DLL'
 import { MapWithDefault } from './Various'
 
-const reconstructPath = <T>(cameFrom: Map<T, T>, end: T): T[] => {
+interface PathWithDistance<T> extends Array<T> {
+  distance: number
+}
+const reconstructPath = <T>(
+  cameFrom: Map<T, T>,
+  end: T,
+  d: (from: T, to: T) => number
+): PathWithDistance<T> => {
   let current: T | undefined = end
-  const totalPath: T[] = [current]
+  const totalPath = [current] as PathWithDistance<T>
   while (current && cameFrom.has(current)) {
     current = cameFrom.get(current)
     totalPath.push(current as T)
   }
-  return totalPath.reverse()
+  totalPath.reverse()
+  totalPath.distance = sumPathDistance(totalPath, d)
+  return totalPath
 }
 
 // A* finds a path from start to goal.
@@ -38,7 +47,7 @@ const AStar = <T>(
     if (current === undefined) throw new Error('something fucked up')
 
     if (current.value === goal) {
-      return reconstructPath(cameFrom, current.value)
+      return reconstructPath(cameFrom, current.value, d)
     }
 
     openSet.removeNode(current)
@@ -98,10 +107,13 @@ const openSetAdd = <T>(
   }
 }
 
-export const sumPathDistance = <T>(path: T[], map: Map<T, number>): number =>
+export const sumPathDistance = <T>(
+  path: T[],
+  d: (from: T, to: T) => number
+): number =>
   path.reduce(
     (sum, currentNode, i) =>
-      i === 0 ? sum : sum + (map.get(currentNode) as number),
+      i === 0 ? sum : sum + d(path[i - 1], currentNode),
     0
   )
 
