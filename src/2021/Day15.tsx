@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import AStar, { sumPathDistance } from '../utils/AStar'
+import AStar from '../utils/AStar'
 import { manhattanDistance } from '../utils/Various'
 
 import INPUT from './Input/Day15'
@@ -67,22 +67,23 @@ const BUTTONS: IButton[] = [
     label: 'Find Lowest-Risk Path',
     onClick: (inputKey: string) => {
       const map = parseInput(INPUT[inputKey])
-      const size = map.get('size') as number
-      const startTime = new Date().getTime()
-
+      const startKey = '0,0'
+      const size = map.get('size')
+      if (size === undefined) throw new Error('something fucked up')
       const endKey = `${size - 1},${size - 1}`
-      const path = AStar<string>(
-        '0,0',
+      const dFn = (n: string) => map.get(n) as number
+      const getNeighborsFn = (n: string) => getNeighbors(n, map)
+      const startTime = new Date().getTime()
+      const pathRiskLevel = AStar(
+        startKey,
         endKey,
-        (n: string) => h(n, endKey),
-        (current: string) => getNeighbors(current, map),
-        (from: string, to: string) => map.get(to) as number
+        dFn,
+        h,
+        getNeighborsFn
       )
-
       console.log(`Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`)
-
       return {
-        answer1: sumPathDistance(path, map).toString()
+        answer1: path.distance.toString()
       }
     }
   },
@@ -90,22 +91,26 @@ const BUTTONS: IButton[] = [
     label: 'Find Lowest-Risk Path Through the Big Map',
     onClick: (inputKey: string) => {
       const map = getTheBigMap(INPUT[inputKey])
-      const size = map.get('size') as number
-      const startTime = new Date().getTime()
+      const startKey = '0,0'
+      const size = map.get('size')
+      if (size === undefined) throw new Error('something fucked up')
       const endKey = `${size - 1},${size - 1}`
 
-      const path = AStar<string>(
-        '0,0',
-        endKey,
-        (n: string) => h(n, endKey),
-        (current: string) => getNeighbors(current, map),
-        (from: string, to: string) => map.get(to) as number
-      )
+      const dFn = (n: string) => map.get(n) as number
+      const getNeighborsFn = (n: string) => getNeighbors(n, map)
 
+      const startTime = new Date().getTime()
+      const pathRiskLevel = AStar(
+        startKey,
+        endKey,
+        dFn,
+        h,
+        getNeighborsFn
+      )
       console.log(`Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`)
 
       return {
-        answer2: sumPathDistance(path, map).toString()
+        answer2: path.distance.toString()
       }
     }
   }
