@@ -14,29 +14,35 @@ const goal = `#############
   #A#B#C#D#
   #########`
 
+const goalPartTwo = `#############
+#...........#
+###A#B#C#D###
+  #A#B#C#D#
+  #A#B#C#D#
+  #A#B#C#D#
+  #########`
+
 /**
  * Coords: row,col
  *
  * Hallways: 1,1 through 1,11
- * Rooms: A: 2,3-3,3
- *        B: 2,5-3,5
- *        C: 2,7-3,7
- *        D: 2,9-3,9
+ * Rooms: A: 2,3-3,3 OR 2,3-5,3
+ *        B: 2,5-3,5 OR 2,5-5,5
+ *        C: 2,7-3,7 OR 2,7-5,7
+ *        D: 2,9-3,9 OR 2,9-5,9
  */
 
-// const hallwaySpaces: [number, number][] = [
-//   [1, 1], [1, 2], [1, 4], [1, 6], [1, 8], [1, 10], [1, 11]
-// ]
-// const roomA: [number, number][] = [[2, 3], [3, 3]]
-// const roomB: [number, number][] = [[2, 5], [3, 5]]
-// const roomC: [number, number][] = [[2, 7], [3, 7]]
-// const roomD: [number, number][] = [[2, 9], [3, 9]]
+const parseMapForPartTwo = (inputKey: string): string => {
+  const rows = INPUT[inputKey].split('\n')
+  rows.splice(3, 0, '  #D#C#B#A#', '  #D#B#A#C#')
+  return rows.join('\n')
+}
 
 interface AmphipodPositions {
-  A: [[number, number], [number, number]],
-  B: [[number, number], [number, number]],
-  C: [[number, number], [number, number]],
-  D: [[number, number], [number, number]]
+  A: [number, number][],
+  B: [number, number][],
+  C: [number, number][],
+  D: [number, number][]
 }
 const getAmphipodPositions = (state: string): AmphipodPositions => {
   const rows = state.split('\n')
@@ -53,15 +59,10 @@ const getAmphipodPositions = (state: string): AmphipodPositions => {
       if (char === 'D') D.push([rowIndex, i])
     }
   })
-  return {
-    A: A as [[number, number], [number, number]],
-    B: B as [[number, number], [number, number]],
-    C: C as [[number, number], [number, number]],
-    D: D as [[number, number], [number, number]],
-  }
+  return { A, B, C, D }
 }
 
-const getStateFromPositions = ({ A, B, C, D }: AmphipodPositions): string => {
+const getStateFromPositions = ({ A, B, C, D }: AmphipodPositions, part: 1 | 2): string => {
   const rows = [
     '#############',
     '#...........#',
@@ -69,6 +70,9 @@ const getStateFromPositions = ({ A, B, C, D }: AmphipodPositions): string => {
     '  #.#.#.#.#',
     '  #########'
   ]
+  if (part === 2) {
+    rows.splice(3, 0, '  #.#.#.#.#', '  #.#.#.#.#')
+  }
   A.forEach(([rowIdx, colIdx]) => {
     const row = rows[rowIdx].split('')
     row.splice(colIdx, 1, 'A')
@@ -111,7 +115,7 @@ const getMinimumDistance = (row: number, col: number, type: 'A' | 'B' | 'C' | 'D
   const colDistance = Math.abs(col - roomColIndex)
   // Row distance is just the row they're on. If they're in the hallway (row 1), we
   // assume they're moving to row 2 (1 space). If they're in a room, we know it's not
-  // their own, so they need to move to the hallway (1 or 2 spaces), then we assume row 2
+  // their own, so they need to move to the hallway (1 or 2 or 3 or 4 spaces), then we assume row 2
   // (1 more space).
   return colDistance + row
 }
@@ -162,15 +166,8 @@ const d = (to: string, from: string): number => {
   }
   // Moving from a room to a room
   else {
-    if ((moveFrom[0] === 2 && moveTo[0] === 3) || (moveFrom[0] === 3 && moveTo[0] === 2)) {
-      rowDistance = 3
-    }
-    if (moveFrom[0] === 2 && moveTo[0] === 2) {
-      rowDistance = 2
-    }
-    if (moveFrom[0] === 3 && moveTo[0] === 3) {
-      rowDistance = 4
-    }
+    // This should work
+    rowDistance = moveFrom[0] + moveTo[0] - 2
   }
   return (rowDistance + colDistance) * multiplier
 }
@@ -180,7 +177,8 @@ const getCharFromState = (row: number, col: number, state: string): string => {
   return rows[row].charAt(col)
 }
 
-const getNeighborsForPosition = ([row, col]: [number, number], state: string): string[] => {
+const getNeighborsForPosition = ([row, col]: [number, number], state: string, part: 1 | 2): string[] => {
+  const rows = state.split('\n')
   const type = getCharFromState(row, col, state) as 'A' | 'B' | 'C' | 'D'
   const roomColIndex = type === 'A' ? 3 : type === 'B' ? 5 : type === 'C' ? 7 : 9
   const nextStates: string[] = []
@@ -188,20 +186,27 @@ const getNeighborsForPosition = ([row, col]: [number, number], state: string): s
   if (row === 1) {
     // If it's in the hallway, see if its room is empty or has its type in it and move there
     // If its room is empty
+    const rowsOfRoomSpacesToCheck = rows.length === 5 ? [3] : [5, 4, 3]
     if (
       (
-        getCharFromState(3, roomColIndex, state) === '.' ||
-        getCharFromState(3, roomColIndex, state) === type
+        rowsOfRoomSpacesToCheck.every(rowIndex => (
+          getCharFromState(rowIndex, roomColIndex, state) === '.' ||
+          getCharFromState(rowIndex, roomColIndex, state) === type
+        ))
       ) &&
       getCharFromState(2, roomColIndex, state) === '.'
     ) {
       // We can move into the room!
       // If the back row is empty, we should move there (if there's a free path)
+      // If there's a free hallway path, we shoud move to the farthest back room we can reach
       const hallwaySpacesToMoveThrough = col < roomColIndex ?
         [...Array(roomColIndex + 1).keys()].slice(col + 1) :
         [...Array(col).keys()].slice(roomColIndex)
       if (hallwaySpacesToMoveThrough.every(hCol => getCharFromState(1, hCol, state) === '.')) {
-        const nextRow = getCharFromState(3, roomColIndex, state) === '.' ? 3 : 2
+        rowsOfRoomSpacesToCheck.push(2)
+        const nextRow = rowsOfRoomSpacesToCheck.find(rowIndex => (
+          getCharFromState(rowIndex, roomColIndex, state) === '.'
+        ))
         const nextStatePositions = getAmphipodPositions(state)
         nextStatePositions[type] = nextStatePositions[type].map(([nRow, nCol]) => {
           if (row === nRow && col === nCol) {
@@ -209,10 +214,11 @@ const getNeighborsForPosition = ([row, col]: [number, number], state: string): s
           }
           return [nRow, nCol]
         }) as [[number, number], [number, number]]
-        nextStates.push(getStateFromPositions(nextStatePositions))
+        nextStates.push(getStateFromPositions(nextStatePositions, part))
       }
     }
   }
+  ///////////////////// FROM HERE ON DOWN, WE HAVE NOT YET ADAPTED FOR PART TWO!!!! START HERE!!!!
   // Go to the hallway
   if (
     // If it's in the exit row of a room that's not its room, it can go to the hallway
@@ -234,7 +240,7 @@ const getNeighborsForPosition = ([row, col]: [number, number], state: string): s
           }
           return [nRow, nCol]
         }) as [[number, number], [number, number]]
-        nextStates.push(getStateFromPositions(nextStatePositions))
+        nextStates.push(getStateFromPositions(nextStatePositions, part))
       }
       if (hCol === roomColIndex) {
         // Might as well see if we can go in
@@ -270,7 +276,7 @@ const getNeighborsForPosition = ([row, col]: [number, number], state: string): s
           }
           return [nRow, nCol]
         }) as [[number, number], [number, number]]
-        nextStates.push(getStateFromPositions(nextStatePositions))
+        nextStates.push(getStateFromPositions(nextStatePositions, part))
       }
       if (hCol === roomColIndex) {
         // Might as well see if we can go in
@@ -282,7 +288,7 @@ const getNeighborsForPosition = ([row, col]: [number, number], state: string): s
             }
             return [nRow, nCol]
           }) as [[number, number], [number, number]]
-          nextStates.push(getStateFromPositions(nextStatePositions))
+          nextStates.push(getStateFromPositions(nextStatePositions, part))
           if (getCharFromState(3, hCol, state) === '.') {
             const nextStatePositions_ = getAmphipodPositions(state)
             nextStatePositions_[type] = nextStatePositions_[type].map(([nRow, nCol]) => {
@@ -291,7 +297,7 @@ const getNeighborsForPosition = ([row, col]: [number, number], state: string): s
               }
               return [nRow, nCol]
             }) as [[number, number], [number, number]]
-            nextStates.push(getStateFromPositions(nextStatePositions_))
+            nextStates.push(getStateFromPositions(nextStatePositions_, part))
           }
         }
       }
@@ -306,33 +312,35 @@ const getNeighborsForPosition = ([row, col]: [number, number], state: string): s
 }
 
 // getNeighbors gives all possible adjacent states to this one
-const getNeighbors = (state: string): string[] => {
+const getNeighbors = (state: string, part: 1 | 2): string[] => {
   const nextStates: string[] = []
   const { A, B, C, D } = getAmphipodPositions(state)
   A.forEach(([row, col]) => {
-    nextStates.push(...getNeighborsForPosition([row, col], state))
+    nextStates.push(...getNeighborsForPosition([row, col], state, part))
   })
   B.forEach(([row, col]) => {
-    nextStates.push(...getNeighborsForPosition([row, col], state))
+    nextStates.push(...getNeighborsForPosition([row, col], state, part))
   })
   C.forEach(([row, col]) => {
-    nextStates.push(...getNeighborsForPosition([row, col], state))
+    nextStates.push(...getNeighborsForPosition([row, col], state, part))
   })
   D.forEach(([row, col]) => {
-    nextStates.push(...getNeighborsForPosition([row, col], state))
+    nextStates.push(...getNeighborsForPosition([row, col], state, part))
   })
   return nextStates
 }
 
 const BUTTONS: IButton[] = [
   {
-    label: 'Get Next States for State',
+    label: 'Just Testing Things',
     onClick: (inputKey: string) => {
-      const start = INPUT[inputKey]
+      const start = parseMapForPartTwo(inputKey)
 
-      const neighbors = getNeighbors(start)
+      const positions = getAmphipodPositions(start)
 
-      neighbors.forEach(neighbor => console.log(neighbor))
+      const parsedState = getStateFromPositions(positions, 2)
+
+      debugger
 
       return {}
     }
@@ -346,12 +354,14 @@ const BUTTONS: IButton[] = [
 
       const startTime = new Date().getTime()
 
+      const getNeighborsFn = (state: string) => getNeighbors(state, 1)
+
       const pathLength = AStar(
         start,
         goal,
         d,
         h,
-        getNeighbors
+        getNeighborsFn
       )
 
       console.log(`Total runtime: ${(new Date().getTime() - startTime) / 1000} seconds.`)
@@ -366,6 +376,16 @@ const BUTTONS: IButton[] = [
       }
     }
   },
+  {
+    label: 'Organize More Amphipods',
+    onClick: (inputKey: string) => {
+      const start = parseMapForPartTwo(inputKey)
+
+      debugger
+
+      return {}
+    }
+  }
 ]
 
 const config: IDayConfig = {
@@ -376,7 +396,7 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      After the reboot, <code>{answer}</code> cubes are ON.
+      It will take <code>{answer}</code> energy to organize all of the amphipods.
     </span>
   ),
   buttons: BUTTONS,
