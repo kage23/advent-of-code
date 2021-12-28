@@ -177,6 +177,33 @@ const getCharFromState = (row: number, col: number, state: string): string => {
   return rows[row].charAt(col)
 }
 
+const shouldGoToHallway = (row: number, col: number, state: string, part: 1 | 2): boolean => {
+  /**
+   * It can go to the hallway if:
+   *  it's in a room that's not its room, and every space between it and the hallway is clear
+   *  it's in its room, and some space behind it has something of not its type
+   */
+  const type = getCharFromState(row, col, state) as 'A' | 'B' | 'C' | 'D'
+  const roomColIndex = type === 'A' ? 3 : type === 'B' ? 5 : type === 'C' ? 7 : 9
+  const backRow = part === 1 ? 3 : 5
+  // If it's in its room, and some space behind it has something of not its type
+  if (col === roomColIndex) {
+    const rowsToCheck = [...Array(backRow + 1).keys()].slice(row + 1)
+    for (let i = 0; i < rowsToCheck.length; i++) {
+      const rowSpotToCheck = getCharFromState(rowsToCheck[i], roomColIndex, state)
+      if (rowSpotToCheck !== type) return true
+    }
+  }
+  // If it's in a room that's not its room, and every space between it and the hallway is clear
+  else {
+    const rowsToCheck = [2, 3, 4, 5]
+    if (rowsToCheck.every(rowIndex => (
+      rowIndex >= row || getCharFromState(rowIndex, roomColIndex, state) === '.'
+    ))) return true
+  }
+  return false
+}
+
 const getNeighborsForPosition = ([row, col]: [number, number], state: string, part: 1 | 2): string[] => {
   const rows = state.split('\n')
   const type = getCharFromState(row, col, state) as 'A' | 'B' | 'C' | 'D'
@@ -218,16 +245,8 @@ const getNeighborsForPosition = ([row, col]: [number, number], state: string, pa
       }
     }
   }
-  ///////////////////// FROM HERE ON DOWN, WE HAVE NOT YET ADAPTED FOR PART TWO!!!! START HERE!!!!
   // Go to the hallway
-  if (
-    // If it's in the exit row of a room that's not its room, it can go to the hallway
-    (row === 2 && col !== roomColIndex) ||
-    // If it's in the exit row of its room, it should only exit if the back row doesn't have its type
-    (row === 2 && col === roomColIndex && getCharFromState(3, col, state) !== type) ||
-    // If it's in the back row of a room that's not its room, it can go to the hallway if the exit row is empty
-    (row === 3 && col !== roomColIndex && getCharFromState(2, col, state) === '.')
-  ) {
+  if (shouldGoToHallway(row, col, state, part)) {
     // Check spaces to the left until we find an occupied one
     for (let hCol = col - 1; hCol >= 1; hCol--) {
       const space = getCharFromState(1, hCol, state)
@@ -303,10 +322,6 @@ const getNeighborsForPosition = ([row, col]: [number, number], state: string, pa
       }
     }
   }
-  // If it's in the back row of its room, it shouldn't move
-  if (row === 3 && col === roomColIndex) {
-    // Do nothing here. This is here just so I know I'm doing something (nothing) about it.
-  }
 
   return nextStates
 }
@@ -331,20 +346,6 @@ const getNeighbors = (state: string, part: 1 | 2): string[] => {
 }
 
 const BUTTONS: IButton[] = [
-  {
-    label: 'Just Testing Things',
-    onClick: (inputKey: string) => {
-      const start = parseMapForPartTwo(inputKey)
-
-      const positions = getAmphipodPositions(start)
-
-      const parsedState = getStateFromPositions(positions, 2)
-
-      debugger
-
-      return {}
-    }
-  },
   {
     label: 'Organize the Amphipods',
     onClick: (inputKey: string) => {
@@ -381,9 +382,30 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey: string) => {
       const start = parseMapForPartTwo(inputKey)
 
-      debugger
+      console.log('h', h(start))
 
-      return {}
+      const startTime = new Date().getTime()
+
+      const getNeighborsFn = (state: string) => getNeighbors(state, 2)
+
+      const pathLength = AStar(
+        start,
+        goalPartTwo,
+        d,
+        h,
+        getNeighborsFn
+      )
+
+      console.log(`Total runtime: ${(new Date().getTime() - startTime) / 1000} seconds.`)
+
+      // path.forEach(state => {
+      //   state.split('\n').forEach(row => console.log(row))
+      //   console.log('\n\n')
+      // })
+
+      return {
+        answer2: pathLength.toString()
+      }
     }
   }
 ]
