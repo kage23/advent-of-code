@@ -5,9 +5,9 @@ import DLL from './DLL'
 const AStar = (
   startKey: string,
   endKey: string,
-  map: Map<string, number>,
+  dFn: (to: string, from: string) => number,
   h: (startKey: string, endKey: string) => number,
-  getNeighbors: (current: string, map: Map<string, number>) => string[]
+  getNeighbors: (current: string) => string[]
 ): number => {
   // The set of discovered nodes that may need to be (re-)expanded.
   // Initially, only the start node is known.
@@ -53,9 +53,9 @@ const AStar = (
     openSet.removeNode(current)
 
     // for each neighbor of current
-    getNeighbors(current.value, map).forEach((nKey) => {
+    getNeighbors(current.value).forEach((nKey) => {
       // d(current,neighbor) is the weight of the edge from current to neighbor
-      const d = map.get(nKey) as number
+      const d = dFn(nKey, current.value)
 
       // tentative_gScore is the distance from start to the neighbor through current
       // tentative_gScore := gScore[current] + d(current, neighbor)
