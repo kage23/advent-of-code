@@ -4,6 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
+import AStar from '../utils/AStar'
 import DLL from '../utils/DLL'
 import { manhattanDistance } from '../utils/Various'
 
@@ -216,8 +217,14 @@ const BUTTONS: IButton[] = [
     label: 'Find Lowest-Risk Path Through the Big Map',
     onClick: (inputKey: string) => {
       const map = getTheBigMap(INPUT[inputKey])
+      const startKey = '0,0'
+      const size = map.get('size')
+      if (size === undefined) throw new Error('something fucked up')
+      const endKey = `${size - 1},${size - 1}`
+
       const startTime = new Date().getTime()
-      const pathRiskLevel = findLowestRiskPath(map)
+      // const pathRiskLevel = findLowestRiskPath(map)
+      const pathRiskLevel = AStar(startKey, endKey, map, h, getNeighbors)
       console.log(`Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`)
 
       return {
