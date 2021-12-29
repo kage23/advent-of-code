@@ -5,7 +5,6 @@ import {
   IDayConfig
 } from '../Config'
 import AStar from '../utils/AStar'
-import { manhattanDistance } from '../utils/Various'
 
 import INPUT from './Input/Day23'
 
@@ -118,7 +117,7 @@ const getMinimumDistance = (row: number, col: number, type: 'A' | 'B' | 'C' | 'D
 }
 
 // d gives the energy cost to get from one state to an (assumed) adjacent state
-const d = (from: string, to: string): number => {
+const d = (to: string, from: string): number => {
   const fromRows = from.split('\n')
   const toRows = to.split('\n')
 
@@ -163,7 +162,7 @@ const d = (from: string, to: string): number => {
   }
   // Moving from a room to a room
   else {
-    if (moveFrom[0] === 2 && moveTo[0] === 3 || moveFrom[0] === 3 && moveTo[0] === 2) {
+    if ((moveFrom[0] === 2 && moveTo[0] === 3) || (moveFrom[0] === 3 && moveTo[0] === 2)) {
       rowDistance = 3
     }
     if (moveFrom[0] === 2 && moveTo[0] === 2) {
@@ -347,17 +346,23 @@ const BUTTONS: IButton[] = [
 
       const startTime = new Date().getTime()
 
-      const path = AStar<string>(start, goal, h, getNeighbors, d)
+      const pathLength = AStar(
+        start,
+        goal,
+        d,
+        h,
+        getNeighbors
+      )
 
       console.log(`Total runtime: ${(new Date().getTime() - startTime) / 1000} seconds.`)
 
-      path.forEach(state => {
-        state.split('\n').forEach(row => console.log(row))
-        console.log('\n\n')
-      })
+      // path.forEach(state => {
+      //   state.split('\n').forEach(row => console.log(row))
+      //   console.log('\n\n')
+      // })
 
       return {
-        answer1: path.distance.toString()
+        answer1: pathLength.toString()
       }
     }
   },
