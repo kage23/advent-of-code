@@ -1,120 +1,100 @@
-import DLL from './DLL'
-import { MapWithDefault } from './Various'
-
-interface PathWithDistance<T> extends Array<T> {
-  distance: number
-}
-const reconstructPath = <T>(
-  cameFrom: Map<T, T>,
-  end: T,
-  d: (from: T, to: T) => number
-): PathWithDistance<T> => {
-  let current: T | undefined = end
-  const totalPath = [current] as PathWithDistance<T>
-  while (current && cameFrom.has(current)) {
-    current = cameFrom.get(current)
-    totalPath.push(current as T)
-  }
-  totalPath.reverse()
-  totalPath.distance = sumPathDistance(totalPath, d)
-  return totalPath
-}
-
 // A* finds a path from start to goal.
-// h is the heuristic function. h(n) estimates the cost to reach goal from node n.
-// d should give the distance from one node to the next
-const AStar = <T>(
-  start: T,
-  goal: T,
-  h: (n: T) => number,
-  getNeighbors: (n: T) => T[],
-  d: (from: T, to: T) => number
-) => {
-  const openSet: DLL<T> = new DLL(start)
-  const cameFrom: Map<T, T> = new Map()
 
+import BinaryHeap from './BinaryHeap'
+
+// function A_Star(start, goal, h)
+const AStar = (
+  startKey: string,
+  endKey: string,
+  dFn: (to: string, from: string) => number,
+  h: (startKey: string, endKey: string) => number,
+  getNeighbors: (current: string) => string[]
+): number => {
   // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
-  const gScore = new MapWithDefault<T, number>(() => Infinity)
-  gScore.set(start, 0)
+  // gScore := map with default value of Infinity
+  // gScore[start] := 0
+  const gScores: Map<string, number> = new Map([[startKey, 0]])
 
   // For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
   // how short a path from start to finish can be if it goes through n.
-  const fScore = new MapWithDefault<T, number>(() => Infinity)
-  fScore.set(start, h(start))
+  // fScore := map with default value of Infinity
+  // fScore[start] := h(start)
+  const fScores: Map<string, number> = new Map([
+    [startKey, h(startKey, endKey)],
+  ])
 
-  while (openSet.length) {
-    const current = openSet.head
+  // The set of discovered nodes that may need to be (re-)expanded.
+  // Initially, only the start node is known.
+  // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+  // openSet := {start}
+  const openSet = new BinaryHeap<string>(
+    (node: string) => fScores.get(node) as number,
+    'min'
+  )
+  openSet.push(startKey)
+
+  let whileLoopRuns = 0
+  let dllStepThroughs = 0
+
+  // while openSet is not empty
+  while (openSet.size()) {
+    // This operation can occur in O(1) time if openSet is a min-heap or a priority queue
+    // current := the node in openSet having the lowest fScore[] value
+    const current = openSet.pop()
     if (current === undefined) throw new Error('something fucked up')
 
-    if (current.value === goal) {
-      return reconstructPath(cameFrom, current.value, d)
+    // if current = goal
+    if (current === endKey) {
+      // return reconstruct_path(cameFrom, current)
+      // (except I don't care about the path, just the riskiness)
+      console.log(`The main while loop ran ${whileLoopRuns} times.`)
+      console.log(
+        `We took ${dllStepThroughs} individual steps through the DLL.`
+      )
+      return gScores.get(current) as number
     }
 
-    openSet.removeNode(current)
+    // for each neighbor of current
+    getNeighbors(current).forEach((nKey) => {
+      // d(current,neighbor) is the weight of the edge from current to neighbor
+      const d = dFn(nKey, current)
 
-    getNeighbors(current.value).forEach((n) => {
       // tentative_gScore is the distance from start to the neighbor through current
-      const tentativeGScore = gScore.get(current.value) + d(current.value, n)
+      // tentative_gScore := gScore[current] + d(current, neighbor)
+      const tentative_gScore = (gScores.get(current) as number) + d
 
-      if (tentativeGScore < gScore.get(n)) {
+      // if tentative_gScore < gScore[neighbor]
+      if (
+        gScores.get(nKey) === undefined ||
+        tentative_gScore < (gScores.get(nKey) as number)
+      ) {
         // This path to neighbor is better than any previous one. Record it!
-        cameFrom.set(n, current.value)
-        gScore.set(n, tentativeGScore)
-        fScore.set(n, tentativeGScore + h(n))
-        if (openSet.getNode(n) === undefined) {
-          openSetAdd<T>(openSet, n, fScore)
+        // gScore[neighbor] := tentative_gScore
+        gScores.set(nKey, tentative_gScore)
+        // fScore[neighbor] := tentative_gScore + h(neighbor)
+        const fScore = tentative_gScore + h(nKey, endKey)
+        fScores.set(nKey, fScore)
+        // if neighbor not in openSet
+        if (!openSet.content.includes(nKey)) {
+          // openSet.add(neighbor)
+          openSet.push(nKey)
+        }
+        // If neighbor is in openSet, make sure it's sorted properly
+        else {
+          const nIndex = openSet.content.indexOf(nKey)
+          openSet.bubbleUp(nIndex)
+          openSet.sinkDown(nIndex)
         }
       }
     })
+    whileLoopRuns++
   }
+
   // Open set is empty but goal was never reached
-  throw new Error('Path not found!')
+  // return failure
+  console.log(`The main while loop ran ${whileLoopRuns} times.`)
+  console.log(`We took ${dllStepThroughs} individual steps through the DLL.`)
+  throw new Error('path not found!')
 }
-
-// The open set needs to be sorted by fScore, lowest first
-const openSetAdd = <T>(
-  openSet: DLL<T>,
-  add: T,
-  fScores: MapWithDefault<T, number>
-) => {
-  if (openSet.length === 0) {
-    openSet.push(add)
-  } else {
-    const fScore = fScores.get(add)
-    if (openSet.length === 1) {
-      if (openSet.head === undefined) throw new Error('something fucked up')
-      const setHeadFScore = fScores.get(openSet.head.value)
-      if (fScore >= setHeadFScore) {
-        openSet.insertAfter(add, openSet.head)
-      } else {
-        openSet.insertBefore(add, openSet.head)
-      }
-    } else {
-      let sortNode = openSet.head
-      if (sortNode === undefined) throw new Error('something fucked up')
-      let sortFScore = fScores.get(sortNode.value)
-      while (sortFScore < fScore && sortNode.next !== openSet.head) {
-        sortNode = sortNode.next
-        if (sortNode === undefined) throw new Error('something fucked up')
-        sortFScore = fScores.get(sortNode.value)
-      }
-      if (fScore < sortFScore) {
-        openSet.insertBefore(add, sortNode)
-      } else {
-        openSet.insertAfter(add, sortNode)
-      }
-    }
-  }
-}
-
-export const sumPathDistance = <T>(
-  path: T[],
-  d: (from: T, to: T) => number
-): number =>
-  path.reduce(
-    (sum, currentNode, i) =>
-      i === 0 ? sum : sum + d(path[i - 1], currentNode),
-    0
-  )
 
 export default AStar
