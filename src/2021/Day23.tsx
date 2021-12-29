@@ -183,6 +183,8 @@ const shouldGoToHallway = (row: number, col: number, state: string, part: 1 | 2)
    *  it's in a room that's not its room, and every space between it and the hallway is clear
    *  it's in its room, and some space behind it has something of not its type
    */
+  // If we're already in the hallway, we shouldn't move elsewhere in the hallway
+  if (row === 1) return false
   const type = getCharFromState(row, col, state) as 'A' | 'B' | 'C' | 'D'
   const roomColIndex = type === 'A' ? 3 : type === 'B' ? 5 : type === 'C' ? 7 : 9
   const backRow = part === 1 ? 3 : 5
@@ -196,9 +198,9 @@ const shouldGoToHallway = (row: number, col: number, state: string, part: 1 | 2)
   }
   // If it's in a room that's not its room, and every space between it and the hallway is clear
   else {
-    const rowsToCheck = [2, 3, 4, 5]
+    const rowsToCheck = part === 1 ? [2, 3] : [2, 3, 4, 5]
     if (rowsToCheck.every(rowIndex => (
-      rowIndex >= row || getCharFromState(rowIndex, roomColIndex, state) === '.'
+      rowIndex >= row || getCharFromState(rowIndex, col, state) === '.'
     ))) return true
   }
   return false
