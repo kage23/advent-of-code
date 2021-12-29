@@ -1,6 +1,7 @@
-import DLL from './DLL'
-
 // A* finds a path from start to goal.
+
+import BinaryHeap from './BinaryHeap'
+
 // function A_Star(start, goal, h)
 const AStar = (
   startKey: string,
@@ -9,12 +10,6 @@ const AStar = (
   h: (startKey: string, endKey: string) => number,
   getNeighbors: (current: string) => string[]
 ): number => {
-  // The set of discovered nodes that may need to be (re-)expanded.
-  // Initially, only the start node is known.
-  // This is usually implemented as a min-heap or priority queue rather than a hash-set.
-  // openSet := {start}
-  const openSet: DLL<string> = new DLL(startKey)
-
   // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
   // gScore := map with default value of Infinity
   // gScore[start] := 0
@@ -28,38 +23,45 @@ const AStar = (
     [startKey, h(startKey, endKey)],
   ])
 
+  // The set of discovered nodes that may need to be (re-)expanded.
+  // Initially, only the start node is known.
+  // This is usually implemented as a min-heap or priority queue rather than a hash-set.
+  // openSet := {start}
+  const openSet = new BinaryHeap<string>(
+    (node: string) => fScores.get(node) as number,
+    'min'
+  )
+  openSet.push(startKey)
+
   let whileLoopRuns = 0
   let dllStepThroughs = 0
 
   // while openSet is not empty
-  while (openSet.length) {
+  while (openSet.size()) {
     // This operation can occur in O(1) time if openSet is a min-heap or a priority queue
     // current := the node in openSet having the lowest fScore[] value
-    const current = openSet.head
+    const current = openSet.pop()
     if (current === undefined) throw new Error('something fucked up')
 
     // if current = goal
-    if (current.value === endKey) {
+    if (current === endKey) {
       // return reconstruct_path(cameFrom, current)
       // (except I don't care about the path, just the riskiness)
       console.log(`The main while loop ran ${whileLoopRuns} times.`)
       console.log(
         `We took ${dllStepThroughs} individual steps through the DLL.`
       )
-      return gScores.get(current.value) as number
+      return gScores.get(current) as number
     }
 
-    // openSet.Remove(current)
-    openSet.removeNode(current)
-
     // for each neighbor of current
-    getNeighbors(current.value).forEach((nKey) => {
+    getNeighbors(current).forEach((nKey) => {
       // d(current,neighbor) is the weight of the edge from current to neighbor
-      const d = dFn(nKey, current.value)
+      const d = dFn(nKey, current)
 
       // tentative_gScore is the distance from start to the neighbor through current
       // tentative_gScore := gScore[current] + d(current, neighbor)
-      const tentative_gScore = (gScores.get(current.value) as number) + d
+      const tentative_gScore = (gScores.get(current) as number) + d
 
       // if tentative_gScore < gScore[neighbor]
       if (
@@ -73,9 +75,15 @@ const AStar = (
         const fScore = tentative_gScore + h(nKey, endKey)
         fScores.set(nKey, fScore)
         // if neighbor not in openSet
-        if (openSet.getNode(nKey) === undefined) {
+        if (!openSet.content.includes(nKey)) {
           // openSet.add(neighbor)
-          dllStepThroughs += openSetAdd(openSet, nKey, fScores)
+          openSet.push(nKey)
+        }
+        // If neighbor is in openSet, make sure it's sorted properly
+        else {
+          const nIndex = openSet.content.indexOf(nKey)
+          openSet.bubbleUp(nIndex)
+          openSet.sinkDown(nIndex)
         }
       }
     })
@@ -87,46 +95,6 @@ const AStar = (
   console.log(`The main while loop ran ${whileLoopRuns} times.`)
   console.log(`We took ${dllStepThroughs} individual steps through the DLL.`)
   throw new Error('path not found!')
-}
-
-// The open set needs to be sorted by fScore, lowest first
-const openSetAdd = (
-  openSet: DLL<string>,
-  add: string,
-  fScores: Map<string, number>
-) => {
-  // debugger
-  let dllStepThroughs = 0
-  if (openSet.length === 0) {
-    openSet.push(add)
-  } else {
-    const fScore = fScores.get(add) as number
-    if (openSet.length === 1) {
-      if (openSet.head === undefined) throw new Error('something fucked up')
-      const setHeadFScore = fScores.get(openSet.head.value) as number
-      if (fScore >= setHeadFScore) {
-        openSet.insertAfter(add, openSet.head)
-      } else {
-        openSet.insertBefore(add, openSet.head)
-      }
-    } else {
-      let sortNode = openSet.head
-      if (sortNode === undefined) throw new Error('something fucked up')
-      let sortFScore = fScores.get(sortNode.value) as number
-      while (sortFScore < fScore && sortNode.next !== openSet.head) {
-        sortNode = sortNode.next
-        if (sortNode === undefined) throw new Error('something fucked up')
-        sortFScore = fScores.get(sortNode.value) as number
-        dllStepThroughs++
-      }
-      if (fScore < sortFScore) {
-        openSet.insertBefore(add, sortNode)
-      } else {
-        openSet.insertAfter(add, sortNode)
-      }
-    }
-  }
-  return dllStepThroughs
 }
 
 export default AStar
