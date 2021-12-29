@@ -5,6 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 import AStar from '../utils/AStar'
+import BinaryHeap from '../utils/BinaryHeap'
 
 import INPUT from './Input/Day23'
 
@@ -369,11 +370,6 @@ const BUTTONS: IButton[] = [
 
       console.log(`Total runtime: ${(new Date().getTime() - startTime) / 1000} seconds.`)
 
-      // path.forEach(state => {
-      //   state.split('\n').forEach(row => console.log(row))
-      //   console.log('\n\n')
-      // })
-
       return {
         answer1: pathLength.toString()
       }
@@ -399,11 +395,6 @@ const BUTTONS: IButton[] = [
       )
 
       console.log(`Total runtime: ${(new Date().getTime() - startTime) / 1000} seconds.`)
-
-      // path.forEach(state => {
-      //   state.split('\n').forEach(row => console.log(row))
-      //   console.log('\n\n')
-      // })
 
       return {
         answer2: pathLength.toString()
