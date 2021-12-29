@@ -34,7 +34,6 @@ const AStar = (
   openSet.push(startKey)
 
   let whileLoopRuns = 0
-  let dllStepThroughs = 0
 
   // while openSet is not empty
   while (openSet.size()) {
@@ -48,9 +47,6 @@ const AStar = (
       // return reconstruct_path(cameFrom, current)
       // (except I don't care about the path, just the riskiness)
       console.log(`The main while loop ran ${whileLoopRuns} times.`)
-      console.log(
-        `We took ${dllStepThroughs} individual steps through the DLL.`
-      )
       return gScores.get(current) as number
     }
 
@@ -93,7 +89,6 @@ const AStar = (
   // Open set is empty but goal was never reached
   // return failure
   console.log(`The main while loop ran ${whileLoopRuns} times.`)
-  console.log(`We took ${dllStepThroughs} individual steps through the DLL.`)
   throw new Error('path not found!')
 }
 
