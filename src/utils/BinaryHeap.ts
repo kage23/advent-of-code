@@ -86,18 +86,18 @@ class BinaryHeap<T> {
       // Store possible new position of element
       let swap: number | null = null
       // If the first child exists
-      if (child1N < length) {
-        // Fetch it and score it
-        const child1 = this.content[child1N]
-        const child1Score = this.scoreFunction(child1)
-        // Compare them and swap if necessary
-        if (
-          (this.type === 'min' && child1Score < score) ||
-          (this.type === 'max' && child1Score > score)
-        )
-          swap = child1N
-      }
-      // Check the other child as well
+      // Fetch it and score it
+      const child1 = this.content[child1N]
+      const child1Score =
+        child1 !== undefined ? this.scoreFunction(child1) : undefined
+      // Compare them and swap if necessary
+      if (
+        child1Score !== undefined &&
+        ((this.type === 'min' && child1Score < score) ||
+          (this.type === 'max' && child1Score > score))
+      )
+        swap = child1N
+      // Check child 2 as well
       if (child2N < length) {
         const child2 = this.content[child2N]
         const child2Score = this.scoreFunction(child2)
@@ -105,13 +105,17 @@ class BinaryHeap<T> {
           (this.type === 'min' && child2Score < score) ||
           (this.type === 'max' && child2Score > score)
         )
-          swap = child2N
+          if (this.type === 'min') {
+            // We should swap with either the lesser (min) or greater (max) or its children
+            swap = (child1Score as number) < child2Score ? child1N : child2N
+          }
+        if (this.type === 'max') {
+          swap = (child1Score as number) > child2Score ? child1N : child2N
+        }
       }
 
-      // If we don't need to swap, we need to sink down its parent
+      // If we don't need to swap, we're done
       if (swap === null) {
-        const parentN = Math.floor((n + 1) / 2) - 1
-        if (parentN > -1) this.sinkDown(parentN)
         break
       }
       // Otherwise, swap and continue
