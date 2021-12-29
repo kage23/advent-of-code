@@ -19,15 +19,6 @@ const simulateADay = (fish: number[]) => {
   }
 }
 
-const simulateXDays = (fish: number[], days: number) => {
-  for (let i = 0; i < days; i++) {
-    simulateADay(fish)
-    if (i % 10 === 0 || i > 140) {
-      console.log(`Day ${i} count: ${fish.length}`)
-    }
-  }
-}
-
 interface FishCohort {
   active: number
   id: number

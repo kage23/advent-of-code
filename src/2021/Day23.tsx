@@ -5,7 +5,6 @@ import {
   IDayConfig
 } from '../Config'
 import AStar from '../utils/AStar'
-import BinaryHeap from '../utils/BinaryHeap'
 
 import INPUT from './Input/Day23'
 
