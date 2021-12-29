@@ -16,44 +16,6 @@ interface Game {
   currentPlayer: 0 | 1
 }
 
-const developTheGame = ({ players, currentPlayer }: Game): Game[] => {
-  /**
-   * Possible rolls are:
-   *
-   * 1 1 1, 1 1 2, 1 1 3, => 3, 4, 5
-   * 1 2 1, 1 2 2, 1 2 3, => 4, 5, 6
-   * 1 3 1, 1 3 2, 1 3 3, => 5, 6, 7
-   *
-   * 2 1 1, 2 1 2, 2 1 3, => 4, 5, 6
-   * 2 2 1, 2 2 2, 2 2 3, => 5, 6, 7
-   * 2 3 1, 2 3 2, 2 3 3, => 6, 7, 8
-   *
-   * 3 1 1, 3 1 2, 3 1 3, => 5, 6, 7
-   * 3 2 1, 3 2 2, 3 2 3, => 6, 7, 8
-   * 3 3 1, 3 3 2, 3 3 3 => 7, 8, 9
-   */
-  const possibleRolls = [
-    3, 4, 5, 4, 5, 6, 5, 6, 7,
-    4, 5, 6, 5, 6, 7, 6, 7, 8,
-    5, 6, 7, 6, 7, 8, 7, 8, 9
-  ]
-
-  const nextGames: Game[] = []
-  const nextPlayer = (currentPlayer + 1) % 2 as 0 | 1
-
-  possibleRolls.forEach(roll => {
-    const playersCopy = JSON.parse(JSON.stringify(players)) as [Player, Player]
-    playersCopy[currentPlayer].position = ((playersCopy[currentPlayer].position + roll) % 10) || 10
-    playersCopy[currentPlayer].score += playersCopy[currentPlayer].position
-    nextGames.push({
-      players: playersCopy,
-      currentPlayer: nextPlayer
-    })
-  })
-
-  return nextGames
-}
-
 const recurseGame = ({ players, currentPlayer }: Game, memos: Map<string, [number, number]>, wins: [number, number]): [number, number] => {
   const winner = players.findIndex(({ score }) => score >= 21)
   if (winner === 0) {
