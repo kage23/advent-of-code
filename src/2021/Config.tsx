@@ -28,14 +28,14 @@ import Day21__2021__Config from './Day21'
 import Day22__2021__Config from './Day22'
 import Day23__2021__Config from './Day23'
 import Day24__2021__Config from './Day24'
-// import Day25__2021__Config from './Day25'
+import Day25__2021__Config from './Day25'
 
 const CONFIG_2021: IYearConfig = {
   year: 2021,
   cover: coverImage,
   extraText: (
     <p>
-      Let's see what this year will bring!
+      Deep sea adventure!
     </p>
   ),
   days: [
@@ -63,7 +63,7 @@ const CONFIG_2021: IYearConfig = {
     Day22__2021__Config,
     Day23__2021__Config,
     Day24__2021__Config,
-    // Day25__2021__Config
+    Day25__2021__Config
   ]
 }
 
