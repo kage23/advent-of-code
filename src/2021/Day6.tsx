@@ -7,6 +7,7 @@ import {
 
 import INPUT from './Input/Day6'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const simulateADay = (fish: number[]) => {
   const fishCount = fish.length
   for (let i = 0; i < fishCount; i++) {
