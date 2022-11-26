@@ -7,9 +7,9 @@ import {
 
 import INPUT from './Input/Day22'
 
-const convertToLCF = (instruction: string): [BigInt, BigInt] => {
+const convertToLCF = (instruction: string): [bigint, bigint] => {
   if (instruction.startsWith('deal with')) {
-    const increment: BigInt = BigInt(parseInt(instruction.split('increment ')[1]))
+    const increment: bigint = BigInt(parseInt(instruction.split('increment ')[1]))
     return [increment, BigInt(0)]
   } else if (instruction.startsWith('deal into')) {
     return [BigInt(-1), BigInt(-1)]
@@ -21,13 +21,13 @@ const convertToLCF = (instruction: string): [BigInt, BigInt] => {
   return [BigInt(NaN), BigInt(NaN)]
 }
 
-const getNewCardPosition = (origPosition: BigInt, deckSize: BigInt, shuffleLCF: [BigInt, BigInt]): BigInt => {
+const getNewCardPosition = (origPosition: bigint, deckSize: bigint, shuffleLCF: [bigint, bigint]): bigint => {
   const newPosition = (BigInt(BigInt(shuffleLCF[0]) * BigInt(origPosition)) + BigInt(shuffleLCF[1])) % BigInt(deckSize)
 
   return newPosition >= 0 ? newPosition : BigInt(deckSize) + BigInt(newPosition)
 }
 
-const simplifyInstructions = (instructions: string[], deckSize: BigInt): [BigInt, BigInt] => {
+const simplifyInstructions = (instructions: string[], deckSize: bigint): [bigint, bigint] => {
   const originalLCFs = instructions.map(convertToLCF)
 
   let newLCF = originalLCFs[0]
@@ -42,7 +42,7 @@ const simplifyInstructions = (instructions: string[], deckSize: BigInt): [BigInt
   return newLCF
 }
 
-const exponentiationBySquaring__recursive = (x: BigInt, y: BigInt, m: BigInt): BigInt => {
+const exponentiationBySquaring__recursive = (x: bigint, y: bigint, m: bigint): bigint => {
   if (y === BigInt(0)) return BigInt(1)
   else if (y === BigInt(1)) return x
   else if (BigInt(y) % BigInt(2) === BigInt(0)) {
@@ -60,11 +60,11 @@ const BUTTONS: IButton[] = [
     label: 'Perform Shuffling Technique (Part 1)',
     onClick: (inputKey: string) => {
       const input = INPUT[inputKey]
-      const deckSize: BigInt = inputKey.startsWith('DEMO') ? BigInt(10) : BigInt(10007)
+      const deckSize: bigint = inputKey.startsWith('DEMO') ? BigInt(10) : BigInt(10007)
       const instructionLCF = simplifyInstructions(input.split('\n'), deckSize)
 
       if (deckSize === BigInt(10)) {
-        const newDeck: BigInt[] = []
+        const newDeck: bigint[] = []
         for (let i = BigInt(0); i < deckSize; i++) {
           newDeck[Number(getNewCardPosition(i, deckSize, instructionLCF))] = i
         }
@@ -85,7 +85,7 @@ const BUTTONS: IButton[] = [
       const instructionLCF = simplifyInstructions(input.split('\n'), deckSize)
       const repetitions = BigInt(101741582076661)
       const aToTheK = BigInt(exponentiationBySquaring__recursive(instructionLCF[0], repetitions, deckSize))
-      const finalLCF: [BigInt, BigInt] = [
+      const finalLCF: [bigint, bigint] = [
         aToTheK % deckSize,
         (
           ((BigInt(instructionLCF[1]) * (BigInt(1) - aToTheK)) % deckSize)
