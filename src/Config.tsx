@@ -7,6 +7,7 @@ import CONFIG_2018 from './2018/Config'
 import CONFIG_2019 from './2019/Config'
 import CONFIG_2020 from './2020/Config'
 import CONFIG_2021 from './2021/Config'
+import CONFIG_2022 from './2022/Config'
 
 export interface IButton {
   label: string
@@ -55,5 +56,6 @@ export const YEARS: IYearConfig[] = [
   CONFIG_2018,
   CONFIG_2019,
   CONFIG_2020,
-  CONFIG_2021
+  CONFIG_2021,
+  CONFIG_2022
 ]
