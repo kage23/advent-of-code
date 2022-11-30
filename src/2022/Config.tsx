@@ -35,7 +35,7 @@ const CONFIG_2022: IYearConfig = {
   cover: coverImage,
   extraText: (
     <p>
-      Who knows where we'll go this year! Testing automated deployment!
+      Who knows where we'll go this year!
     </p>
   ),
   days: [
