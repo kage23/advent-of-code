@@ -4,15 +4,15 @@ import { IYearConfig } from '../Config'
 
 import coverImage from './cover.png'
 
-import Day1__2019__Config from './Day1'
-import Day2__2019__Config from './Day2'
-import Day3__2019__Config from './Day3'
-import Day4__2019__Config from './Day4'
-import Day5__2019__Config from './Day5'
-import Day6__2019__Config from './Day6'
-import Day7__2019__Config from './Day7'
-import Day8__2019__Config from './Day8'
-import Day9__2019__Config from './Day9'
+import Day01__2019__Config from './Day01'
+import Day02__2019__Config from './Day02'
+import Day03__2019__Config from './Day03'
+import Day04__2019__Config from './Day04'
+import Day05__2019__Config from './Day05'
+import Day06__2019__Config from './Day06'
+import Day07__2019__Config from './Day07'
+import Day08__2019__Config from './Day08'
+import Day09__2019__Config from './Day09'
 import Day10__2019__Config from './Day10'
 import Day11__2019__Config from './Day11'
 import Day12__2019__Config from './Day12'
@@ -43,15 +43,15 @@ const CONFIG_2019: IYearConfig = {
     </span>
   ),
   days: [
-    Day1__2019__Config,
-    Day2__2019__Config,
-    Day3__2019__Config,
-    Day4__2019__Config,
-    Day5__2019__Config,
-    Day6__2019__Config,
-    Day7__2019__Config,
-    Day8__2019__Config,
-    Day9__2019__Config,
+    Day01__2019__Config,
+    Day02__2019__Config,
+    Day03__2019__Config,
+    Day04__2019__Config,
+    Day05__2019__Config,
+    Day06__2019__Config,
+    Day07__2019__Config,
+    Day08__2019__Config,
+    Day09__2019__Config,
     Day10__2019__Config,
     Day11__2019__Config,
     Day12__2019__Config,
