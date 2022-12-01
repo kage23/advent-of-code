@@ -2,9 +2,9 @@ import React from 'react'
 import {
   IButton,
   IDayConfig
- } from '../Config'
+} from '../Config'
 
-import INPUT from './Input/Day10'
+import INPUT from '../Inputs/2018/Day10'
 
 interface IStar {
   id: number | 'max' | 'min'
@@ -67,12 +67,12 @@ const stepBack = (stars: IStar[]): IStarfield => {
 }
 
 const findMessage = (stars: IStar[], time: number = 0)
-: {
-  starfield: IStarfield
-  time: number
-} => {
-  let currMin = [0,0]
-  let currMax = [0,0]
+  : {
+    starfield: IStarfield
+    time: number
+  } => {
+  let currMin = [0, 0]
+  let currMax = [0, 0]
   for (const star of stars) {
     currMin = [Math.min(currMin[0], star.position[0]), Math.min(currMin[1], star.position[1])]
     currMax = [Math.max(currMax[0], star.position[0]), Math.max(currMax[1], star.position[1])]
@@ -108,22 +108,22 @@ const getStars = (inputKey: string): IStarfield => {
   const min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]
   const max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
   const stars: IStar[] = INPUT[inputKey].split('\n')
-  .map((line, id) => {
-    const posX = parseInt(line.slice(line.indexOf('<') + 1))
-    const posY = parseInt(line.slice(line.indexOf(', ') + 1))
-    const velX = parseInt(line.slice(line.lastIndexOf('<') + 1))
-    const velY = parseInt(line.slice(line.lastIndexOf(', ') + 1))
-    min[0] = Math.min(min[0], posX)
-    min[1] = Math.min(min[1], posY)
-    max[0] = Math.max(max[0], posX)
-    max[1] = Math.max(max[1], posY)
+    .map((line, id) => {
+      const posX = parseInt(line.slice(line.indexOf('<') + 1))
+      const posY = parseInt(line.slice(line.indexOf(', ') + 1))
+      const velX = parseInt(line.slice(line.lastIndexOf('<') + 1))
+      const velY = parseInt(line.slice(line.lastIndexOf(', ') + 1))
+      min[0] = Math.min(min[0], posX)
+      min[1] = Math.min(min[1], posY)
+      max[0] = Math.max(max[0], posX)
+      max[1] = Math.max(max[1], posY)
 
-    return {
-      id,
-      position: [posX, posY],
-      velocity: [velX, velY]
-    }
-  })
+      return {
+        id,
+        position: [posX, posY],
+        velocity: [velX, velY]
+      }
+    })
   return {
     min,
     max,
@@ -132,7 +132,7 @@ const getStars = (inputKey: string): IStarfield => {
 }
 
 const getStarField = (stars: IStar[], min: number[], max: number[])
-: Array<string | JSX.Element> => {
+  : Array<string | JSX.Element> => {
   const field: Array<string | JSX.Element> = []
 
   const yOff = min[1] * -1

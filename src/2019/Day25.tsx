@@ -5,7 +5,7 @@ import {
 } from '../Config'
 import { intcodeComputer2019, IIntcodeComputerResults } from '../utils/Various'
 
-import INPUT from './Input/Day25'
+import INPUT from '../Inputs/2019/Day25'
 
 let program: number[] = []
 let intcodeComputerResults: IIntcodeComputerResults = {

@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day14'
+import INPUT from '../Inputs/2015//Day14'
 
 interface IReindeer {
   flyTime: number
@@ -33,7 +33,7 @@ const getLeadersAtTime = (reindeers: IReindeer[], time: number): string[] => {
 
 const parseInput = (inputKey: string): IReindeer[] => INPUT[inputKey].split('\n').map(
   reindeerLine => {
-    const [ name, , , velocity, , , flyTime, , , , , , , restTime] = reindeerLine.split(' ')
+    const [name, , , velocity, , , flyTime, , , , , , , restTime] = reindeerLine.split(' ')
     return {
       flyTime: parseInt(flyTime),
       name,

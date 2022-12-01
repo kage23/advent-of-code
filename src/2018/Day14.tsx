@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day14'
+import INPUT from '../Inputs/2018/Day14'
 
 import DLL, { IDLLNode } from '../utils/DLL'
 

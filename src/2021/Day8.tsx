@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day8'
+import INPUT from '../Inputs/2021/Day8'
 
 const actualSignalCombos = [
   ['AAA', 'BBB', 'CCC', 'EEE', 'FFF', 'GGG'], // 0

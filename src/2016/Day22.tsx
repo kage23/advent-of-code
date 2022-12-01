@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day22'
+import INPUT from '../Inputs/2016/Day22'
 import SLL from '../utils/SLL'
 import { manhattanDistance } from '../utils/Various'
 
@@ -67,7 +67,7 @@ const getPossibleNexts = (gridStr: string, inputKey: string, visited: Map<string
     : inputKey === 'REAL' ? maxY : 1
   // Find the x,y coords of the empty node and the G node
   const emptyIndex = gridStr.indexOf('_')
-  const [ emptyX, emptyY ] = getCoordsFromStringIndex(emptyIndex, localMaxX + 1)
+  const [emptyX, emptyY] = getCoordsFromStringIndex(emptyIndex, localMaxX + 1)
 
   // From there, you can get possible next steps (i.e. move empty up, down, left, right)
   return [
@@ -130,11 +130,9 @@ const moveEmptyToCoords = (gridStr: string, nextCoords: [number, number], width:
   let nextGridStr = gridStr.replace('_', getContentsFromCoords(gridStr, nextCoords[0], nextCoords[1], inputKey))
   // Insert new empty
   const newEmptyStringIndex = getStringIndexFromCoords(nextCoords[0], nextCoords[1], width)
-  return `${
-    nextGridStr.slice(0, newEmptyStringIndex)
-  }_${
-    nextGridStr.slice(newEmptyStringIndex + 1)
-  }`
+  return `${nextGridStr.slice(0, newEmptyStringIndex)
+    }_${nextGridStr.slice(newEmptyStringIndex + 1)
+    }`
 }
 
 const parseInput = (inputKey: string): Map<string, INode> => {

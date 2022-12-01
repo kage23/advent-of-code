@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import INPUT from './Input/Day20'
+import INPUT from '../Inputs/2020/Day20'
 
 interface ITile {
   id: number

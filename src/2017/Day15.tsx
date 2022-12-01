@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day15'
+import INPUT from '../Inputs/2017/Day15'
 
 let genA = 0
 let genB = 0

@@ -4,12 +4,12 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day21'
+import INPUT from '../Inputs/2017/Day21'
 
 let prevInputKey = ''
 let steps = 0
 let patternStr =
-`.#.
+  `.#.
 ..#
 ###`
 
@@ -22,7 +22,7 @@ const revStr = (input: string): string => input.split('').reverse().join('')
 
 const parseInput = (input: string): IRule[] => (
   input.split('\n').map(line => {
-    const [ before, after ] = line.split(' => ')
+    const [before, after] = line.split(' => ')
     return {
       before: before.split('/'),
       after: after.split('/')
@@ -193,7 +193,7 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
     prevInputKey = inputKey
     steps = 0
     patternStr =
-`.#.
+      `.#.
 ..#
 ###`
   }

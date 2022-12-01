@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day1'
+import INPUT from '../Inputs/2018/Day1'
 
 const findFrequency = (inputKey: string) => {
   const input = parseInput(inputKey)
@@ -22,7 +22,7 @@ const findRepeatedFrequency = (inputKey: string) => {
   let freq = 0
   let foundFreqs: boolean[] = []
   let i = 0
-  while(!foundFreqs[freq]) {
+  while (!foundFreqs[freq]) {
     foundFreqs[freq] = true
     freq += input[i]
     i += 1

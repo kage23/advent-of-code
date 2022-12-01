@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day9'
+import INPUT from '../Inputs/2016/Day9'
 
 let prevInputKey = ''
 let answer1_a = ''

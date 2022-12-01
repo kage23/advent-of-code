@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import { manhattanDistance } from '../utils/Various'
 
-import INPUT from './Input/Day19'
+import INPUT from '../Inputs/2021/Day19'
 
 const orientPoint = (
   [x, y, z]: [x: number, y: number, z: number],

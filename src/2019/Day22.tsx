@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day22'
+import INPUT from '../Inputs/2019/Day22'
 
 const convertToLCF = (instruction: string): [bigint, bigint] => {
   if (instruction.startsWith('deal with')) {

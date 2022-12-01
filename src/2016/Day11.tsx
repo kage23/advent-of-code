@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day11'
+import INPUT from '../Inputs/2016/Day11'
 
 const validFacilities: Map<string, boolean> = new Map()
 
@@ -24,7 +24,7 @@ const findShortestPath = (facility: (number | [number, number])[]): number => {
 
   const startingString = JSON.stringify(facility)
   const queue: string[] = [startingString]
-  const parents: { [key:string]: string } = { [startingString]: '' }
+  const parents: { [key: string]: string } = { [startingString]: '' }
 
   while (queue.length > 0) {
     const current = queue.shift()
@@ -74,7 +74,7 @@ const normalizeFacility = (inFacility: string[][], elevatorFloor: number): (numb
   ].sort(sortFacility)
 }
 
-function * getPossibleNexts(inFacility: (number | [number, number])[]) {
+function* getPossibleNexts(inFacility: (number | [number, number])[]) {
   const elevatorFloor = inFacility.shift()
 
   if (typeof elevatorFloor === 'number') {
@@ -182,7 +182,7 @@ const parseInput = (inputKey: string): (number | [number, number])[] => {
   const input = INPUT[inputKey]
 
   const facility: (number | [number, number])[] = [inputKey === 'DEMO_TEST' ? 3 : 0]
-  const itemMap: { [key:string]: [number, number] } = {}
+  const itemMap: { [key: string]: [number, number] } = {}
 
   validFacilities.clear()
 

@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day8'
+import INPUT from '../Inputs/2017/Day8'
 
 const registers: Map<string, number> = new Map()
 let prevInputKey = ''
@@ -30,31 +30,31 @@ const processCode = (input: string): {
     if (typeof registers.get(registerForCondition) === 'undefined') registers.set(registerForCondition, 0)
     switch (condition) {
       case '>':
-      if ((registers.get(registerForCondition) || 0) > parseInt(testAmount)) doAction = true
-      break
+        if ((registers.get(registerForCondition) || 0) > parseInt(testAmount)) doAction = true
+        break
 
       case '<':
-      if ((registers.get(registerForCondition) || 0) < parseInt(testAmount)) doAction = true
-      break
+        if ((registers.get(registerForCondition) || 0) < parseInt(testAmount)) doAction = true
+        break
 
       case '>=':
-      if ((registers.get(registerForCondition) || 0) >= parseInt(testAmount)) doAction = true
-      break
+        if ((registers.get(registerForCondition) || 0) >= parseInt(testAmount)) doAction = true
+        break
 
       case '<=':
-      if ((registers.get(registerForCondition) || 0) <= parseInt(testAmount)) doAction = true
-      break
+        if ((registers.get(registerForCondition) || 0) <= parseInt(testAmount)) doAction = true
+        break
 
       case '==':
-      if ((registers.get(registerForCondition) || 0) === parseInt(testAmount)) doAction = true
-      break
+        if ((registers.get(registerForCondition) || 0) === parseInt(testAmount)) doAction = true
+        break
 
       case '!=':
-      if ((registers.get(registerForCondition) || 0) !== parseInt(testAmount)) doAction = true
-      break
+        if ((registers.get(registerForCondition) || 0) !== parseInt(testAmount)) doAction = true
+        break
 
       default:
-      break
+        break
     }
     if (doAction) {
       if (action === 'inc') {

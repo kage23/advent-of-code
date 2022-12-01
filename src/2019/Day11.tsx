@@ -5,7 +5,7 @@ import {
 } from '../Config'
 import { intcodeComputer2019 } from '../utils/Various'
 
-import INPUT from './Input/Day11'
+import INPUT from '../Inputs/2019/Day11'
 
 // 0 Black
 // 1 White

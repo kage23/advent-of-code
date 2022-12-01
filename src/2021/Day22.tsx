@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day22'
+import INPUT from '../Inputs/2021/Day22'
 
 type Pair = [number, number]
 

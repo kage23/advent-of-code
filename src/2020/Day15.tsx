@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import INPUT from './Input/Day15'
+import INPUT from '../Inputs/2020/Day15'
 
 const playNumberGame = (startingNumbers: number[], turnsToPlay: number): number => {
   const numbersSpokenOnTurns: Map<number, number[]> = new Map()

@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import INPUT from './Input/Day16'
+import INPUT from '../Inputs/2020/Day16'
 
 const getTicketErrorRate = (ticket: string, fieldRanges: [number, number][]): number => {
   let errorRate = 0

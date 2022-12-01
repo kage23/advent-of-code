@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day2'
+import INPUT from '../Inputs/2017/Day2'
 
 const getChecksum = (inputKey: string): { answer1: string } => {
   const input = INPUT[inputKey]

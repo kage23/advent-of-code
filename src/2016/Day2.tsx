@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day2'
+import INPUT from '../Inputs/2016/Day2'
 
 const BUTTONS: IButton[] = [
   {
@@ -25,23 +25,23 @@ const BUTTONS: IButton[] = [
         for (let i = 0; i < line.length; i++) {
           switch (line.charAt(i)) {
             case 'U':
-            currentPosition[1] = Math.max(0, currentPosition[1] - 1)
-            break
+              currentPosition[1] = Math.max(0, currentPosition[1] - 1)
+              break
 
             case 'D':
-            currentPosition[1] = Math.min(2, currentPosition[1] + 1)
-            break
+              currentPosition[1] = Math.min(2, currentPosition[1] + 1)
+              break
 
             case 'L':
-            currentPosition[0] = Math.max(0, currentPosition[0] - 1)
-            break
+              currentPosition[0] = Math.max(0, currentPosition[0] - 1)
+              break
 
             case 'R':
-            currentPosition[0] = Math.min(2, currentPosition[0] + 1)
-            break
+              currentPosition[0] = Math.min(2, currentPosition[0] + 1)
+              break
 
             default:
-            break
+              break
           }
         }
         code += DOOR_BUTTONS[currentPosition[1]].charAt(currentPosition[0])
@@ -78,33 +78,33 @@ const BUTTONS: IButton[] = [
         for (let i = 0; i < line.length; i++) {
           switch (line.charAt(i)) {
             case 'U':
-            if (
-              currentPosition[1] - 1 >= 0
-              && DOOR_BUTTONS[currentPosition[1] - 1].charAt(currentPosition[0]) !== ' '
-            ) {
-              currentPosition[1] = Math.max(0, currentPosition[1] - 1)
-            }
-            break
+              if (
+                currentPosition[1] - 1 >= 0
+                && DOOR_BUTTONS[currentPosition[1] - 1].charAt(currentPosition[0]) !== ' '
+              ) {
+                currentPosition[1] = Math.max(0, currentPosition[1] - 1)
+              }
+              break
 
             case 'D':
-            if (
-              currentPosition[1] + 1 < DOOR_BUTTONS.length
-              && DOOR_BUTTONS[currentPosition[1] + 1].charAt(currentPosition[0]) !== ' '
-            ) {
-              currentPosition[1] += 1
-            }
-            break
+              if (
+                currentPosition[1] + 1 < DOOR_BUTTONS.length
+                && DOOR_BUTTONS[currentPosition[1] + 1].charAt(currentPosition[0]) !== ' '
+              ) {
+                currentPosition[1] += 1
+              }
+              break
 
             case 'L':
-            currentPosition[0] = Math.max(buttonRowLimits[currentPosition[1]][0], currentPosition[0] - 1)
-            break
+              currentPosition[0] = Math.max(buttonRowLimits[currentPosition[1]][0], currentPosition[0] - 1)
+              break
 
             case 'R':
-            currentPosition[0] = Math.min(buttonRowLimits[currentPosition[1]][1], currentPosition[0] + 1)
-            break
+              currentPosition[0] = Math.min(buttonRowLimits[currentPosition[1]][1], currentPosition[0] + 1)
+              break
 
             default:
-            break
+              break
           }
         }
         code += DOOR_BUTTONS[currentPosition[1]].charAt(currentPosition[0])

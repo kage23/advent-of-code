@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day25'
+import INPUT from '../Inputs/2017/Day25'
 
 interface ITuringMachineStates {
   currentState: string

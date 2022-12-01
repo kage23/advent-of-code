@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day7'
+import INPUT from '../Inputs/2015/Day7'
 
 const constructCircuit = (instructions: string[], part: 1 | 2): Map<string, number> => {
   const circuit: Map<string, number> = new Map()
@@ -14,7 +14,7 @@ const constructCircuit = (instructions: string[], part: 1 | 2): Map<string, numb
 
   while (outputs.some(output => circuit.get(output) === undefined)) {
     instructions.forEach(instruction => {
-      const [ input, output ] = instruction.split(' -> ')
+      const [input, output] = instruction.split(' -> ')
       if (circuit.get(output) === undefined) {
         if (output === 'b' && part === 2) {
           circuit.set(output, 3176)

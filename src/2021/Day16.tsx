@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day16'
+import INPUT from '../Inputs/2021/Day16'
 
 interface Packet {
   body: number | Packet[]

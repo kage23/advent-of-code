@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day9'
+import INPUT from '../Inputs/2015/Day9'
 
 const findShortestPath = (inputKey: string): {
   answer1: string
@@ -18,19 +18,19 @@ const findShortestPath = (inputKey: string): {
 
   const distances: Map<string, number> = new Map(
     INPUT[inputKey].split('\n')
-    .map(inputLine => {
-      const [ places, distance ] = inputLine.split(' = ')
+      .map(inputLine => {
+        const [places, distance] = inputLine.split(' = ')
 
-      return [
-        places
-          .split(' to ')
-          .sort((a, b) => (
-            a.toLowerCase().localeCompare(b.toLowerCase())
-          ))
-          .join(' to '),
-        parseInt(distance)
-      ]
-    })
+        return [
+          places
+            .split(' to ')
+            .sort((a, b) => (
+              a.toLowerCase().localeCompare(b.toLowerCase())
+            ))
+            .join(' to '),
+          parseInt(distance)
+        ]
+      })
   )
 
   const places = Array.from(distances.keys()).map(x => x.split(' to ')).reduce((list, current) => {

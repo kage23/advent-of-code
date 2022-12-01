@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day22'
+import INPUT from '../Inputs/2018/Day22'
 
 const TYPE_ARRAY: Array<'.' | '=' | '|'> = ['.', '=', '|']
 
@@ -22,7 +22,7 @@ interface IMap {
   depth: number
   max: ICoord
   squares: {
-    [key:string]: IMapSquare
+    [key: string]: IMapSquare
   }
   target: ICoord
 }
@@ -93,7 +93,7 @@ const getMapSquare = (map: IMap, coord: ICoord): IMapSquare => {
     if (upSquare === undefined)
       upSquare = updateMap(getMapSquare(map, { x: x, y: y - 1 }), map).squares[pathKey({ x: x, y: y - 1 })]
 
-      geologic = leftSquare.erosion * upSquare.erosion
+    geologic = leftSquare.erosion * upSquare.erosion
   }
 
   // A region's erosion level is its geologic index plus the cave system's depth, all modulo 20183.
@@ -102,7 +102,7 @@ const getMapSquare = (map: IMap, coord: ICoord): IMapSquare => {
   // If the erosion level modulo 3 is 0, the region's type is rocky.
   // If the erosion level modulo 3 is 1, the region's type is wet.
   // If the erosion level modulo 3 is 2, the region's type is narrow.
-  const type= TYPE_ARRAY[erosion % 3]
+  const type = TYPE_ARRAY[erosion % 3]
 
   return {
     x,
@@ -158,7 +158,7 @@ const assessRisk = (inputKey: string): { answer1: string } => {
 }
 
 const getNextActions = (map: IMap, action: IAction)
-: IAction[] => {
+  : IAction[] => {
   /**
    * The potentially possible moves for each position are: move N, W, S, or E, or change equipment and then move NWSE
    * The limitations are that you can't go x < or y < 0, and you have to have the right equipment for the current room and the next room
@@ -193,46 +193,46 @@ const getNextActions = (map: IMap, action: IAction)
     { x: position.x, y: position.y - 1 },
     { x: position.x, y: position.y + 1 }
   ]
-  // Filtered by ones actually within the allowed cave area
-  .filter(position => position.x >= 0 && position.y >= 0)
-  // Mapped and reduced to possible actions, including switching equipment and total time
-  .reduce((accumulator: IAction[], nextPosition: ICoord): IAction[] => {
-    const currentRoomType = map.squares[pathKey(position)].type
-    const nextRoomType = map.squares[pathKey(nextPosition)]
-      ? map.squares[pathKey(nextPosition)].type
-      : updateMap(getMapSquare(map, nextPosition), map).squares[pathKey(nextPosition)].type
-    const currentNotEquipped = ALLOWED_EQUIPMENT_PER_ROOM_TYPE[currentRoomType].find(e => e !== equipment)
+    // Filtered by ones actually within the allowed cave area
+    .filter(position => position.x >= 0 && position.y >= 0)
+    // Mapped and reduced to possible actions, including switching equipment and total time
+    .reduce((accumulator: IAction[], nextPosition: ICoord): IAction[] => {
+      const currentRoomType = map.squares[pathKey(position)].type
+      const nextRoomType = map.squares[pathKey(nextPosition)]
+        ? map.squares[pathKey(nextPosition)].type
+        : updateMap(getMapSquare(map, nextPosition), map).squares[pathKey(nextPosition)].type
+      const currentNotEquipped = ALLOWED_EQUIPMENT_PER_ROOM_TYPE[currentRoomType].find(e => e !== equipment)
 
-    // If this is the current room, the action we're examining is switching your equipment with a time of 7
-    if (currentNotEquipped !== undefined && nextPosition.x === position.x && nextPosition.y === position.y) {
-      accumulator.push({
-        equipment: currentNotEquipped,
-        position: nextPosition,
-        time: time + 7
-      })
-    } else {
-
-      // If the currently-equipped item is allowed in the next room, push it with a time of 1 plus current
-      if (ALLOWED_EQUIPMENT_PER_ROOM_TYPE[nextRoomType].indexOf(equipment) !== -1) {
+      // If this is the current room, the action we're examining is switching your equipment with a time of 7
+      if (currentNotEquipped !== undefined && nextPosition.x === position.x && nextPosition.y === position.y) {
         accumulator.push({
-          equipment,
+          equipment: currentNotEquipped,
           position: nextPosition,
-          time: time + 1
+          time: time + 7
         })
-      }
-    }
+      } else {
 
-    return accumulator
-  }, [])
-  // Sorted by time
-  .sort((a, b) => a.time - b.time)
+        // If the currently-equipped item is allowed in the next room, push it with a time of 1 plus current
+        if (ALLOWED_EQUIPMENT_PER_ROOM_TYPE[nextRoomType].indexOf(equipment) !== -1) {
+          accumulator.push({
+            equipment,
+            position: nextPosition,
+            time: time + 1
+          })
+        }
+      }
+
+      return accumulator
+    }, [])
+    // Sorted by time
+    .sort((a, b) => a.time - b.time)
 }
 
 const calculateRescueTime = (caveMap: IMap)
-: {
-  answer: number
-  map: IMap
-} => {
+  : {
+    answer: number
+    map: IMap
+  } => {
   let actionsList: IAction[] = [{
     position: {
       x: 0,
@@ -273,8 +273,8 @@ const calculateRescueTime = (caveMap: IMap)
         break
       }
       getNextActions(caveMap, currentNode)
-      .filter(action => !visitedMap.get(searchPathKey(action)) )
-      .forEach(forEachAction)
+        .filter(action => !visitedMap.get(searchPathKey(action)))
+        .forEach(forEachAction)
       visitedMap.set(searchPathKey(currentNode), true)
 
       actionsList.sort((a, b) => a.time - b.time)

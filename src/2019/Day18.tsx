@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day18'
+import INPUT from '../Inputs/2019/Day18'
 import Tree, { TreeNode } from '../utils/Tree'
 import { manhattanDistance } from '../utils/Various'
 import SLL from '../utils/SLL'
@@ -225,19 +225,19 @@ const getReachableFromCollected = (robotIndex: number, collected: string, positi
 const parseGridString = (str: string): number[] => str.split(',').map(i => parseInt(i))
 const renderGridString = (pos: number[]): string => pos.join(',')
 
-const getAdjacentPositions = (current: string): { [key:string]: string } => {
-  const [ x, y ] = parseGridString(current)
+const getAdjacentPositions = (current: string): { [key: string]: string } => {
+  const [x, y] = parseGridString(current)
   return {
-    n: renderGridString([x , y - 1]),
-    s: renderGridString([x , y + 1]),
-    w: renderGridString([x - 1 , y]),
-    e: renderGridString([x + 1 , y])
+    n: renderGridString([x, y - 1]),
+    s: renderGridString([x, y + 1]),
+    w: renderGridString([x - 1, y]),
+    e: renderGridString([x + 1, y])
   }
 }
 
 const getAdjacentPositionsArray = (current: string): string[] => {
   const { n, e, s, w } = getAdjacentPositions(current)
-  return [ n, e, s, w ]
+  return [n, e, s, w]
 }
 
 const findShortestPath = (start: string, end: string, map: Map<string, string>): {
@@ -264,7 +264,7 @@ const findShortestPath = (start: string, end: string, map: Map<string, string>):
         // Sort by distance from the target
         .sort((a, b) => (
           manhattanDistance(parseGridString(end), parseGridString(a))
-            - manhattanDistance(parseGridString(end), parseGridString(b))
+          - manhattanDistance(parseGridString(end), parseGridString(b))
         ))
       adjacents.forEach(pushAdjacentToCurrent)
     }
@@ -306,7 +306,7 @@ const alphaSort = (a: string, b: string) => {
 const sortStringAlpha = (x: string): string => x.split('').sort(alphaSort).join('')
 
 const renderKeys = (): string => Array.from(listOfKeysAndDoors.keys())
-  .sort((a, b) => a < b ? -1 : 1 )
+  .sort((a, b) => a < b ? -1 : 1)
   .map(doorName => {
     const keyDoorThing = listOfKeysAndDoors.get(doorName)
     if (!keyDoorThing) throw new Error('fuck')

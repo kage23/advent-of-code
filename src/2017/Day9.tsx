@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day9'
+import INPUT from '../Inputs/2017/Day9'
 
 let groups = 0
 let prevInputKey = ''
@@ -22,35 +22,35 @@ const processStream = (input: string): {
   for (let i = 0; i < len; i++) {
     switch (input.charAt(i)) {
       case '{':
-      if (!inGarbage) {
-        groups++
-        parentScore++
-        score += parentScore
-      }
-      if (inGarbage) garbage++
-      break
+        if (!inGarbage) {
+          groups++
+          parentScore++
+          score += parentScore
+        }
+        if (inGarbage) garbage++
+        break
 
       case '}':
-      if (!inGarbage) parentScore--
-      if (inGarbage) garbage++
-      break
+        if (!inGarbage) parentScore--
+        if (inGarbage) garbage++
+        break
 
       case '<':
-      if (inGarbage) garbage++
-      inGarbage = true
-      break
+        if (inGarbage) garbage++
+        inGarbage = true
+        break
 
       case '>':
-      inGarbage = false
-      break
+        inGarbage = false
+        break
 
       case '!':
-      i++
-      break
+        i++
+        break
 
       default:
-      if (inGarbage) garbage++
-      break
+        if (inGarbage) garbage++
+        break
     }
   }
 

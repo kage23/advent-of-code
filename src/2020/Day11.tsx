@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day11'
+import INPUT from '../Inputs/2020/Day11'
 
 const getOccupiedLineOfSightCount = (
   seats: string[],
@@ -52,20 +52,20 @@ const getOccupiedNeighborsCount = (
   rowIdx: number,
   seatIdx: number
 ): number => ([
-    [rowIdx - 1, seatIdx - 1],
-    [rowIdx - 1, seatIdx],
-    [rowIdx - 1, seatIdx + 1],
-    [rowIdx, seatIdx - 1],
-    [rowIdx, seatIdx + 1],
-    [rowIdx + 1, seatIdx - 1],
-    [rowIdx + 1, seatIdx],
-    [rowIdx + 1, seatIdx + 1]
-  ].filter(([rowIdx, seatIdx]) => (
-    // No invalid coords
-    (rowIdx >= 0 && seatIdx >= 0 && rowIdx < seats.length && seatIdx < seats[0].length) &&
-    // Check if occupied
-    (seats[rowIdx].charAt(seatIdx) === '#')
-  )).length
+  [rowIdx - 1, seatIdx - 1],
+  [rowIdx - 1, seatIdx],
+  [rowIdx - 1, seatIdx + 1],
+  [rowIdx, seatIdx - 1],
+  [rowIdx, seatIdx + 1],
+  [rowIdx + 1, seatIdx - 1],
+  [rowIdx + 1, seatIdx],
+  [rowIdx + 1, seatIdx + 1]
+].filter(([rowIdx, seatIdx]) => (
+  // No invalid coords
+  (rowIdx >= 0 && seatIdx >= 0 && rowIdx < seats.length && seatIdx < seats[0].length) &&
+  // Check if occupied
+  (seats[rowIdx].charAt(seatIdx) === '#')
+)).length
 )
 
 const iterateSeats = (seats: string[]): string[] => {

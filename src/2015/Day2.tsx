@@ -5,10 +5,10 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day2'
+import INPUT from '../Inputs/2015/Day2'
 
 const getRibbon = (present: string): number => {
-  const [ l, w, h ] = present.split('x').map(x => parseInt(x))
+  const [l, w, h] = present.split('x').map(x => parseInt(x))
   return Math.min(
     (l * 2) + (w * 2),
     (l * 2) + (h * 2),
@@ -17,7 +17,7 @@ const getRibbon = (present: string): number => {
 }
 
 const getWrappingPaperSize = (present: string): number => {
-  const [ l, w, h ] = present.split('x').map(x => parseInt(x))
+  const [l, w, h] = present.split('x').map(x => parseInt(x))
   const slack = Math.min(l * w, l * h, w * h)
   return (2 * l * w) + (2 * l * h) + (2 * w * h) + slack
 }

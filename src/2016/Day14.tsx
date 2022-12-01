@@ -6,14 +6,14 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day14'
+import INPUT from '../Inputs/2016/Day14'
 
 const hashes: Map<string, string> = new Map()
 const stretchedHashes: Map<string, string> = new Map()
 
 const containsRepeat = (input: string, requiredCount: number, letter?: string): false | string => {
   const { length } = input
-  
+
   for (let i = 0; i <= length - requiredCount; i++) {
     const slice = input.slice(i, i + requiredCount).split('')
     if (

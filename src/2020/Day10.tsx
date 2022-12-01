@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day10'
+import INPUT from '../Inputs/2020/Day10'
 
 const BUTTONS: IButton[] = [
   {

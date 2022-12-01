@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day6'
+import INPUT from '../Inputs/2021/Day6'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const simulateADay = (fish: number[]) => {

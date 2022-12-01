@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day5'
+import INPUT from '../Inputs/2019/Day5'
 import { intcodeComputer2019 } from '../utils/Various'
 
 const parseInput = (inputKey: string): number[] =>
@@ -17,7 +17,7 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey: string) => {
       const input = parseInput(inputKey)
 
-      const { outputs } = intcodeComputer2019(input,[1])
+      const { outputs } = intcodeComputer2019(input, [1])
       const output = outputs.pop()
 
       return output !== undefined ? {

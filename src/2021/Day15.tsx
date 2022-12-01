@@ -7,7 +7,7 @@ import {
 import AStar from '../utils/AStar'
 import { manhattanDistance } from '../utils/Various'
 
-import INPUT from './Input/Day15'
+import INPUT from '../Inputs/2021/Day15'
 
 const parseInput = (input: string): Map<string, number> => {
   const map: Map<string, number> = new Map()

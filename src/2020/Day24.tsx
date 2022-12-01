@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import INPUT from './Input/Day24'
+import INPUT from '../Inputs/2020/Day24'
 
 const advanceOneStep = (tiles: Map<string, boolean>): Map<string, boolean> => {
   const newTiles: Map<string, boolean> = new Map()

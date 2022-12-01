@@ -5,7 +5,7 @@ import {
 } from '../Config'
 import { intcodeComputer2019, IIntcodeComputerResults } from '../utils/Various'
 
-import INPUT from './Input/Day13'
+import INPUT from '../Inputs/2019/Day13'
 
 // 0 is an empty tile. No game object appears in this tile.
 // 1 is a wall tile. Walls are indestructible barriers.
@@ -23,7 +23,7 @@ const parseInput = (inputKey: string): number[] =>
 const renderDay = (dayConfig: IDayConfig, inputKey: string) => {
   const screenArray: string[][] = []
   Array.from(screen.entries()).forEach(([position, value]) => {
-    const [ xPos, yPos ] = position.split(',').map(i => parseInt(i))
+    const [xPos, yPos] = position.split(',').map(i => parseInt(i))
     let char = ''
     switch (value) {
       case 0:
@@ -68,8 +68,8 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string) => {
 }
 
 const getInput = (): number => {
-  const [ bx ] = ballPosition.split(',').map(i => parseInt(i))
-  const [ px ] = paddlePosition.split(',').map(i => parseInt(i))
+  const [bx] = ballPosition.split(',').map(i => parseInt(i))
+  const [px] = paddlePosition.split(',').map(i => parseInt(i))
 
   if (bx < px) return -1
   else if (bx > px) return 1
@@ -130,7 +130,7 @@ const BUTTONS: IButton[] = [
   {
     label: 'Run Step',
     onClick: () => {
-      let input: number[] = [ getInput() ]
+      let input: number[] = [getInput()]
 
       while (outputs.length < 3) {
         result = intcodeComputer2019(result.program, input, true, result.instructionPointer, result.relativeBase)

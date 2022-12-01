@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day1'
+import INPUT from '../Inputs/2019/Day1'
 
 const findFuelForAllModules = (inputKey: string) => {
   const input = parseInput(inputKey)

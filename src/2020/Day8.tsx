@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day8'
+import INPUT from '../Inputs/2020/Day8'
 
 import GamingSystem, { IInstruction } from './GamingSystem'
 

@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import SLL from '../utils/SLL'
 
-import INPUT from './Input/Day22'
+import INPUT from '../Inputs/2015/Day22'
 
 interface IFighter {
   armor: number
@@ -30,49 +30,49 @@ const SPELLS: {
   effect: (player: IFighter, boss: IFighter) => void
   name: string
 }[] = [
-  {
-    cost: 53,
-    effect: (player, boss) => {
-      boss.hitPoints -= 4
+    {
+      cost: 53,
+      effect: (player, boss) => {
+        boss.hitPoints -= 4
+      },
+      name: 'Magic Missile'
     },
-    name: 'Magic Missile'
-  },
-  {
-    cost: 73,
-    effect: (player, boss) => {
-      boss.hitPoints -= 2
-      player.hitPoints += 2
+    {
+      cost: 73,
+      effect: (player, boss) => {
+        boss.hitPoints -= 2
+        player.hitPoints += 2
+      },
+      name: 'Drain'
     },
-    name: 'Drain'
-  },
-  {
-    cost: 113,
-    effect: (player) => {
-      if (player.shieldIsActive === 0) {
-        player.shieldIsActive = 6
-      }
+    {
+      cost: 113,
+      effect: (player) => {
+        if (player.shieldIsActive === 0) {
+          player.shieldIsActive = 6
+        }
+      },
+      name: 'Shield'
     },
-    name: 'Shield'
-  },
-  {
-    cost: 173,
-    effect: (player, boss) => {
-      if (boss.poisonIsActive === 0) {
-        boss.poisonIsActive = 6
-      }
+    {
+      cost: 173,
+      effect: (player, boss) => {
+        if (boss.poisonIsActive === 0) {
+          boss.poisonIsActive = 6
+        }
+      },
+      name: 'Poison'
     },
-    name: 'Poison'
-  },
-  {
-    cost: 229,
-    effect: (player) => {
-      if (player.rechargeIsActive === 0) {
-        player.rechargeIsActive = 5
-      }
-    },
-    name: 'Recharge'
-  }
-]
+    {
+      cost: 229,
+      effect: (player) => {
+        if (player.rechargeIsActive === 0) {
+          player.rechargeIsActive = 5
+        }
+      },
+      name: 'Recharge'
+    }
+  ]
 
 const applyEffects = (fighters: IFighter[]): void =>
   fighters.forEach(fighter => {
@@ -175,7 +175,7 @@ const findBestFight = (part: 1 | 2): number => {
   return NaN
 }
 
-function * generatePossibleNexts(current: ISearchNode, part: 1 | 2): Generator<ISearchNode, ISearchNode | undefined, undefined> {
+function* generatePossibleNexts(current: ISearchNode, part: 1 | 2): Generator<ISearchNode, ISearchNode | undefined, undefined> {
   for (let i = 0; i < SPELLS.length; i++) {
     const spell = SPELLS[i]
     let fighters = {

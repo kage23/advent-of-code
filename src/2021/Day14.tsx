@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day14'
+import INPUT from '../Inputs/2021/Day14'
 
 // const polymerize = (polymer: string, rulesMap: Map<string, string>): string =>
 //   polymer.split('').reduce((poly, char, i, polyArray) => {

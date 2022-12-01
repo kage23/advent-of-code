@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day1'
+import INPUT from '../Inputs/2017/Day1'
 
 const solveCaptcha1 = (inputKey: string): { answer1: string } => {
   const input = INPUT[inputKey]

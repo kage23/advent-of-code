@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day24'
+import INPUT from '../Inputs/2015/Day24'
 
 const determineCombos = (numbers: number[], target: number): number[][] => {
   if (target <= 0) return []

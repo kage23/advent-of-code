@@ -5,7 +5,7 @@ import {
 } from '../Config'
 import { intcodeComputer2019 } from '../utils/Various'
 
-import INPUT from './Input/Day19'
+import INPUT from '../Inputs/2019/Day19'
 
 const size = 50
 
@@ -77,7 +77,7 @@ const BUTTONS: IButton[] = [
         [number, number],
         [number, number]
       ] => {
-        const [ x, y ] = upperRight
+        const [x, y] = upperRight
         return [
           [x - 99, y],
           [x, y],
@@ -93,7 +93,7 @@ const BUTTONS: IButton[] = [
       }
 
       const getNextNode = (node: [number, number]): [number, number] => {
-        let [ x, y ] = node
+        let [x, y] = node
         // First, go down one
         y++
         // Verify that you're still in the beam
@@ -118,7 +118,7 @@ const BUTTONS: IButton[] = [
       }
 
       const goodCorners = getCorners(currentNode)
-      const [ [ x, y ] ] = goodCorners
+      const [[x, y]] = goodCorners
 
       return {
         answer2: ((x * 10000) + y).toString()

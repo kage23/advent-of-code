@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day18'
+import INPUT from '../Inputs/2015/Day18'
 
 const countOnNeighbors = (grid: string, x: number, y: number): number => {
   const parsedGrid = grid.split('\n')

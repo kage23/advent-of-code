@@ -6,7 +6,7 @@ import {
 import { intcodeComputer2019, IIntcodeComputerResults, manhattanDistance } from '../utils/Various'
 import Tree, { TreeNode } from '../utils/Tree'
 
-import INPUT from './Input/Day15'
+import INPUT from '../Inputs/2019/Day15'
 
 let program: number[] = []
 let instructionPointer = 0
@@ -41,19 +41,19 @@ grid.set(droidPosition, 'D')
 const parseGridString = (str: string): number[] => str.split(',').map(i => parseInt(i))
 const renderGridString = (pos: number[]): string => pos.join(',')
 
-const getAdjacentPositions = (current: string): { [key:string]: string } => {
-  const [ x, y ] = parseGridString(current)
+const getAdjacentPositions = (current: string): { [key: string]: string } => {
+  const [x, y] = parseGridString(current)
   return {
-    n: renderGridString([x , y - 1]),
-    s: renderGridString([x , y + 1]),
-    w: renderGridString([x - 1 , y]),
-    e: renderGridString([x + 1 , y])
+    n: renderGridString([x, y - 1]),
+    s: renderGridString([x, y + 1]),
+    w: renderGridString([x - 1, y]),
+    e: renderGridString([x + 1, y])
   }
 }
 
 const getAdjacentPositionsArray = (current: string): string[] => {
   const { n, e, s, w } = getAdjacentPositions(current)
-  return [ n, e, s, w ]
+  return [n, e, s, w]
 }
 
 const advanceOxygen = () => {
@@ -88,15 +88,15 @@ const findNearestUnknownSquare = (): string => {
   let searchQueue = [droidPosition]
   const searched = new Map()
   const forEachAdjacent = (adjacent: string) => {
-    const [ x, y ] = parseGridString(adjacent)
-      if (
-        !searched.get(adjacent)
-        && !searchQueue.includes(adjacent)
-        && !forbidden.includes(adjacent)
-        && (x >= goodXMin && x <= goodXMax && y >= goodYMin && y <= goodYMax)
-      ) {
-        searchQueue.push(adjacent)
-      }
+    const [x, y] = parseGridString(adjacent)
+    if (
+      !searched.get(adjacent)
+      && !searchQueue.includes(adjacent)
+      && !forbidden.includes(adjacent)
+      && (x >= goodXMin && x <= goodXMax && y >= goodYMin && y <= goodYMax)
+    ) {
+      searchQueue.push(adjacent)
+    }
   }
   while (searchQueue.length) {
     const current = searchQueue.shift()
@@ -135,7 +135,7 @@ const findShortestPath = (start: string, end: string): string[] | undefined => {
         // Sort by distance from the target
         .sort((a, b) => (
           manhattanDistance(parseGridString(end), parseGridString(a))
-            - manhattanDistance(parseGridString(end), parseGridString(b))
+          - manhattanDistance(parseGridString(end), parseGridString(b))
         ))
       adjacents.forEach(pushAdjacentToCurrent)
     }
@@ -158,7 +158,7 @@ const findShortestPath = (start: string, end: string): string[] | undefined => {
         let maxX = Number.MIN_SAFE_INTEGER
         let maxY = Number.MIN_SAFE_INTEGER
         for (let key of grid.keys()) {
-          const [ x, y ] = parseGridString(key)
+          const [x, y] = parseGridString(key)
           minX = Math.min(minX, x)
           minY = Math.min(minY, y)
           maxX = Math.max(maxX, x)
@@ -178,7 +178,7 @@ const findShortestPath = (start: string, end: string): string[] | undefined => {
 
 const getNextStep = (): -1 | 1 | 2 | 3 | 4 => {
   // I should find the nearest unknown square and take one step toward it
-  const [ x, y ] = parseGridString(droidPosition)
+  const [x, y] = parseGridString(droidPosition)
   let path: undefined | string[] = undefined
 
   while (!path) {
@@ -228,7 +228,7 @@ const renderGrid = () => {
   let minY = Number.MAX_SAFE_INTEGER
 
   for (let key of grid.keys()) {
-    const [ x, y ] = parseGridString(key)
+    const [x, y] = parseGridString(key)
     minX = Math.min(minX, x)
     minY = Math.min(minY, y)
   }
@@ -239,7 +239,7 @@ const renderGrid = () => {
   const field: ('D' | '#' | '.' | ' ' | 'X' | 'O')[][] = []
 
   for (let [key, value] of grid.entries()) {
-    const [ x, y ] = parseGridString(key)
+    const [x, y] = parseGridString(key)
     const fieldX = x + xOffset
     const fieldY = y + yOffset
     if (!field[fieldY]) field[fieldY] = []

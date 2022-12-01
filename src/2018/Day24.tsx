@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day24'
+import INPUT from '../Inputs/2018/Day24'
 import { randInt } from '../utils/Various'
 
 export enum DAMAGE_TYPES {
@@ -42,12 +42,12 @@ interface IFight {
 let rounds = 0
 
 const findBoost = (inputKey: string)
-: {
-  immuneSystem: IGroup[],
-  infection: IGroup[],
-  rounds: number,
-  boost: number
-} => {
+  : {
+    immuneSystem: IGroup[],
+    infection: IGroup[],
+    rounds: number,
+    boost: number
+  } => {
   let boost = 0
   let highestBad = 0
   let lowestGood = Number.MAX_SAFE_INTEGER
@@ -86,14 +86,14 @@ const findBoost = (inputKey: string)
 }
 
 const fightCombat = (immuneSystem: IGroup[], infection: IGroup[], rounds: number)
-: IFight => {
+  : IFight => {
   let fight = { immuneSystem, infection }
   let stalemate = false
 
-  let prevUnitCount = [ ...immuneSystem, ...infection].reduce((total, group) => total + group.units, 0)
+  let prevUnitCount = [...immuneSystem, ...infection].reduce((total, group) => total + group.units, 0)
   while (fight.immuneSystem.length > 0 && fight.infection.length > 0) {
     fight = fightRound(fight.immuneSystem, fight.infection)
-    const afterUnitCount = [ ...fight.immuneSystem, ...fight.infection].reduce((total, group) => total + group.units, 0)
+    const afterUnitCount = [...fight.immuneSystem, ...fight.infection].reduce((total, group) => total + group.units, 0)
     if (afterUnitCount === prevUnitCount) {
       stalemate = true
       break
@@ -111,22 +111,22 @@ const fightCombat = (immuneSystem: IGroup[], infection: IGroup[], rounds: number
 }
 
 const fightRound = (immuneSystem: IGroup[], infection: IGroup[])
-: { immuneSystem: IGroup[], infection: IGroup[] } => {
+  : { immuneSystem: IGroup[], infection: IGroup[] } => {
   // Target selection phase
   const groups = [
     ...immuneSystem,
     ...infection
   ]
-  .map(group => ({
-    ...group,
-    effectivePower: group.units * group.attackPower,
-    picked: false
-  }))
-  .sort((a, b) => (
-    a.effectivePower !== b.effectivePower
-      ? b.effectivePower - a.effectivePower
-      : b.initiative - a.initiative
-  ))
+    .map(group => ({
+      ...group,
+      effectivePower: group.units * group.attackPower,
+      picked: false
+    }))
+    .sort((a, b) => (
+      a.effectivePower !== b.effectivePower
+        ? b.effectivePower - a.effectivePower
+        : b.initiative - a.initiative
+    ))
 
   const enemiesMap = new Map()
 
@@ -161,18 +161,18 @@ const fightRound = (immuneSystem: IGroup[], infection: IGroup[])
 
   // Attack phase
   groups.sort((a, b) => b.initiative - a.initiative)
-  .forEach(group => {
-    if (enemiesMap.get(group) && group.units > 0) {
-      const enemy = enemiesMap.get(group)
-      const damage = calculateHPDamage(group, enemy)
-      const unitsLost = Math.floor(damage / enemy.hp)
-      enemy.units -= unitsLost
+    .forEach(group => {
+      if (enemiesMap.get(group) && group.units > 0) {
+        const enemy = enemiesMap.get(group)
+        const damage = calculateHPDamage(group, enemy)
+        const unitsLost = Math.floor(damage / enemy.hp)
+        enemy.units -= unitsLost
 
-      // console.log(`${group.type} group ${(group.id || 0) + 1} attacks defending group ${(group.enemy.id || 0) + 1}, killing ${unitsLost} units`)
+        // console.log(`${group.type} group ${(group.id || 0) + 1} attacks defending group ${(group.enemy.id || 0) + 1}, killing ${unitsLost} units`)
 
-      enemy.picked = false
-    }
-  })
+        enemy.picked = false
+      }
+    })
 
   return {
     immuneSystem: groups.filter(group => group.type === UNIT_TYPES.IMMUNE_SYSTEM && group.units > 0),
@@ -228,8 +228,8 @@ const getGroup = (line: string, type: UNIT_TYPES, boost: number, id: number): IG
     immune,
     weak
   } = remain.indexOf('(') !== -1
-    ? getImmunitiesAndWeaknesses(remain.split('(')[1])
-    : { immune: [], weak: [] }
+      ? getImmunitiesAndWeaknesses(remain.split('(')[1])
+      : { immune: [], weak: [] }
   remain = remain.split('with an attack that does ')[1]
   let attackPower = parseInt(remain)
   const remainingWords = remain.split(' ')
@@ -374,15 +374,13 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
             <li key={`${group.type.split(' ').join('_')}${group.id}`}>
               {group.units} units each with {group.hp} hit points{' '}
               {group.weak.length > 0 || group.immune.length > 0
-                ? `(${
-                  group.weak.length > 0
-                    ? `weak to ${group.weak.join(', ')}${group.immune.length > 0 ? '; ' : ''}`
-                    : ''
-                  }${
-                    group.immune.length > 0
-                      ? `immune to ${group.immune.join(', ')}`
-                      : ''
-                  }) `
+                ? `(${group.weak.length > 0
+                  ? `weak to ${group.weak.join(', ')}${group.immune.length > 0 ? '; ' : ''}`
+                  : ''
+                }${group.immune.length > 0
+                  ? `immune to ${group.immune.join(', ')}`
+                  : ''
+                }) `
                 : ''
               }
               with an attack that does {group.attackPower} {group.attackType} damage at initiative {group.initiative}
@@ -402,15 +400,13 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
             <li key={`${group.type.split(' ').join('_')}${group.id}`}>
               {group.units} units each with {group.hp} hit points{' '}
               {group.weak.length > 0 || group.immune.length > 0
-                ? `(${
-                  group.weak.length > 0
-                    ? `weak to ${group.weak.join(', ')}${group.immune.length > 0 ? '; ' : ''}`
-                    : ''
-                  }${
-                    group.immune.length > 0
-                      ? `immune to ${group.immune.join(', ')}`
-                      : ''
-                  }) `
+                ? `(${group.weak.length > 0
+                  ? `weak to ${group.weak.join(', ')}${group.immune.length > 0 ? '; ' : ''}`
+                  : ''
+                }${group.immune.length > 0
+                  ? `immune to ${group.immune.join(', ')}`
+                  : ''
+                }) `
                 : ''
               }
               with an attack that does {group.attackPower} {group.attackType} damage at initiative {group.initiative}

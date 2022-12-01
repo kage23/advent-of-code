@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day25'
+import INPUT from '../Inputs/2015/Day25'
 
 const getCodeFromCodeNumber = (codeNumber: number): number => {
   let code = 20151125

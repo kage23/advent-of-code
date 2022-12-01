@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day3'
+import INPUT from '../Inputs/2017/Day3'
 import { manhattanDistance } from '../utils/Various'
 
 const Directions: Array<'R' | 'U' | 'L' | 'D'> = [
@@ -14,13 +14,13 @@ const Directions: Array<'R' | 'U' | 'L' | 'D'> = [
 
 const getAdjacentSquares = (position: number[]): number[][] => [
   [position[0] - 1, position[1] - 1],
-  [position[0]    , position[1] - 1],
+  [position[0], position[1] - 1],
   [position[0] + 1, position[1] - 1],
-  [position[0] - 1, position[1]    ],
+  [position[0] - 1, position[1]],
   // [position[0]    , position[1]    ],
-  [position[0] + 1, position[1]    ],
+  [position[0] + 1, position[1]],
   [position[0] - 1, position[1] + 1],
-  [position[0]    , position[1] + 1],
+  [position[0], position[1] + 1],
   [position[0] + 1, position[1] + 1]
 ]
 
@@ -34,7 +34,7 @@ const figureSolution = (input: number, whichPart: 1 | 2): {
   let max = [0, 0]
   let min = [0, 0]
   let directionIndex = 0
-  const posValueMap: { [key:string]: number } = {
+  const posValueMap: { [key: string]: number } = {
     [`${JSON.stringify(currentPosition)}`]: 1
   }
 
@@ -44,36 +44,36 @@ const figureSolution = (input: number, whichPart: 1 | 2): {
   ) {
     switch (Directions[directionIndex]) {
       case 'R':
-      currentPosition[0]++
-      if (currentPosition[0] > max[0]) {
-        max[0] = currentPosition[0]
-        directionIndex = (directionIndex + 1) % Directions.length
-      }
-      break
+        currentPosition[0]++
+        if (currentPosition[0] > max[0]) {
+          max[0] = currentPosition[0]
+          directionIndex = (directionIndex + 1) % Directions.length
+        }
+        break
 
       case 'U':
-      currentPosition[1]--
-      if (currentPosition[1] < min[1]) {
-        min[1] = currentPosition[1]
-        directionIndex = (directionIndex + 1) % Directions.length
-      }
-      break
+        currentPosition[1]--
+        if (currentPosition[1] < min[1]) {
+          min[1] = currentPosition[1]
+          directionIndex = (directionIndex + 1) % Directions.length
+        }
+        break
 
       case 'L':
-      currentPosition[0]--
-      if (currentPosition[0] < min[0]) {
-        min[0] = currentPosition[0]
-        directionIndex = (directionIndex + 1) % Directions.length
-      }
-      break
+        currentPosition[0]--
+        if (currentPosition[0] < min[0]) {
+          min[0] = currentPosition[0]
+          directionIndex = (directionIndex + 1) % Directions.length
+        }
+        break
 
       case 'D':
-      currentPosition[1]++
-      if (currentPosition[1] > max[1]) {
-        max[1] = currentPosition[1]
-        directionIndex = (directionIndex + 1) % Directions.length
-      }
-      break
+        currentPosition[1]++
+        if (currentPosition[1] > max[1]) {
+          max[1] = currentPosition[1]
+          directionIndex = (directionIndex + 1) % Directions.length
+        }
+        break
     }
     currentValue = getAdjacentSquares(currentPosition).reduce((value, position) => (
       value + (posValueMap[`${JSON.stringify(position)}`] || 0)
@@ -83,12 +83,12 @@ const figureSolution = (input: number, whichPart: 1 | 2): {
   }
 
   return whichPart === 1
-  ? {
-    answer1: manhattanDistance(currentPosition, [0, 0]).toString()
-  }
-  : {
-    answer2: currentValue.toString()
-  }
+    ? {
+      answer1: manhattanDistance(currentPosition, [0, 0]).toString()
+    }
+    : {
+      answer2: currentValue.toString()
+    }
 }
 
 const BUTTONS: IButton[] = [

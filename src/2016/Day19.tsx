@@ -7,7 +7,7 @@ import {
 
 import DLL from '../utils/DLL'
 
-import INPUT from './Input/Day19'
+import INPUT from '../Inputs/2016/Day19'
 
 const doTheBadWhiteElephant = (inputKey: string): { answer1: string } => {
   const elfCount = parseInt(INPUT[inputKey])

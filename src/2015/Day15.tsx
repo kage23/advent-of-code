@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day15'
+import INPUT from '../Inputs/2015/Day15'
 
 interface IIngredient {
   calories: number
@@ -34,7 +34,7 @@ const generateRecipes = (ingredients: IIngredient[], totalSize = 100): IRecipeIt
       quantity: i
     }
     const remainingIngredientRecipes = generateRecipes(ingredients.slice(1), totalSize - i)
-    remainingIngredientRecipes.forEach(recipe => recipes.push([ firstIngredient, ...recipe ]))
+    remainingIngredientRecipes.forEach(recipe => recipes.push([firstIngredient, ...recipe]))
   }
 
   return recipes

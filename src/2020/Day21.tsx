@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import INPUT from './Input/Day21'
+import INPUT from '../Inputs/2020/Day21'
 
 interface IRecipe {
   allergens: string[]
@@ -60,10 +60,10 @@ const BUTTONS: IButton[] = [
           .map(({ allergen }) => allergen)
         allergenPossibilities = allergenPossibilities.map(({ allergen, possibilities }) => (
           knownAllergies.includes(allergen) ? { allergen, possibilities } :
-          {
-            allergen,
-            possibilities: possibilities.filter(possibility => !knownIngredients.includes(possibility))
-          }
+            {
+              allergen,
+              possibilities: possibilities.filter(possibility => !knownIngredients.includes(possibility))
+            }
         ))
       }
 
@@ -114,10 +114,10 @@ const BUTTONS: IButton[] = [
           .map(({ allergen }) => allergen)
         allergenPossibilities = allergenPossibilities.map(({ allergen, possibilities }) => (
           knownAllergies.includes(allergen) ? { allergen, possibilities } :
-          {
-            allergen,
-            possibilities: possibilities.filter(possibility => !knownIngredients.includes(possibility))
-          }
+            {
+              allergen,
+              possibilities: possibilities.filter(possibility => !knownIngredients.includes(possibility))
+            }
         ))
       }
 

@@ -3,9 +3,9 @@ import {
   defaultRenderDay,
   IButton,
   IDayConfig
- } from '../Config'
+} from '../Config'
 
-import INPUT, { PART_2_CONFIGS } from './Input/Day7'
+import INPUT, { PART_2_CONFIGS } from '../Inputs/2018/Day7'
 
 interface IStep {
   id: string
@@ -15,20 +15,20 @@ interface IStep {
 const parseInput = (inputKey: string): IStep[] => {
   const steps: IStep[] = []
   INPUT[inputKey].split('\n')
-  .forEach(stepStr => {
-    const prereq = stepStr.charAt(5)
-    const stepId = stepStr.charAt(36)
-    const step = steps.find(step => step.id === stepId)
-    if (step) {
-      step.prereqs.push(prereq)
-    } else {
-      steps.push({ id: stepId, prereqs: [prereq] })
-    }
-    const prereqStep = steps.find(step => step.id === prereq)
-    if (!prereqStep) {
-      steps.push({ id: prereq, prereqs: [] })
-    }
-  })
+    .forEach(stepStr => {
+      const prereq = stepStr.charAt(5)
+      const stepId = stepStr.charAt(36)
+      const step = steps.find(step => step.id === stepId)
+      if (step) {
+        step.prereqs.push(prereq)
+      } else {
+        steps.push({ id: stepId, prereqs: [prereq] })
+      }
+      const prereqStep = steps.find(step => step.id === prereq)
+      if (!prereqStep) {
+        steps.push({ id: prereq, prereqs: [] })
+      }
+    })
   steps.sort((a, b) => a.id < b.id ? -1 : 1)
   return steps
 }

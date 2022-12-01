@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day9'
+import INPUT from '../Inputs/2021/Day9'
 
 // Returns [rowIndex, colIndex][] list of low points
 const identifyTheLowPoints = (rows: string[]): [number, number][] => {

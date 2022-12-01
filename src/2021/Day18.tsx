@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day18'
+import INPUT from '../Inputs/2021/Day18'
 
 type SnailfishNumber = [number | SnailfishNumber, number | SnailfishNumber]
 

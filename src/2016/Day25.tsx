@@ -5,7 +5,7 @@ import {
 } from '../Config'
 
 import Assembunny from './Assembunny'
-import INPUT from './Input/Day25'
+import INPUT from '../Inputs/2016/Day25'
 
 const assembunny = new Assembunny([])
 

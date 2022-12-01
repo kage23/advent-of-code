@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import INPUT from './Input/Day25'
+import INPUT from '../Inputs/2020/Day25'
 
 const calculateEncryptionKey = (loopSize: number, subject: number): number => {
   let value = 1

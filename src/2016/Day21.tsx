@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day21'
+import INPUT from '../Inputs/2016/Day21'
 
 const performScramble = (toScramble: string, instruction: string): string => {
   const instructionWords = instruction.split(' ')

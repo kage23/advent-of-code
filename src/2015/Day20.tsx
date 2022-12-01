@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day20'
+import INPUT from '../Inputs/2015/Day20'
 
 const presentsAtHouseNumber = (houseNumber: number, presentsPerElf: number, maxHousesPerElf?: number): number =>
   (sumOfAllDivisors(houseNumber, maxHousesPerElf) + houseNumber) * presentsPerElf
@@ -48,7 +48,7 @@ const BUTTONS: IButton[] = [
 
       let i = 1
       let presents = presentsAtHouseNumber(i, 10)
-      while(presents < target) {
+      while (presents < target) {
         if (i % 1000 === 0) console.log(`House number ${i} received ${presents} presents, which is${presents < target ? ' not ' : ' '}enough.`)
         i++
         presents = presentsAtHouseNumber(i, 10)
@@ -66,7 +66,7 @@ const BUTTONS: IButton[] = [
 
       let i = 1
       let presents = presentsAtHouseNumber(i, 11, 50)
-      while(presents < target) {
+      while (presents < target) {
         if (i % 1000 === 0) console.log(`House number ${i} received ${presents} presents, which is${presents < target ? ' not ' : ' '}enough.`)
         i++
         presents = presentsAtHouseNumber(i, 11, 50)

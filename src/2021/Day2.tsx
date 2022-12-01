@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day2'
+import INPUT from '../Inputs/2021/Day2'
 
 const parseInput = (inputKey: string) => INPUT[inputKey].split('\n')
 

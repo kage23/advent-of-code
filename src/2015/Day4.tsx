@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import md5 from 'md5'
 
-import INPUT from './Input/Day4'
+import INPUT from '../Inputs/2015/Day4'
 
 const BUTTONS: IButton[] = [
   {

@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 import { binToDec, decToBin } from '../utils/Various'
-import INPUT from './Input/Day14'
+import INPUT from '../Inputs/2020/Day14'
 
 const applyMask = (origValue: string, mask: string): string => {
   origValue = origValue.padStart(36, '0')

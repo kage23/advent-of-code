@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import { intcodeComputer2019 } from '../utils/Various'
 
-import INPUT from './Input/Day2'
+import INPUT from '../Inputs/2019/Day2'
 
 const parseInput = (inputKey: string): number[] =>
   INPUT[inputKey].split(',').map(inputStr => parseInt(inputStr))

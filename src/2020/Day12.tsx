@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import { manhattanDistance } from '../utils/Various'
 
-import INPUT from './Input/Day12'
+import INPUT from '../Inputs/2020/Day12'
 
 const directionsTurningRight = ['N', 'E', 'S', 'W'] as ('N' | 'S' | 'E' | 'W')[]
 
@@ -20,7 +20,7 @@ const BUTTONS: IButton[] = [
       let facing: 'N' | 'S' | 'E' | 'W' = 'E'
 
       input.forEach(instruction => {
-        const direction = instruction.slice(0,1) as 'N' | 'S' | 'E' | 'W' | 'L' | 'R' | 'F'
+        const direction = instruction.slice(0, 1) as 'N' | 'S' | 'E' | 'W' | 'L' | 'R' | 'F'
         const amount = parseInt(instruction.slice(1))
         switch (direction) {
           case 'N':
@@ -91,7 +91,7 @@ const BUTTONS: IButton[] = [
       let waypointOffset = [10, -1]
 
       input.forEach(instruction => {
-        const direction = instruction.slice(0,1) as 'N' | 'S' | 'E' | 'W' | 'L' | 'R' | 'F'
+        const direction = instruction.slice(0, 1) as 'N' | 'S' | 'E' | 'W' | 'L' | 'R' | 'F'
         const amount = parseInt(instruction.slice(1))
         switch (direction) {
           case 'N':

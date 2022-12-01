@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day16'
+import INPUT from '../Inputs/2019/Day16'
 import { lcmTwoNumbers } from '../utils/Various'
 
 const basePattern = [0, 1, 0, -1]

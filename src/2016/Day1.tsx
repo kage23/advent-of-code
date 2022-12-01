@@ -6,7 +6,7 @@ import {
 
 import { manhattanDistance } from '../utils/Various'
 
-import INPUT from './Input/Day1'
+import INPUT from '../Inputs/2016/Day1'
 
 // increase directions index to turn right; decrease to turn left
 const DIRECTIONS = [

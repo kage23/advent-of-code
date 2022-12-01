@@ -5,7 +5,7 @@ import {
 } from '../Config'
 import { intcodeComputer2019, IIntcodeComputerResults } from '../utils/Various'
 
-import INPUT from './Input/Day17'
+import INPUT from '../Inputs/2019/Day17'
 
 let program: number[] = []
 let instructionPointer = 0
@@ -32,25 +32,25 @@ const renderGridString = (pos: number[]): string => pos.join(',')
 const parseInput = (inputKey: string): number[] =>
   INPUT[inputKey].split(',').map(inputStr => parseInt(inputStr))
 
-const getAdjacentPositions = (current: string): { [key:string]: string } => {
-  const [ x, y ] = parseGridString(current)
+const getAdjacentPositions = (current: string): { [key: string]: string } => {
+  const [x, y] = parseGridString(current)
   return {
-    n: renderGridString([x , y - 1]),
-    s: renderGridString([x , y + 1]),
-    w: renderGridString([x - 1 , y]),
-    e: renderGridString([x + 1 , y])
+    n: renderGridString([x, y - 1]),
+    s: renderGridString([x, y + 1]),
+    w: renderGridString([x - 1, y]),
+    e: renderGridString([x + 1, y])
   }
 }
 
 const getAdjacentPositionsArray = (current: string): string[] => {
   const { n, e, s, w } = getAdjacentPositions(current)
-  return [ n, e, s, w ]
+  return [n, e, s, w]
 }
 
 const getPath = (): ('L' | 'R' | number)[] => {
   const DIRECTIONS = ['^', '>', 'v', '<']
   DIRECTIONS[-1] = '<'
-  const DIRECTION_TO_COMPASS: { [key:string]: string } = {
+  const DIRECTION_TO_COMPASS: { [key: string]: string } = {
     '^': 'n',
     '>': 'e',
     'v': 's',

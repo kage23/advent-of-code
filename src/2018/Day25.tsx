@@ -5,16 +5,16 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day25'
+import INPUT from '../Inputs/2018/Day25'
 
 import { manhattanDistance } from '../utils/Various'
 
 const parseInput = (INPUT: string): number[][] => {
   return INPUT.split('\n')
-  .map(line => {
-    const [ x, y, z, t ] = line.split(',')
-    return [ parseInt(x), parseInt(y), parseInt(z), parseInt(t) ]
-  })
+    .map(line => {
+      const [x, y, z, t] = line.split(',')
+      return [parseInt(x), parseInt(y), parseInt(z), parseInt(t)]
+    })
 }
 
 const visitNeighbors = (star: number[], stars: number[][], visitedMap: Map<any, any>) => {

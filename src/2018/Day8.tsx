@@ -2,9 +2,9 @@ import React from 'react'
 import {
   IButton,
   IDayConfig
- } from '../Config'
+} from '../Config'
 
-import INPUT from './Input/Day8'
+import INPUT from '../Inputs/2018/Day8'
 
 const calculateChecksum = (numbers: number[]): { answer1: string } => {
   let total = 0

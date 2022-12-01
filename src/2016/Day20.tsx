@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day20'
+import INPUT from '../Inputs/2016/Day20'
 
 const generateBannedList = (inputKey: string): number[][] => (
   INPUT[inputKey]

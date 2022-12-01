@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day8'
+import INPUT from '../Inputs/2015/Day8'
 
 const convertString = (string: string): string => {
   let result = ''
@@ -75,9 +75,9 @@ const BUTTONS: IButton[] = [
         .map(str => encodeString(str))
         .reduce((total, current) => total + current.length, 0)
 
-        return {
-          answer2: (encodedLength - codeLength).toString()
-        }
+      return {
+        answer2: (encodedLength - codeLength).toString()
+      }
     }
   }
 ]

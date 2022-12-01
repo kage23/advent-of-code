@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day15'
+import INPUT from '../Inputs/2016/Day15'
 
 interface IDisc {
   numberOfPositions: number

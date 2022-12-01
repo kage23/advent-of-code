@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day23'
+import INPUT from '../Inputs/2016/Day23'
 import Assembunny from './Assembunny'
 
 const assembunny = new Assembunny([])
