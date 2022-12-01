@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day18'
+import INPUT from '../Inputs/2016/Day18'
 
 const getNextRow = (row: string): string => {
   let newRow = ''

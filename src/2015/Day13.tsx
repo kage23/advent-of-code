@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day13'
+import INPUT from '../Inputs/2015/Day13'
 
 const calculateHappiness = (arrangement: string[], happinessLevels: Map<string, number>): number => {
   let totalHappinessDiff = 0
@@ -44,7 +44,7 @@ const parseInput = (inputKey: string, part: 1 | 2, attendees?: string[]): Map<st
   const happinessUnits: Map<string, number> = new Map()
 
   INPUT[inputKey].split('\n').forEach(line => {
-    const [ firstPerson, , gainOrLose, x, , , , , , , secondPerson ] = line.slice(0, -1).split(' ')
+    const [firstPerson, , gainOrLose, x, , , , , , , secondPerson] = line.slice(0, -1).split(' ')
     happinessUnits.set(`${firstPerson}-${secondPerson}`, parseInt(x) * (gainOrLose === 'lose' ? -1 : 1))
   })
 

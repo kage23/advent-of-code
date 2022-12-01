@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day9'
+import INPUT from '../Inputs/2020/Day9'
 
 const findEncryptionList = (input: number[], encryptionKey: number): number[] => {
   for (let i = 0; i < input.length; i++) {

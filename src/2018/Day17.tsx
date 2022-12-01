@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day17'
+import INPUT from '../Inputs/2018/Day17'
 
 interface ICoord {
   x: number
@@ -12,7 +12,7 @@ interface ICoord {
 }
 
 interface IOccupiedTiles {
-  [key:string]: '#' | '~' | '|'
+  [key: string]: '#' | '~' | '|'
 }
 
 interface IField {
@@ -40,7 +40,7 @@ const getCoord = (xy: string): ICoord => ({
 })
 
 const parseInput = (input: string): IField => {
-  const occupied: { [key:string]: '#' | '~' | '|' } = {}
+  const occupied: { [key: string]: '#' | '~' | '|' } = {}
   const field = input.split('\n')
   let minX = 500
   let minY = Number.MAX_SAFE_INTEGER
@@ -50,8 +50,8 @@ const parseInput = (input: string): IField => {
   for (const row of field) {
     const things = row.split(', ')
     let xStr = '', yStr = '',
-    localMinX = Number.MAX_VALUE, localMinY = Number.MAX_VALUE,
-    localMaxX = Number.MIN_VALUE, localMaxY = Number.MIN_VALUE
+      localMinX = Number.MAX_VALUE, localMinY = Number.MAX_VALUE,
+      localMaxX = Number.MIN_VALUE, localMaxY = Number.MIN_VALUE
     for (const thing of things) {
       if (thing.slice(0, 1) === 'x') xStr = thing.split('=')[1]
       if (thing.slice(0, 1) === 'y') yStr = thing.split('=')[1]
@@ -74,7 +74,7 @@ const parseInput = (input: string): IField => {
     maxY = Math.max(maxY, localMaxY)
     for (let x = localMinX; x <= localMaxX; x++) {
       for (let y = localMinY; y <= localMaxY; y++) {
-        occupied[pathKey({x, y})] = '#'
+        occupied[pathKey({ x, y })] = '#'
       }
     }
   }
@@ -140,7 +140,7 @@ const fillSquares = (occupied: IOccupiedTiles, a: ICoord, b: ICoord) => {
 }
 
 const hasWall = (coord: ICoord, occupied: IOccupiedTiles, dir: 'l' | 'r')
-: ICoord | false => {
+  : ICoord | false => {
   let offset = dir === 'l' ? -1 : 1
   let offsetMod = dir === 'l' ? -1 : 1
   while (true) {

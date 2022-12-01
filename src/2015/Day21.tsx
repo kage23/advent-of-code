@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day21'
+import INPUT from '../Inputs/2015/Day21'
 
 interface IItemCombo {
   armor?: IShopItem

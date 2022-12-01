@@ -5,9 +5,9 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day23'
+import INPUT from '../Inputs/2015/Day23'
 
-const runCode = (registers: { [key:string]: number }, instructions: string[]): { [key:string]: number } => {
+const runCode = (registers: { [key: string]: number }, instructions: string[]): { [key: string]: number } => {
   let instructionPointer = 0
 
   while (instructionPointer < instructions.length) {
@@ -52,7 +52,7 @@ const BUTTONS: IButton[] = [
   {
     label: 'Run Code',
     onClick: (inputKey) => {
-      const registers: { [key:string]: number } = { a: 0, b: 0 }
+      const registers: { [key: string]: number } = { a: 0, b: 0 }
       const instructions = INPUT[inputKey].split('\n')
       return {
         answer1: runCode(registers, instructions).b.toString()
@@ -62,7 +62,7 @@ const BUTTONS: IButton[] = [
   {
     label: 'Run Code with 1 in A',
     onClick: (inputKey) => {
-      const registers: { [key:string]: number } = { a: 1, b: 0 }
+      const registers: { [key: string]: number } = { a: 1, b: 0 }
       const instructions = INPUT[inputKey].split('\n')
       return {
         answer2: runCode(registers, instructions).b.toString()

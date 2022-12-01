@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day12'
+import INPUT from '../Inputs/2018/Day12'
 
 let prevInputKey = ''
 let generation = 0
@@ -41,11 +41,11 @@ const parseInput = (input: string): IState => {
 const sum = (pots: string, bottomPot: number): number => (
   pots.split('').reduce((prevSum, currentPot, index) => (
     prevSum
-      + (
-        currentPot === '#'
-          ? (index + bottomPot)
-          : 0
-        )
+    + (
+      currentPot === '#'
+        ? (index + bottomPot)
+        : 0
+    )
   ), 0)
 )
 

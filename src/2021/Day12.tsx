@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day12'
+import INPUT from '../Inputs/2021/Day12'
 
 interface Cave {
   id: string

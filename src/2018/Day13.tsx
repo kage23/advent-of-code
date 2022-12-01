@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day13'
+import INPUT from '../Inputs/2018/Day13'
 
 interface IState {
   baseTrack: string[],
@@ -48,53 +48,53 @@ const advanceOneTick = (baseTrack: string[], carts: ICart[], time: number): {
 
       switch (direction) {
         case '>':
-        position[0]++
-        break
+          position[0]++
+          break
 
         case '<':
-        position[0]--
-        break
+          position[0]--
+          break
 
         case '^':
-        position[1]--
-        break
+          position[1]--
+          break
 
         case 'v':
-        position[1]++
-        break
+          position[1]++
+          break
 
         default:
-        break
+          break
       }
 
       const newTrackAtPos = baseTrack[position[1]].charAt(position[0])
 
       switch (newTrackAtPos) {
         case '/':
-        if (direction === '>') direction = '^'
-        else if (direction === '^') direction = '>'
-        else if (direction === '<') direction = 'v'
-        else if (direction === 'v') direction = '<'
-        break
+          if (direction === '>') direction = '^'
+          else if (direction === '^') direction = '>'
+          else if (direction === '<') direction = 'v'
+          else if (direction === 'v') direction = '<'
+          break
 
         case '\\':
-        if (direction === '>') direction = 'v'
-        else if (direction === 'v') direction = '>'
-        else if (direction === '<') direction = '^'
-        else if (direction === '^') direction = '<'
-        break
+          if (direction === '>') direction = 'v'
+          else if (direction === 'v') direction = '>'
+          else if (direction === '<') direction = '^'
+          else if (direction === '^') direction = '<'
+          break
 
         case '+':
-        const oldDirectionIndex = directions.indexOf(direction)
-        direction = directions[(oldDirectionIndex + turnMods[turnsExecuted % turnMods.length] + directions.length) % directions.length]
-        turnsExecuted++
-        break
+          const oldDirectionIndex = directions.indexOf(direction)
+          direction = directions[(oldDirectionIndex + turnMods[turnsExecuted % turnMods.length] + directions.length) % directions.length]
+          turnsExecuted++
+          break
 
         case '-':
         case '|':
         default:
-        // Nothing to do here
-        break
+          // Nothing to do here
+          break
       }
 
       // Detect collision here
@@ -165,53 +165,53 @@ const advanceOneAndRemove = (baseTrack: string[], carts: ICart[], time: number):
 
       switch (direction) {
         case '>':
-        position[0]++
-        break
+          position[0]++
+          break
 
         case '<':
-        position[0]--
-        break
+          position[0]--
+          break
 
         case '^':
-        position[1]--
-        break
+          position[1]--
+          break
 
         case 'v':
-        position[1]++
-        break
+          position[1]++
+          break
 
         default:
-        break
+          break
       }
 
       const newTrackAtPos = baseTrack[position[1]].charAt(position[0])
 
       switch (newTrackAtPos) {
         case '/':
-        if (direction === '>') direction = '^'
-        else if (direction === '^') direction = '>'
-        else if (direction === '<') direction = 'v'
-        else if (direction === 'v') direction = '<'
-        break
+          if (direction === '>') direction = '^'
+          else if (direction === '^') direction = '>'
+          else if (direction === '<') direction = 'v'
+          else if (direction === 'v') direction = '<'
+          break
 
         case '\\':
-        if (direction === '>') direction = 'v'
-        else if (direction === 'v') direction = '>'
-        else if (direction === '<') direction = '^'
-        else if (direction === '^') direction = '<'
-        break
+          if (direction === '>') direction = 'v'
+          else if (direction === 'v') direction = '>'
+          else if (direction === '<') direction = '^'
+          else if (direction === '^') direction = '<'
+          break
 
         case '+':
-        const oldDirectionIndex = directions.indexOf(direction)
-        direction = directions[(oldDirectionIndex + turnMods[turnsExecuted % turnMods.length] + directions.length) % directions.length]
-        turnsExecuted++
-        break
+          const oldDirectionIndex = directions.indexOf(direction)
+          direction = directions[(oldDirectionIndex + turnMods[turnsExecuted % turnMods.length] + directions.length) % directions.length]
+          turnsExecuted++
+          break
 
         case '-':
         case '|':
         default:
-        // Nothing to do here
-        break
+          // Nothing to do here
+          break
       }
 
       // Detect collision here
@@ -277,27 +277,27 @@ const parseInput = (input: string): IState => {
       switch (char) {
         case '>':
         case '<':
-        carts.push({
-          direction: char,
-          position: [x, y],
-          turnsExecuted: 0
-        })
-        contents += '-'
-        break
+          carts.push({
+            direction: char,
+            position: [x, y],
+            turnsExecuted: 0
+          })
+          contents += '-'
+          break
 
         case '^':
         case 'v':
-        carts.push({
-          direction: char,
-          position: [x, y],
-          turnsExecuted: 0
-        })
-        contents += '|'
-        break
+          carts.push({
+            direction: char,
+            position: [x, y],
+            turnsExecuted: 0
+          })
+          contents += '|'
+          break
 
         default:
-        contents += char
-        break
+          contents += char
+          break
       }
     })
     return contents
@@ -312,8 +312,8 @@ const parseInput = (input: string): IState => {
 }
 
 const sortCartsByPosition = (a: ICart, b: ICart): number => {
-  const [ xa, ya ] = a.position
-  const [ xb, yb ] = b.position
+  const [xa, ya] = a.position
+  const [xb, yb] = b.position
 
   return ya === yb
     ? xa - xb
@@ -330,17 +330,17 @@ const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
   const {
     baseTrack,
     carts
-   } = state
+  } = state
 
   const display = baseTrack.map((line, y) => {
     const contents = line.split('').map((char, x) => {
       const cart = carts.find(fCart => fCart.position[0] === x && fCart.position[1] === y)
       return (
         char === ' '
-        ? <span key={`${x},${y}`}>&nbsp;</span>
-        : cart
-          ? <span key={`${x},${y}`}>{cart.direction}</span>
-          : <span key={`${x},${y}`}>{char}</span>
+          ? <span key={`${x},${y}`}>&nbsp;</span>
+          : cart
+            ? <span key={`${x},${y}`}>{cart.direction}</span>
+            : <span key={`${x},${y}`}>{char}</span>
       )
     })
     return <div key={y}>{contents}</div>

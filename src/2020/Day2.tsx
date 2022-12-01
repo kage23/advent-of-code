@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day2'
+import INPUT from '../Inputs/2020/Day2'
 
 const analyzePasswords = (inputKey: string): { answer1: string } => {
   let validPasswordCount = 0

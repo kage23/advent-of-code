@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import INPUT from './Input/Day18'
+import INPUT from '../Inputs/2020/Day18'
 
 const solveProblem = (problem: string): number => {
   let ongoing = 0

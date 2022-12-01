@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day16'
+import INPUT from '../Inputs/2018/Day16'
 
 import OPERATIONS, { IOperation } from '../utils/Operations'
 import {
@@ -39,26 +39,26 @@ let matchingOpsList: number[] = []
 
 const parseInputSamples = (input: string): ISample[] => {
   return input.split('\n\n')
-  .map((sample: string) => {
-    const sampleArr = sample.split('\n')
-    const [
-      code,
-      inputA,
-      inputB,
-      outputC
-    ] = sampleArr[1].split(' ').map(x => parseInt(x))
-
-    return {
-      before: JSON.parse(sampleArr[0].slice(8)),
-      operation: {
+    .map((sample: string) => {
+      const sampleArr = sample.split('\n')
+      const [
         code,
         inputA,
         inputB,
         outputC
-      },
-      after: JSON.parse(sampleArr[2].slice(8))
-    }
-  })
+      ] = sampleArr[1].split(' ').map(x => parseInt(x))
+
+      return {
+        before: JSON.parse(sampleArr[0].slice(8)),
+        operation: {
+          code,
+          inputA,
+          inputB,
+          outputC
+        },
+        after: JSON.parse(sampleArr[2].slice(8))
+      }
+    })
 }
 
 const threeOrMoreOps = (sample: ISample): boolean => {
@@ -95,7 +95,7 @@ const figureOutOpCodes = (samples: ISample[]): string[] => {
   const filterOp = (op: string) => currentSample && !(opCodes.indexOf(op) !== -1 && opCodes.indexOf(op) !== currentSample.operation.code)
   while (currentSample !== undefined) {
     const whichMatchingOps = matchingOps(currentSample)
-    .filter(filterOp)
+      .filter(filterOp)
 
     if (whichMatchingOps.length === 1 && currentSample.operation.code) {
       opCodes[currentSample.operation.code] = whichMatchingOps[0]
@@ -109,14 +109,14 @@ const figureOutOpCodes = (samples: ISample[]): string[] => {
 
 const runInputCode = (code: string): { answer2: string } => {
   const instructions: IOperation[] = code.split('\n')
-  .map(line => line.split(' '))
-  .map(line => line.map(i => parseInt(i)))
-  .map(line => ({
-    code: line[0],
-    inputA: line[1],
-    inputB: line[2],
-    outputC: line[3]
-  }))
+    .map(line => line.split(' '))
+    .map(line => line.map(i => parseInt(i)))
+    .map(line => ({
+      code: line[0],
+      inputA: line[1],
+      inputB: line[2],
+      outputC: line[3]
+    }))
 
   let registers = [0, 0, 0, 0]
 
@@ -147,13 +147,13 @@ const BUTTONS: IButton[] = [
       const { samples } = state
 
       matchingOpsList = samples
-      .map(sample => howManyMatchingOps(sample))
-      .reduce((results, howMany): number[] => {
-        if (!results[howMany]) results[howMany] = 1
-        else results[howMany]++
+        .map(sample => howManyMatchingOps(sample))
+        .reduce((results, howMany): number[] => {
+          if (!results[howMany]) results[howMany] = 1
+          else results[howMany]++
 
-        return results
-      }, new Array(16))
+          return results
+        }, new Array(16))
       return {}
     }
   },

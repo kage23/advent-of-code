@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day13'
+import INPUT from '../Inputs/2021/Day13'
 
 interface Field {
   field: Map<string, '#'>

@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day5'
+import INPUT from '../Inputs/2017/Day5'
 
 const parseInput = (input: string): number[] => input.split('\n').map(x => parseInt(x))
 

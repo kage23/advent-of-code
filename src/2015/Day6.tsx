@@ -5,16 +5,16 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day6'
+import INPUT from '../Inputs/2015/Day6'
 
 const parseLightingInstruction__v2 = (lights: Map<string, number>, instruction: string): Map<string, number> => {
   const instructionWords = instruction.split(' ')
 
-  const [ maxX, maxY ] = instructionWords[instructionWords.length - 1].split(',').map(x => parseInt(x))
-  const [ minX, minY ] = instructionWords[
+  const [maxX, maxY] = instructionWords[instructionWords.length - 1].split(',').map(x => parseInt(x))
+  const [minX, minY] = instructionWords[
     instructionWords[0] === 'turn'
-    ? 2
-    : 1
+      ? 2
+      : 1
   ].split(',').map(x => parseInt(x))
 
   for (let x = minX; x <= maxX; x++) {
@@ -34,11 +34,11 @@ const parseLightingInstruction__v2 = (lights: Map<string, number>, instruction: 
 const parseLightingInstruction = (lights: Map<string, boolean>, instruction: string): Map<string, boolean> => {
   const instructionWords = instruction.split(' ')
 
-  const [ maxX, maxY ] = instructionWords[instructionWords.length - 1].split(',').map(x => parseInt(x))
-  const [ minX, minY ] = instructionWords[
+  const [maxX, maxY] = instructionWords[instructionWords.length - 1].split(',').map(x => parseInt(x))
+  const [minX, minY] = instructionWords[
     instructionWords[0] === 'turn'
-    ? 2
-    : 1
+      ? 2
+      : 1
   ].split(',').map(x => parseInt(x))
 
   for (let x = minX; x <= maxX; x++) {

@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day10'
+import INPUT from '../Inputs/2021/Day10'
 
 const checkSyntax = (line: string): string | string[] => {
   const openers: string[] = []

@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day23'
+import INPUT from '../Inputs/2017/Day23'
 
 import { detectPrime } from '../utils/Various'
 

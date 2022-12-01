@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day12'
+import INPUT from '../Inputs/2017/Day12'
 
 interface IProgram {
   connectedTo: number[]

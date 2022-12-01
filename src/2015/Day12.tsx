@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day12'
+import INPUT from '../Inputs/2015/Day12'
 
 const findSum = (input: any, runningTotal = 0, part: 1 | 2): number => {
   if (typeof input === 'string') {

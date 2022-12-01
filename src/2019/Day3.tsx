@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import { manhattanDistance } from '../utils/Various'
 
-import INPUT from './Input/Day3'
+import INPUT from '../Inputs/2019/Day3'
 
 const findPositionsForWire = (row: string) => {
   let x = 0
@@ -83,7 +83,7 @@ const BUTTONS: IButton[] = [
       positions[0].forEach((value, key) => {
         if (positions[1].has(key)) {
           const xy = key.split(',').map(i => parseInt(i))
-          const currentDistance = manhattanDistance(xy, [0,0])
+          const currentDistance = manhattanDistance(xy, [0, 0])
           minDistance = Math.min(minDistance, currentDistance)
         }
       })

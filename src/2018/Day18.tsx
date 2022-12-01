@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day18'
+import INPUT from '../Inputs/2018/Day18'
 
 enum TYPES {
   OPEN = '.',
@@ -25,7 +25,7 @@ interface IField {
 }
 
 interface IFieldHash {
-  [key:string]: number
+  [key: string]: number
 }
 
 interface IState {
@@ -83,16 +83,16 @@ const parseInput = (INPUT: string): IState => {
 const getNeighbors = (xi: number, yi: number, field: IField): string[] => (
   [
     { x: xi - 1, y: yi - 1 },
-    { x: xi,     y: yi - 1 },
+    { x: xi, y: yi - 1 },
     { x: xi + 1, y: yi - 1 },
     { x: xi - 1, y: yi },
     { x: xi + 1, y: yi },
     { x: xi - 1, y: yi + 1 },
-    { x: xi,     y: yi + 1 },
+    { x: xi, y: yi + 1 },
     { x: xi + 1, y: yi + 1 },
   ]
-  .filter(({ x, y }) => x >= field.min.x && x <= field.max.x && y >= field.min.y && y <= field.max.y)
-  .map(({ x, y }) => field.data[y].charAt(x))
+    .filter(({ x, y }) => x >= field.min.x && x <= field.max.x && y >= field.min.y && y <= field.max.y)
+    .map(({ x, y }) => field.data[y].charAt(x))
 )
 
 const getNext = (current: string, treeNeighbors: number, lyNeighbors: number): string => {
@@ -112,11 +112,11 @@ const getNext = (current: string, treeNeighbors: number, lyNeighbors: number): s
 }
 
 const step = (field: IField)
-: {
-  field: IField
-  trees: number
-  lys: number
-} => {
+  : {
+    field: IField
+    trees: number
+    lys: number
+  } => {
   const { data, min, max } = field
   const newData: string[] = []
   let trees = 0

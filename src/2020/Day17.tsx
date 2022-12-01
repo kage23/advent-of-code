@@ -4,7 +4,7 @@ import {
   IButton,
   IDayConfig
 } from '../Config'
-import INPUT from './Input/Day17'
+import INPUT from '../Inputs/2020/Day17'
 
 interface IField {
   points: Map<string, boolean>

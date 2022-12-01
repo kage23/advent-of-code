@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 import DLL, { IDLLNode } from '../utils/DLL'
-import INPUT from './Input/Day23'
+import INPUT from '../Inputs/2020/Day23'
 
 const playARound = (cups: DLL, currentCup: IDLLNode) => {
   const nextThree: number[] = []

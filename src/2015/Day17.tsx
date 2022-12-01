@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day17'
+import INPUT from '../Inputs/2015/Day17'
 
 const determineCombos = (containerSizes: number[], targetSize: number, currentContainerStack: number[]): number[][] => {
   const comboList: number[][] = []

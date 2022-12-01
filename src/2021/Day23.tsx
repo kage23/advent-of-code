@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import AStar from '../utils/AStar'
 
-import INPUT from './Input/Day23'
+import INPUT from '../Inputs/2021/Day23'
 
 const goal = `#############
 #...........#

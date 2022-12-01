@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day18'
+import INPUT from '../Inputs/2017/Day18'
 
 interface IInstruction {
   command: string
@@ -42,7 +42,7 @@ class Program {
   currentInstruction: number
   instructions: IInstruction[]
   lastPlayed: number
-  registers: { [key:string]: number }
+  registers: { [key: string]: number }
   id?: number
 
   constructor(part: 1 | 2, id?: number) {
@@ -125,14 +125,14 @@ const executeInstruction = (part: number, program: Program, command: string, x: 
     case 'mul':
     case 'mod':
     case 'jgz':
-    return program[command](x, y)
+      return program[command](x, y)
 
     case 'rcv':
     case 'snd':
-    return program[command](x, part)
+      return program[command](x, part)
 
     default:
-    break
+      break
   }
 }
 

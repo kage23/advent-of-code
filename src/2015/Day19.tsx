@@ -6,11 +6,11 @@ import {
 } from '../Config'
 import SLL from '../utils/SLL'
 
-import INPUT from './Input/Day19'
+import INPUT from '../Inputs/2015/Day19'
 
 const findShortestPathToTarget = (start: string, target: string, replacements: Map<string, string[]>): number => {
   const queue: SLL = new SLL(start)
-  const parents: { [key:string]: string } = { [start]: '' }
+  const parents: { [key: string]: string } = { [start]: '' }
 
   while (queue.length > 0) {
     const current = queue.shift()
@@ -38,7 +38,7 @@ const findShortestPathToTarget = (start: string, target: string, replacements: M
   return NaN
 }
 
-function * generatePossibleNexts(molecule: string, replacements: Map<string, string[]>) {
+function* generatePossibleNexts(molecule: string, replacements: Map<string, string[]>) {
   const replacementFroms = Array.from(replacements.keys()).sort((a, b) => b.length - a.length)
   for (let i = 0; i < replacementFroms.length; i++) {
     const from = replacementFroms[i]

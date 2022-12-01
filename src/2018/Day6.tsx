@@ -2,9 +2,9 @@ import React from 'react'
 import {
   IButton,
   IDayConfig
- } from '../Config'
+} from '../Config'
 
-import INPUT, { DISTANCE } from './Input/Day6'
+import INPUT, { DISTANCE } from '../Inputs/2018/Day6'
 
 import { manhattanDistance } from '../utils/Various'
 
@@ -26,7 +26,7 @@ const parseInput = (inputKey: string): ICoordMap => {
   const min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]
   const coordStrs = INPUT[inputKey].split('\n')
   for (const coordStr of coordStrs) {
-    const coord = [ parseInt(coordStr.split(', ')[0]), parseInt(coordStr.split(', ')[1]) ]
+    const coord = [parseInt(coordStr.split(', ')[0]), parseInt(coordStr.split(', ')[1])]
     coords.push(coord)
     max[0] = Math.max(max[0], coord[0])
     max[1] = Math.max(max[1], coord[1])
@@ -48,11 +48,10 @@ const markCoordsOnMapDisplay = (map: ICoordMap) => {
   const { coords, display } = map
   for (let i = 0; i < coords.length; i++) {
     const coord = coords[i]
-    display[coord[1]] = `${display[coord[1]].slice(0, coord[0])}${
-      coords.length <= 26
+    display[coord[1]] = `${display[coord[1]].slice(0, coord[0])}${coords.length <= 26
         ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.slice(i, i + 1)
         : 'X'
-    }${display[coord[1]].slice(coord[0] + 1)}`
+      }${display[coord[1]].slice(coord[0] + 1)}`
   }
 }
 
@@ -103,14 +102,14 @@ const findArea1 = (inMap: ICoordMap): { answer1: string } => {
 }
 
 const findArea2 = (inMap: ICoordMap, targetDistance: number)
-: { answer2: string } => {
+  : { answer2: string } => {
   const { coords, max, min } = inMap
   let size = 0
   for (let x = min[0]; x <= max[0]; x++) {
     for (let y = min[1]; y <= max[1]; y++) {
       let totalDistance = 0
       for (const coord of coords) {
-        totalDistance += manhattanDistance(coord, [x,y])
+        totalDistance += manhattanDistance(coord, [x, y])
         if (totalDistance >= targetDistance) break
       }
       if (totalDistance < targetDistance) {

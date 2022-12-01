@@ -3,16 +3,16 @@ import {
   defaultRenderDay,
   IButton,
   IDayConfig
- } from '../Config'
+} from '../Config'
 
-import INPUT from './Input/Day2'
+import INPUT from '../Inputs/2018/Day2'
 
 const findChecksum = (inputKey: string) => {
   const boxIDs = INPUT[inputKey].split('\n')
   let twoCount = 0
   let threeCount = 0
   boxIDs.forEach(boxID => {
-    const letterCounts: { [key:string]: number } = {}
+    const letterCounts: { [key: string]: number } = {}
     let twos = false
     let threes = false
     boxID.split('').forEach(letter => {

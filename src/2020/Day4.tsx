@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day4'
+import INPUT from '../Inputs/2020/Day4'
 
 const isActuallyValidPassport = (passport: string): boolean => {
   if (!isValidPassport(passport)) return false
@@ -51,8 +51,8 @@ const isValidField = (keyValue: string): boolean => {
       return format === 'cm'
         ? height >= 150 && height <= 193
         : format === 'in'
-        ? height >= 59 && height <= 76
-        : false
+          ? height >= 59 && height <= 76
+          : false
 
     case 'hcl':
       return (
@@ -60,13 +60,13 @@ const isValidField = (keyValue: string): boolean => {
         value.slice(1).split('').every(char => (
           Number(char) >= 0 && Number(char) <= 9
         ) || (
-          char === 'a' ||
-          char === 'b' ||
-          char === 'c' ||
-          char === 'd' ||
-          char === 'e' ||
-          char === 'f'
-        ))
+            char === 'a' ||
+            char === 'b' ||
+            char === 'c' ||
+            char === 'd' ||
+            char === 'e' ||
+            char === 'f'
+          ))
       )
 
     case 'ecl':

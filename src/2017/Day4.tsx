@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day4'
+import INPUT from '../Inputs/2017/Day4'
 
 const areAnagrams = (word1: string, word2: string): boolean => {
   if (word1.length !== word2.length) return false

@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day22'
+import INPUT from '../Inputs/2017/Day22'
 
 interface IField {
   map: string[]
@@ -65,13 +65,10 @@ const toggleCurrentPosition = (field: IField): boolean => {
   const positionInField = [field.currentPosition[0] - field.min[0], field.currentPosition[1] - field.min[1]]
   const newNode = currentNode === '.' ? '#' : '.'
 
-  field.map[positionInField[1]] = `${
-    field.map[positionInField[1]].slice(0, positionInField[0])
-  }${
-    newNode
-  }${
-    field.map[positionInField[1]].slice(positionInField[0] + 1)
-  }`
+  field.map[positionInField[1]] = `${field.map[positionInField[1]].slice(0, positionInField[0])
+    }${newNode
+    }${field.map[positionInField[1]].slice(positionInField[0] + 1)
+    }`
 
   return newNode === '#'
 }
@@ -88,13 +85,10 @@ const evolveCurrentPosition = (field: IField): boolean => {
         ? 'F'
         : '.'
 
-  field.map[positionInField[1]] = `${
-    field.map[positionInField[1]].slice(0, positionInField[0])
-  }${
-    newNode
-  }${
-    field.map[positionInField[1]].slice(positionInField[0] + 1)
-  }`
+  field.map[positionInField[1]] = `${field.map[positionInField[1]].slice(0, positionInField[0])
+    }${newNode
+    }${field.map[positionInField[1]].slice(positionInField[0] + 1)
+    }`
 
   return newNode === '#'
 }
@@ -126,20 +120,20 @@ const burst = (field: IField, part: 1 | 2): boolean => {
   // Change direction based on current location
   switch (currentNode) {
     case '.':
-    field.currentDirection = (field.currentDirection + 3) % DIRECTIONS.length
-    break
+      field.currentDirection = (field.currentDirection + 3) % DIRECTIONS.length
+      break
 
     case '#':
-    field.currentDirection = (field.currentDirection + 1) % DIRECTIONS.length
-    break
+      field.currentDirection = (field.currentDirection + 1) % DIRECTIONS.length
+      break
 
     case 'F':
-    field.currentDirection = (field.currentDirection + 2) % DIRECTIONS.length
-    break
+      field.currentDirection = (field.currentDirection + 2) % DIRECTIONS.length
+      break
 
     case 'W':
     default:
-    break
+      break
   }
   // Clean or infect current location
   if (part === 1) infected = toggleCurrentPosition(field)

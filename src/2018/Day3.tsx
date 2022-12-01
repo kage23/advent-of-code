@@ -3,23 +3,23 @@ import {
   defaultRenderDay,
   IButton,
   IDayConfig
- } from '../Config'
+} from '../Config'
 
-import INPUT from './Input/Day3'
+import INPUT from '../Inputs/2018/Day3'
 
 const pathKey = (x: number, y: number): string => `${x}_${y}`
 
 const parseInput = (input: string): number[][] => {
   return input.split('\n')
-  .map(line => {
-    const id = parseInt(line.slice(1))
-    const x = parseInt(line.slice(line.indexOf('@') + 2))
-    const y = parseInt(line.slice(line.indexOf(',') + 1))
-    const w = parseInt(line.slice(line.indexOf(':') + 2))
-    const h = parseInt(line.slice(line.indexOf('x') + 1))
+    .map(line => {
+      const id = parseInt(line.slice(1))
+      const x = parseInt(line.slice(line.indexOf('@') + 2))
+      const y = parseInt(line.slice(line.indexOf(',') + 1))
+      const w = parseInt(line.slice(line.indexOf(':') + 2))
+      const h = parseInt(line.slice(line.indexOf('x') + 1))
 
-    return [ id, x, y, w, h ]
-  })
+      return [id, x, y, w, h]
+    })
 }
 
 const makeClaimsMap = (claims: number[][]): Map<string, number[]> => {

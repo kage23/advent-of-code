@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day4'
+import INPUT from '../Inputs/2019/Day4'
 
 const isItAPassword = (number: number, part: number): boolean => (
   // It is a six-digit number.

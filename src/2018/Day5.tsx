@@ -2,9 +2,9 @@ import React from 'react'
 import {
   IButton,
   IDayConfig
- } from '../Config'
+} from '../Config'
 
-import INPUT from './Input/Day5'
+import INPUT from '../Inputs/2018/Day5'
 
 const renderDay = (
   dayConfig: IDayConfig,

@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day16'
+import INPUT from '../Inputs/2015/Day16'
 
 interface ISue {
   akitas?: number
@@ -19,7 +19,7 @@ interface ISue {
   samoyeds?: number
   trees?: number
   vizslas?: number
-  [key:string]: number | undefined
+  [key: string]: number | undefined
 }
 
 const analysis: ISue = {

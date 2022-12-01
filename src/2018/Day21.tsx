@@ -4,10 +4,10 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day21'
+import INPUT from '../Inputs/2018/Day21'
 import OPERATIONS from '../utils/Operations';
 
-let setOther = (other: any): void => {}
+let setOther = (other: any): void => { }
 
 let registers: number[] = [0, 0, 0, 0, 0, 0]
 let prevInputKey = ''

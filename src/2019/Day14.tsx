@@ -5,19 +5,19 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day14'
+import INPUT from '../Inputs/2019/Day14'
 
 interface IConverter {
-  [key:string]: {
-    [key:string]: number
+  [key: string]: {
+    [key: string]: number
   }[]
 }
 
 const getRecipe = (ingredient: string, recipes: IConverter): {
-  recipe: { [key:string]: number }[]
+  recipe: { [key: string]: number }[]
   recipeAmountProduced: number
 } => {
-  let recipe: { [key:string]: number }[] = []
+  let recipe: { [key: string]: number }[] = []
   let recipeAmountProduced = 0
 
   if (ingredient === 'ORE') {
@@ -44,10 +44,10 @@ const getRecipe = (ingredient: string, recipes: IConverter): {
 const parseInput = (inputKey: string) => {
   const converter: IConverter = {}
   INPUT[inputKey].split('\n').forEach((row: string) => {
-    const [ costsStr, result ] = row.split(' => ')
-    const [ resultAmount, resultName ] = result.split(' ')
+    const [costsStr, result] = row.split(' => ')
+    const [resultAmount, resultName] = result.split(' ')
     converter[`${resultName}-${resultAmount}`] = costsStr.split(', ').map((cost: string) => {
-      const [ costAmount, costName ] = cost.split(' ')
+      const [costAmount, costName] = cost.split(' ')
       return {
         [`${costName}`]: parseInt(costAmount)
       }
@@ -62,7 +62,7 @@ interface IOrder {
 }
 
 const totalOreCostForOrder = (inOrder: IOrder, recipes: IConverter): number => {
-  const inventory: { [key:string]: number } = {}
+  const inventory: { [key: string]: number } = {}
   const orders: IOrder[] = []
   let oreUsed = 0
   orders.push(inOrder)

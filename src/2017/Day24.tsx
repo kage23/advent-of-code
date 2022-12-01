@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day24'
+import INPUT from '../Inputs/2017/Day24'
 
 import SLL from '../utils/SLL'
 
@@ -16,12 +16,12 @@ interface IBridge {
 
 const parseInput = (input: string): number[][] => (
   input.split('\n').map(line => {
-    const [ aStr, bStr ] = line.split('/')
+    const [aStr, bStr] = line.split('/')
     const a = Math.min(parseInt(aStr), parseInt(bStr))
     const b = Math.max(parseInt(aStr), parseInt(bStr))
     return [a, b]
   })
-  .sort((a, b) => a[0] - b[0])
+    .sort((a, b) => a[0] - b[0])
 )
 
 const totalBridgeStrength = (bridge: number[][]): number => (
@@ -64,7 +64,7 @@ const findBridges = (ports: number[][]): IBridge[] => {
   let i = 0
   while (bridge) {
     if (i % 10000 === 0)
-    console.log(`Complete bridges: ${completeBridges.length}. Bridges remaining: ${bridges.length}. Total bridges: ${completeBridges.length + bridges.length}.`)
+      console.log(`Complete bridges: ${completeBridges.length}. Bridges remaining: ${bridges.length}. Total bridges: ${completeBridges.length + bridges.length}.`)
     i++
     for (let i = 0; i < ports.length; i++) {
       const port = ports[i]
@@ -105,9 +105,9 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey) => {
       const ports: number[][] = parseInput(INPUT[inputKey])
       const possibleBridges = findBridges(ports)
-      .sort((a, b) => {
-        return totalBridgeStrength(b.ports) - totalBridgeStrength(a.ports)
-      })
+        .sort((a, b) => {
+          return totalBridgeStrength(b.ports) - totalBridgeStrength(a.ports)
+        })
 
       return {
         answer1: totalBridgeStrength(possibleBridges[0].ports).toString()
@@ -119,13 +119,13 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey) => {
       const ports: number[][] = parseInput(INPUT[inputKey])
       const possibleBridges = findBridges(ports)
-      .sort((a, b) => {
-        return a.ports.length > b.ports.length
-          ? -1
-          : a.ports.length < b.ports.length
-            ? 1
-            : totalBridgeStrength(b.ports) - totalBridgeStrength(a.ports)
-      })
+        .sort((a, b) => {
+          return a.ports.length > b.ports.length
+            ? -1
+            : a.ports.length < b.ports.length
+              ? 1
+              : totalBridgeStrength(b.ports) - totalBridgeStrength(a.ports)
+        })
 
       return {
         answer2: totalBridgeStrength(possibleBridges[0].ports).toString()

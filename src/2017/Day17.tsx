@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day17'
+import INPUT from '../Inputs/2017/Day17'
 import DLL from '../utils/DLL'
 
 let numbers = new DLL(0)

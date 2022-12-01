@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day7'
+import INPUT from '../Inputs/2021/Day7'
 
 const calculateMovingCosts = (upToDistance: number): Map<number, number> => {
   const movingCostsMap: Map<number, number> = new Map()

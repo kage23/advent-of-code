@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import { lcmTwoNumbers } from '../utils/Various'
 
-import INPUT from './Input/Day12'
+import INPUT from '../Inputs/2019/Day12'
 
 interface IMoonData {
   xPos: number

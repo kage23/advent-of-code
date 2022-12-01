@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day10'
+import INPUT from '../Inputs/2016/Day10'
 
 interface IBot {
   id: number
@@ -66,8 +66,8 @@ const runBots = (inputKey: string): {
   let answer1: undefined | string = undefined
 
   const comparisonNumbers = inputKey.indexOf('DEMO') !== -1
-  ? [2, 5]
-  : [17, 61]
+    ? [2, 5]
+    : [17, 61]
 
   while (bots.some(bot => bot.numbers ? bot.numbers.length === 2 : false)) {
     for (const bot of bots) {

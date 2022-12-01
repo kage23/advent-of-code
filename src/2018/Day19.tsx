@@ -4,10 +4,10 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day19'
+import INPUT from '../Inputs/2018/Day19'
 import OPERATIONS from '../utils/Operations';
 
-let setOther = (other: any): void => {}
+let setOther = (other: any): void => { }
 
 let registers: number[] = [0, 0, 0, 0, 0, 0]
 let prevInputKey = ''
@@ -107,35 +107,35 @@ const BUTTONS: IButton[] = [
   {
     label: 'Run One Line',
     onClick: () => {
-      setOther({ registers: runProgram(prevInputKey, 1)})
+      setOther({ registers: runProgram(prevInputKey, 1) })
       return {}
     }
   },
   {
     label: 'Run Ten Lines',
     onClick: () => {
-      setOther({ registers: runProgram(prevInputKey, 10)})
+      setOther({ registers: runProgram(prevInputKey, 10) })
       return {}
     }
   },
   {
     label: 'Run 100 Lines',
     onClick: () => {
-      setOther({ registers: runProgram(prevInputKey, 100)})
+      setOther({ registers: runProgram(prevInputKey, 100) })
       return {}
     }
   },
   {
     label: 'Run 1000 Lines',
     onClick: () => {
-      setOther({ registers: runProgram(prevInputKey, 1000)})
+      setOther({ registers: runProgram(prevInputKey, 1000) })
       return {}
     }
   },
   {
     label: 'Run Until Done',
     onClick: () => {
-      setOther({ registers: runProgram(prevInputKey)})
+      setOther({ registers: runProgram(prevInputKey) })
       return {
         answer1: registers[0].toString()
       }
@@ -171,12 +171,12 @@ const renderDay = (
       >
         <p>
           Registers: [
-            {registerInputs[0]},{' '}
-            {registerInputs[1]},{' '}
-            {registerInputs[2]},{' '}
-            {registerInputs[3]},{' '}
-            {registerInputs[4]},{' '}
-            {registerInputs[5]}
+          {registerInputs[0]},{' '}
+          {registerInputs[1]},{' '}
+          {registerInputs[2]},{' '}
+          {registerInputs[3]},{' '}
+          {registerInputs[4]},{' '}
+          {registerInputs[5]}
           ]
         </p>
       </div>

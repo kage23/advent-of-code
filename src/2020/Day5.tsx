@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day5'
+import INPUT from '../Inputs/2020/Day5'
 
 interface IDecodedBoardingPass {
   row: number

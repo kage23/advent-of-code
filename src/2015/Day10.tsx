@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day10'
+import INPUT from '../Inputs/2015/Day10'
 
 const doLookAndSay = (input: string): string => {
   let result = ''

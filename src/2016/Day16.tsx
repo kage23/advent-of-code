@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day16'
+import INPUT from '../Inputs/2016/Day16'
 
 const generateDragonData = (a: string): string => {
   const b = a.split('').reverse().map(x => x === '0' ? '1' : '0').join('')

@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day20'
+import INPUT from '../Inputs/2018/Day20'
 
 interface ICoord {
   x: number
@@ -19,7 +19,7 @@ interface IMapSquare extends ICoord {
 interface IMap {
   min: ICoord
   max: ICoord
-  [key:string]: IMapSquare
+  [key: string]: IMapSquare
 }
 
 let map: IMap = {
@@ -32,10 +32,10 @@ let prevInputKey = ''
 const pathKey = (coord: ICoord): string => `${coord.x},${coord.y}`
 
 const createMap = (input: string, inMap?: IMap)
-: {
-  map: IMap
-  remaining: string
-} => {
+  : {
+    map: IMap
+    remaining: string
+  } => {
   let map: IMap = inMap || {
     min: { x: 0, y: 0 },
     max: { x: 0, y: 0 }
@@ -70,7 +70,7 @@ const createMap = (input: string, inMap?: IMap)
         position = { x: position.x - 1, y: position.y }
         break
 
-        case 'S':
+      case 'S':
         currentPath += char
         addDoor(position, char, map)
         position = { x: position.x, y: position.y + 1 }
@@ -100,10 +100,10 @@ const createMap = (input: string, inMap?: IMap)
 }
 
 const calulateSplit = (input: string, map: IMap, inPosition: ICoord, inPath: string)
-: {
-  map: IMap
-  remaining: string
-} => {
+  : {
+    map: IMap
+    remaining: string
+  } => {
   let paths: string[] = [inPath]
   let pathIndex = 0
   let position = inPosition
@@ -188,9 +188,9 @@ const addDoor = (position: ICoord, door: string, map: IMap): IMap => {
   const otherMapSquare = map[pathKey(otherRoomPosition)]
   otherMapSquare.doors += door === 'W' ? 'E'
     : door === 'E' ? 'W'
-    : door === 'N' ? 'S'
-    : door === 'S' ? 'N'
-    : ''
+      : door === 'N' ? 'S'
+        : door === 'S' ? 'N'
+          : ''
   return map
 }
 

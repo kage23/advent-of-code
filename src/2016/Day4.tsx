@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day4'
+import INPUT from '../Inputs/2016/Day4'
 
 let answer2_a = ''
 let prevInputKey = ''
@@ -56,25 +56,25 @@ const BUTTONS: IButton[] = [
     label: 'Print Decrypted Room Names',
     onClick: inputKey => {
       INPUT[inputKey].split('\n')
-      .filter(room => isRealRoom(room))
-      .forEach(roomLine => {
-        const split = roomLine.split('-')
-        const rotate = parseInt(split[split.length - 1])
-        let result = ''
+        .filter(room => isRealRoom(room))
+        .forEach(roomLine => {
+          const split = roomLine.split('-')
+          const rotate = parseInt(split[split.length - 1])
+          let result = ''
 
-        const alphabet = 'abcdefghijklmnopqrstuvwxyz'
-        for (let i = 0; i < roomLine.length; i++) {
-          const char = roomLine.charAt(i)
+          const alphabet = 'abcdefghijklmnopqrstuvwxyz'
+          for (let i = 0; i < roomLine.length; i++) {
+            const char = roomLine.charAt(i)
 
-          if (alphabet.indexOf(char) !== -1) {
-            result += alphabet[(alphabet.indexOf(char) + rotate) % alphabet.length]
-          } else if (char === '-') {
-            result += ' '
-          } else if (!isNaN(parseInt(char))) break
-        }
+            if (alphabet.indexOf(char) !== -1) {
+              result += alphabet[(alphabet.indexOf(char) + rotate) % alphabet.length]
+            } else if (char === '-') {
+              result += ' '
+            } else if (!isNaN(parseInt(char))) break
+          }
 
-        answer2_a += `${rotate}: ${result}\n`
-      })
+          answer2_a += `${rotate}: ${result}\n`
+        })
 
       return {
         answer2: ''

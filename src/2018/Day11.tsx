@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day11'
+import INPUT from '../Inputs/2018/Day11'
 
 const findBestGrid = (input: string, size: number = 3): { answer1: string } => {
   const cellPowerMap: Map<string, number> = new Map()

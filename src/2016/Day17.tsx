@@ -6,7 +6,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day17'
+import INPUT from '../Inputs/2016/Day17'
 
 interface ISearchNode {
   path: string
@@ -59,10 +59,10 @@ const getNextSteps = ({ path, position }: ISearchNode, passcode: string): ISearc
   const hash = md5(`${passcode}${path}`)
   const [x, y] = position.split(',').map(n => parseInt(n))
   const nextSteps: ISearchNode[] = [
-    { position: [x, y - 1], direction: 'U'},
-    { position: [x, y + 1], direction: 'D'},
-    { position: [x - 1, y], direction: 'L'},
-    { position: [x + 1, y], direction: 'R'}
+    { position: [x, y - 1], direction: 'U' },
+    { position: [x, y + 1], direction: 'D' },
+    { position: [x - 1, y], direction: 'L' },
+    { position: [x + 1, y], direction: 'R' }
   ]
     .filter((nextStep, i) => (
       nextStep.position.every(n => n >= 0 && n <= 3)

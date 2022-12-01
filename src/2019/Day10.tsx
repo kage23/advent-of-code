@@ -6,11 +6,11 @@ import {
 } from '../Config'
 import { manhattanDistance, reduce } from '../utils/Various'
 
-import INPUT from './Input/Day10'
+import INPUT from '../Inputs/2019/Day10'
 
 const getAngle = (asteroidStr1: string, asteroidStr2: string): number => {
-  const [ x1, y1 ] = parseAsteroidString(asteroidStr1)
-  const [ x2, y2 ] = parseAsteroidString(asteroidStr2)
+  const [x1, y1] = parseAsteroidString(asteroidStr1)
+  const [x2, y2] = parseAsteroidString(asteroidStr2)
 
   return Math.atan2((y2 * -1) - (y1 * -1), x2 - x1) * 180 / Math.PI
 }
@@ -52,16 +52,16 @@ const sortAsteroidsByAngleAndDistance = (asteroidList: string[], laserLocation: 
 
 const hasLineOfSight = (asteroidA: string, asteroidB: string, asteroidList: string[]): boolean => {
   // console.log('checking line of sight', asteroidA, asteroidB)
-  const [ x1, y1 ] = parseAsteroidString(asteroidA)
-  const [ x2, y2 ] = parseAsteroidString(asteroidB)
+  const [x1, y1] = parseAsteroidString(asteroidA)
+  const [x2, y2] = parseAsteroidString(asteroidB)
   const xDiff = x2 - x1
   const yDiff = y2 - y1
-  let [ rx, ry ] = reduce(Math.abs(xDiff), Math.abs(yDiff))
+  let [rx, ry] = reduce(Math.abs(xDiff), Math.abs(yDiff))
   if (xDiff < 1) rx *= -1
   if (yDiff < 1) ry *= -1
   let target = asteroidA
   while (target !== asteroidB) {
-    const [ tx, ty ] = parseAsteroidString(target)
+    const [tx, ty] = parseAsteroidString(target)
     if (target !== asteroidA) {
       if (asteroidList.includes(target)) return false
     }
@@ -140,7 +140,7 @@ const BUTTONS: IButton[] = [
       }
 
       const asteroid200 = asteroidsSorted[199]
-      const [ x200, y200 ] = parseAsteroidString(asteroid200)
+      const [x200, y200] = parseAsteroidString(asteroid200)
 
       return {
         answer2: ((x200 * 100) + y200).toString()

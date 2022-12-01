@@ -2,9 +2,9 @@ import React from 'react'
 import {
   IButton,
   IDayConfig
- } from '../Config'
+} from '../Config'
 
-import INPUT from './Input/Day9'
+import INPUT from '../Inputs/2018/Day9'
 
 import DLL from '../utils/DLL'
 
@@ -19,7 +19,7 @@ const parseInput = (input: string): {
 } => JSON.parse(input)
 
 const playGame = (inputKey: string, marbles: DLL)
-: { player: number, score: number, marbles: DLL } => {
+  : { player: number, score: number, marbles: DLL } => {
   const { numPlayers, numMarbles } = parseInput(INPUT[inputKey])
   const scores: number[] = []
   let currentPlayer = 0

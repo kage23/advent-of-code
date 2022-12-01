@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day10'
+import INPUT from '../Inputs/2017/Day10'
 
 import DLL, { IDLLNode } from '../utils/DLL'
 import { generateKnotHash } from '../utils/Various'

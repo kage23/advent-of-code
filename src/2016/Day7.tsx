@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day7'
+import INPUT from '../Inputs/2016/Day7'
 
 const hasAbba = (input: string): boolean => {
   for (let i = 0; i <= input.length - 4; i++) {
@@ -41,20 +41,20 @@ const getSequences = (input: string): {
   for (const character of input) {
     switch (character) {
       case '[':
-      inHyper = true
-      hyperIndex++
-      hypernetSequences[hyperIndex] = ''
-      break
+        inHyper = true
+        hyperIndex++
+        hypernetSequences[hyperIndex] = ''
+        break
 
       case ']':
-      inHyper = false
-      superIndex++
-      supernetSequences[superIndex] = ''
-      break
+        inHyper = false
+        superIndex++
+        supernetSequences[superIndex] = ''
+        break
 
       default:
-      if (inHyper) hypernetSequences[hyperIndex] += character
-      else supernetSequences[superIndex] += character
+        if (inHyper) hypernetSequences[hyperIndex] += character
+        else supernetSequences[superIndex] += character
     }
   }
 

@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day14'
+import INPUT from '../Inputs/2017/Day14'
 
 import { generateKnotHash } from '../utils/Various'
 

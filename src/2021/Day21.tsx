@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day21'
+import INPUT from '../Inputs/2021/Day21'
 
 interface Player {
   position: number

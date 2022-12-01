@@ -7,7 +7,7 @@ import {
 import SLL from '../utils/SLL'
 import { manhattanDistance } from '../utils/Various'
 
-import INPUT from './Input/Day20'
+import INPUT from '../Inputs/2019/Day20'
 
 const parseGridString = (str: string): number[] => str.split(',').map(i => parseInt(i))
 const renderGridString = (pos: number[]): string => pos.join(',')
@@ -43,7 +43,7 @@ const parseInput = (inputKey: string): IMap => {
     portals: new Map()
   }
 
-  const getSpotFromInput = ([x, y]: [number, number], inputKey: string): string =>{
+  const getSpotFromInput = ([x, y]: [number, number], inputKey: string): string => {
     const input = INPUT[inputKey]
     const width = input.split('').indexOf('\n')
     const charAt = x + (width * y) + y
@@ -201,45 +201,45 @@ const findShortestPathLength = (start: string, end: string, portals = true, recu
 
       return !['#', ' ', undefined].includes(spot)
     })
-    // Then map portals to their other ends
-    .map(adjacent => {
-      const [ax, ay] = adjacent
-      const { portal: portalName } = map.grid[ay][ax]
+      // Then map portals to their other ends
+      .map(adjacent => {
+        const [ax, ay] = adjacent
+        const { portal: portalName } = map.grid[ay][ax]
 
-      if (portals && portalName) {
-        // If they're a portal, the other side of that portal is the actual adjacent.
-        // Unless the portal is AA, which is the entrance and it has no other side. So that's just an invalid adjacent.
-        // Or ZZ, which is the exit, but only in the outermost layer, and a wall everywhere else.
-        // Also, in recursive mode, all of the portals on the outermost layer are just walls, not portals.
-        if (portalName === 'AA') return ''
-        if (portalName === 'ZZ') return ''
-        if (recursive && isOuterLayer(ax, ay) && cz === 0) return ''
+        if (portals && portalName) {
+          // If they're a portal, the other side of that portal is the actual adjacent.
+          // Unless the portal is AA, which is the entrance and it has no other side. So that's just an invalid adjacent.
+          // Or ZZ, which is the exit, but only in the outermost layer, and a wall everywhere else.
+          // Also, in recursive mode, all of the portals on the outermost layer are just walls, not portals.
+          if (portalName === 'AA') return ''
+          if (portalName === 'ZZ') return ''
+          if (recursive && isOuterLayer(ax, ay) && cz === 0) return ''
 
-        const portal = map.portals.get(portalName)
-        if (!portal) throw new Error('fuck')
+          const portal = map.portals.get(portalName)
+          if (!portal) throw new Error('fuck')
 
-        const otherEnd = portal
-          .map(p => parseGridString(p))
-          .filter(p => renderGridString(p) !== renderGridString([cx, cy]))[0]
+          const otherEnd = portal
+            .map(p => parseGridString(p))
+            .filter(p => renderGridString(p) !== renderGridString([cx, cy]))[0]
 
-        const otherEndZ = recursive
-          ? isOuterLayer(ax, ay)
-            ? cz - 1
-            : cz + 1
-          : 0
-        otherEnd.push(otherEndZ)
+          const otherEndZ = recursive
+            ? isOuterLayer(ax, ay)
+              ? cz - 1
+              : cz + 1
+            : 0
+          otherEnd.push(otherEndZ)
 
-        return otherEnd.join(',')
-      } else {
-        return renderGridString(adjacent)
-      }
-    })
-    // Filter out ones with no length
-    .filter(x => x && x.length > 0)
-    // Filter out places we've already been
-    .filter(adjacent => !visitedDistances.get(adjacent))
-    // Make TypeScript happy
-    .map(x => x ? x : '')
+          return otherEnd.join(',')
+        } else {
+          return renderGridString(adjacent)
+        }
+      })
+      // Filter out ones with no length
+      .filter(x => x && x.length > 0)
+      // Filter out places we've already been
+      .filter(adjacent => !visitedDistances.get(adjacent))
+      // Make TypeScript happy
+      .map(x => x ? x : '')
   }
 
   // Make a search queue starting with the start node
@@ -344,29 +344,29 @@ const findShortestRecursiveNodePath = (): number | undefined => {
             }
             return true
           })
-          .forEach(([connectionName, connectionDistance]) => {
-            const newZIndex = connectionName.slice(0, 2) === currentNode.position.slice(0, 2)
-              ? currentNode.position.charAt(2) === '+'
-                ? zIndex + 1
-                : zIndex - 1
-              : zIndex
-            const newSearchNode: ISearchNode = {
-              distance: currentNode.distance + connectionDistance,
-              position: `${connectionName}${newZIndex}`
-            }
-            if (!visitedNodes.get(newSearchNode.position)) {
-              let insertAfter = searchQueue.head
-              while (
-                insertAfter
-                && insertAfter.next
-                && insertAfter.next.value.distance < newSearchNode.distance
-              ) {
-                insertAfter = insertAfter.next
+            .forEach(([connectionName, connectionDistance]) => {
+              const newZIndex = connectionName.slice(0, 2) === currentNode.position.slice(0, 2)
+                ? currentNode.position.charAt(2) === '+'
+                  ? zIndex + 1
+                  : zIndex - 1
+                : zIndex
+              const newSearchNode: ISearchNode = {
+                distance: currentNode.distance + connectionDistance,
+                position: `${connectionName}${newZIndex}`
               }
-              if (insertAfter) searchQueue.insertAfter(newSearchNode, insertAfter)
-              else searchQueue.push(newSearchNode)
-            }
-          })
+              if (!visitedNodes.get(newSearchNode.position)) {
+                let insertAfter = searchQueue.head
+                while (
+                  insertAfter
+                  && insertAfter.next
+                  && insertAfter.next.value.distance < newSearchNode.distance
+                ) {
+                  insertAfter = insertAfter.next
+                }
+                if (insertAfter) searchQueue.insertAfter(newSearchNode, insertAfter)
+                else searchQueue.push(newSearchNode)
+              }
+            })
         }
       }
     }

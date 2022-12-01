@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day15'
+import INPUT from '../Inputs/2018/Day15'
 
 interface IUnit {
   attackPower: number
@@ -81,25 +81,25 @@ const getAdjacentSquares = (
   ny: number,
   value: string
 }[] => (
-    [
-      { x, y: y - 1 },
-      { x: x - 1, y },
-      { x: x + 1, y },
-      { x, y: y + 1 }
-    ]
-      .filter(cell => (
-        (
-          field[pathKey(cell.x, cell.y)] === '.'
-          || field[pathKey(cell.x, cell.y)] === opponent
-        )
-        && visited[pathKey(cell.x, cell.y)] !== true
-      ))
-      .map(cell => ({
-        nx: cell.x,
-        ny: cell.y,
-        value: field[pathKey(cell.x, cell.y)]
-      }))
-  )
+  [
+    { x, y: y - 1 },
+    { x: x - 1, y },
+    { x: x + 1, y },
+    { x, y: y + 1 }
+  ]
+    .filter(cell => (
+      (
+        field[pathKey(cell.x, cell.y)] === '.'
+        || field[pathKey(cell.x, cell.y)] === opponent
+      )
+      && visited[pathKey(cell.x, cell.y)] !== true
+    ))
+    .map(cell => ({
+      nx: cell.x,
+      ny: cell.y,
+      value: field[pathKey(cell.x, cell.y)]
+    }))
+)
 
 const reset = (input: string[], elfPower: number = 3): IState => {
   const fieldHeight: number = input.length

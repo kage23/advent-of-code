@@ -3,9 +3,9 @@ import {
   defaultRenderDay,
   IButton,
   IDayConfig
- } from '../Config'
+} from '../Config'
 
-import INPUT from './Input/Day4'
+import INPUT from '../Inputs/2018/Day4'
 
 let answer1_a = ''
 let answer1_b = ''
@@ -15,13 +15,13 @@ let answer2_b = ''
 
 const pathKey = (id: number, minute: number): string => `${id}_${minute}`
 const unPathKey = (input: string): { id: number, minute: number } => {
-  const [ id, minute ] = input.split('_')
+  const [id, minute] = input.split('_')
   return { id: parseInt(id), minute: parseInt(minute) }
 }
 
 const parseInput = (input: string) => {
   return input.split('\n')
-  .sort((a, b) => a < b ? -1 : 1)
+    .sort((a, b) => a < b ? -1 : 1)
 }
 
 const part1 = (inputStr: string) => {
@@ -76,7 +76,7 @@ const part1 = (inputStr: string) => {
 
 const part2 = (inputStr: string) => {
   const records = parseInput(INPUT[inputStr])
-  const guardSleepMinuteCount: { [key:string]: number } = {}
+  const guardSleepMinuteCount: { [key: string]: number } = {}
 
   let currentGuardId = 0
   let sleepMinute = 0

@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day6'
+import INPUT from '../Inputs/2019/Day6'
 
 interface ISpaceObject {
   directOrbit: string
@@ -28,7 +28,7 @@ const getTotalOrbits = (objectName: string, map: Map<string, ISpaceObject>): num
 const parseInput = (inputKey: string): Map<string, ISpaceObject> => {
   const map: Map<string, ISpaceObject> = new Map()
   INPUT[inputKey].split('\n').forEach(listing => {
-    const [ directOrbitName, objectName ] = listing.split(')')
+    const [directOrbitName, objectName] = listing.split(')')
     const directOrbitObject = map.get(directOrbitName)
     if (!directOrbitObject) {
       map.set(directOrbitName, {
@@ -49,7 +49,8 @@ const parseInput = (inputKey: string): Map<string, ISpaceObject> => {
         directOrbit: directOrbitName,
         label: objectName,
         orbitedBy: [],
-        totalOrbits })
+        totalOrbits
+      })
     } else {
       object.directOrbit = directOrbitName
       object.totalOrbits = object.totalOrbits || totalOrbits

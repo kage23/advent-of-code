@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day11'
+import INPUT from '../Inputs/2015/Day11'
 
 const containsTwoSeparatePairs = (input: string): boolean => {
   let pairCount = 0

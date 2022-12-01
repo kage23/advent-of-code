@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day25'
+import INPUT from '../Inputs/2021/Day25'
 
 const takeAStep = (map: string): string => {
   const field = map.split('\n').map(row => row.split(''))

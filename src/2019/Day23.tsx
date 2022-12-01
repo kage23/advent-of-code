@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import { intcodeComputer2019 } from '../utils/Various'
 
-import INPUT from './Input/Day23'
+import INPUT from '../Inputs/2019/Day23'
 
 interface INICComputer {
   finished: boolean

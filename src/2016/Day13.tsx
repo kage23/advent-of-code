@@ -7,7 +7,7 @@ import {
 import { manhattanDistance } from '../utils/Various'
 import SLL from '../utils/SLL'
 
-import INPUT from './Input/Day13'
+import INPUT from '../Inputs/2016/Day13'
 
 const parseGridString = (coords: string): number[] => coords.split(',').map(x => parseInt(x))
 const renderGridString = (coords: number[]): string => coords.join(',')
@@ -28,12 +28,12 @@ const getAnswer = (start: string, end: string, favoriteNumber: number, part: 1 |
 
   const getPathLength = (current: any) => {
     let pathLength = 0
-      let parent = parents.get(current)
-      while (parent && parent !== '') {
-        pathLength++
-        parent = parents.get(parent)
-      }
-      return pathLength
+    let parent = parents.get(current)
+    while (parent && parent !== '') {
+      pathLength++
+      parent = parents.get(parent)
+    }
+    return pathLength
   }
 
   while (queue.length) {

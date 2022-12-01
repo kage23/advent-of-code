@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day13'
+import INPUT from '../Inputs/2017/Day13'
 
 interface ILayer {
   range: number

@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day24'
+import INPUT from '../Inputs/2016/Day24'
 import SLL from '../utils/SLL'
 
 const getNeighbors = ([x, y]: [number, number], grid: Map<string, string>): [number, number][] => (
@@ -15,10 +15,10 @@ const getNeighbors = ([x, y]: [number, number], grid: Map<string, string>): [num
     [x, y - 1] as [number, number],
     [x, y + 1] as [number, number]
   ]
-  .filter(([x, y]) => {
-    const fromGrid = grid.get(`${x}-${y}`)
-    return fromGrid && fromGrid !== '#'
-  })
+    .filter(([x, y]) => {
+      const fromGrid = grid.get(`${x}-${y}`)
+      return fromGrid && fromGrid !== '#'
+    })
 )
 
 const getDistanceBetweenNodes = (grid: Map<string, string>, start: [number, number], end: [number, number]): number => {

@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day17'
+import INPUT from '../Inputs/2021/Day17'
 
 interface TargetArea {
   minX: number

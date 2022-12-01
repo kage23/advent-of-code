@@ -4,44 +4,44 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day11'
+import INPUT from '../Inputs/2017/Day11'
 
 import { manhattanDistance } from '../utils/Various'
 
 const stepFn = (step: string, currentPosition: number[]) => {
   switch (step) {
     case 'nw':
-    currentPosition[0]++
-    currentPosition[2]--
-    break
+      currentPosition[0]++
+      currentPosition[2]--
+      break
 
     case 'n':
-    currentPosition[0]++
-    currentPosition[1]--
-    break
+      currentPosition[0]++
+      currentPosition[1]--
+      break
 
     case 'ne':
-    currentPosition[1]--
-    currentPosition[2]++
-    break
+      currentPosition[1]--
+      currentPosition[2]++
+      break
 
     case 'sw':
-    currentPosition[1]++
-    currentPosition[2]--
-    break
+      currentPosition[1]++
+      currentPosition[2]--
+      break
 
     case 's':
-    currentPosition[0]--
-    currentPosition[1]++
-    break
+      currentPosition[0]--
+      currentPosition[1]++
+      break
 
     case 'se':
-    currentPosition[0]--
-    currentPosition[2]++
-    break
+      currentPosition[0]--
+      currentPosition[2]++
+      break
 
     default:
-    break
+      break
   }
 
   return currentPosition
@@ -55,7 +55,8 @@ const BUTTONS: IButton[] = [
       let currentPosition = [0, 0, 0]
 
       steps.forEach(step => {
-        currentPosition = stepFn(step, currentPosition)}
+        currentPosition = stepFn(step, currentPosition)
+      }
       )
 
       return {

@@ -5,10 +5,10 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day20'
+import INPUT from '../Inputs/2021/Day20'
 
 const enhance = (
-  image:Map<string, '#' | '.'>,
+  image: Map<string, '#' | '.'>,
   algStr: string,
   time: number,
   demo: boolean

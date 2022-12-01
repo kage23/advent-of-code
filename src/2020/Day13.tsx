@@ -6,7 +6,7 @@ import {
 } from '../Config'
 import { lcmTwoNumbers } from '../utils/Various'
 
-import INPUT from './Input/Day13'
+import INPUT from '../Inputs/2020/Day13'
 
 const determineIsWinningForBus = (
   bus: { id: number, busIndex: number },

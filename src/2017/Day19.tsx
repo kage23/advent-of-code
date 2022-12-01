@@ -5,28 +5,28 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day19'
+import INPUT from '../Inputs/2017/Day19'
 
 const move = (position: number[], direction: 'U' | 'R' | 'D' | 'L') => {
   switch (direction) {
     case 'U':
-    position[0]--
-    break
+      position[0]--
+      break
 
     case 'R':
-    position[1]++
-    break
+      position[1]++
+      break
 
     case 'D':
-    position[0]++
-    break
+      position[0]++
+      break
 
     case 'L':
-    position[1]--
-    break
+      position[1]--
+      break
 
     default:
-    break
+      break
   }
 }
 
@@ -34,16 +34,16 @@ const findNewDirection = (position: number[], map: string[], direction: 'U' | 'R
   switch (direction) {
     case 'U':
     case 'D':
-    const l = map[position[0]].charAt(position[1] - 1)
-    if (l !== ' ' && l !== '') return 'L'
-    else return 'R'
+      const l = map[position[0]].charAt(position[1] - 1)
+      if (l !== ' ' && l !== '') return 'L'
+      else return 'R'
 
     case 'L':
     case 'R':
     default:
-    const d = map[position[0] + 1] ? map[position[0] + 1].charAt(position[1]) : ' '
-    if (d !== ' ' && d !== '') return 'D'
-    else return 'U'
+      const d = map[position[0] + 1] ? map[position[0] + 1].charAt(position[1]) : ' '
+      if (d !== ' ' && d !== '') return 'D'
+      else return 'U'
   }
 }
 
@@ -62,24 +62,24 @@ const BUTTONS: IButton[] = [
         switch (map[position[0]].charAt(position[1])) {
           case '|':
           case '-':
-          move(position, direction)
-          steps++
-          break
+            move(position, direction)
+            steps++
+            break
 
           case '+':
-          direction = findNewDirection(position, map, direction)
-          move(position, direction)
-          steps++
-          break
+            direction = findNewDirection(position, map, direction)
+            move(position, direction)
+            steps++
+            break
 
           case ' ':
-          break travelLoop
+            break travelLoop
 
           default:
-          answer1 += map[position[0]].charAt(position[1])
-          move(position, direction)
-          steps++
-          break
+            answer1 += map[position[0]].charAt(position[1])
+            move(position, direction)
+            steps++
+            break
         }
       }
 

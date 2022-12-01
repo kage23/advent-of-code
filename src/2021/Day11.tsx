@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day11'
+import INPUT from '../Inputs/2021/Day11'
 
 const getAdjacents = (i: number, j: number, width: number, height: number) => {
   return [

@@ -4,10 +4,10 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day8'
+import INPUT from '../Inputs/2019/Day8'
 
 const IMAGE_SIZES_BY_INPUT_KEY: {
-  [key:string]: {
+  [key: string]: {
     height: number
     width: number
   }

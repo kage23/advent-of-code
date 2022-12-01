@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day7'
+import INPUT from '../Inputs/2017/Day7'
 
 interface IProgram {
   name: string

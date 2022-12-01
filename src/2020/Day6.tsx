@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day6'
+import INPUT from '../Inputs/2020/Day6'
 
 const countGroupYesses = (groupInput: string): number => {
   let uniqueYesses = ''

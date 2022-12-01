@@ -5,7 +5,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day5'
+import INPUT from '../Inputs/2015/Day5'
 
 const isNice = (string: string): boolean => {
   const vowels = ['a', 'e', 'i', 'o', 'u']

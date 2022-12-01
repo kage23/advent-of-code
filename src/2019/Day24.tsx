@@ -4,7 +4,7 @@ import {
   IDayConfig
 } from '../Config'
 
-import INPUT from './Input/Day24'
+import INPUT from '../Inputs/2019/Day24'
 
 const EMPTY_FIELD = '............?............'
 const SIZE = 5
