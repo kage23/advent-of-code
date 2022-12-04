@@ -7,7 +7,7 @@ import coverImage from './cover.png'
 import Day01__2022__Config from './Day01'
 import Day02__2022__Config from './Day02'
 import Day03__2022__Config from './Day03'
-// import Day04__2022__Config from './Day04'
+import Day04__2022__Config from './Day04'
 // import Day05__2022__Config from './Day05'
 // import Day06__2022__Config from './Day06'
 // import Day07__2022__Config from './Day07'
@@ -35,14 +35,14 @@ const CONFIG_2022: IYearConfig = {
   cover: coverImage,
   extraText: (
     <p>
-      Approaching the jungle! Getting ready to set out!
+      Approaching the jungle! Getting ready to set out! Setting up camp!
     </p>
   ),
   days: [
     Day01__2022__Config,
     Day02__2022__Config,
     Day03__2022__Config,
-    // Day04__2022__Config,
+    Day04__2022__Config,
     // Day05__2022__Config,
     // Day06__2022__Config,
     // Day07__2022__Config,
