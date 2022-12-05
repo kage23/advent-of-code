@@ -8,7 +8,7 @@ import Day01__2022__Config from './Day01'
 import Day02__2022__Config from './Day02'
 import Day03__2022__Config from './Day03'
 import Day04__2022__Config from './Day04'
-// import Day05__2022__Config from './Day05'
+import Day05__2022__Config from './Day05'
 // import Day06__2022__Config from './Day06'
 // import Day07__2022__Config from './Day07'
 // import Day08__2022__Config from './Day08'
@@ -43,7 +43,7 @@ const CONFIG_2022: IYearConfig = {
     Day02__2022__Config,
     Day03__2022__Config,
     Day04__2022__Config,
-    // Day05__2022__Config,
+    Day05__2022__Config,
     // Day06__2022__Config,
     // Day07__2022__Config,
     // Day08__2022__Config,
