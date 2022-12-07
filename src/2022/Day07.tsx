@@ -68,18 +68,22 @@ const parseInput = (inputKey: string) => {
         } else if (x[2] === '..') {
           currDir = currDir.parent!
         } else {
-          currDir = currDir.children.find(y => y.hasOwnProperty('children') && y.id === x[2]) as Directory
+          currDir = currDir.children.find(y => y.hasOwnProperty('children') && y.id.endsWith(x[2])) as Directory
         }
       }
     } else {
       // It's the result of an ls command
+      const id = (() => {
+        if (currDir.id === '/') return `/${x[1]}`
+        return `${currDir.id}/${x[1]}`
+      })()
       if (x[0] === 'dir') {
-        const directory = { parent: currDir, children: [], id: x[1] }
+        const directory = { parent: currDir, children: [], id }
         currDir.children.push(directory)
-        directories.set(x[1], { directory })
+        directories.set(id, { directory })
       } else {
-        currDir.children.push({ id: x[1], size: Number(x[0]) })
-        files.set(x[1], Number(x[0]))
+        currDir.children.push({ id, size: Number(x[0]) })
+        files.set(id, Number(x[0]))
       }
     }
   })
