@@ -114,10 +114,10 @@ const findNearestUnknownSquare = (): string => {
 }
 
 const findShortestPath = (start: string, end: string): string[] | undefined => {
-  const searchTree = new Tree(start)
+  const searchTree = new Tree<string>(start)
   const visited: Map<string, boolean> = new Map()
 
-  let current: TreeNode = searchTree.head
+  let current: TreeNode<string> = searchTree.head
   const filterOutWalls = (pos: string) => grid.get(pos) !== '#'
   const pushAdjacentToCurrent = (adjacent: string) => { current.push(adjacent) }
   while (current.value !== end) {
