@@ -247,7 +247,7 @@ const findShortestPath = (start: string, end: string, map: Map<string, string>):
   const searchTree = new Tree(start)
   const visited: Map<string, boolean> = new Map()
 
-  let current: TreeNode = searchTree.head
+  let current: TreeNode<string> = searchTree.head
   const pushAdjacentToCurrent = (adjacent: string) => { current.push(adjacent) }
   while (current.value !== end) {
     if (typeof current.value === 'string') {
