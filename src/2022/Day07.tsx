@@ -109,10 +109,6 @@ const BUTTONS: IButton[] = [
     onClick: (inputKey: string) => {
       parseInput(inputKey)
 
-      // 967369 is wrong
-
-      debugger
-
       return {
         answer1: Array.from(directories.keys())
           .map(dirId => getDirectorySize(dirId))
@@ -122,6 +118,24 @@ const BUTTONS: IButton[] = [
       }
     }
   },
+  {
+    label: 'Choose Directory to Delete',
+    onClick: (inputKey: string) => {
+      parseInput(inputKey)
+      const totalUsedSpace = getDirectorySize('/')
+      const totalFreeSpace = 70000000 - totalUsedSpace
+      const spaceToClear = 30000000 - totalFreeSpace
+
+      const possibleDirsToDelete = Array.from(directories.keys())
+        .map(dirId => getDirectorySize(dirId))
+        .filter(x => x >= spaceToClear)
+        .sort((a, b) => a - b)
+
+      return {
+        answer2: possibleDirsToDelete[0].toString()
+      }
+    }
+  }
 ]
 
 const config: IDayConfig = {
@@ -133,8 +147,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      The start-of-message marker is{' '}
-      <code>{answer}</code> characters in.
+      The size of the directory to delete is{' '}
+      <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
