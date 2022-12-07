@@ -20,38 +20,6 @@ interface Directory {
 const directories: Map<string, { directory: Directory, size?: number }> = new Map()
 const files: Map<string, number> = new Map()
 
-// const parseInput = (inputKey: string) => {
-//   const fileTree = new Tree<Directory | File>({ id: '/' })
-//   let currDir = fileTree.head
-
-//   INPUT[inputKey].split('\n').forEach(line => {
-//     const x = line.split(' ')
-//     if (x[0] === '$') {
-//       // It's an instruction, either cd or ls
-//       if (x[1] === 'cd') {
-//         if (x[2] === '/') {
-//           currDir = fileTree.head
-//         } else if (x[2] === '..') {
-//           if (!currDir.parent) throw new Error('something fucked up')
-//           currDir = currDir.parent
-//         } else {
-//           const nextDir = currDir.branches.find(({ value: { id } }) => id === x[2])
-//           if (!nextDir) throw new Error('something fucked up')
-//           currDir = nextDir
-//         }
-//       }
-//     } else {
-//       // It's the result of an ls command
-//       if (x[0] === 'dir') {
-//         currDir.push({ id: x[1] })
-//       } else {
-//         currDir.push({ id: x[1], size: Number(x[0]) })
-//       }
-//     }
-//   })
-//   return fileTree
-// }
-
 const parseInput = (inputKey: string) => {
   directories.clear()
   files.clear()
@@ -62,6 +30,7 @@ const parseInput = (inputKey: string) => {
     const x = line.split(' ')
     if (x[0] === '$') {
       // It's an instruction, either cd or ls
+      // We can ignore ls lines
       if (x[1] === 'cd') {
         if (x[2] === '/') {
           currDir = root
