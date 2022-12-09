@@ -12,7 +12,7 @@ import Day05__2022__Config from './Day05'
 import Day06__2022__Config from './Day06'
 import Day07__2022__Config from './Day07'
 import Day08__2022__Config from './Day08'
-// import Day09__2022__Config from './Day09'
+import Day09__2022__Config from './Day09'
 // import Day10__2022__Config from './Day10'
 // import Day11__2022__Config from './Day11'
 // import Day12__2022__Config from './Day12'
@@ -40,6 +40,7 @@ const CONFIG_2022: IYearConfig = {
       Setting up camp!
       Heading into the jungle!
       Found a tree grid!
+      Crossing a rope bridge!
     </p>
   ),
   days: [
@@ -51,7 +52,7 @@ const CONFIG_2022: IYearConfig = {
     Day06__2022__Config,
     Day07__2022__Config,
     Day08__2022__Config,
-    // Day09__2022__Config,
+    Day09__2022__Config,
     // Day10__2022__Config,
     // Day11__2022__Config,
     // Day12__2022__Config,
