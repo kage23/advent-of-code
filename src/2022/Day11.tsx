@@ -28,10 +28,11 @@ class Monkey {
     this.inspectionCount = 0
   }
 
-  inspectItem = (item: number, keepWorrying?: boolean): number => {
+  inspectItem = (item: number, worryLimiter?: number): number => {
     const [, operator, right] = this.operation.split(' ')
     const rightNumber = right === 'old' ? item : Number(right)
     let worry = item
+
     switch (operator) {
       case '+':
         worry += rightNumber
@@ -42,21 +43,26 @@ class Monkey {
       default:
         break
     }
+
     this.inspectionCount += 1
-    return keepWorrying ? worry : Math.floor(worry / 3)
+    return worryLimiter ? worry % worryLimiter : Math.floor(worry / 3)
   }
 
   testItem = (item: number): number =>
     item % this.testDivisibleBy === 0 ? this.trueThrowTo : this.falseThrowTo
 }
 
-const chaseTheMonkeys = (inputKey: string, rounds: number, keepWorrying?: boolean): number => {
+const chaseTheMonkeys = (inputKey: string, rounds: number): number => {
   const monkeys = INPUT[inputKey].split('\n\n').map(x => new Monkey(x))
+
+  const worryLimiter = monkeys.reduce(
+    (accumulator, monkey) => accumulator * monkey.testDivisibleBy, 1
+  )
 
   for (let round = 0; round < rounds; round++) {
     monkeys.forEach(monkey => {
       while (monkey.items.length) {
-        let item = monkey.inspectItem(monkey.items.shift()!, keepWorrying)
+        let item = monkey.inspectItem(monkey.items.shift()!, rounds > 20 ? worryLimiter : undefined)
         const throwTo = monkey.testItem(item)
         monkeys[throwTo].items.push(item)
       }
@@ -75,6 +81,12 @@ const BUTTONS: IButton[] = [
       answer1: chaseTheMonkeys(inputKey, 20).toString()
     })
   },
+  {
+    label: 'Chase the Monkeys for a While',
+    onClick: (inputKey: string) => ({
+      answer2: chaseTheMonkeys(inputKey, 10000).toString()
+    })
+  },
 ]
 
 const config: IDayConfig = {
@@ -86,8 +98,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      Check the console for the answer!
-      {/* <code>{answer}</code> locations. */}
+      The level of monkey business after 10,000 rounds is{' '}
+      <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,

@@ -42,6 +42,7 @@ const CONFIG_2022: IYearConfig = {
       Found a tree grid!
       Crossing a rope bridge!
       Fell in the river!
+      Going down the river!
     </p>
   ),
   days: [
