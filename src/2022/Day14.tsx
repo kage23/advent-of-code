@@ -30,15 +30,13 @@ class SandDropper {
     lines.forEach(line => {
       const points = line.split(' -> ')
       points.forEach(point => {
-        const [x, y] = point.split(',')
-        xRange[0] = Math.min(xRange[0], Number(x))
-        xRange[1] = Math.max(xRange[1], Number(x))
+        const [, y] = point.split(',')
         this.yMax = Math.max(this.yMax, Number(y))
       })
     })
 
-    xRange[0] -= 2
-    xRange[1] += 2
+    xRange[0] = 500 - (this.yMax + 2)
+    xRange[1] = 500 + (this.yMax + 2)
 
     this.xOffset = xRange[0]
 
