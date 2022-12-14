@@ -18,6 +18,11 @@ class SandDropper {
     // and make sure Part 1 still works, because it should, and then add the floor
     // for Part 2.
 
+    // Or not necessarily. The width of the final pyramid of sand will be: (height * 2) - 1.
+    // So we can just use that for the xRange, instead of figuring out min/max from the data.
+    // Min is 500 - the height and a bit
+    // Max is 500 + the height and a bit
+
     const lines = INPUT[inputKey].split('\n')
     const xRange = [Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
     this.yMax = 0
