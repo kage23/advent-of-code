@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { IYearConfig } from '../Config'
 
 import coverImage from './cover.png'

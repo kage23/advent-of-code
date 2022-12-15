@@ -1,5 +1,3 @@
-import React from 'react'
-
 import CONFIG_2015 from './2015/Config'
 import CONFIG_2016 from './2016/Config'
 import CONFIG_2017 from './2017/Config'
