@@ -1,4 +1,3 @@
-import React from 'react'
 import { defaultRenderDay, IButton, IDayConfig } from '../Config'
 
 import INPUT from '../Inputs/2022/Day15'
