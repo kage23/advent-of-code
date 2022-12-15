@@ -1,0 +1,12 @@
+.header {
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.link {
+  text-decoration: none;
+  color: #1E90FF;
+}
+.link:hover {
+  color: #00BFFF;
+}
