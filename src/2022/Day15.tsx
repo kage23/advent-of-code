@@ -13,20 +13,35 @@ class Field {
   sensors: string[]
   beacons: string[]
 
-  rangesOfNoBeaconsOnRow: [number, number][]
-  beaconsOnRow: number[]
+  rowInfo: Map<number, {
+    rangesOfNoBeaconsOnRow: [number, number][]
+    beaconsOnRow: number[]
+  }>
 
-  constructor(inputKey: string, rowWeCareAbout: number) {
+  constructor(inputKey: string, rowWeCareAbout: number, part2?: boolean) {
     this.xMin = Number.MAX_SAFE_INTEGER
     this.xMax = Number.MIN_SAFE_INTEGER
     this.yMin = Number.MAX_SAFE_INTEGER
-    this.yMax = Number.MIN_SAFE_INTEGER
+    this.yMax = part2 ? rowWeCareAbout * 2 : Number.MIN_SAFE_INTEGER
 
     this.sensors = []
     this.beacons = []
 
-    this.rangesOfNoBeaconsOnRow = []
-    this.beaconsOnRow = []
+    this.rowInfo = new Map()
+
+    if (!part2) {
+      this.rowInfo.set(rowWeCareAbout, {
+        rangesOfNoBeaconsOnRow: [],
+        beaconsOnRow: []
+      })
+    } else {
+      for (let y = 0; y <= this.yMax; y++) {
+        this.rowInfo.set(y, {
+          rangesOfNoBeaconsOnRow: [],
+          beaconsOnRow: []
+        })
+      }
+    }
 
     INPUT[inputKey].split('\n').forEach((line) => {
       const [sensorText, beaconText] = line.split(': ')
@@ -38,13 +53,18 @@ class Field {
       this.xMin = Math.min(this.xMin, sensorX, beaconX)
       this.xMax = Math.max(this.xMax, sensorX, beaconX)
       this.yMin = Math.min(this.yMin, sensorY, beaconY)
-      this.yMax = Math.max(this.yMax, sensorY, beaconY)
+      if (!part2) this.yMax = Math.max(this.yMax, sensorY, beaconY)
 
       this.sensors.push(`${sensorX},${sensorY}`)
       this.beacons.push(`${beaconX},${beaconY}`)
 
-      if (beaconY === rowWeCareAbout && !this.beaconsOnRow.includes(beaconX)) {
-        this.beaconsOnRow.push(beaconX)
+      for (let y = 0; y <= this.yMax; y++) {
+        if (part2 || y === rowWeCareAbout) {
+          const { beaconsOnRow } = this.rowInfo.get(y)!
+          if (beaconY === y && !beaconsOnRow.includes(beaconX)) {
+            beaconsOnRow.push(beaconX)
+          }
+        }
       }
     })
 
@@ -56,24 +76,35 @@ class Field {
 
       const distance = manhattanDistance([sensorX, sensorY], [beaconX, beaconY])
 
-      const distanceToRowWeCareAbout = Math.abs(sensorY - rowWeCareAbout)
+      for (let y = 0; y <= this.yMax; y++) {
+        if (part2 || y === rowWeCareAbout) {
+          const distanceToRowWeCareAbout = Math.abs(sensorY - y)
 
-      const remainingDistance = distance - distanceToRowWeCareAbout
+          const remainingDistance = distance - distanceToRowWeCareAbout
 
-      if (remainingDistance >= 0) {
-        const xRangeOnRow = [
-          sensorX - remainingDistance,
-          sensorX + remainingDistance,
-        ].sort((a, b) => a - b) as [number, number]
-        this.rangesOfNoBeaconsOnRow.push(xRangeOnRow)
+          if (remainingDistance >= 0) {
+            const { rangesOfNoBeaconsOnRow } = this.rowInfo.get(y)!
+            const xRangeOnRow = [
+              sensorX - remainingDistance,
+              sensorX + remainingDistance,
+            ].sort((a, b) => a - b) as [number, number]
+            rangesOfNoBeaconsOnRow.push(xRangeOnRow)
+          }
+        }
       }
     })
+
+    Array.from(this.rowInfo.keys()).forEach(row => this.combineRangesOfNoBeaconsOnRow(row))
   }
 
-  countNoBeaconsOnRow() {
-    this.rangesOfNoBeaconsOnRow.sort((a, b) => a[0] - b[0])
+  combineRangesOfNoBeaconsOnRow(row: number) {
+    const rowInfo = this.rowInfo.get(row)
+    if (!rowInfo) throw new Error(`we didn't care about row ${row}!`)
+    const { beaconsOnRow, rangesOfNoBeaconsOnRow } = rowInfo
 
-    this.rangesOfNoBeaconsOnRow = this.rangesOfNoBeaconsOnRow.reduce(
+    rangesOfNoBeaconsOnRow.sort((a, b) => a[0] - b[0])
+
+    const combinedRangesOfNoBeaconsOnRow = rangesOfNoBeaconsOnRow.reduce(
       (accumulator, currentRange, i) => {
         if (i === 0) {
           accumulator.push(currentRange)
@@ -93,16 +124,46 @@ class Field {
       [] as [number, number][]
     )
 
-    let count = this.rangesOfNoBeaconsOnRow.reduce(
+    this.rowInfo.set(row, { beaconsOnRow, rangesOfNoBeaconsOnRow: combinedRangesOfNoBeaconsOnRow })
+  }
+
+  countNoBeaconsOnRow(row: number) {
+    const rowInfo = this.rowInfo.get(row)
+    if (!rowInfo) throw new Error(`we didn't care about row ${row}!`)
+    const { beaconsOnRow, rangesOfNoBeaconsOnRow } = rowInfo
+
+    rangesOfNoBeaconsOnRow.sort((a, b) => a[0] - b[0])
+
+    const combinedRangesOfNoBeaconsOnRow = rangesOfNoBeaconsOnRow.reduce(
+      (accumulator, currentRange, i) => {
+        if (i === 0) {
+          accumulator.push(currentRange)
+        } else {
+          const prevRange = accumulator[accumulator.length - 1]
+          if (
+            currentRange[0] <= prevRange[1] + 1 &&
+            currentRange[1] > prevRange[1]
+          ) {
+            accumulator[accumulator.length - 1][1] = currentRange[1]
+          } else if (currentRange[0] > prevRange[1]) {
+            accumulator.push(currentRange)
+          }
+        }
+        return accumulator
+      },
+      [] as [number, number][]
+    )
+
+    let count = combinedRangesOfNoBeaconsOnRow.reduce(
       (currentCount, currentRange) => {
         return currentCount + (currentRange[1] - currentRange[0])
       },
       1
     )
 
-    this.beaconsOnRow.forEach((beaconX) => {
+    beaconsOnRow.forEach((beaconX) => {
       if (
-        this.rangesOfNoBeaconsOnRow.some(
+        combinedRangesOfNoBeaconsOnRow.some(
           ([min, max]) => min <= beaconX && max >= beaconX
         )
       )
@@ -117,22 +178,46 @@ const BUTTONS: IButton[] = [
   {
     label: 'Check for Beacons',
     onClick: (inputKey: string) => {
+      const startTime = new Date().getTime()
+
       const rowWeCareAbout = inputKey === 'DEMO' ? 10 : 2000000
 
       const field = new Field(inputKey, rowWeCareAbout)
 
-      const answer = field.countNoBeaconsOnRow()
+      const answer = field.countNoBeaconsOnRow(rowWeCareAbout)
 
-      debugger
-
-      // 5710544 is too high
-      // and it's not off-by-one; 5710543 is also too high :P
+      console.log(`Part 1 run time: ${new Date().getTime() - startTime}ms`)
 
       return {
         answer1: answer.toString(),
       }
     },
   },
+  {
+    label: 'Find Distress Beacon',
+    onClick: (inputKey: string) => {
+      const startTime = new Date().getTime()
+
+      const rowWeCareAbout = inputKey === 'DEMO' ? 10 : 2000000
+
+      const field = new Field(inputKey, rowWeCareAbout, true)
+
+      const rowWithGap = Array.from(field.rowInfo.keys()).find(key => {
+        const { rangesOfNoBeaconsOnRow } = field.rowInfo.get(key)!
+        return rangesOfNoBeaconsOnRow.length === 2
+      })!
+
+      const { rangesOfNoBeaconsOnRow } = field.rowInfo.get(rowWithGap)!
+
+      const x = rangesOfNoBeaconsOnRow[0][1] + 1
+
+      console.log(`Part 2 run time: ${new Date().getTime() - startTime}ms`)
+
+      return {
+        answer2: ((x * 4000000) + rowWithGap).toString()
+      }
+    }
+  }
 ]
 
 const config: IDayConfig = {
@@ -143,7 +228,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      With a floor, <code>{answer}</code> grains of sand will come to rest.
+      The distress beacon's tuning frequency is{' '}
+      <code>{answer}</code>.
     </span>
   ),
   buttons: BUTTONS,
