@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import { defaultRenderDay, IButton, IDayConfig } from '../Config'
 
 import INPUT from '../Inputs/2022/Day15'
 import { manhattanDistance } from '../utils/Various'
@@ -32,7 +28,7 @@ class Field {
     this.rangesOfNoBeaconsOnRow = []
     this.beaconsOnRow = []
 
-    INPUT[inputKey].split('\n').forEach(line => {
+    INPUT[inputKey].split('\n').forEach((line) => {
       const [sensorText, beaconText] = line.split(': ')
       const sensorX = Number(sensorText.slice(12).split(',')[0])
       const sensorY = Number(sensorText.split('y=')[1])
@@ -53,8 +49,10 @@ class Field {
     })
 
     this.sensors.forEach((sensor, i) => {
-      const [sensorX, sensorY] = sensor.split(',').map(n => Number(n))
-      const [beaconX, beaconY] = this.beacons[i].split(',').map(n => Number(n))
+      const [sensorX, sensorY] = sensor.split(',').map((n) => Number(n))
+      const [beaconX, beaconY] = this.beacons[i]
+        .split(',')
+        .map((n) => Number(n))
 
       const distance = manhattanDistance([sensorX, sensorY], [beaconX, beaconY])
 
@@ -62,35 +60,53 @@ class Field {
 
       const remainingDistance = distance - distanceToRowWeCareAbout
 
-      const xRangeOnRow = [sensorX - remainingDistance, sensorX + remainingDistance].sort((a, b) => a - b) as [number, number]
-      this.rangesOfNoBeaconsOnRow.push(xRangeOnRow)
+      if (remainingDistance >= 0) {
+        const xRangeOnRow = [
+          sensorX - remainingDistance,
+          sensorX + remainingDistance,
+        ].sort((a, b) => a - b) as [number, number]
+        this.rangesOfNoBeaconsOnRow.push(xRangeOnRow)
+      }
     })
   }
 
   countNoBeaconsOnRow() {
     this.rangesOfNoBeaconsOnRow.sort((a, b) => a[0] - b[0])
 
-    this.rangesOfNoBeaconsOnRow = this.rangesOfNoBeaconsOnRow
-      .reduce((accumulator, currentRange, i) => {
+    this.rangesOfNoBeaconsOnRow = this.rangesOfNoBeaconsOnRow.reduce(
+      (accumulator, currentRange, i) => {
         if (i === 0) {
           accumulator.push(currentRange)
         } else {
           const prevRange = accumulator[accumulator.length - 1]
-          if (currentRange[0] <= prevRange[1] + 1 && currentRange[1] > prevRange[1]) {
+          if (
+            currentRange[0] <= prevRange[1] + 1 &&
+            currentRange[1] > prevRange[1]
+          ) {
             accumulator[accumulator.length - 1][1] = currentRange[1]
           } else if (currentRange[0] > prevRange[1]) {
             accumulator.push(currentRange)
           }
         }
         return accumulator
-      }, [] as [number, number][])
+      },
+      [] as [number, number][]
+    )
 
-    let count = this.rangesOfNoBeaconsOnRow.reduce((currentCount, currentRange) => {
-      return currentCount + (currentRange[1] - currentRange[0])
-    }, 1)
+    let count = this.rangesOfNoBeaconsOnRow.reduce(
+      (currentCount, currentRange) => {
+        return currentCount + (currentRange[1] - currentRange[0])
+      },
+      1
+    )
 
-    this.beaconsOnRow.forEach(beaconX => {
-      if (this.rangesOfNoBeaconsOnRow.some(([min, max]) => min <= beaconX && max >= beaconX)) count -= 1
+    this.beaconsOnRow.forEach((beaconX) => {
+      if (
+        this.rangesOfNoBeaconsOnRow.some(
+          ([min, max]) => min <= beaconX && max >= beaconX
+        )
+      )
+        count -= 1
     })
 
     return count
@@ -113,30 +129,28 @@ const BUTTONS: IButton[] = [
       // and it's not off-by-one; 5710543 is also too high :P
 
       return {
-        answer1: answer.toString()
+        answer1: answer.toString(),
       }
-    }
-  }
+    },
+  },
 ]
 
 const config: IDayConfig = {
   answer1Text: (answer) => (
     <span>
-      The row has{' '}
-      <code>{answer}</code> spaces that can't have a beacon.
+      The row has <code>{answer}</code> spaces that can't have a beacon.
     </span>
   ),
   answer2Text: (answer) => (
     <span>
-      With a floor,{' '}
-      <code>{answer}</code> grains of sand will come to rest.
+      With a floor, <code>{answer}</code> grains of sand will come to rest.
     </span>
   ),
   buttons: BUTTONS,
   day: 15,
   INPUT,
   renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Beacon Exclusion Zone'
+  title: 'Beacon Exclusion Zone',
 }
 
 export default config
