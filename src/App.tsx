@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Day, { loader as dayLoader } from './routes/Day'
 
 import Home from './routes/Home'
 import Root from './routes/Root'
@@ -18,6 +19,12 @@ const router = createBrowserRouter([
         element: <Year />,
         id: 'year',
         loader: yearLoader
+      },
+      {
+        path: ':year/day/:day/',
+        element: <Day />,
+        id: 'day',
+        loader: dayLoader
       }
     ]
   }

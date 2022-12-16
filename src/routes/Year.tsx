@@ -1,10 +1,18 @@
-import { useLoaderData } from 'react-router-dom'
-import years, { YearConfig } from '../configs/years'
+import { Params, useLoaderData } from 'react-router-dom'
+import years from '../configs/years'
+import { DayConfig } from './Day'
 
 import styles from './Year.module.css'
 
-export async function loader({ params }: { params: any }) {
-  const { year } = (params as { [key: string]: string })
+export interface YearConfig {
+  cover: string
+  days: Map<number, Omit<DayConfig, 'year'>>
+  extraText: string
+  id: number
+}
+
+export async function loader({ params }: { params: Params }) {
+  const { year } = params
   const yearConfig = years.get(Number(year))
 
   if (!yearConfig) throw new Error(`year not found: ${year}`)
