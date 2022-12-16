@@ -1,5 +1,6 @@
 import { defaultRenderDay, IButton, IDayConfig } from '../Config'
 
+import AStar from '../utils/AStar'
 import INPUT from '../Inputs/2022/Day16'
 
 interface Minute {
@@ -23,14 +24,30 @@ class Valve {
   }
 }
 
-const parseInput = (inputKey: string) => {
+const parseInput = (inputKey: string): {
+  valves: Map<string, Valve>
+  valveDistances: Map<string, number>
+} => {
   const input = INPUT[inputKey].split('\n')
   const valves: Map<string, Valve> = new Map()
   input.forEach(line => {
     const valve = new Valve(line)
     valves.set(valve.id, valve)
   })
-  return valves
+
+  const valveDistances: Map<string, number> = new Map()
+  const valveIds = Array.from(valves.keys())
+
+  for (let i = 0; i < valveIds.length - 1; i++) {
+    for (let j = i + 1; j < valveIds.length; j++) {
+      const valvePair = [valves.get(valveIds[i])!, valves.get(valveIds[j])!].sort((a, b) => a.id.localeCompare(b.id))
+      const h = (from: string) => from === valvePair[1].id ? 0 : 1
+      const getNeighbors = (currentId: string) => valves.get(currentId)!.tunnels
+      const distance = AStar(valvePair[0].id, valvePair[1].id, () => 1, h, getNeighbors)
+      valveDistances.set(valvePair.map(({ id }) => id).join(','), distance)
+    }
+  }
+  return { valves, valveDistances }
 }
 
 const getNextStates = (currentState: Minute, valves: Map<string, Valve>): Minute[] => {
@@ -79,32 +96,34 @@ const BUTTONS: IButton[] = [
   {
     label: 'Open Valves',
     onClick: (inputKey: string) => {
-      const valves = parseInput(inputKey)
+      const { valves, valveDistances } = parseInput(inputKey)
 
-      const queue: Minute[] = [{
-        id: 1,
-        openValves: [],
-        totalPressureReleaseSoFar: 0,
-        currentPressureReleasePerMinute: 0,
-        location: valves.get('AA')!
-      }]
+      debugger
 
-      let maxPressureRelease = 0
+      // const queue: Minute[] = [{
+      //   id: 1,
+      //   openValves: [],
+      //   totalPressureReleaseSoFar: 0,
+      //   currentPressureReleasePerMinute: 0,
+      //   location: valves.get('AA')!
+      // }]
 
-      while (queue.length) {
-        const currentState = queue.shift()!
-        if (currentState.id < 30) {
-          queue.unshift(...getNextStates(currentState!, valves))
-        } else {
-          maxPressureRelease = Math.max(
-            maxPressureRelease,
-            currentState.totalPressureReleaseSoFar
-          )
-        }
-      }
+      // let maxPressureRelease = 0
+
+      // while (queue.length) {
+      //   const currentState = queue.shift()!
+      //   if (currentState.id < 30) {
+      //     queue.unshift(...getNextStates(currentState!, valves))
+      //   } else {
+      //     maxPressureRelease = Math.max(
+      //       maxPressureRelease,
+      //       currentState.totalPressureReleaseSoFar
+      //     )
+      //   }
+      // }
 
       return {
-        answer1: maxPressureRelease.toString()
+        answer1: 'maxPressureRelease.toString()'
       }
     }
   }
