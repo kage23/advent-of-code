@@ -5,17 +5,22 @@ import {
   useNavigate,
   useRouteLoaderData
 } from 'react-router-dom'
+import years, { YearConfig } from '../configs/years'
 
 import styles from './Root.module.css'
 
 const Root = () => {
   const navigate = useNavigate()
-  const year = Number(useRouteLoaderData('year')) || 0
+  const year = useRouteLoaderData('year') as YearConfig | undefined
 
   const updateYear = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target
     navigate(value === '0' ? '/' : `/${value}`)
   }
+
+  const yearOptions = Array.from(years.keys()).map(year => (
+    <option key={year} value={year}>{year}</option>
+  ))
 
   return (
     <>
@@ -33,20 +38,15 @@ const Root = () => {
             id="yearSelect"
             className={styles.navSelect}
             onChange={updateYear}
-            value={year || 0}
+            value={year?.id || 0}
           >
-            <option
-              key="2015"
-              value={2015}
-            >
-              2015
-            </option>
             <option
               key="xx"
               value={0}
             >
               20xx
             </option>
+            {yearOptions}
           </select>
           {' '}
           <label className={styles.navLabel} htmlFor="daySelect">
