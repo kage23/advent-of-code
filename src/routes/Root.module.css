@@ -1,6 +1,7 @@
 .header {
   font-size: 1em;
   font-weight: normal;
+  margin: 0;
 }
 
 .link {
@@ -9,4 +10,30 @@
 }
 .link:hover {
   color: #00BFFF;
+}
+
+.nav {
+  padding-left: 33px;
+}
+
+.navLabel {
+  color: #1E90FF;
+  opacity: .5;
+}
+
+.navSelect {
+  -webkit-appearance: none;
+  font-size: 14pt;
+  font-family: "Source Code Pro", monospace;
+  background-color: transparent;
+  color: #1E90FF;
+  text-shadow: 0 0 2px #1E90FF, 0 0 5px #1E90FF;
+  border: none;
+}
+.navSelect:hover {
+  color: #00BFFF;
+  text-shadow: 0 0 2px #00BFFF, 0 0 5px #00BFFF;
+}
+.navSelect:focus {
+  outline: none;
 }

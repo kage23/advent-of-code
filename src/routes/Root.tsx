@@ -9,7 +9,37 @@ const Root = () => (
         Coding Advent Challenge Solution Suite
       </Link>
     </h1>
-    root ahoy!
+    <nav className={styles.nav}>
+      <label className={styles.navLabel} htmlFor="yearSelect">
+        year=
+      </label>
+      <select
+        id="yearSelect"
+        className={styles.navSelect}
+      >
+        <option
+          key="xx"
+          value={0}
+        >
+          20xx
+        </option>
+      </select>
+      {' '}
+      <label className={styles.navLabel} htmlFor="daySelect">
+        day=
+      </label>
+      <select
+        id="daySelect"
+        className={styles.navSelect}
+      >
+        <option
+          key="xx"
+          value={0}
+        >
+          xx
+        </option>
+      </select>
+    </nav>
     <div id="detail" />
   </>
 )
