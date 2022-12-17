@@ -1,3 +1,4 @@
+import classnames from 'classnames'
 import { Params, useLoaderData } from 'react-router-dom'
 import years from '../configs/years'
 import { YearConfig } from './Year'
@@ -8,6 +9,7 @@ import { ChangeEvent, ReactNode, useState } from 'react'
 type ButtonClickReturn = {
   answer1?: string | number
   answer2?: string | number
+  specialRender?: ReactNode
 } | void
 
 export interface DayConfig {
@@ -50,6 +52,7 @@ const Day = () => {
 
   const [answer1, setAnswer1] = useState<string | number>()
   const [answer2, setAnswer2] = useState<string | number>()
+  const [specialRender, setSpecialRender] = useState<ReactNode>(null)
   const [selectedInputKey, setSelectedInputKey] = useState<string>()
 
   const handleButtonClick = (
@@ -63,6 +66,7 @@ const Day = () => {
 
     if (result && result.answer1 !== undefined) setAnswer1(result.answer1)
     if (result && result.answer2 !== undefined) setAnswer2(result.answer2)
+    setSpecialRender(result?.specialRender)
   }
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +74,7 @@ const Day = () => {
     setSelectedInputKey(value)
     setAnswer1(undefined)
     setAnswer2(undefined)
+    setSpecialRender(null)
   }
 
   const inputSelectors = Array.from(inputs.keys()).map(inputKey => (
@@ -141,6 +146,23 @@ const Day = () => {
           </div>
         )}
       </div>
+      {selectedInputKey !== undefined && (
+        <div className={styles.renderBox}>
+          <div className={classnames({ [styles.inputDisplay]: !!specialRender })}>
+            <h3 className={styles.inputTitle}>
+              Input:
+            </h3>
+            <pre className={styles.input}>
+              {inputs.get(selectedInputKey)}
+            </pre>
+          </div>
+          {!!specialRender && (
+            <div className={styles.specialRender}>
+              {specialRender}
+            </div>
+          )}
+        </div>
+      )}
     </>
   )
 }

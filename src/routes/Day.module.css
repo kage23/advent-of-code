@@ -90,3 +90,39 @@ code:before {
   background: #10101a;
 }
 
+.renderBox {
+  margin: 1em 0px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.inputDisplay {
+  width: 25%;
+  flex-basis: 25%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  overflow-x: scroll;
+}
+
+.specialRender {
+  margin-left: 24px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  overflow-x: scroll;
+}
+
+.inputTitle,
+.specialRender h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.input,
+.specialRender pre,
+.specialRender p {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: "Source Code Pro", monospace;
+}
