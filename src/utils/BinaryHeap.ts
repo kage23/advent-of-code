@@ -3,10 +3,11 @@ class BinaryHeap<T> {
   scoreFunction: (item: T) => number
   type: 'min' | 'max'
 
-  constructor(scoreFunction: (item: T) => number, type: 'min' | 'max') {
+  constructor(scoreFunction: (item: T) => number, type: 'min' | 'max', head?: T) {
     this.content = []
     this.scoreFunction = scoreFunction
     this.type = type
+    if (head) this.push(head)
   }
 
   // Add a new element to the heap
