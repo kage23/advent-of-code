@@ -19,7 +19,7 @@ import Day13__2022__Config from './Day13'
 import Day14__2022__Config from './Day14'
 import Day15__2022__Config from './Day15'
 import Day16__2022__Config from './Day16'
-// import Day17__2022__Config from './Day17'
+import Day17__2022__Config from './Day17'
 // import Day18__2022__Config from './Day18'
 // import Day19__2022__Config from './Day19'
 // import Day20__2022__Config from './Day20'
@@ -46,6 +46,7 @@ const CONFIG_2022: IYearConfig = {
       Fell into an underground cave behind a waterfall!
       Going through underground tunnels!
       We found some elephants in the volcano!
+      Oh no, TETRIS-y rocks!
     </p>
   ),
   days: [
@@ -65,7 +66,7 @@ const CONFIG_2022: IYearConfig = {
     Day14__2022__Config,
     Day15__2022__Config,
     Day16__2022__Config,
-    // Day17__2022__Config,
+    Day17__2022__Config,
     // Day18__2022__Config,
     // Day19__2022__Config,
     // Day20__2022__Config,
