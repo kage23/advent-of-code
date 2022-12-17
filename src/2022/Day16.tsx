@@ -4,20 +4,6 @@ import AStar from '../utils/AStar'
 import BinaryHeap from '../utils/BinaryHeap'
 import INPUT from '../Inputs/2022/Day16'
 
-interface Minute {
-  id: number
-  openValves: string[]
-  totalPressureReleaseSoFar: number
-  currentPressureReleasePerMinute: number
-  location: Valve
-}
-
-interface Worker {
-  nextValveToOpen: string
-  timeToValveOpen: number
-  location: string
-}
-
 class Valve {
   id: string
   flowRate: number
@@ -75,17 +61,33 @@ const getNextStates = (
   node: Node,
   valves: Map<string, Valve>,
   valveDistances: Map<string, number>,
-  totalTime: number
+  totalTime: number,
+  saveSomeForMe?: boolean,
+  onlyLookAtTheseValves?: string[]
 ): Node[] => {
   const nextStates: Node[] = []
 
+  // We only care about valves with flow rates higher than zero.
+  // Also, if there's an allowlist, we should make sure it's on it.
+  const valvesWeCareAbout = Array.from(valves.keys()).filter(valveId => (
+    valves.get(valveId)!.flowRate > 0 &&
+    (!onlyLookAtTheseValves || onlyLookAtTheseValves.includes(valveId))
+  ))
+
+  // If there's going to be another worker, we should save some for them
+  if (saveSomeForMe && node.openValves.length >= (valvesWeCareAbout.length / 2)) {
+    return [{
+      ...node,
+      time: totalTime
+    }]
+  }
+
   // What valve should we open next?
-  // Could be any currently closed valve that has a flow rate higher than 0 and is close enough that we can get to it.
-  const closedValves = Array.from(valves.keys()).filter(valveId => {
+  // Could be any currently closed valve that we care about and is close enough that we can get to it.
+  const closedValves = valvesWeCareAbout.filter(valveId => {
     const valvePairId = [valveId, node.location].sort((a, b) => a.localeCompare(b)).join(',')
     return (
       !node.openValves.includes(valveId) &&
-      valves.get(valveId)!.flowRate > 0 &&
       (node.location === valveId || (node.time + valveDistances.get(valvePairId)! + 1) <= totalTime)
     )
   })
@@ -116,7 +118,9 @@ const getNextStates = (
 const findPathsInXTime = (
   valves: Map<string, Valve>,
   valveDistances: Map<string, number>,
-  time: number
+  time: number,
+  saveSomeForMe?: boolean,
+  onlyLookAtTheseValves?: string[]
 ): Node[] => {
   const paths: Node[] = []
 
@@ -132,7 +136,14 @@ const findPathsInXTime = (
   while (queue.size()) {
     const currentState = queue.pop()
     if (currentState.time < time) {
-      const nextStates = getNextStates(currentState!, valves, valveDistances, time)
+      const nextStates = getNextStates(
+        currentState!,
+        valves,
+        valveDistances,
+        time,
+        saveSomeForMe,
+        onlyLookAtTheseValves
+      )
       nextStates.forEach(ns => queue.push(ns))
     } else {
       paths.push(currentState)
@@ -161,6 +172,32 @@ const BUTTONS: IButton[] = [
       }
     }
   },
+  {
+    label: 'Work With an Elephant',
+    onClick: (inputKey: string) => {
+      const { valves, valveDistances } = parseInput(inputKey)
+
+      const timerLabel = 'Actually finding the best plan'
+      console.time(timerLabel)
+
+      const myBestPath = findPathsInXTime(valves, valveDistances, 26, true)
+        .sort((a, b) => b.totalPressureRelease - a.totalPressureRelease)[0]
+
+      const elephantsBestPath = findPathsInXTime(
+        valves,
+        valveDistances,
+        26,
+        false,
+        Array.from(valves.keys()).filter(valveId => !myBestPath.openValves.includes(valveId))
+      ).sort((a, b) => b.totalPressureRelease - a.totalPressureRelease)[0]
+
+      console.timeEnd(timerLabel)
+
+      return {
+        answer2: (myBestPath.totalPressureRelease + elephantsBestPath.totalPressureRelease).toString()
+      }
+    }
+  }
 ]
 
 const config: IDayConfig = {
