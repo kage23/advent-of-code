@@ -57,9 +57,10 @@ const Day = () => {
 
   const handleButtonClick = (
     onClick: (inputKey: string) => ButtonClickReturn,
+    inputKey: string,
     label: string
   ) => {
-    const timerLabel = `Year ${year.id}, Day ${id}, ${label}`
+    const timerLabel = `Year ${year.id}, Day ${id}, ${label} (${inputKey})`
     console.time(timerLabel)
     const result = onClick(selectedInputKey!)
     console.timeEnd(timerLabel)
@@ -118,7 +119,7 @@ const Day = () => {
                 key={i}
                 className={styles.button}
                 disabled={selectedInputKey === undefined}
-                onClick={() => handleButtonClick(onClick, label)}
+                onClick={() => handleButtonClick(onClick, selectedInputKey!, label)}
               >
                 {label}
               </button>
