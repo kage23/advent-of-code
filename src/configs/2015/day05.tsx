@@ -1,12 +1,7 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2015/day05'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2015/Day05'
-
-const isNice = (string: string): boolean => {
+export const isStringNice = (string: string): boolean => {
   const vowels = ['a', 'e', 'i', 'o', 'u']
   let vowelCount = 0
   let double = false
@@ -32,7 +27,7 @@ const isNice = (string: string): boolean => {
   )
 }
 
-const isNice__v2 = (string: string): boolean => {
+export const isStringNice__v2 = (string: string): boolean => {
   // It contains a pair of any two letters that appears at least twice in the string without overlapping, like xyxy (xy) or aabcdefgaa (aa), but not like aaa (aa, but it overlaps).
   let condition1 = false
   // It contains at least one letter which repeats with exactly one letter between them, like xyx, abcdefeghi (efe), or even aaa.
@@ -48,28 +43,7 @@ const isNice__v2 = (string: string): boolean => {
   return false
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Count Nice Strings',
-    onClick: (inputKey) => {
-      const strings = INPUT[inputKey].split('\n')
-      return {
-        answer1: strings.filter(string => isNice(string)).length.toString()
-      }
-    }
-  },
-  {
-    label: 'Count Nice Strings, v. 2',
-    onClick: (inputKey) => {
-      const strings = INPUT[inputKey].split('\n')
-      return {
-        answer2: strings.filter(string => isNice__v2(string)).length.toString()
-      }
-    }
-  }
-]
-
-const config: IDayConfig = {
+const day05: Omit<DayConfig, 'year'> = {
   answer1Text: (answer) => (
     <span>
       There are <code>{answer}</code> nice strings.
@@ -80,11 +54,29 @@ const config: IDayConfig = {
       There are <code>{answer}</code> nice strings, under the new rules.
     </span>
   ),
-  buttons: BUTTONS,
-  day: 5,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: `Doesn't He Have Intern-Elves For This?`
+  buttons: [
+    {
+      label: 'Count Nice Strings',
+      onClick: (inputKey) => {
+        const strings = inputs.get(inputKey)!.split('\n')
+        return {
+          answer1: strings.filter(string => isStringNice(string)).length
+        }
+      }
+    },
+    {
+      label: 'Count Nice Strings, v.2',
+      onClick: (inputKey) => {
+        const strings = inputs.get(inputKey)!.split('\n')
+        return {
+          answer2: strings.filter(string => isStringNice__v2(string)).length
+        }
+      }
+    }
+  ],
+  id: 5,
+  inputs,
+  title: `Doesn't He Have Intern-Elves For This?`,
 }
 
-export default config
+export default day05

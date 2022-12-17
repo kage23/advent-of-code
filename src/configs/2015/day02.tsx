@@ -1,13 +1,13 @@
 import inputs from '../../inputs/2015/day02'
 import { DayConfig } from '../../routes/Day'
 
-const getWrappingPaperSize = (present: string): number => {
+export const getWrappingPaperSize = (present: string): number => {
   const [l, w, h] = present.split('x').map(x => parseInt(x))
   const slack = Math.min(l * w, l * h, w * h)
   return (2 * l * w) + (2 * l * h) + (2 * w * h) + slack
 }
 
-const getRibbon = (present: string): number => {
+export const getRibbon = (present: string): number => {
   const [l, w, h] = present.split('x').map(x => parseInt(x))
   return Math.min(
     (l * 2) + (w * 2),
@@ -16,7 +16,7 @@ const getRibbon = (present: string): number => {
   ) + (l * w * h)
 }
 
-export const calculateWrappingPaper = (inputKey: string) => {
+const calculateWrappingPaper = (inputKey: string) => {
   const presentSizeList = inputs.get(inputKey)!.split('\n')
 
   return {
@@ -27,7 +27,7 @@ export const calculateWrappingPaper = (inputKey: string) => {
   }
 }
 
-export const calculateRibbon = (inputKey: string) => {
+const calculateRibbon = (inputKey: string) => {
   const presentSizeList = inputs.get(inputKey)!.split('\n')
 
   return {
