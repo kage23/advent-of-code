@@ -52,8 +52,14 @@ const Day = () => {
   const [answer2, setAnswer2] = useState<string | number>()
   const [selectedInputKey, setSelectedInputKey] = useState<string>()
 
-  const handleButtonClick = (onClick: (inputKey: string) => ButtonClickReturn) => {
+  const handleButtonClick = (
+    onClick: (inputKey: string) => ButtonClickReturn,
+    label: string
+  ) => {
+    const timerLabel = `Year ${year.id}, Day ${id}, ${label}`
+    console.time(timerLabel)
     const result = onClick(selectedInputKey!)
+    console.timeEnd(timerLabel)
 
     if (result && result.answer1 !== undefined) setAnswer1(result.answer1)
     if (result && result.answer2 !== undefined) setAnswer2(result.answer2)
@@ -107,7 +113,7 @@ const Day = () => {
                 key={i}
                 className={styles.button}
                 disabled={selectedInputKey === undefined}
-                onClick={() => handleButtonClick(onClick)}
+                onClick={() => handleButtonClick(onClick, label)}
               >
                 {label}
               </button>
