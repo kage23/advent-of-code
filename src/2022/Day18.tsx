@@ -59,7 +59,8 @@ const findOuterSurfaceArea = (inputKey: string): number => {
       // Down
       [airX, airY, airZ + 1]
     ]
-    neighbors.forEach(neighbor => {
+    for (let n = 0; n < neighbors.length; n++) {
+      const neighbor = neighbors[n]
       if (
         !outsideAir.includes(neighbor.join(',')) &&
         !droplets.has(neighbor.join(',')) &&
@@ -72,7 +73,7 @@ const findOuterSurfaceArea = (inputKey: string): number => {
       ) {
         outsideAir.push(neighbor.join(','))
       }
-    })
+    }
   }
 
   Array.from(droplets.keys()).forEach(droplet => {
