@@ -161,6 +161,20 @@ const getNextStates = ([
     }
   })
 
+  if (timeRemaining > 0 && nextStates.length === 0) {
+    nextStates.push([
+      oreRobots,
+      clayRobots,
+      obsidianRobots,
+      geodeRobots,
+      ore + (oreRobots * timeRemaining),
+      clay + (clayRobots * timeRemaining),
+      obsidian + (obsidianRobots * timeRemaining),
+      geodes + (geodeRobots * timeRemaining),
+      24
+    ].join(','))
+  }
+
   return nextStates
 }
 
@@ -183,6 +197,8 @@ const BUTTONS: IButton[] = [
       ), 0)
 
       console.timeEnd(timerLabel)
+
+      // 1804 is too low
 
       return {
         answer1: totalQualityLevels.toString()
