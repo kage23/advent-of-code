@@ -43,6 +43,20 @@ export const isStringNice__v2 = (string: string): boolean => {
   return false
 }
 
+export const areStringsNice = (inputKey: string) => {
+  const strings = inputs.get(inputKey)!.split('\n')
+  return {
+    answer1: strings.filter(string => isStringNice(string)).length
+  }
+}
+
+export const areStringsNice__v2 = (inputKey: string) => {
+  const strings = inputs.get(inputKey)!.split('\n')
+  return {
+    answer2: strings.filter(string => isStringNice__v2(string)).length
+  }
+}
+
 const day05: Omit<DayConfig, 'year'> = {
   answer1Text: (answer) => (
     <span>
@@ -57,21 +71,11 @@ const day05: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Count Nice Strings',
-      onClick: (inputKey) => {
-        const strings = inputs.get(inputKey)!.split('\n')
-        return {
-          answer1: strings.filter(string => isStringNice(string)).length
-        }
-      }
+      onClick: areStringsNice
     },
     {
       label: 'Count Nice Strings, v.2',
-      onClick: (inputKey) => {
-        const strings = inputs.get(inputKey)!.split('\n')
-        return {
-          answer2: strings.filter(string => isStringNice__v2(string)).length
-        }
-      }
+      onClick: areStringsNice__v2
     }
   ],
   id: 5,

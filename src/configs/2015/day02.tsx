@@ -16,7 +16,7 @@ export const getRibbon = (present: string): number => {
   ) + (l * w * h)
 }
 
-const calculateWrappingPaper = (inputKey: string) => {
+export const calculateWrappingPaper = (inputKey: string) => {
   const presentSizeList = inputs.get(inputKey)!.split('\n')
 
   return {
@@ -27,7 +27,7 @@ const calculateWrappingPaper = (inputKey: string) => {
   }
 }
 
-const calculateRibbon = (inputKey: string) => {
+export const calculateRibbon = (inputKey: string) => {
   const presentSizeList = inputs.get(inputKey)!.split('\n')
 
   return {

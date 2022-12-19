@@ -22,6 +22,7 @@
     "start": "PORT=1225 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "answers": "react-scripts test --testMatch [ \"**/?(*.)+(answers).[jt]s?(x)\" ]",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
