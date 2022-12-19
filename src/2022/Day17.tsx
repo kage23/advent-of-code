@@ -306,110 +306,79 @@ const dropItOnce = (rock: Rock, tower: Map<number, string>): boolean => {
       }
     }
 
-    // Only save the top of the tower
-    const rows = Array.from(tower.keys()).sort((a, b) => b - a)
-    if (rows.length > 1000) {
-      for (let i = 1000; i < rows.length; i++) {
-        tower.delete(rows[i])
-      }
-    }
-
     return true
   }
+}
+
+const getTowerHeight = (inputKey: string, howManyRocks: number) => {
+  const jetStream = INPUT[inputKey].split('') as WindDirections[]
+  const seenStates: Map<string, { height: number, rocks: number }> = new Map()
+
+  console.time('getTowerHeight')
+
+  // Map of row numbers to what's on that row
+  const tower: Map<number, string> = new Map()
+
+  let result: {
+    nextWindIndex: number
+    nextRockTypeIndex: number
+  } = {
+    nextWindIndex: 0,
+    nextRockTypeIndex: 0
+  }
+
+  for (let rockNumber = 0; rockNumber < howManyRocks; rockNumber++) {
+    result = dropOneRock(jetStream, tower, result.nextWindIndex, result.nextRockTypeIndex)
+
+    // current state consists of: [windIndex,rockIndex,tenRecentRows]
+    // result.windAndRockStuff will already be for the next upcoming rock though
+    if (tower.size > 10) {
+      let state = `${(result.nextWindIndex - 1 + jetStream.length) % jetStream.length},` +
+        `${(result.nextRockTypeIndex - 1 + rockOrder.length) % rockOrder.length},`
+      for (let i = tower.size; i > tower.size - 10; i--) {
+        state += `${tower.get(i)!},`
+      }
+      if (seenStates.has(state)) {
+        // We found repetition!
+        // These consts represent the height and rock number when we started the pattern
+        const { height, rocks } = seenStates.get(state)!
+        const loopHeight = tower.size - height
+        const loopLengthInRocks = rockNumber - rocks
+        const rocksRemainingToDrop = howManyRocks - rockNumber
+        const howManyLoopsIsThat = Math.floor(rocksRemainingToDrop / loopLengthInRocks)
+        const plusTheRemainderToDrop = rocksRemainingToDrop % loopLengthInRocks
+        const heightFromTheLoops = howManyLoopsIsThat * loopHeight
+        // Drop the remainder of the rocks
+        let remainderResult = { ...result }
+        for (let k = 1; k < plusTheRemainderToDrop; k++) {
+          remainderResult = dropOneRock(jetStream, tower, remainderResult.nextWindIndex, remainderResult.nextRockTypeIndex)
+        }
+        console.timeEnd('getTowerHeight')
+        return tower.size + heightFromTheLoops
+      } else {
+        seenStates.set(state, { height: tower.size, rocks: rockNumber })
+      }
+    }
+  }
+
+  console.timeEnd('getTowerHeight')
+
+  console.log('this was the bad end')
+  return Array.from(tower.keys()).sort((a, b) => b - a)[0]
 }
 
 const BUTTONS: IButton[] = [
   {
     label: 'Simulate Falling Rocks',
-    onClick: (inputKey: string) => {
-      const jetStream = INPUT[inputKey].split('') as WindDirections[]
-      const seenStates: Map<string, { height: number, rocks: number }> = new Map()
-
-      console.time('rock simulation part 1')
-
-      // Map of row numbers to what's on that row
-      const tower: Map<number, string> = new Map()
-
-      let result: {
-        nextWindIndex: number
-        nextRockTypeIndex: number
-      } = {
-        nextWindIndex: 0,
-        nextRockTypeIndex: 0
-      }
-
-      mainRockLoop:
-      for (let rockNumber = 0; rockNumber < 2022; rockNumber++) {
-        result = dropOneRock(jetStream, tower, result.nextWindIndex, result.nextRockTypeIndex)
-
-        // current state consists of: [windIndex,rockIndex,tenRecentRows]
-        // result.windAndRockStuff will already be for the next upcoming rock though
-        if (tower.size > 10) {
-          let state = `${(result.nextWindIndex - 1 + jetStream.length) % jetStream.length},` +
-            `${(result.nextRockTypeIndex - 1 + rockOrder.length) % rockOrder.length},`
-          for (let i = tower.size; i > tower.size - 10; i--) {
-            state += `${tower.get(i)!},`
-          }
-          if (seenStates.has(state)) {
-            // We found repetition!
-            // These consts represent the height and rock number when we started the pattern
-            const { height, rocks } = seenStates.get(state)!
-            const loopHeight = tower.size - height
-            const loopLengthInRocks = rockNumber - rocks
-            const rocksRemainingToDrop = 2022 - rockNumber
-            const howManyLoopsIsThat = Math.floor(rocksRemainingToDrop / loopLengthInRocks)
-            const plusTheRemainderToDrop = rocksRemainingToDrop % loopLengthInRocks
-            const heightFromTheLoops = howManyLoopsIsThat * loopHeight
-            // Drop the remainder of the rocks
-            let remainderResult = { ...result }
-            for (let k = 1; k < plusTheRemainderToDrop; k++) {
-              remainderResult = dropOneRock(jetStream, tower, remainderResult.nextWindIndex, remainderResult.nextRockTypeIndex)
-            }
-            console.timeEnd('rock simulation part 1')
-            return {
-              answer1: (tower.size + heightFromTheLoops).toString()
-            }
-          } else {
-            seenStates.set(state, { height: tower.size, rocks: rockNumber })
-          }
-        }
-      }
-
-      console.timeEnd('rock simulation part 1')
-
-      return {
-        answer1: Array.from(tower.keys()).sort((a, b) => b - a)[0].toString()
-      }
-    }
+    onClick: (inputKey: string) => ({
+      answer1: getTowerHeight(inputKey, 2022).toString()
+    })
   },
   {
     label: 'Simulate Falling Rocks for a Long Time',
-    onClick: (inputKey: string) => {
-      const jetStream = INPUT[inputKey].split('') as WindDirections[]
-
-      console.time('rock simulation part 2')
-
-      // Map of row numbers to what's on that row
-      const tower: Map<number, string> = new Map()
-
-      let result: {
-        nextWindIndex: number
-        nextRockTypeIndex: number
-      } = {
-        nextWindIndex: 0,
-        nextRockTypeIndex: 0
-      }
-
-      for (let i = 0; i < 1000000000000; i++) {
-        result = dropOneRock(jetStream, tower, result.nextWindIndex, result.nextRockTypeIndex)
-      }
-
-      console.timeEnd('rock simulation part 2')
-
-      return {
-        answer1: Array.from(tower.keys()).sort((a, b) => b - a)[0].toString()
-      }
-    }
+    onClick: (inputKey: string) => ({
+      answer2: getTowerHeight(inputKey, 1000000000000).toString()
+    })
   },
 ]
 
@@ -422,8 +391,8 @@ const config: IDayConfig = {
   ),
   answer2Text: (answer) => (
     <span>
-      Working with an elephant, the most pressure you can release is{' '}
-      <code>{answer}</code>.
+      After one trillion rocks, the tower will be{' '}
+      <code>{answer}</code> units tall.
     </span>
   ),
   buttons: BUTTONS,
