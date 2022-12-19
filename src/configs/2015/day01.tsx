@@ -54,16 +54,8 @@ export const findBasement = (inputKey: string) => {
 }
 
 const day01: Omit<DayConfig, 'year'> = {
-  answer1Text: (answer) => (
-    <span>
-      The instructions take Santa to Floor <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      Santa first visits the Basement at Step <code>{answer}</code>.
-    </span>
-  ),
+  answer1Text: 'The instructions take Santa to Floor answer.',
+  answer2Text: 'Santa first visits the Basement at Step answer.',
   buttons: [
     {
       label: 'Follow Instructions',

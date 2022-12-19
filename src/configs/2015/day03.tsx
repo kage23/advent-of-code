@@ -68,16 +68,8 @@ export const deliverPresentsWithRoboSanta = (inputKey: string) => {
 }
 
 const day03: Omit<DayConfig, 'year'> = {
-  answer1Text: (answer) => (
-    <span>
-      Santa visits <code>{answer}</code> houses at least once.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      With Robo-Santa's help, at least <code>{answer}</code> houses get a present.
-    </span>
-  ),
+  answer1Text: 'Santa visits answer houses at least once.',
+  answer2Text: `With Robo-Santa's help, at least answer houses get a present.`,
   buttons: [
     {
       label: 'Deliver Presents',

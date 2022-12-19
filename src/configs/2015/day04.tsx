@@ -22,16 +22,8 @@ export const lookForBetterHash = (inputKey: string) => {
 }
 
 const day04: Omit<DayConfig, 'year'> = {
-  answer1Text: (answer) => (
-    <span>
-      The lowest number that produces a good hash is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The lowest number that produces a better hash is <code>{answer}</code>.
-    </span>
-  ),
+  answer1Text: 'The lowest number that produces a good hash is answer.',
+  answer2Text: 'The lowest number that produces a better hash is answer.',
   buttons: [
     {
       label: 'Look for Hash',

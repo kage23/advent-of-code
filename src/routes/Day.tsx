@@ -4,7 +4,7 @@ import years from '../configs/years'
 import { YearConfig } from './Year'
 
 import styles from './Day.module.css'
-import { ChangeEvent, ReactNode, useState } from 'react'
+import { ChangeEvent, ReactNode, useEffect, useState } from 'react'
 
 type ButtonClickReturn = {
   answer1?: string | number
@@ -13,8 +13,8 @@ type ButtonClickReturn = {
 } | void
 
 export interface DayConfig {
-  answer1Text: (answer: number | string) => ReactNode
-  answer2Text: (answer: number | string) => ReactNode
+  answer1Text: string
+  answer2Text: string
   buttons: {
     label: string
     onClick: (inputKey: string) => ButtonClickReturn
@@ -78,6 +78,15 @@ const Day = () => {
     setSpecialRender(null)
   }
 
+  const renderAnswerText = (answerText: string, actualAnswer: string | number) => {
+    const answerTextParts = answerText.split('answer')
+    return (
+      <span>
+        {answerTextParts[0]}<code>{actualAnswer}</code>{answerTextParts[1]}
+      </span>
+    )
+  }
+
   const inputSelectors = Array.from(inputs.keys()).map(inputKey => (
     <label key={inputKey} className={styles.label}>
       <input
@@ -91,6 +100,14 @@ const Day = () => {
       {inputKey}
     </label>
   ))
+
+  // Reset the state if the day or year changes
+  useEffect(() => {
+    setAnswer1(undefined)
+    setAnswer2(undefined)
+    setSpecialRender(null)
+    setSelectedInputKey(undefined)
+  }, [id, year.id])
 
   return (
     <>
@@ -132,7 +149,7 @@ const Day = () => {
               <fieldset className={styles.answer}>
                 <p className={styles.answerText}>
                   Answer 1:{' '}
-                  {answer1Text(answer1)}
+                  {renderAnswerText(answer1Text, answer1)}
                 </p>
               </fieldset>
             )}
@@ -140,7 +157,7 @@ const Day = () => {
               <fieldset className={styles.answer}>
                 <p className={styles.answerText}>
                   Answer 2:{' '}
-                  {answer2Text(answer2)}
+                  {renderAnswerText(answer2Text, answer2)}
                 </p>
               </fieldset>
             )}

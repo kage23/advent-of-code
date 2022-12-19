@@ -58,16 +58,8 @@ export const areStringsNice__v2 = (inputKey: string) => {
 }
 
 const day05: Omit<DayConfig, 'year'> = {
-  answer1Text: (answer) => (
-    <span>
-      There are <code>{answer}</code> nice strings.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      There are <code>{answer}</code> nice strings, under the new rules.
-    </span>
-  ),
+  answer1Text: 'There are answer nice strings.',
+  answer2Text: 'There are answer nice strings, under the new rules.',
   buttons: [
     {
       label: 'Count Nice Strings',

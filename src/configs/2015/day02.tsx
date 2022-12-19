@@ -39,16 +39,8 @@ export const calculateRibbon = (inputKey: string) => {
 }
 
 const day02: Omit<DayConfig, 'year'> = {
-  answer1Text: (answer) => (
-    <span>
-      The elves should order <code>{answer}</code> square feet of wrapping paper.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The elves should order <code>{answer}</code> feet of ribbon.
-    </span>
-  ),
+  answer1Text: 'The elves should order answer square feet of wrapping paper.',
+  answer2Text: 'The elves should order answer feet of ribbon.',
   buttons: [
     {
       label: 'Calculate Wrapping Paper',
