@@ -1,4 +1,5 @@
 import { defaultRenderDay, IButton, IDayConfig } from '../Config'
+import BinaryHeap from '../utils/BinaryHeap'
 
 import INPUT from '../Inputs/2022/Day19'
 
@@ -49,15 +50,40 @@ const parseBlueprint = (raw: string): Blueprint => {
 }
 
 const getMostGeodes = (blueprint: Blueprint): number => {
-  const searchQueue = ['1,0,0,0,0,0,0,0,0']
+  const scoreFunction = (stateToScore: string): number => {
+    const [
+      oreRobots,
+      clayRobots,
+      obsidianRobots,
+      geodeRobots,
+      ore,
+      clay,
+      obsidian,
+      geodes,
+      time
+    ] = stateToScore.split(',').map(n => Number(n))
+    return (
+      (geodes * 1000) +
+      (geodeRobots * 900) +
+      (obsidian * 800) +
+      (obsidianRobots * 700) +
+      (clay * 600) +
+      (clayRobots * 500) +
+      (ore * 400) +
+      (oreRobots * 200) +
+      ((24 - time) * 100)
+    )
+  }
+
+  const searchQueue = new BinaryHeap<string>(scoreFunction, 'max', '1,0,0,0,0,0,0,0,0')
 
   let maxGeodes = 0
 
-  while (searchQueue.length) {
-    const state = searchQueue.shift()!.split(',').map(n => Number(n))
+  while (searchQueue.size()) {
+    const state = searchQueue.pop()!.split(',').map(n => Number(n))
     const [, , , , , , , geodes, time] = state
     if (time === 24) maxGeodes = Math.max(maxGeodes, geodes)
-    searchQueue.push(...getNextStates(state, blueprint))
+    getNextStates(state, blueprint).forEach(ns => searchQueue.push(ns))
   }
 
   return maxGeodes
