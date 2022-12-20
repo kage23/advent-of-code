@@ -95,7 +95,7 @@ const day09: Omit<DayConfig, 'year'> = {
   ],
   id: 9,
   inputs,
-  title: `All in a Single Night`,
+  title: 'All in a Single Night',
 }
 
 export default day09

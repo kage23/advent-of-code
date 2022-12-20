@@ -1,10 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2015/Day11'
+import inputs from '../../inputs/2015/day11'
+import { DayConfig } from '../../routes/Day'
 
 const containsTwoSeparatePairs = (input: string): boolean => {
   let pairCount = 0
@@ -39,7 +34,7 @@ const incrementPassword = (input: string): string => {
   }
 }
 
-const isViablePassword = (input: string): boolean => (
+export const isViablePassword = (input: string): boolean => (
   // Exactly eight lowercase letters
   (input.length === 8 && input === input.toLowerCase())
   // Passwords must include one increasing straight of at least three letters, like abc, bcd, cde, and so on, up to xyz. They cannot skip letters; abd doesn't count.
@@ -50,38 +45,41 @@ const isViablePassword = (input: string): boolean => (
   && containsTwoSeparatePairs(input)
 )
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Find Next Viable Password',
-    onClick: (inputKey) => {
-      let password = incrementPassword(INPUT[inputKey])
-      while (!isViablePassword(password)) {
-        password = incrementPassword(password)
-      }
+export const findNextViablePassword = (inputKey: string) => {
+  let password = incrementPassword(inputs.get(inputKey) || inputKey)
 
-      return {
-        answer1: password
-      }
-    }
+  while (!isViablePassword(password)) {
+    password = incrementPassword(password)
   }
-]
 
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The next viable password is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The NEXT next viable password is <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 11,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Corporate Policy'
+  return {
+    answer1: password
+  }
 }
 
-export default config
+export const findNEXTNextViablePassword = (inputKey: string) => {
+  const nextViablePassword = findNextViablePassword(inputKey).answer1
+  return {
+    answer2: findNextViablePassword(nextViablePassword).answer1
+  }
+}
+
+const day11: Omit<DayConfig, 'year'> = {
+  answer1Text: `Santa's next viable password is answer.`,
+  answer2Text: `Santa's NEXT next viable password is answer.`,
+  buttons: [
+    {
+      label: 'Find Next Viable Password',
+      onClick: findNextViablePassword
+    },
+    {
+      label: 'Find NEXT Next Viable Password',
+      onClick: findNEXTNextViablePassword
+    }
+  ],
+  id: 11,
+  inputs,
+  title: 'Corporate Policy',
+}
+
+export default day11

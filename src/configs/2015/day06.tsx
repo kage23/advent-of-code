@@ -86,7 +86,7 @@ const day06: Omit<DayConfig, 'year'> = {
   ],
   id: 6,
   inputs,
-  title: `Probably a Fire Hazard`,
+  title: 'Probably a Fire Hazard',
 }
 
 export default day06

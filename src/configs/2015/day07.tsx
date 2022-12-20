@@ -87,7 +87,7 @@ const day07: Omit<DayConfig, 'year'> = {
   ],
   id: 7,
   inputs,
-  title: `Some Assembly Required`,
+  title: 'Some Assembly Required',
 }
 
 export default day07

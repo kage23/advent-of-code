@@ -8,6 +8,7 @@ import { constructTheCircuit } from './day07'
 import { examineStringConversions, examineStringEncodings } from './day08'
 import { findPaths } from './day09'
 import { doHowManyLookAndSays } from './day10'
+import { findNextViablePassword, findNEXTNextViablePassword } from './day11'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -61,5 +62,10 @@ describe('2015 Answers', () => {
   it('Day 10', () => {
     console.log(`Day 10, Part 1: ${doHowManyLookAndSays('REAL', 40).answer1}`)
     console.log(`Day 10, Part 2: ${doHowManyLookAndSays('REAL', 50).answer2}`)
+  })
+
+  it('Day 11', () => {
+    console.log(`Day 11, Part 1: ${findNextViablePassword('REAL').answer1}`)
+    console.log(`Day 11, Part 2: ${findNEXTNextViablePassword('REAL').answer2}`)
   })
 })

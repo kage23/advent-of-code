@@ -48,7 +48,7 @@ const day10: Omit<DayConfig, 'year'> = {
   ],
   id: 10,
   inputs,
-  title: `Elves Look, Elves Say`,
+  title: 'Elves Look, Elves Say',
 }
 
 export default day10
