@@ -1,8 +1,10 @@
-const INPUT: { [key:string]: string } = {
-DEMO_0: `London to Dublin = 464
+const inputs: Map<string, string> = new Map([
+  ['DEMO_1', `London to Dublin = 464
 London to Belfast = 518
-Dublin to Belfast = 141`,
-REAL: `Tristram to AlphaCentauri = 34
+Dublin to Belfast = 141`],
+  [
+    'REAL',
+    `Tristram to AlphaCentauri = 34
 Tristram to Snowdin = 100
 Tristram to Tambi = 63
 Tristram to Faerun = 108
@@ -29,7 +31,8 @@ Faerun to Straylight = 66
 Faerun to Arbre = 144
 Norrath to Straylight = 115
 Norrath to Arbre = 135
-Straylight to Arbre = 127`
-}
+Straylight to Arbre = 127`,
+  ],
+])
 
-export default INPUT
+export default inputs

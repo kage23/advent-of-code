@@ -6,6 +6,7 @@ import { areStringsNice, areStringsNice__v2 } from './day05'
 import { followLightingInstructions, findTotalBrightness } from './day06'
 import { constructTheCircuit } from './day07'
 import { examineStringConversions, examineStringEncodings } from './day08'
+import { findPaths } from './day09'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -20,7 +21,9 @@ describe('2015 Answers', () => {
 
   it('Day 03', () => {
     console.log(`Day 03, Part 1: ${deliverPresents('REAL').answer1}`)
-    console.log(`Day 03, Part 2: ${deliverPresentsWithRoboSanta('REAL').answer2}`)
+    console.log(
+      `Day 03, Part 2: ${deliverPresentsWithRoboSanta('REAL').answer2}`
+    )
   })
 
   it('Day 04', () => {
@@ -46,5 +49,11 @@ describe('2015 Answers', () => {
   it('Day 08', () => {
     console.log(`Day 08, Part 1: ${examineStringConversions('REAL').answer1}`)
     console.log(`Day 08, Part 2: ${examineStringEncodings('REAL').answer2}`)
+  })
+
+  it('Day 09', () => {
+    const result = findPaths('REAL')
+    console.log(`Day 09, Part 1: ${result.answer1}`)
+    console.log(`Day 09, Part 2: ${result.answer2}`)
   })
 })

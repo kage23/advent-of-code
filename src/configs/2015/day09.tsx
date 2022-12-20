@@ -1,22 +1,14 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2015/day09'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2015/Day09'
-
-const findShortestPath = (inputKey: string): {
-  answer1: string
-  answer2: string
-} => {
+export const findPaths = (inputKey: string) => {
   interface ISearchNode {
     distance: number
     path: string[]
   }
 
   const distances: Map<string, number> = new Map(
-    INPUT[inputKey].split('\n')
+    inputs.get(inputKey)!.split('\n')
       .map(inputLine => {
         const [places, distance] = inputLine.split(' = ')
 
@@ -87,34 +79,23 @@ const findShortestPath = (inputKey: string): {
   }
 
   return {
-    answer1: shortestPath.toString(),
-    answer2: longestPath.toString()
+    answer1: shortestPath,
+    answer2: longestPath
   }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Find Shortest Path',
-    onClick: findShortestPath
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The shortest distance Santa can travel is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The longest distance Santa can travel is <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 9,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'All in a Single Night'
+const day09: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The shortest distance Santa can travel is answer.',
+  answer2Text: 'The longest distance Santa can travel is answer.',
+  buttons: [
+    {
+      label: 'Find All the Paths',
+      onClick: findPaths
+    }
+  ],
+  id: 9,
+  inputs,
+  title: `All in a Single Night`,
 }
 
-export default config
+export default day09
