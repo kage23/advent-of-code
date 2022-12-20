@@ -9,6 +9,7 @@ import { examineStringConversions, examineStringEncodings } from './day08'
 import { findPaths } from './day09'
 import { doHowManyLookAndSays } from './day10'
 import { findNextViablePassword, findNEXTNextViablePassword } from './day11'
+import { sumInput, sumInputNoRed } from './day12'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -67,5 +68,10 @@ describe('2015 Answers', () => {
   it('Day 11', () => {
     console.log(`Day 11, Part 1: ${findNextViablePassword('REAL').answer1}`)
     console.log(`Day 11, Part 2: ${findNEXTNextViablePassword('REAL').answer2}`)
+  })
+
+  it('Day 12', () => {
+    console.log(`Day 12, Part 1: ${sumInput('REAL').answer1}`)
+    console.log(`Day 12, Part 2: ${sumInputNoRed('REAL').answer2}`)
   })
 })
