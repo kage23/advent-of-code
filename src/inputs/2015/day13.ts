@@ -1,5 +1,7 @@
-const INPUT: { [key:string]: string } = {
-DEMO_0: `Alice would gain 54 happiness units by sitting next to Bob.
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO_1',
+    `Alice would gain 54 happiness units by sitting next to Bob.
 Alice would lose 79 happiness units by sitting next to Carol.
 Alice would lose 2 happiness units by sitting next to David.
 Bob would gain 83 happiness units by sitting next to Alice.
@@ -11,7 +13,10 @@ Carol would gain 55 happiness units by sitting next to David.
 David would gain 46 happiness units by sitting next to Alice.
 David would lose 7 happiness units by sitting next to Bob.
 David would gain 41 happiness units by sitting next to Carol.`,
-REAL: `Alice would lose 57 happiness units by sitting next to Bob.
+  ],
+  [
+    'REAL',
+    `Alice would lose 57 happiness units by sitting next to Bob.
 Alice would lose 62 happiness units by sitting next to Carol.
 Alice would lose 75 happiness units by sitting next to David.
 Alice would gain 71 happiness units by sitting next to Eric.
@@ -66,7 +71,8 @@ Mallory would lose 10 happiness units by sitting next to Carol.
 Mallory would gain 44 happiness units by sitting next to David.
 Mallory would gain 22 happiness units by sitting next to Eric.
 Mallory would gain 79 happiness units by sitting next to Frank.
-Mallory would lose 16 happiness units by sitting next to George.`
-}
+Mallory would lose 16 happiness units by sitting next to George.`,
+  ],
+])
 
-export default INPUT
+export default inputs
