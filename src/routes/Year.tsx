@@ -30,15 +30,14 @@ const Year = () => {
       </h2>
       <p>
         Welcome to my {id} Advent of Code Coding Challenge solution suite!
-        Select a day above to see my solution for that day's challenges. Check
-        out my overall year progress:
+        Select a day above to see my solution for that day's challenges.
       </p>
+      <p>{extraText}</p>
       <img
         alt="screenshot of cover from Advent of Code website"
         className={styles.cover}
         src={cover}
       />
-      <p>{extraText}</p>
     </>
   )
 }

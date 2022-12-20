@@ -1,7 +1,7 @@
 import inputs from '../../inputs/2015/day05'
 import { isStringNice, isStringNice__v2 } from './day05'
 
-describe('2015 Day 04', () => {
+describe('2015 Day 05', () => {
   describe('Part 1', () => {
     describe('isStringNice', () => {
       it('should determine if a string is nice', () => {

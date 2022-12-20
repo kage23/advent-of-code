@@ -1,10 +1,12 @@
-const INPUT: { [key:string]: string } = {
-DEMO_0_0: 'turn on 0,0 through 999,999',
-DEMO_0_1: 'toggle 0,0 through 999,0',
-DEMO_0_2: 'turn off 499,499 through 500,500',
-DEMO_1_0: 'turn on 0,0 through 0,0',
-DEMO_1_1: 'toggle 0,0 through 999,999',
-REAL: `turn off 660,55 through 986,197
+const inputs: Map<string, string> = new Map([
+  ['DEMO_1_1', 'turn on 0,0 through 999,999'],
+  ['DEMO_1_2', 'toggle 0,0 through 999,0'],
+  ['DEMO_1_3', 'turn off 499,499 through 500,500'],
+  ['DEMO_2_1', 'turn on 0,0 through 0,0'],
+  ['DEMO_2_2', 'toggle 0,0 through 999,999'],
+  [
+    'REAL',
+    `turn off 660,55 through 986,197
 turn off 341,304 through 638,850
 turn off 199,133 through 461,193
 toggle 322,558 through 977,958
@@ -303,7 +305,8 @@ turn off 446,432 through 458,648
 turn on 715,871 through 722,890
 toggle 424,675 through 740,862
 toggle 580,592 through 671,900
-toggle 296,687 through 906,775`
-}
+toggle 296,687 through 906,775`,
+  ],
+])
 
-export default INPUT
+export default inputs
