@@ -1,21 +1,15 @@
-const INPUT: { [key:string]: string } = {
-DEMO_0: `123 -> x
+const inputs: Map<string, string> = new Map([
+  ['DEMO_1', `123 -> x
 456 -> y
 x AND y -> d
 x OR y -> e
 x LSHIFT 2 -> f
 y RSHIFT 2 -> g
 NOT x -> h
-NOT y -> i`,
-DEMO_TEST: `x AND y -> d
-x OR y -> e
-x LSHIFT 2 -> f
-y RSHIFT 2 -> g
-NOT x -> h
-NOT y -> i
-123 -> x
-456 -> y`,
-REAL: `NOT dq -> dr
+NOT y -> i`],
+  [
+    'REAL',
+    `NOT dq -> dr
 kg OR kf -> kh
 ep OR eo -> eq
 44430 -> b
@@ -353,7 +347,8 @@ hv OR hu -> hw
 NOT hj -> hk
 gj RSHIFT 3 -> gl
 fo RSHIFT 3 -> fq
-he RSHIFT 2 -> hf`
-}
+he RSHIFT 2 -> hf`,
+  ],
+])
 
-export default INPUT
+export default inputs

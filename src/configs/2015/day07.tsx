@@ -1,12 +1,7 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2015/day07'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2015/Day07'
-
-const constructCircuit = (instructions: string[], part: 1 | 2): Map<string, number> => {
+export const constructCircuit = (instructions: string[], part: 1 | 2): Map<string, number> => {
   const circuit: Map<string, number> = new Map()
 
   const outputs = instructions.map(instruction => instruction.split(' -> ')[1])
@@ -68,45 +63,31 @@ const constructCircuit = (instructions: string[], part: 1 | 2): Map<string, numb
   return circuit
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Construct Circuit',
-    onClick: (inputKey) => {
-      const circuit = constructCircuit(INPUT[inputKey].split('\n'), 1)
+export const constructTheCircuit = (inputKey: string, part: 1 | 2) => {
+  const circuit = constructCircuit(inputs.get(inputKey)!.split('\n'), part)
 
-      return {
-        answer1: (circuit.get('a') || NaN).toString()
-      }
-    }
-  },
-  {
-    label: 'Construct Circuit with Override',
-    onClick: (inputKey) => {
-      const circuit = constructCircuit(INPUT[inputKey].split('\n'), 2)
-
-      return {
-        answer2: (circuit.get('a') || NaN).toString()
-      }
-    }
+  return {
+    answer1: part === 1 ? circuit.get('a') : undefined,
+    answer2: part === 2 ? circuit.get('a') : undefined
   }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The output on wire <code>a</code> is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The output on wire <code>a</code> is <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 7,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Some Assembly Required'
 }
 
-export default config
+const day06: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The output on wire A is answer.',
+  answer2Text: 'The output on wire A is answer.',
+  buttons: [
+    {
+      label: 'Construct the Circuit',
+      onClick: (inputKey) => constructTheCircuit(inputKey, 1)
+    },
+    {
+      label: 'Construct Circuit with Override',
+      onClick: (inputKey) => constructTheCircuit(inputKey, 2)
+    }
+  ],
+  id: 7,
+  inputs,
+  title: `Some Assembly Required`,
+}
+
+export default day06

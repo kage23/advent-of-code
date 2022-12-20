@@ -4,6 +4,7 @@ import { deliverPresents, deliverPresentsWithRoboSanta } from './day03'
 import { lookForHash, lookForBetterHash } from './day04'
 import { areStringsNice, areStringsNice__v2 } from './day05'
 import { followLightingInstructions, findTotalBrightness } from './day06'
+import { constructTheCircuit } from './day07'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -34,5 +35,10 @@ describe('2015 Answers', () => {
   it('Day 06', () => {
     console.log(`Day 06, Part 1: ${followLightingInstructions('REAL').answer1}`)
     console.log(`Day 06, Part 2: ${findTotalBrightness('REAL').answer2}`)
+  })
+
+  it('Day 07', () => {
+    console.log(`Day 07, Part 1: ${constructTheCircuit('REAL', 1).answer1}`)
+    console.log(`Day 07, Part 1: ${constructTheCircuit('REAL', 2).answer2}`)
   })
 })
