@@ -5,6 +5,7 @@ import { lookForHash, lookForBetterHash } from './day04'
 import { areStringsNice, areStringsNice__v2 } from './day05'
 import { followLightingInstructions, findTotalBrightness } from './day06'
 import { constructTheCircuit } from './day07'
+import { examineStringConversions, examineStringEncodings } from './day08'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -39,6 +40,11 @@ describe('2015 Answers', () => {
 
   it('Day 07', () => {
     console.log(`Day 07, Part 1: ${constructTheCircuit('REAL', 1).answer1}`)
-    console.log(`Day 07, Part 1: ${constructTheCircuit('REAL', 2).answer2}`)
+    console.log(`Day 07, Part 2: ${constructTheCircuit('REAL', 2).answer2}`)
+  })
+
+  it('Day 08', () => {
+    console.log(`Day 08, Part 1: ${examineStringConversions('REAL').answer1}`)
+    console.log(`Day 08, Part 2: ${examineStringEncodings('REAL').answer2}`)
   })
 })

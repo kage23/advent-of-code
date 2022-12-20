@@ -72,7 +72,7 @@ export const constructTheCircuit = (inputKey: string, part: 1 | 2) => {
   }
 }
 
-const day06: Omit<DayConfig, 'year'> = {
+const day07: Omit<DayConfig, 'year'> = {
   answer1Text: 'The output on wire A is answer.',
   answer2Text: 'The output on wire A is answer.',
   buttons: [
@@ -90,4 +90,4 @@ const day06: Omit<DayConfig, 'year'> = {
   title: `Some Assembly Required`,
 }
 
-export default day06
+export default day07

@@ -1,9 +1,11 @@
-const INPUT: { [key:string]: string } = {
-DEMO_0: String.raw`""
+const inputs: Map<string, string> = new Map([
+  ['DEMO_1', String.raw`""
 "abc"
 "aaa\"aaa"
-"\x27"`,
-REAL: String.raw`"azlgxdbljwygyttzkfwuxv"
+"\x27"`],
+  [
+    'REAL',
+    String.raw`"azlgxdbljwygyttzkfwuxv"
 "v\xfb\"lgs\"kvjfywmut\x9cr"
 "merxdhj"
 "dwz"
@@ -302,7 +304,8 @@ REAL: String.raw`"azlgxdbljwygyttzkfwuxv"
 "x\x6fxbljsjdgd\xaau"
 "hjg\\w\"\x78uoqbsdikbjxpip\"w\"jnhzec"
 "gk"
-"\\zrs\\syur"`
-}
+"\\zrs\\syur"`,
+  ],
+])
 
-export default INPUT
+export default inputs
