@@ -7,6 +7,7 @@ import { followLightingInstructions, findTotalBrightness } from './day06'
 import { constructTheCircuit } from './day07'
 import { examineStringConversions, examineStringEncodings } from './day08'
 import { findPaths } from './day09'
+import { doHowManyLookAndSays } from './day10'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -55,5 +56,10 @@ describe('2015 Answers', () => {
     const result = findPaths('REAL')
     console.log(`Day 09, Part 1: ${result.answer1}`)
     console.log(`Day 09, Part 2: ${result.answer2}`)
+  })
+
+  it('Day 10', () => {
+    console.log(`Day 10, Part 1: ${doHowManyLookAndSays('REAL', 40).answer1}`)
+    console.log(`Day 10, Part 2: ${doHowManyLookAndSays('REAL', 50).answer2}`)
   })
 })
