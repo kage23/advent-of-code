@@ -14,6 +14,7 @@ import {
   findOptimalSeatingArrangement,
   findOptimalSeatingArrangementWithYou,
 } from './day13'
+import { raceReindeer, raceReindeerV2 } from './day14'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -81,10 +82,15 @@ describe('2015 Answers', () => {
 
   it('Day 13', () => {
     console.log(
-      `Day 12, Part 1: ${findOptimalSeatingArrangement('REAL').answer1}`
+      `Day 13, Part 1: ${findOptimalSeatingArrangement('REAL').answer1}`
     )
     console.log(
-      `Day 12, Part 2: ${findOptimalSeatingArrangementWithYou('REAL').answer2}`
+      `Day 13, Part 2: ${findOptimalSeatingArrangementWithYou('REAL').answer2}`
     )
+  })
+
+  it('Day 14', () => {
+    console.log(`Day 14, Part 1: ${raceReindeer('REAL').answer1}`)
+    console.log(`Day 14, Part 2: ${raceReindeerV2('REAL').answer2}`)
   })
 })
