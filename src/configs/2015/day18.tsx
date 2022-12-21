@@ -1,10 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2015/Day18'
+import inputs from '../../inputs/2015/day18'
+import { DayConfig } from '../../routes/Day'
 
 const countOnNeighbors = (grid: string, x: number, y: number): number => {
   const parsedGrid = grid.split('\n')
@@ -82,52 +77,53 @@ const getNextGrid = (grid: string, part: 1 | 2): string => {
   return nextGrid
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Run Light Animation',
-    onClick: (inputKey) => {
-      let grid = INPUT[inputKey]
-      const animationSteps = inputKey.startsWith('DEMO') ? 4 : 100
-      for (let i = 0; i < animationSteps; i++) {
-        grid = getNextGrid(grid, 1)
-      }
-      return {
-        answer1: grid.split('').filter(x => x === '#').length.toString()
-      }
-    }
-  },
-  {
-    label: 'Run Light Animation with Stuck On Lights',
-    onClick: (inputKey) => {
-      let grid = INPUT[inputKey]
-      const animationSteps = inputKey.startsWith('DEMO') ? 5 : 100
-      for (let i = 0; i < animationSteps; i++) {
-        grid = getNextGrid(grid, 2)
-      }
-      return {
-        answer2: grid.split('').filter(x => x === '#').length.toString()
-      }
-    }
+export const runLightAnimation = (inputKey: string) => {
+  let grid = inputs.get(inputKey)!
+  const animationSteps = inputKey.startsWith('DEMO') ? 4 : 100
+  for (let i = 0; i < animationSteps; i++) {
+    grid = getNextGrid(grid, 1)
   }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      At the end of the animation, <code>{answer}</code> lights are turned on.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      At the end of the animation, <code>{answer}</code> lights are turned on{' '}
-      (including the corner lights which are stuck on).
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 18,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Like a GIF For Your Yard'
+  return {
+    answer1: grid.split('').filter(x => x === '#').length
+  }
 }
 
-export default config
+export const runLightAnimationWithStuckOnLights = (inputKey: string) => {
+  let grid = inputs.get(inputKey)!
+  // Set the stuck-on lights
+  // Top left and bottom right
+  grid = `#${grid.slice(1, -1)}#`
+  // Top right and bottom left are trickier
+  grid = grid.split('\n').map((line, i, gridLines) => {
+    if (i === 0) return `${line.slice(0, -1)}#`
+    if (i === gridLines.length - 1) return `#${line.slice(1)}`
+    return line
+  }).join('\n')
+  const animationSteps = inputKey.startsWith('DEMO') ? 5 : 100
+  for (let i = 0; i < animationSteps; i++) {
+    grid = getNextGrid(grid, 2)
+  }
+  return {
+    answer2: grid.split('').filter(x => x === '#').length
+  }
+}
+
+const day18: Omit<DayConfig, 'year'> = {
+  answer1Text: 'At the end of the animation, answer lights are turned on.',
+  answer2Text: 'At the end of the animation, answer lights are turned on (including the corner lights which are stuck on).',
+  buttons: [
+    {
+      label: 'Run Light Animation',
+      onClick: runLightAnimation
+    },
+    {
+      label: 'Run Light Animation with Stuck On Lights',
+      onClick: runLightAnimationWithStuckOnLights
+    }
+  ],
+  id: 18,
+  inputs,
+  title: 'Like a GIF For Your Yard',
+}
+
+export default day18

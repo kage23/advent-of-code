@@ -18,6 +18,7 @@ import { raceReindeer, raceReindeerV2 } from './day14'
 import { findBestLowCalRecipe, findBestRecipe } from './day15'
 import { determineTheActualSue, determineTheSue } from './day16'
 import { determineContainerCombos, determineEfficientContainerCombos } from './day17'
+import { runLightAnimation, runLightAnimationWithStuckOnLights } from './day18'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -110,5 +111,10 @@ describe('2015 Answers', () => {
   it('Day 17', () => {
     console.log(`Day 17, Part 1: ${determineContainerCombos('REAL').answer1}`)
     console.log(`Day 17, Part 2: ${determineEfficientContainerCombos('REAL').answer2}`)
+  })
+
+  it('Day 18', () => {
+    console.log(`Day 18, Part 1: ${runLightAnimation('REAL').answer1}`)
+    console.log(`Day 18, Part 2: ${runLightAnimationWithStuckOnLights('REAL').answer2}`)
   })
 })
