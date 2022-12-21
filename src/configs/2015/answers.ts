@@ -23,6 +23,7 @@ import { calibrateMachine, generateMolecule } from './day19'
 import { findThePresentHouse, findThePresentHouseWithLazierElves } from './day20'
 import { checkAllEquipmentCombos } from './day21'
 import { findBestFightOnHard, findBestFightPart1 } from './day22'
+import { runCodePart1, runCodePart2 } from './day23'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -140,5 +141,10 @@ describe('2015 Answers', () => {
   it('Day 22', () => {
     console.log(`Day 22, Part 1: ${findBestFightPart1().answer1}`)
     console.log(`Day 22, Part 2: ${findBestFightOnHard().answer2}`)
+  })
+
+  it('Day 23', () => {
+    console.log(`Day 23, Part 1: ${runCodePart1('REAL').answer1}`)
+    console.log(`Day 23, Part 1: ${runCodePart2('REAL').answer2}`)
   })
 })
