@@ -15,6 +15,24 @@ lgvd: ljgn * ptdq
 drzm: hmdt - zczc
 hmdt: 32`,
 
+  K_TEST_1: `root: humn + kyle
+kyle: 301
+humn: 420`,
+
+  K_TEST_2: `root: ptdq + kyle
+kyle: 298
+ptdq: humn - dvpt
+dvpt: 3
+humn: 420`,
+
+  K_TEST_3: `root: lgvd + kyle
+kyle: 596
+lgvd: ljgn * ptdq
+ljgn: 2
+ptdq: humn - dvpt
+dvpt: 3
+humn: 420`,
+
   REAL: `vzhr: 2
 jfcc: 14
 fsqh: hrbw * vdtj

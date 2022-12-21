@@ -32,24 +32,9 @@ const parseMonkey = (line: string): [string, Monkey] => {
 }
 
 const solveMonkey = ({ id, value }: Monkey, monkeys: Map<string, Monkey>): Monkey => {
-  // if (id === 'humn') throw new Error('this side has the humn monkey!')
   if (typeof value === 'number') return { id, value }
-  const monkeyA = value.monkeyA === 'humn' ?
-    monkeys.get(value.monkeyA)! :
-    solveMonkey(monkeys.get(value.monkeyA)!, monkeys)
-  const monkeyB = value.monkeyB === 'humn' ?
-    monkeys.get(value.monkeyB)! :
-    solveMonkey(monkeys.get(value.monkeyB)!, monkeys)
-  if (value.monkeyA === 'humn' || value.monkeyB === 'humn') {
-    return {
-      id,
-      value: {
-        ...value,
-        monkeyA: monkeyA.id,
-        monkeyB: monkeyB.id
-      }
-    }
-  }
+  const monkeyA = solveMonkey(monkeys.get(value.monkeyA)!, monkeys)
+  const monkeyB = solveMonkey(monkeys.get(value.monkeyB)!, monkeys)
   switch (value.symbol) {
     case '+': {
       return {
@@ -78,11 +63,48 @@ const solveMonkey = ({ id, value }: Monkey, monkeys: Map<string, Monkey>): Monke
   }
 }
 
+const solveForHumn = (
+  monkey: Monkey,
+  comparisonValue: number,
+  monkeys: Map<string, Monkey>
+): number => {
+  if (monkey.id === 'humn') return comparisonValue
+  if ((monkey.value as Operation).monkeyA === 'humn') {
+    const monkeyB = solveMonkey(monkeys.get((monkey.value as Operation).monkeyB)!, monkeys)
+    switch ((monkey.value as Operation).symbol) {
+      case '*':
+        return comparisonValue / (monkeyB.value as number)
+      case '+':
+        return comparisonValue - (monkeyB.value as number)
+      case '-':
+        return comparisonValue + (monkeyB.value as number)
+      case '/':
+        return comparisonValue * (monkeyB.value as number)
+    }
+  }
+  if ((monkey.value as Operation).monkeyB === 'humn') {
+    const monkeyA = solveMonkey(monkeys.get((monkey.value as Operation).monkeyB)!, monkeys)
+    switch ((monkey.value as Operation).symbol) {
+      case '*':
+        return comparisonValue / (monkeyA.value as number)
+      case '+':
+        return comparisonValue - (monkeyA.value as number)
+      case '-':
+        return comparisonValue + (monkeyA.value as number)
+      case '/':
+        return comparisonValue * (monkeyA.value as number)
+    }
+  }
+  debugger
+  // Probably actually gotta recurse in here maybe? Test case 3
+  return 0
+}
+
 const BUTTONS: IButton[] = [
   {
     label: 'Listen to the Shouting Monkeys',
     onClick: (inputKey: string) => {
-      const timerLabel = 'monkey listening timer the slow way'
+      const timerLabel = 'monkey listening timer'
       console.time(timerLabel)
 
       const monkeys: Map<string, Monkey> = new Map(
@@ -98,6 +120,31 @@ const BUTTONS: IButton[] = [
       return { answer1 }
     },
   },
+  {
+    label: 'Shout With the Monkeys',
+    onClick: (inputKey: string) => {
+      const timerLabel = 'monkey shouting timer'
+      console.time(timerLabel)
+
+      const monkeys: Map<string, Monkey> = new Map(
+        INPUT[inputKey].split('\n').map(parseMonkey)
+      )
+
+      const comparisonMonkeys = [
+        monkeys.get((monkeys.get('root')!.value as Operation).monkeyA)!,
+        monkeys.get((monkeys.get('root')!.value as Operation).monkeyB)!
+      ]
+
+      const comparisonValue = solveMonkey(comparisonMonkeys[1], monkeys).value as number
+      const answer2 = solveForHumn(comparisonMonkeys[0], comparisonValue, monkeys).toString()
+
+      console.timeEnd(timerLabel)
+
+      return {
+        answer2
+      }
+    }
+  }
 ]
 
 const config: IDayConfig = {
@@ -119,3 +166,44 @@ const config: IDayConfig = {
 }
 
 export default config
+
+/**
+ * root: pppw = sjmn
+dbpl: 5
+cczh: sllz + lgvd
+zczc: 2
+ptdq: humn - dvpt
+dvpt: 3
+lfqf: 4
+humn: 5
+ljgn: 2
+sjmn: drzm * dbpl
+sllz: 4
+pppw: cczh / lfqf
+lgvd: ljgn * ptdq
+drzm: hmdt - zczc
+hmdt: 32
+
+
+
+root: pppw = 150
+root: cczh / lfqf = 150
+root: cczh / 4 = 150
+root: cczh = 600
+root: sllz + lgvd = 600
+root: 4 + lgvd = 600
+
+
+
+root: lgvd = 596
+root: ljgn * ptdq = 596
+root: 2 * ptdq = 596
+
+root: ptdq = 298
+root: humn - dvpt = 298
+root: humn - 3 = 298
+root: humn = 301
+
+
+
+ */
