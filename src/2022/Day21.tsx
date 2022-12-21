@@ -4,6 +4,7 @@ import INPUT from '../Inputs/2022/Day21'
 
 interface Monkey {
   id: string
+  raw: string
   value: number | Operation
 }
 
@@ -18,11 +19,12 @@ type OperationSymbol = '+' | '-' | '*' | '/'
 const parseMonkey = (line: string): [string, Monkey] => {
   const [id, value] = line.split(': ')
   if (!isNaN(Number(value))) {
-    return [id, { id, value: Number(value) }]
+    return [id, { id, raw: line, value: Number(value) }]
   }
   const [monkeyA, symbol, monkeyB] = value.split(' ')
   return [id, {
     id,
+    raw: line,
     value: {
       monkeyA,
       symbol: symbol as OperationSymbol,
@@ -31,72 +33,50 @@ const parseMonkey = (line: string): [string, Monkey] => {
   }]
 }
 
-const solveMonkey = ({ id, value }: Monkey, monkeys: Map<string, Monkey>): Monkey => {
-  if (typeof value === 'number') return { id, value }
-  const monkeyA = solveMonkey(monkeys.get(value.monkeyA)!, monkeys)
-  const monkeyB = solveMonkey(monkeys.get(value.monkeyB)!, monkeys)
+const solveMonkey = (
+  { id, raw, value }: Monkey,
+  monkeys: Map<string, Monkey>,
+  dealWithHuman = true
+): Monkey | undefined => {
+  if (typeof value === 'number') return { id, raw, value }
+  const monkeyA = solveMonkey(monkeys.get(value.monkeyA)!, monkeys, dealWithHuman)!
+  const monkeyB = solveMonkey(monkeys.get(value.monkeyB)!, monkeys, dealWithHuman)!
+  if (!dealWithHuman && (monkeyA.id === 'humn' || monkeyB.id === 'humn')) {
+    return undefined
+  }
   switch (value.symbol) {
     case '+': {
       return {
         id,
+        raw,
         value: (monkeyA.value as number) + (monkeyB.value as number)
       }
     }
     case '-': {
       return {
         id,
+        raw,
         value: (monkeyA.value as number) - (monkeyB.value as number)
       }
     }
     case '*': {
       return {
         id,
+        raw,
         value: (monkeyA.value as number) * (monkeyB.value as number)
       }
     }
     case '/': {
       return {
         id,
+        raw,
         value: (monkeyA.value as number) / (monkeyB.value as number)
       }
     }
   }
 }
 
-const solveForHumn = (
-  monkey: Monkey,
-  comparisonValue: number,
-  monkeys: Map<string, Monkey>
-): number => {
-  if (monkey.id === 'humn') return comparisonValue
-  if ((monkey.value as Operation).monkeyA === 'humn') {
-    const monkeyB = solveMonkey(monkeys.get((monkey.value as Operation).monkeyB)!, monkeys)
-    switch ((monkey.value as Operation).symbol) {
-      case '*':
-        return comparisonValue / (monkeyB.value as number)
-      case '+':
-        return comparisonValue - (monkeyB.value as number)
-      case '-':
-        return comparisonValue + (monkeyB.value as number)
-      case '/':
-        return comparisonValue * (monkeyB.value as number)
-    }
-  }
-  if ((monkey.value as Operation).monkeyB === 'humn') {
-    const monkeyA = solveMonkey(monkeys.get((monkey.value as Operation).monkeyB)!, monkeys)
-    switch ((monkey.value as Operation).symbol) {
-      case '*':
-        return comparisonValue / (monkeyA.value as number)
-      case '+':
-        return comparisonValue - (monkeyA.value as number)
-      case '-':
-        return comparisonValue + (monkeyA.value as number)
-      case '/':
-        return comparisonValue * (monkeyA.value as number)
-    }
-  }
-  debugger
-  // Probably actually gotta recurse in here maybe? Test case 3
+const solveForHumn = (monkeys: Map<string, Monkey>): number => {
   return 0
 }
 
@@ -112,7 +92,7 @@ const BUTTONS: IButton[] = [
       )
 
       const answer1 = (
-        solveMonkey(monkeys.get('root')!, monkeys).value as number
+        solveMonkey(monkeys.get('root')!, monkeys)!.value as number
       ).toString()
 
       console.timeEnd(timerLabel)
@@ -130,13 +110,10 @@ const BUTTONS: IButton[] = [
         INPUT[inputKey].split('\n').map(parseMonkey)
       )
 
-      const comparisonMonkeys = [
-        monkeys.get((monkeys.get('root')!.value as Operation).monkeyA)!,
-        monkeys.get((monkeys.get('root')!.value as Operation).monkeyB)!
-      ]
+      const answer2 = `solveForHumn(monkeys.get('root')!, monkeys).toString()`
 
-      const comparisonValue = solveMonkey(comparisonMonkeys[1], monkeys).value as number
-      const answer2 = solveForHumn(comparisonMonkeys[0], comparisonValue, monkeys).toString()
+      // const comparisonValue = solveMonkey(comparisonMonkeys[1], monkeys).value as number
+      // const answer2 = solveForHumn(comparisonMonkeys[0], comparisonValue, monkeys).toString()
 
       console.timeEnd(timerLabel)
 
@@ -203,6 +180,8 @@ root: ptdq = 298
 root: humn - dvpt = 298
 root: humn - 3 = 298
 root: humn = 301
+
+
 
 
 
