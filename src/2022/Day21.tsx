@@ -35,15 +35,11 @@ const parseMonkey = (line: string): [string, Monkey] => {
 
 const solveMonkey = (
   { id, raw, value }: Monkey,
-  monkeys: Map<string, Monkey>,
-  dealWithHuman = true
+  monkeys: Map<string, Monkey>
 ): Monkey | undefined => {
   if (typeof value === 'number') return { id, raw, value }
-  const monkeyA = solveMonkey(monkeys.get(value.monkeyA)!, monkeys, dealWithHuman)!
-  const monkeyB = solveMonkey(monkeys.get(value.monkeyB)!, monkeys, dealWithHuman)!
-  if (!dealWithHuman && (monkeyA.id === 'humn' || monkeyB.id === 'humn')) {
-    return undefined
-  }
+  const monkeyA = solveMonkey(monkeys.get(value.monkeyA)!, monkeys)!
+  const monkeyB = solveMonkey(monkeys.get(value.monkeyB)!, monkeys)!
   switch (value.symbol) {
     case '+': {
       return {
@@ -76,8 +72,47 @@ const solveMonkey = (
   }
 }
 
-const solveForHumn = (monkeys: Map<string, Monkey>): number => {
-  return 0
+const solveForMonkey = (
+  monkeyId: string,
+  monkeys: Map<string, Monkey>,
+  operationsToUndo = [] as [OperationSymbol, number, boolean][]
+): number => {
+  // Find the monkey that uses the monkey we're solving for (the parentMonkey)
+  const parentMonkey = Array.from(monkeys.values()).find(({ value }) => (
+    typeof value !== 'number' && (value.monkeyA === monkeyId || value.monkeyB === monkeyId)
+  ))!
+  // Get the value of the other monkey that the parentMonkey uses (the siblingMonkey)
+  const siblingValue = (
+    monkeyId === (parentMonkey.value as Operation).monkeyA ?
+      solveMonkey(monkeys.get((parentMonkey.value as Operation).monkeyB)!, monkeys)! :
+      solveMonkey(monkeys.get((parentMonkey.value as Operation).monkeyA)!, monkeys)!
+  ).value as number
+  // If the parent is root, run through the list of operations to undo
+  if (parentMonkey.id === 'root') {
+    return operationsToUndo.reduce((accumulator, [symbol, number, swap]) => {
+      switch (symbol) {
+        case '*':
+          return accumulator / number
+        case '+':
+          return accumulator - number
+        case '-':
+          return swap ? number - accumulator : accumulator + number
+        case '/':
+          return swap ? number / accumulator : accumulator * number
+      }
+      return accumulator
+    }, siblingValue)
+  }
+  // Otherwise, add parentMonkey's operation to a list of operations to undo, and solve for the parent
+  else {
+    let swap = false
+    if (
+      ((parentMonkey.value as Operation).symbol === '-' || (parentMonkey.value as Operation).symbol === '/') &&
+      monkeyId === (parentMonkey.value as Operation).monkeyB
+    ) swap = true
+    operationsToUndo.unshift([(parentMonkey.value as Operation).symbol, siblingValue, swap])
+    return solveForMonkey(parentMonkey.id, monkeys, operationsToUndo)
+  }
 }
 
 const BUTTONS: IButton[] = [
@@ -110,10 +145,7 @@ const BUTTONS: IButton[] = [
         INPUT[inputKey].split('\n').map(parseMonkey)
       )
 
-      const answer2 = `solveForHumn(monkeys.get('root')!, monkeys).toString()`
-
-      // const comparisonValue = solveMonkey(comparisonMonkeys[1], monkeys).value as number
-      // const answer2 = solveForHumn(comparisonMonkeys[0], comparisonValue, monkeys).toString()
+      const answer2 = solveForMonkey('humn', monkeys).toString()
 
       console.timeEnd(timerLabel)
 
@@ -143,46 +175,3 @@ const config: IDayConfig = {
 }
 
 export default config
-
-/**
- * root: pppw = sjmn
-dbpl: 5
-cczh: sllz + lgvd
-zczc: 2
-ptdq: humn - dvpt
-dvpt: 3
-lfqf: 4
-humn: 5
-ljgn: 2
-sjmn: drzm * dbpl
-sllz: 4
-pppw: cczh / lfqf
-lgvd: ljgn * ptdq
-drzm: hmdt - zczc
-hmdt: 32
-
-
-
-root: pppw = 150
-root: cczh / lfqf = 150
-root: cczh / 4 = 150
-root: cczh = 600
-root: sllz + lgvd = 600
-root: 4 + lgvd = 600
-
-
-
-root: lgvd = 596
-root: ljgn * ptdq = 596
-root: 2 * ptdq = 596
-
-root: ptdq = 298
-root: humn - dvpt = 298
-root: humn - 3 = 298
-root: humn = 301
-
-
-
-
-
- */

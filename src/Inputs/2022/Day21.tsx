@@ -15,24 +15,6 @@ lgvd: ljgn * ptdq
 drzm: hmdt - zczc
 hmdt: 32`,
 
-  K_TEST_1: `root: humn + test
-test: 301
-humn: 420`,
-
-  K_TEST_2: `root: ptdq + test
-test: 298
-ptdq: humn - dvpt
-dvpt: 3
-humn: 420`,
-
-  K_TEST_3: `root: lgvd + test
-test: 596
-lgvd: ljgn * ptdq
-ljgn: 2
-ptdq: humn - dvpt
-dvpt: 3
-humn: 420`,
-
   REAL: `vzhr: 2
 jfcc: 14
 fsqh: hrbw * vdtj
