@@ -20,6 +20,7 @@ import { determineTheActualSue, determineTheSue } from './day16'
 import { determineContainerCombos, determineEfficientContainerCombos } from './day17'
 import { runLightAnimation, runLightAnimationWithStuckOnLights } from './day18'
 import { calibrateMachine, generateMolecule } from './day19'
+import { findThePresentHouse, findThePresentHouseWithLazierElves } from './day20'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -122,5 +123,10 @@ describe('2015 Answers', () => {
   it('Day 19', () => {
     console.log(`Day 19, Part 1: ${calibrateMachine('REAL').answer1}`)
     console.log(`Day 19, Part 2: ${generateMolecule('REAL').answer2}`)
+  })
+
+  it('Day 20', () => {
+    console.log(`Day 20, Part 1: ${findThePresentHouse('REAL').answer1}`)
+    console.log(`Day 20, Part 2: ${findThePresentHouseWithLazierElves('REAL').answer2}`)
   })
 })
