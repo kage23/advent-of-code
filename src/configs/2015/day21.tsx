@@ -1,32 +1,27 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2015/day21'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2015/Day21'
-
-interface IItemCombo {
-  armor?: IShopItem
-  rings: IShopItem[]
-  totalCost: number
-  weapon: IShopItem
-}
-
-interface IFighter {
+interface Fighter {
   armor: number
   damage: number
   hitPoints: number
 }
 
-interface IShopItem {
+interface Equipment {
+  armor?: ShopItem
+  rings: ShopItem[]
+  totalCost: number
+  weapon: ShopItem
+}
+
+interface ShopItem {
   armor: number
   cost: number
   damage: number
   name: string
 }
 
-const weapons: IShopItem[] = [
+const weapons: ShopItem[] = [
   {
     armor: 0,
     cost: 8,
@@ -59,7 +54,7 @@ const weapons: IShopItem[] = [
   }
 ]
 
-const armors: IShopItem[] = [
+const armors: ShopItem[] = [
   {
     armor: 1,
     cost: 13,
@@ -92,7 +87,7 @@ const armors: IShopItem[] = [
   },
 ]
 
-const rings: IShopItem[] = [
+const rings: ShopItem[] = [
   {
     armor: 0,
     cost: 25,
@@ -131,8 +126,8 @@ const rings: IShopItem[] = [
   },
 ]
 
-const generateEquipmentCombos = (): IItemCombo[] => {
-  const combosList: IItemCombo[] = []
+const generateEquipmentCombos = (): Equipment[] => {
+  const combosList: Equipment[] = []
 
   for (let weapon of weapons) {
     // You must have exactly one weapon.
@@ -208,7 +203,7 @@ const generateEquipmentCombos = (): IItemCombo[] => {
   return combosList
 }
 
-const getFighterStatsFromEquipmentCombo = (equipment: IItemCombo): IFighter => ({
+const getFighterStatsFromEquipmentCombo = (equipment: Equipment): Fighter => ({
   armor: equipment.rings.reduce((total, ring) => total + ring.armor, 0)
     + (equipment.armor ? equipment.armor.armor : 0),
   damage: equipment.weapon.damage + equipment.rings.reduce((total, ring) => total + ring.damage, 0),
@@ -217,7 +212,7 @@ const getFighterStatsFromEquipmentCombo = (equipment: IItemCombo): IFighter => (
 
 // Returns true if the first player wins or false if the second player wins
 // It's up to you to pass the player as the first player and the boss as the second player
-const runFight = (fighters: IFighter[]): boolean => {
+export const runFight = (fighters: Fighter[]): boolean => {
   // We don't actually _have_ to simulate the whole fight here; we could just determine how many rounds it will take for each player to win
   // But I figure this is more fun for the browser's JS engine ... ;)
   if (fighters.length !== 2) throw new Error('fuck')
@@ -231,17 +226,14 @@ const runFight = (fighters: IFighter[]): boolean => {
   return fighters[0].hitPoints > 0
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Check All Equipment Combos',
-    onClick: () => {
-      const equipmentCombosList = generateEquipmentCombos().sort((a, b) => a.totalCost - b.totalCost)
+export const checkAllEquipmentCombos = () => {
+  const equipmentCombosList = generateEquipmentCombos().sort((a, b) => a.totalCost - b.totalCost)
       let mostExpensiveLoss = 0
       let leastExpensiveWin = Number.MAX_SAFE_INTEGER
 
       for (let equipmentCombo of equipmentCombosList) {
         const player = getFighterStatsFromEquipmentCombo(equipmentCombo)
-        const boss: IFighter = { armor: 2, damage: 8, hitPoints: 100 }
+        const boss: Fighter = { armor: 2, damage: 8, hitPoints: 100 }
         const result = runFight([player, boss])
         if (!result) {
           mostExpensiveLoss = Math.max(mostExpensiveLoss, equipmentCombo.totalCost)
@@ -251,29 +243,23 @@ const BUTTONS: IButton[] = [
       }
 
       return {
-        answer1: leastExpensiveWin.toString(),
-        answer2: mostExpensiveLoss.toString()
+        answer1: leastExpensiveWin,
+        answer2: mostExpensiveLoss
       }
-    }
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      You must spend at least <code>{answer}</code> gold to win the fight.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      It's possible to spend up to <code>{answer}</code> gold and still lose the fight!
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 21,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'RPG Simulator 20XX'
 }
 
-export default config
+const day21: Omit<DayConfig, 'year'> = {
+  answer1Text: 'You must spend at least answer gold to win the fight.',
+  answer2Text: `It's possible to spend up to answer gold and still lose the fight!`,
+  buttons: [
+    {
+      label: 'Check All Equipment Combos',
+      onClick: checkAllEquipmentCombos
+    },
+  ],
+  id: 21,
+  inputs,
+  title: 'RPG Simulator 20XX',
+}
+
+export default day21
