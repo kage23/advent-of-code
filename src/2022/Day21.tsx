@@ -31,56 +31,48 @@ const parseMonkey = (line: string): [string, Monkey] => {
   }]
 }
 
-const shoutingMonkeys = (monkeys: Map<string, Monkey>, part: 1 | 2): number | boolean => {
-  const monkeyIds = Array.from(monkeys.keys())
-
-  while (true) {
-    for (let i = 0; i < monkeyIds.length; i++) {
-      const { id, value } = monkeys.get(monkeyIds[i])!
-      if (id === 'root' && typeof value === 'number') {
-        return value
+const solveMonkey = ({ id, value }: Monkey, monkeys: Map<string, Monkey>): Monkey => {
+  // if (id === 'humn') throw new Error('this side has the humn monkey!')
+  if (typeof value === 'number') return { id, value }
+  const monkeyA = value.monkeyA === 'humn' ?
+    monkeys.get(value.monkeyA)! :
+    solveMonkey(monkeys.get(value.monkeyA)!, monkeys)
+  const monkeyB = value.monkeyB === 'humn' ?
+    monkeys.get(value.monkeyB)! :
+    solveMonkey(monkeys.get(value.monkeyB)!, monkeys)
+  if (value.monkeyA === 'humn' || value.monkeyB === 'humn') {
+    return {
+      id,
+      value: {
+        ...value,
+        monkeyA: monkeyA.id,
+        monkeyB: monkeyB.id
       }
-      if (typeof value !== 'number') {
-        const monkeyA = monkeys.get(value.monkeyA)!
-        const monkeyB = monkeys.get(value.monkeyB)!
-        if (
-          typeof monkeyA.value === 'number' &&
-          typeof monkeyB.value === 'number'
-        ) {
-          if (part === 2 && id === 'root') {
-            return monkeyA.value === monkeyB.value
-          }
-          switch (value.symbol) {
-            case '+': {
-              monkeys.set(id, {
-                id,
-                value: monkeyA.value + monkeyB.value
-              })
-              break
-            }
-            case '-': {
-              monkeys.set(id, {
-                id,
-                value: monkeyA.value - monkeyB.value
-              })
-              break
-            }
-            case '*': {
-              monkeys.set(id, {
-                id,
-                value: monkeyA.value * monkeyB.value
-              })
-              break
-            }
-            case '/': {
-              monkeys.set(id, {
-                id,
-                value: monkeyA.value / monkeyB.value
-              })
-              break
-            }
-          }
-        }
+    }
+  }
+  switch (value.symbol) {
+    case '+': {
+      return {
+        id,
+        value: (monkeyA.value as number) + (monkeyB.value as number)
+      }
+    }
+    case '-': {
+      return {
+        id,
+        value: (monkeyA.value as number) - (monkeyB.value as number)
+      }
+    }
+    case '*': {
+      return {
+        id,
+        value: (monkeyA.value as number) * (monkeyB.value as number)
+      }
+    }
+    case '/': {
+      return {
+        id,
+        value: (monkeyA.value as number) / (monkeyB.value as number)
       }
     }
   }
@@ -90,41 +82,22 @@ const BUTTONS: IButton[] = [
   {
     label: 'Listen to the Shouting Monkeys',
     onClick: (inputKey: string) => {
-      const timerLabel = 'monkey listening timer'
+      const timerLabel = 'monkey listening timer the slow way'
       console.time(timerLabel)
 
       const monkeys: Map<string, Monkey> = new Map(
         INPUT[inputKey].split('\n').map(parseMonkey)
       )
 
-      const answer1 = (shoutingMonkeys(monkeys, 1) as number).toString()
+      const answer1 = (
+        solveMonkey(monkeys.get('root')!, monkeys).value as number
+      ).toString()
 
       console.timeEnd(timerLabel)
 
       return { answer1 }
     },
   },
-  {
-    label: 'Shout With the Monkeys',
-    onClick: (inputKey: string) => {
-      const timerLabel = 'monkey shouting timer'
-      console.time(timerLabel)
-
-      let i = 1
-      while (true) {
-        const monkeys: Map<string, Monkey> = new Map(
-          INPUT[inputKey].split('\n').map(parseMonkey)
-        )
-        monkeys.set('humn', { id: 'humn', value: i })
-        const result = shoutingMonkeys(monkeys, 2) as boolean
-        if (result) {
-          console.timeEnd(timerLabel)
-          return { answer2: i.toString() }
-        }
-        i += 1
-      }
-    }
-  }
 ]
 
 const config: IDayConfig = {
