@@ -22,6 +22,7 @@ import { runLightAnimation, runLightAnimationWithStuckOnLights } from './day18'
 import { calibrateMachine, generateMolecule } from './day19'
 import { findThePresentHouse, findThePresentHouseWithLazierElves } from './day20'
 import { checkAllEquipmentCombos } from './day21'
+import { findBestFightOnHard, findBestFightPart1 } from './day22'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -134,5 +135,10 @@ describe('2015 Answers', () => {
   it('Day 21', () => {
     const result = checkAllEquipmentCombos()
     console.log(`Day 21, Parts 1 & 2: ${result.answer1}, ${result.answer2}`)
+  })
+
+  it('Day 22', () => {
+    console.log(`Day 22, Part 1: ${findBestFightPart1().answer1}`)
+    console.log(`Day 22, Part 2: ${findBestFightOnHard().answer2}`)
   })
 })
