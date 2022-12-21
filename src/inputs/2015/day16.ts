@@ -1,5 +1,7 @@
-const INPUT: { [key:string]: string } = {
-REAL: `Sue 1: cars: 9, akitas: 3, goldfish: 0
+const inputs: Map<string, string> = new Map([
+  [
+    'REAL',
+    `Sue 1: cars: 9, akitas: 3, goldfish: 0
 Sue 2: akitas: 9, children: 3, samoyeds: 9
 Sue 3: trees: 6, cars: 6, children: 4
 Sue 4: trees: 4, vizslas: 4, goldfish: 9
@@ -499,6 +501,7 @@ Sue 497: vizslas: 10, perfumes: 10, pomeranians: 3
 Sue 498: samoyeds: 3, trees: 2, cars: 5
 Sue 499: cats: 6, children: 3, perfumes: 0
 Sue 500: pomeranians: 10, cats: 3, vizslas: 5`
-}
+  ],
+])
 
-export default INPUT
+export default inputs
