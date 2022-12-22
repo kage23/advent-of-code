@@ -1,4 +1,3 @@
-
 import { IYearConfig } from '../Config'
 
 import coverImage from './cover.png'
@@ -24,7 +23,7 @@ import Day18__2022__Config from './Day18'
 import Day19__2022__Config from './Day19'
 import Day20__2022__Config from './Day20'
 import Day21__2022__Config from './Day21'
-// import Day22__2022__Config from './Day22'
+import Day22__2022__Config from './Day22'
 // import Day23__2022__Config from './Day23'
 // import Day24__2022__Config from './Day24'
 // import Day25__2022__Config from './Day25'
@@ -34,22 +33,12 @@ const CONFIG_2022: IYearConfig = {
   cover: coverImage,
   extraText: (
     <p>
-      Approaching the jungle!
-      Getting ready to set out!
-      Setting up camp!
-      Heading into the jungle!
-      Found a tree grid!
-      Crossing a rope bridge!
-      Fell in the river!
-      Going down the river!
-      Climbing the hill!
-      Fell into an underground cave behind a waterfall!
-      Going through underground tunnels!
-      We found some elephants in the volcano!
-      Oh no, TETRIS-y rocks!
-      Dodging lava!
-      Let's get some geodes!
-      Looking for the star fruit grove!
+      Approaching the jungle! Getting ready to set out! Setting up camp! Heading
+      into the jungle! Found a tree grid! Crossing a rope bridge! Fell in the
+      river! Going down the river! Climbing the hill! Fell into an underground
+      cave behind a waterfall! Going through underground tunnels! We found some
+      elephants in the volcano! Oh no, TETRIS-y rocks! Dodging lava! Let's get
+      some geodes! Looking for the star fruit grove!
     </p>
   ),
   days: [
@@ -74,11 +63,11 @@ const CONFIG_2022: IYearConfig = {
     Day19__2022__Config,
     Day20__2022__Config,
     Day21__2022__Config,
-    // Day22__2022__Config,
+    Day22__2022__Config,
     // Day23__2022__Config,
     // Day24__2022__Config,
     // Day25__2022__Config
-  ]
+  ],
 }
 
 export default CONFIG_2022
