@@ -3,7 +3,7 @@ import { DayConfig } from '../../routes/Day'
 
 const getQuantumEntanglement = (numbers: number[]): number => {
   let result = 1
-  numbers.forEach(number => {
+  numbers.forEach((number) => {
     result = result * number
   })
   return result
@@ -21,7 +21,7 @@ const determineCombos = (numbers: number[], target: number): number[][] => {
       comboList.push([number])
     } else {
       const subCombos = determineCombos(numbers.slice(i + 1), target - number)
-      subCombos.forEach(subCombo => {
+      subCombos.forEach((subCombo) => {
         subCombo.push(number)
         comboList.push(subCombo)
       })
@@ -34,50 +34,62 @@ const determineCombos = (numbers: number[], target: number): number[][] => {
 const findBestCombo = (numbers: number[], target: number): number[] => {
   let comboList = determineCombos(numbers, target)
   let smallestGroupSize = Number.MAX_SAFE_INTEGER
-  comboList.forEach(group => {
+  comboList.forEach((group) => {
     smallestGroupSize = Math.min(smallestGroupSize, group.length)
   })
-  comboList = comboList.filter(group => group.length === smallestGroupSize)
-  comboList.sort((a, b) => getQuantumEntanglement(a) - getQuantumEntanglement(b))
+  comboList = comboList.filter((group) => group.length === smallestGroupSize)
+  comboList.sort(
+    (a, b) => getQuantumEntanglement(a) - getQuantumEntanglement(b)
+  )
   return comboList[0]
 }
 
 export const sortThePackages = (inputKey: string) => {
-  const packageWeights: number[] = inputs.get(inputKey)!
+  const packageWeights: number[] = inputs
+    .get(inputKey)!
     .split('\n')
-    .map(x => parseInt(x))
+    .map((x) => parseInt(x))
     .sort((a, b) => b - a)
-  const weightPerGroup = packageWeights.reduce((total, current) => total + current) / 3
+  const weightPerGroup =
+    packageWeights.reduce((total, current) => total + current) / 3
 
   return {
-    answer1: getQuantumEntanglement(findBestCombo(packageWeights, weightPerGroup))
+    answer1: getQuantumEntanglement(
+      findBestCombo(packageWeights, weightPerGroup)
+    ),
   }
 }
 
 export const sortThePackagesWithTheTrunk = (inputKey: string) => {
-  const packageWeights: number[] = inputs.get(inputKey)!
+  const packageWeights: number[] = inputs
+    .get(inputKey)!
     .split('\n')
-    .map(x => parseInt(x))
+    .map((x) => parseInt(x))
     .sort((a, b) => b - a)
-  const weightPerGroup = packageWeights.reduce((total, current) => total + current) / 4
+  const weightPerGroup =
+    packageWeights.reduce((total, current) => total + current) / 4
 
   return {
-    answer2: getQuantumEntanglement(findBestCombo(packageWeights, weightPerGroup))
+    answer2: getQuantumEntanglement(
+      findBestCombo(packageWeights, weightPerGroup)
+    ),
   }
 }
 
 const day24: Omit<DayConfig, 'year'> = {
-  answer1Text: 'In the ideal configuration, the first group of packages has a quantum entanglement of answer.',
-  answer2Text: 'In the ideal configuration (including the trunk), the first group of packages has a quantum entanglement of answer.',
+  answer1Text:
+    'In the ideal configuration, the first group of packages has a quantum entanglement of answer.',
+  answer2Text:
+    'In the ideal configuration (including the trunk), the first group of packages has a quantum entanglement of answer.',
   buttons: [
     {
       label: 'Sort the Packages!',
-      onClick: sortThePackages
+      onClick: sortThePackages,
     },
     {
       label: 'Sort the Packages (with the trunk)!',
-      onClick: sortThePackagesWithTheTrunk
-    }
+      onClick: sortThePackagesWithTheTrunk,
+    },
   ],
   id: 24,
   inputs,

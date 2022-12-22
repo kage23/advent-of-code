@@ -10,7 +10,7 @@ const inputs: Map<string, string> = new Map([
 8
 9
 10
-11`
+11`,
   ],
   [
     'REAL',
@@ -41,8 +41,8 @@ const inputs: Map<string, string> = new Map([
 103
 107
 109
-113`
-  ]
+113`,
+  ],
 ])
 
 export default inputs

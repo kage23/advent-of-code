@@ -1,7 +1,10 @@
 const inputs: Map<string, string> = new Map([
-  ['DEMO_1', `London to Dublin = 464
+  [
+    'DEMO_1',
+    `London to Dublin = 464
 London to Belfast = 518
-Dublin to Belfast = 141`],
+Dublin to Belfast = 141`,
+  ],
   [
     'REAL',
     `Tristram to AlphaCentauri = 34

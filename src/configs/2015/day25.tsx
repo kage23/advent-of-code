@@ -7,9 +7,13 @@ export const getCodeFromCodeNumber = (codeNumber: number): number => {
   return code
 }
 
-const getCodeFromPreviousCode = (previousCode: number): number => (previousCode * 252533) % 33554393
+const getCodeFromPreviousCode = (previousCode: number): number =>
+  (previousCode * 252533) % 33554393
 
-export const getCodeNumberAtGridPosition = (row: number, col: number): number => {
+export const getCodeNumberAtGridPosition = (
+  row: number,
+  col: number
+): number => {
   let countRow = 1
   let countCol = 1
   let number = 1
@@ -30,7 +34,7 @@ export const getTheDesignatedCode = (inputKey: string) => {
   const row = parseInt(inputs.get(inputKey)!.split(' at row ')[1])
   const col = parseInt(inputs.get(inputKey)!.split(', column ')[1])
   return {
-    answer1: getCodeFromCodeNumber(getCodeNumberAtGridPosition(row, col))
+    answer1: getCodeFromCodeNumber(getCodeNumberAtGridPosition(row, col)),
   }
 }
 
@@ -40,8 +44,8 @@ const day25: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Get the Designated Code',
-      onClick: getTheDesignatedCode
-    }
+      onClick: getTheDesignatedCode,
+    },
   ],
   id: 25,
   inputs,

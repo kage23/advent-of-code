@@ -10,10 +10,10 @@
 
 .link {
   text-decoration: none;
-  color: #1E90FF;
+  color: #1e90ff;
 }
 .link:hover {
-  color: #00BFFF;
+  color: #00bfff;
 }
 
 .nav {
@@ -21,22 +21,22 @@
 }
 
 .navLabel {
-  color: #1E90FF;
-  opacity: .5;
+  color: #1e90ff;
+  opacity: 0.5;
 }
 
 .navSelect {
   -webkit-appearance: none;
   font-size: 14pt;
-  font-family: "Source Code Pro", monospace;
+  font-family: 'Source Code Pro', monospace;
   background-color: transparent;
-  color: #1E90FF;
-  text-shadow: 0 0 2px #1E90FF, 0 0 5px #1E90FF;
+  color: #1e90ff;
+  text-shadow: 0 0 2px #1e90ff, 0 0 5px #1e90ff;
   border: none;
 }
 .navSelect:hover {
-  color: #00BFFF;
-  text-shadow: 0 0 2px #00BFFF, 0 0 5px #00BFFF;
+  color: #00bfff;
+  text-shadow: 0 0 2px #00bfff, 0 0 5px #00bfff;
 }
 .navSelect:focus {
   outline: none;

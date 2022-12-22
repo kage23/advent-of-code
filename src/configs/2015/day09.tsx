@@ -8,37 +8,39 @@ export const findPaths = (inputKey: string) => {
   }
 
   const distances: Map<string, number> = new Map(
-    inputs.get(inputKey)!.split('\n')
-      .map(inputLine => {
+    inputs
+      .get(inputKey)!
+      .split('\n')
+      .map((inputLine) => {
         const [places, distance] = inputLine.split(' = ')
 
         return [
           places
             .split(' to ')
-            .sort((a, b) => (
-              a.toLowerCase().localeCompare(b.toLowerCase())
-            ))
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
             .join(' to '),
-          parseInt(distance)
+          parseInt(distance),
         ]
       })
   )
 
-  const places = Array.from(distances.keys()).map(x => x.split(' to ')).reduce((list, current) => {
-    current.forEach(item => {
-      if (!list.includes(item)) list.push(item)
-    })
-    return list
-  }, [] as string[])
+  const places = Array.from(distances.keys())
+    .map((x) => x.split(' to '))
+    .reduce((list, current) => {
+      current.forEach((item) => {
+        if (!list.includes(item)) list.push(item)
+      })
+      return list
+    }, [] as string[])
 
   let shortestPath = Number.MAX_SAFE_INTEGER
   let longestPath = Number.MIN_SAFE_INTEGER
 
   const searchQueue: ISearchNode[] = [
-    ...places.map(place => ({
+    ...places.map((place) => ({
       distance: 0,
-      path: [place]
-    }))
+      path: [place],
+    })),
   ]
 
   while (searchQueue.length) {
@@ -49,29 +51,25 @@ export const findPaths = (inputKey: string) => {
         longestPath = Math.max(longestPath, currentSearchNode.distance)
       } else {
         const nexts: string[][] = []
-        places.forEach(nextPlace => {
+        places.forEach((nextPlace) => {
           if (!currentSearchNode.path.includes(nextPlace)) {
-            nexts.push([
-              ...currentSearchNode.path,
-              nextPlace
-            ])
+            nexts.push([...currentSearchNode.path, nextPlace])
           }
         })
-        nexts.forEach(next => {
-          const nextDistance = currentSearchNode.distance + (
-            distances.get(
+        nexts.forEach((next) => {
+          const nextDistance =
+            currentSearchNode.distance +
+            (distances.get(
               [
                 currentSearchNode.path[currentSearchNode.path.length - 1],
-                next[next.length - 1]
+                next[next.length - 1],
               ]
                 .sort((a, b) => a.localeCompare(b))
                 .join(' to ')
-            )
-            || 0
-          )
+            ) || 0)
           searchQueue.push({
             distance: nextDistance,
-            path: next
+            path: next,
           })
         })
       }
@@ -80,7 +78,7 @@ export const findPaths = (inputKey: string) => {
 
   return {
     answer1: shortestPath,
-    answer2: longestPath
+    answer2: longestPath,
   }
 }
 
@@ -90,8 +88,8 @@ const day09: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Find All the Paths',
-      onClick: findPaths
-    }
+      onClick: findPaths,
+    },
   ],
   id: 9,
   inputs,

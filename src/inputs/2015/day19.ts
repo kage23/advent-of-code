@@ -15,7 +15,7 @@ H => HO
 H => OH
 O => HH
 
-HOH`
+HOH`,
   ],
   [
     'DEMO_2_2',
@@ -25,7 +25,7 @@ H => HO
 H => OH
 O => HH
 
-HOHOHO`
+HOHOHO`,
   ],
   [
     'REAL',

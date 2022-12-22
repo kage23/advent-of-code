@@ -1,4 +1,4 @@
-class SLL <T extends unknown>{
+class SLL<T> {
   head?: ISLLNode<T>
   length: number
 
@@ -18,7 +18,7 @@ class SLL <T extends unknown>{
   insertAfter = (insert: T, after: ISLLNode<T>): ISLLNode<T> => {
     const node: ISLLNode<T> = {
       value: insert,
-      next: after.next
+      next: after.next,
     }
     after.next = node
     this.length++
@@ -67,7 +67,8 @@ class SLL <T extends unknown>{
       else this.head = undefined
     } else if (typeof this.head !== 'undefined') {
       let currentNode: ISLLNode<T> = this.head
-      while (currentNode.next && currentNode.next !== node) currentNode = currentNode.next
+      while (currentNode.next && currentNode.next !== node)
+        currentNode = currentNode.next
       currentNode.next = node.next
     }
 
@@ -90,7 +91,7 @@ class SLL <T extends unknown>{
   }
 }
 
-export interface ISLLNode <T extends unknown>{
+export interface ISLLNode<T> {
   value: T
   next?: ISLLNode<T>
 }

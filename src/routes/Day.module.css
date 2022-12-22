@@ -5,12 +5,12 @@
 }
 
 .link {
-  opacity: .5;
+  opacity: 0.5;
   text-decoration: none;
-  color: #1E90FF;
+  color: #1e90ff;
 }
 .link:hover {
-  color: #00BFFF;
+  color: #00bfff;
 }
 
 .controlBoxes {
@@ -34,8 +34,8 @@
 }
 
 .button {
-  background: none!important;
-  padding: 0!important;
+  background: none !important;
+  padding: 0 !important;
 
   display: block;
   border-width: 2px;
@@ -46,12 +46,11 @@
   margin-bottom: 8px;
   text-decoration: none;
   color: #cccccc;
-  font-family: "Source Code Pro", monospace;
+  font-family: 'Source Code Pro', monospace;
   font-size: 14pt;
   cursor: pointer;
   text-align: center;
-  transition: background 250ms ease-in-out,
-              transform 150ms ease;
+  transition: background 250ms ease-in-out, transform 150ms ease;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
@@ -74,12 +73,12 @@
 }
 
 code {
-  font-family: "Source Code Pro", monospace;
+  font-family: 'Source Code Pro', monospace;
   position: relative;
 }
 code:before {
   z-index: -1;
-  content: "";
+  content: '';
   position: absolute;
   display: block;
   left: -2px;
@@ -124,5 +123,5 @@ code:before {
 .specialRender p {
   margin-top: 0;
   margin-bottom: 0;
-  font-family: "Source Code Pro", monospace;
+  font-family: 'Source Code Pro', monospace;
 }

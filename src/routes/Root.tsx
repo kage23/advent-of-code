@@ -1,10 +1,5 @@
 import { ChangeEvent } from 'react'
-import {
-  Link,
-  Outlet,
-  useNavigate,
-  useRouteLoaderData
-} from 'react-router-dom'
+import { Link, Outlet, useNavigate, useRouteLoaderData } from 'react-router-dom'
 
 import years from '../configs/years'
 import { DayConfig } from './Day'
@@ -30,15 +25,20 @@ const Root = () => {
     )
   }
 
-  const yearOptions = Array.from(years.keys()).map(year => (
-    <option key={year} value={year}>{year}</option>
+  const yearOptions = Array.from(years.keys()).map((year) => (
+    <option key={year} value={year}>
+      {year}
+    </option>
   ))
 
-  const dayOptions = yearConfig ? Array.from(yearConfig.days.keys()).map(day => (
-    <option key={day} value={day}>
-      {day < 10 ? '0' : ''}{day}
-    </option>
-  )) : null
+  const dayOptions = yearConfig
+    ? Array.from(yearConfig.days.keys()).map((day) => (
+        <option key={day} value={day}>
+          {day < 10 ? '0' : ''}
+          {day}
+        </option>
+      ))
+    : null
 
   return (
     <>
@@ -58,15 +58,11 @@ const Root = () => {
             onChange={updateYear}
             value={yearConfig?.id || dayConfig?.year.id || 0}
           >
-            <option
-              key="xx"
-              value={0}
-            >
+            <option key="xx" value={0}>
               20xx
             </option>
             {yearOptions}
-          </select>
-          {' '}
+          </select>{' '}
           <label className={styles.navLabel} htmlFor="daySelect">
             day=
           </label>
@@ -76,10 +72,7 @@ const Root = () => {
             onChange={updateDay}
             value={dayConfig?.id || 0}
           >
-            <option
-              key="xx"
-              value={0}
-            >
+            <option key="xx" value={0}>
               xx
             </option>
             {dayOptions}

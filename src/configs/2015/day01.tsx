@@ -22,7 +22,7 @@ export const followInstructions = (inputKey: string) => {
   }
 
   return {
-    answer1: floor
+    answer1: floor,
   }
 }
 
@@ -49,7 +49,7 @@ export const findBasement = (inputKey: string) => {
   }
 
   return {
-    answer2: (i + 1)
+    answer2: i + 1,
   }
 }
 
@@ -63,7 +63,7 @@ const day01: Omit<DayConfig, 'year'> = {
     },
     {
       label: 'Find Basement',
-      onClick: findBasement
+      onClick: findBasement,
     },
   ],
   id: 1,

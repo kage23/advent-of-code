@@ -25,12 +25,10 @@ const Year = () => {
 
   return (
     <>
-      <h2 className={styles.title}>
-        --- Advent of Code Coding Challenge ---
-      </h2>
+      <h2 className={styles.title}>--- Advent of Code Coding Challenge ---</h2>
       <p>
         Welcome to my {id} Advent of Code Coding Challenge solution suite!
-        Select a day above to see my solution for that day's challenges.
+        Select a day above to see my solution for that day&apos;s challenges.
       </p>
       <p>{extraText}</p>
       <img

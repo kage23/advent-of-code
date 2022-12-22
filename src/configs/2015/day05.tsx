@@ -16,14 +16,14 @@ export const isStringNice = (string: string): boolean => {
   }
   return (
     // It contains at least three vowels (aeiou only), like aei, xazegov, or aeiouaeiouaeiou.
-    vowelCount >= 3
+    vowelCount >= 3 &&
     // It contains at least one letter that appears twice in a row, like xx, abcdde (dd), or aabbccdd (aa, bb, cc, or dd).
-    && double
+    double &&
     // It does not contain the strings ab, cd, pq, or xy, even if they are part of one of the other requirements.
-    && !string.includes('ab')
-    && !string.includes('cd')
-    && !string.includes('pq')
-    && !string.includes('xy')
+    !string.includes('ab') &&
+    !string.includes('cd') &&
+    !string.includes('pq') &&
+    !string.includes('xy')
   )
 }
 
@@ -46,14 +46,14 @@ export const isStringNice__v2 = (string: string): boolean => {
 export const areStringsNice = (inputKey: string) => {
   const strings = inputs.get(inputKey)!.split('\n')
   return {
-    answer1: strings.filter(string => isStringNice(string)).length
+    answer1: strings.filter((string) => isStringNice(string)).length,
   }
 }
 
 export const areStringsNice__v2 = (inputKey: string) => {
   const strings = inputs.get(inputKey)!.split('\n')
   return {
-    answer2: strings.filter(string => isStringNice__v2(string)).length
+    answer2: strings.filter((string) => isStringNice__v2(string)).length,
   }
 }
 
@@ -63,12 +63,12 @@ const day05: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Count Nice Strings',
-      onClick: areStringsNice
+      onClick: areStringsNice,
     },
     {
       label: 'Count Nice Strings, v.2',
-      onClick: areStringsNice__v2
-    }
+      onClick: areStringsNice__v2,
+    },
   ],
   id: 5,
   inputs,

@@ -7,7 +7,7 @@ export const deliverPresents = (inputKey: string) => {
   let x = 0
   let y = 0
   visited.set(`${x},${y}`, true)
-  for (let char of instructions) {
+  for (const char of instructions) {
     switch (char) {
       case '^':
         y--
@@ -28,7 +28,7 @@ export const deliverPresents = (inputKey: string) => {
     visited.set(`${x},${y}`, true)
   }
   return {
-    answer1: visited.size
+    answer1: visited.size,
   }
 }
 
@@ -37,7 +37,7 @@ export const deliverPresentsWithRoboSanta = (inputKey: string) => {
   const visited: Map<string, true> = new Map()
   const santas = [
     [0, 0],
-    [0, 0]
+    [0, 0],
   ]
   visited.set(`0,0`, true)
   for (let i = 0; i < instructions.length; i++) {
@@ -63,7 +63,7 @@ export const deliverPresentsWithRoboSanta = (inputKey: string) => {
     visited.set(`${santas[whoseTurn][0]},${santas[whoseTurn][1]}`, true)
   }
   return {
-    answer2: visited.size
+    answer2: visited.size,
   }
 }
 
@@ -73,12 +73,12 @@ const day03: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Deliver Presents',
-      onClick: deliverPresents
+      onClick: deliverPresents,
     },
     {
       label: 'Deliver Presents with Robo-Santa',
-      onClick: deliverPresentsWithRoboSanta
-    }
+      onClick: deliverPresentsWithRoboSanta,
+    },
   ],
   id: 3,
   inputs,

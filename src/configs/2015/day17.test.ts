@@ -1,4 +1,7 @@
-import { determineContainerCombos, determineEfficientContainerCombos } from './day17'
+import {
+  determineContainerCombos,
+  determineEfficientContainerCombos,
+} from './day17'
 
 describe('2015 Day 17', () => {
   describe('Part 1', () => {

@@ -1,9 +1,12 @@
 const inputs: Map<string, string> = new Map([
-  ['DEMO_1', `20
+  [
+    'DEMO_1',
+    `20
 15
 10
 5
-5`,],
+5`,
+  ],
   [
     'REAL',
     `33
@@ -25,7 +28,7 @@ const inputs: Map<string, string> = new Map([
 24
 41
 30
-42`
+42`,
   ],
 ])
 

@@ -17,10 +17,16 @@ import {
 import { raceReindeer, raceReindeerV2 } from './day14'
 import { findBestLowCalRecipe, findBestRecipe } from './day15'
 import { determineTheActualSue, determineTheSue } from './day16'
-import { determineContainerCombos, determineEfficientContainerCombos } from './day17'
+import {
+  determineContainerCombos,
+  determineEfficientContainerCombos,
+} from './day17'
 import { runLightAnimation, runLightAnimationWithStuckOnLights } from './day18'
 import { calibrateMachine, generateMolecule } from './day19'
-import { findThePresentHouse, findThePresentHouseWithLazierElves } from './day20'
+import {
+  findThePresentHouse,
+  findThePresentHouseWithLazierElves,
+} from './day20'
 import { checkAllEquipmentCombos } from './day21'
 import { findBestFightOnHard, findBestFightPart1 } from './day22'
 import { runCodePart1, runCodePart2 } from './day23'
@@ -117,12 +123,16 @@ describe('2015 Answers', () => {
 
   it('Day 17', () => {
     console.log(`Day 17, Part 1: ${determineContainerCombos('REAL').answer1}`)
-    console.log(`Day 17, Part 2: ${determineEfficientContainerCombos('REAL').answer2}`)
+    console.log(
+      `Day 17, Part 2: ${determineEfficientContainerCombos('REAL').answer2}`
+    )
   })
 
   it('Day 18', () => {
     console.log(`Day 18, Part 1: ${runLightAnimation('REAL').answer1}`)
-    console.log(`Day 18, Part 2: ${runLightAnimationWithStuckOnLights('REAL').answer2}`)
+    console.log(
+      `Day 18, Part 2: ${runLightAnimationWithStuckOnLights('REAL').answer2}`
+    )
   })
 
   it('Day 19', () => {
@@ -132,7 +142,9 @@ describe('2015 Answers', () => {
 
   it('Day 20', () => {
     console.log(`Day 20, Part 1: ${findThePresentHouse('REAL').answer1}`)
-    console.log(`Day 20, Part 2: ${findThePresentHouseWithLazierElves('REAL').answer2}`)
+    console.log(
+      `Day 20, Part 2: ${findThePresentHouseWithLazierElves('REAL').answer2}`
+    )
   })
 
   it('Day 21', () => {
@@ -152,7 +164,9 @@ describe('2015 Answers', () => {
 
   it('Day 24', () => {
     console.log(`Day 24, Part 1: ${sortThePackages('REAL').answer1}`)
-    console.log(`Day 24, Part 1: ${sortThePackagesWithTheTrunk('REAL').answer2}`)
+    console.log(
+      `Day 24, Part 1: ${sortThePackagesWithTheTrunk('REAL').answer2}`
+    )
   })
 
   it('Day 25', () => {

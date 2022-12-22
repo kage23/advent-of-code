@@ -29,7 +29,7 @@ export const doHowManyLookAndSays = (inputKey: string, count: number) => {
 
   return {
     answer1: count === 40 ? input.length : undefined,
-    answer2: count === 50 ? input.length : undefined
+    answer2: count === 50 ? input.length : undefined,
   }
 }
 
@@ -39,11 +39,11 @@ const day10: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Do 40 Look-and-Says',
-      onClick: (inputKey) => doHowManyLookAndSays(inputKey, 40)
+      onClick: (inputKey) => doHowManyLookAndSays(inputKey, 40),
     },
     {
       label: 'Do 50 Look-and-Says',
-      onClick: (inputKey) => doHowManyLookAndSays(inputKey, 50)
+      onClick: (inputKey) => doHowManyLookAndSays(inputKey, 50),
     },
   ],
   id: 10,

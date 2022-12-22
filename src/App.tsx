@@ -12,22 +12,22 @@ const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Home />
+        element: <Home />,
       },
       {
         path: ':year/',
         element: <Year />,
         id: 'year',
-        loader: yearLoader
+        loader: yearLoader,
       },
       {
         path: ':year/day/:day/',
         element: <Day />,
         id: 'day',
-        loader: dayLoader
-      }
-    ]
-  }
+        loader: dayLoader,
+      },
+    ],
+  },
 ])
 
 const App = () => <RouterProvider router={router} />

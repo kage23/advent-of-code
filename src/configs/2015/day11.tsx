@@ -34,16 +34,16 @@ const incrementPassword = (input: string): string => {
   }
 }
 
-export const isViablePassword = (input: string): boolean => (
+export const isViablePassword = (input: string): boolean =>
   // Exactly eight lowercase letters
-  (input.length === 8 && input === input.toLowerCase())
+  input.length === 8 &&
+  input === input.toLowerCase() &&
   // Passwords must include one increasing straight of at least three letters, like abc, bcd, cde, and so on, up to xyz. They cannot skip letters; abd doesn't count.
-  && hasStraight(input)
+  hasStraight(input) &&
   // Passwords may not contain the letters i, o, or l, as these letters can be mistaken for other characters and are therefore confusing.
-  && !['i', 'o', 'l'].some(bannedLetter => input.includes(bannedLetter))
+  !['i', 'o', 'l'].some((bannedLetter) => input.includes(bannedLetter)) &&
   // Passwords must contain at least two different, non-overlapping pairs of letters, like aa, bb, or zz.
-  && containsTwoSeparatePairs(input)
-)
+  containsTwoSeparatePairs(input)
 
 export const findNextViablePassword = (inputKey: string) => {
   let password = incrementPassword(inputs.get(inputKey) || inputKey)
@@ -53,14 +53,14 @@ export const findNextViablePassword = (inputKey: string) => {
   }
 
   return {
-    answer1: password
+    answer1: password,
   }
 }
 
 export const findNEXTNextViablePassword = (inputKey: string) => {
   const nextViablePassword = findNextViablePassword(inputKey).answer1
   return {
-    answer2: findNextViablePassword(nextViablePassword).answer1
+    answer2: findNextViablePassword(nextViablePassword).answer1,
   }
 }
 
@@ -70,12 +70,12 @@ const day11: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Find Next Viable Password',
-      onClick: findNextViablePassword
+      onClick: findNextViablePassword,
     },
     {
       label: 'Find NEXT Next Viable Password',
-      onClick: findNEXTNextViablePassword
-    }
+      onClick: findNEXTNextViablePassword,
+    },
   ],
   id: 11,
   inputs,

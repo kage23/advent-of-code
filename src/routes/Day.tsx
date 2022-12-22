@@ -40,15 +40,8 @@ export async function loader({ params }: { params: Params }) {
 }
 
 const Day = () => {
-  const {
-    answer1Text,
-    answer2Text,
-    buttons,
-    id,
-    inputs,
-    title,
-    year
-  } = useLoaderData() as DayConfig
+  const { answer1Text, answer2Text, buttons, id, inputs, title, year } =
+    useLoaderData() as DayConfig
 
   const [answer1, setAnswer1] = useState<string | number>()
   const [answer2, setAnswer2] = useState<string | number>()
@@ -78,21 +71,26 @@ const Day = () => {
     setSpecialRender(null)
   }
 
-  const renderAnswerText = (answerText: string, actualAnswer: string | number) => {
+  const renderAnswerText = (
+    answerText: string,
+    actualAnswer: string | number
+  ) => {
     const answerTextParts = answerText.split('answer')
     return (
       <span>
-        {answerTextParts[0]}<code>{actualAnswer}</code>{answerTextParts[1]}
+        {answerTextParts[0]}
+        <code>{actualAnswer}</code>
+        {answerTextParts[1]}
       </span>
     )
   }
 
-  const inputSelectors = Array.from(inputs.keys()).map(inputKey => (
+  const inputSelectors = Array.from(inputs.keys()).map((inputKey) => (
     <label key={inputKey} className={styles.label}>
       <input
         className={styles.inputItem}
-        type='radio'
-        name='inputType'
+        type="radio"
+        name="inputType"
         value={inputKey}
         checked={selectedInputKey === inputKey}
         onChange={handleInputChange}
@@ -112,7 +110,8 @@ const Day = () => {
   return (
     <>
       <h2 className={styles.title}>
-        --- Day {id < 10 ? '0' : ''}{id}: {title} ---{' '}
+        --- Day {id < 10 ? '0' : ''}
+        {id}: {title} ---{' '}
         <a
           className={styles.link}
           rel="noreferrer"
@@ -124,9 +123,7 @@ const Day = () => {
       </h2>
       <div className={styles.controlBoxes}>
         <fieldset className={styles.inputSelector}>
-          <label className={styles.label}>
-            Select an input:
-          </label>
+          <label className={styles.label}>Select an input:</label>
           {inputSelectors}
         </fieldset>
         {buttons.length > 0 && (
@@ -136,7 +133,9 @@ const Day = () => {
                 key={i}
                 className={styles.button}
                 disabled={selectedInputKey === undefined}
-                onClick={() => handleButtonClick(onClick, selectedInputKey!, label)}
+                onClick={() =>
+                  handleButtonClick(onClick, selectedInputKey!, label)
+                }
               >
                 {label}
               </button>
@@ -148,16 +147,14 @@ const Day = () => {
             {answer1 !== undefined && (
               <fieldset className={styles.answer}>
                 <p className={styles.answerText}>
-                  Answer 1:{' '}
-                  {renderAnswerText(answer1Text, answer1)}
+                  Answer 1: {renderAnswerText(answer1Text, answer1)}
                 </p>
               </fieldset>
             )}
             {answer2 !== undefined && (
               <fieldset className={styles.answer}>
                 <p className={styles.answerText}>
-                  Answer 2:{' '}
-                  {renderAnswerText(answer2Text, answer2)}
+                  Answer 2: {renderAnswerText(answer2Text, answer2)}
                 </p>
               </fieldset>
             )}
@@ -166,18 +163,14 @@ const Day = () => {
       </div>
       {selectedInputKey !== undefined && (
         <div className={styles.renderBox}>
-          <div className={classnames({ [styles.inputDisplay]: !!specialRender })}>
-            <h3 className={styles.inputTitle}>
-              Input:
-            </h3>
-            <pre className={styles.input}>
-              {inputs.get(selectedInputKey)}
-            </pre>
+          <div
+            className={classnames({ [styles.inputDisplay]: !!specialRender })}
+          >
+            <h3 className={styles.inputTitle}>Input:</h3>
+            <pre className={styles.input}>{inputs.get(selectedInputKey)}</pre>
           </div>
           {!!specialRender && (
-            <div className={styles.specialRender}>
-              {specialRender}
-            </div>
+            <div className={styles.specialRender}>{specialRender}</div>
           )}
         </div>
       )}

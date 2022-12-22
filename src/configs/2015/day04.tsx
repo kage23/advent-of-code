@@ -8,7 +8,7 @@ export const lookForHash = (inputKey: string) => {
   let i = 0
   while (!md5(`${input}${i}`).startsWith('00000')) i++
   return {
-    answer1: i
+    answer1: i,
   }
 }
 
@@ -17,7 +17,7 @@ export const lookForBetterHash = (inputKey: string) => {
   let i = 0
   while (!md5(`${input}${i}`).startsWith('000000')) i++
   return {
-    answer2: i
+    answer2: i,
   }
 }
 
@@ -27,12 +27,12 @@ const day04: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Look for Hash',
-      onClick: lookForHash
+      onClick: lookForHash,
     },
     {
       label: 'Look for Better Hash',
-      onClick: lookForBetterHash
-    }
+      onClick: lookForBetterHash,
+    },
   ],
   id: 4,
   inputs,

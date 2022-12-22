@@ -4,7 +4,7 @@ const inputs: Map<string, string> = new Map([
     `inc a
 jio a, +2
 tpl a
-inc a`
+inc a`,
   ],
   [
     'REAL',
@@ -54,8 +54,8 @@ tpl a
 inc a
 jmp +2
 hlf a
-jmp -7`
-  ]
+jmp -7`,
+  ],
 ])
 
 export default inputs

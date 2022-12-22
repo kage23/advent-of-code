@@ -14,7 +14,9 @@ const convertString = (string: string): string => {
           break
 
         case 'x':
-          result += String.fromCodePoint(parseInt(`0x${string.slice(i + 2, i + 4)}`, 16))
+          result += String.fromCodePoint(
+            parseInt(`0x${string.slice(i + 2, i + 4)}`, 16)
+          )
           i += 3
           break
 
@@ -49,11 +51,11 @@ export const examineStringConversions = (inputKey: string) => {
   const input = inputs.get(inputKey)!.split('\n')
   const codeLength = input.reduce((total, current) => total + current.length, 0)
   const stringsLength = input
-    .map(str => convertString(str))
+    .map((str) => convertString(str))
     .reduce((total, current) => total + current.length, 0)
 
   return {
-    answer1: codeLength - stringsLength
+    answer1: codeLength - stringsLength,
   }
 }
 
@@ -61,26 +63,28 @@ export const examineStringEncodings = (inputKey: string) => {
   const input = inputs.get(inputKey)!.split('\n')
   const codeLength = input.reduce((total, current) => total + current.length, 0)
   const encodedLength = input
-    .map(str => encodeString(str))
+    .map((str) => encodeString(str))
     .reduce((total, current) => total + current.length, 0)
 
   return {
-    answer2: encodedLength - codeLength
+    answer2: encodedLength - codeLength,
   }
 }
 
 const day08: Omit<DayConfig, 'year'> = {
-  answer1Text: 'The difference between the code length and the strings length is answer.',
-  answer2Text: 'The difference between the code length and the encoded strings length is answer.',
+  answer1Text:
+    'The difference between the code length and the strings length is answer.',
+  answer2Text:
+    'The difference between the code length and the encoded strings length is answer.',
   buttons: [
     {
       label: 'Examine String Conversions',
-      onClick: examineStringConversions
+      onClick: examineStringConversions,
     },
     {
       label: 'Examine String Encodings',
-      onClick: examineStringEncodings
-    }
+      onClick: examineStringEncodings,
+    },
   ],
   id: 8,
   inputs,

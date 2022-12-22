@@ -24,52 +24,52 @@ const SPELLS: {
   effect: (player: Fighter, boss: Fighter) => void
   name: string
 }[] = [
-    {
-      cost: 53,
-      effect: (player, boss) => {
-        boss.hitPoints -= 4
-      },
-      name: 'Magic Missile'
+  {
+    cost: 53,
+    effect: (player, boss) => {
+      boss.hitPoints -= 4
     },
-    {
-      cost: 73,
-      effect: (player, boss) => {
-        boss.hitPoints -= 2
-        player.hitPoints += 2
-      },
-      name: 'Drain'
+    name: 'Magic Missile',
+  },
+  {
+    cost: 73,
+    effect: (player, boss) => {
+      boss.hitPoints -= 2
+      player.hitPoints += 2
     },
-    {
-      cost: 113,
-      effect: (player) => {
-        if (player.shieldIsActive === 0) {
-          player.shieldIsActive = 6
-        }
-      },
-      name: 'Shield'
+    name: 'Drain',
+  },
+  {
+    cost: 113,
+    effect: (player) => {
+      if (player.shieldIsActive === 0) {
+        player.shieldIsActive = 6
+      }
     },
-    {
-      cost: 173,
-      effect: (player, boss) => {
-        if (boss.poisonIsActive === 0) {
-          boss.poisonIsActive = 6
-        }
-      },
-      name: 'Poison'
+    name: 'Shield',
+  },
+  {
+    cost: 173,
+    effect: (player, boss) => {
+      if (boss.poisonIsActive === 0) {
+        boss.poisonIsActive = 6
+      }
     },
-    {
-      cost: 229,
-      effect: (player) => {
-        if (player.rechargeIsActive === 0) {
-          player.rechargeIsActive = 5
-        }
-      },
-      name: 'Recharge'
-    }
-  ]
+    name: 'Poison',
+  },
+  {
+    cost: 229,
+    effect: (player) => {
+      if (player.rechargeIsActive === 0) {
+        player.rechargeIsActive = 5
+      }
+    },
+    name: 'Recharge',
+  },
+]
 
 const applyEffects = (fighters: Fighter[]): void =>
-  fighters.forEach(fighter => {
+  fighters.forEach((fighter) => {
     if (fighter.poisonIsActive) {
       fighter.hitPoints -= 3
       fighter.poisonIsActive--
@@ -86,7 +86,12 @@ const applyEffects = (fighters: Fighter[]): void =>
     }
   })
 
-const playerTurn = (inPlayer: Fighter, inBoss: Fighter, spellIndex: number, part: 1 | 2): {
+const playerTurn = (
+  inPlayer: Fighter,
+  inBoss: Fighter,
+  spellIndex: number,
+  part: 1 | 2
+): {
   boss: Fighter
   player: Fighter
 } => {
@@ -94,12 +99,12 @@ const playerTurn = (inPlayer: Fighter, inBoss: Fighter, spellIndex: number, part
   const boss: Fighter = JSON.parse(JSON.stringify(inBoss))
   if (part === 2) {
     player.hitPoints -= 1
-    if ([player, boss].some(fighter => fighter.hitPoints <= 0)) {
+    if ([player, boss].some((fighter) => fighter.hitPoints <= 0)) {
       return { boss, player }
     }
   }
   applyEffects([player, boss])
-  if ([player, boss].some(fighter => fighter.hitPoints <= 0)) {
+  if ([player, boss].some((fighter) => fighter.hitPoints <= 0)) {
     return { boss, player }
   }
   const spell = SPELLS[spellIndex]
@@ -110,14 +115,17 @@ const playerTurn = (inPlayer: Fighter, inBoss: Fighter, spellIndex: number, part
   return { boss, player }
 }
 
-const bossTurn = (inPlayer: Fighter, inBoss: Fighter): {
+const bossTurn = (
+  inPlayer: Fighter,
+  inBoss: Fighter
+): {
   boss: Fighter
   player: Fighter
 } => {
   const player: Fighter = JSON.parse(JSON.stringify(inPlayer))
   const boss: Fighter = JSON.parse(JSON.stringify(inBoss))
   applyEffects([player, boss])
-  if ([player, boss].some(fighter => fighter.hitPoints <= 0)) {
+  if ([player, boss].some((fighter) => fighter.hitPoints <= 0)) {
     return { boss, player }
   }
   const damage = Math.max(1, boss.damage - player.armor)
@@ -125,12 +133,15 @@ const bossTurn = (inPlayer: Fighter, inBoss: Fighter): {
   return { boss, player }
 }
 
-function* generatePossibleNexts(current: SearchNode, part: 1 | 2): Generator<SearchNode, SearchNode | undefined, undefined> {
+function* generatePossibleNexts(
+  current: SearchNode,
+  part: 1 | 2
+): Generator<SearchNode, SearchNode | undefined, undefined> {
   for (let i = 0; i < SPELLS.length; i++) {
     const spell = SPELLS[i]
     let fighters = {
       boss: JSON.parse(JSON.stringify(current.boss)),
-      player: JSON.parse(JSON.stringify(current.player))
+      player: JSON.parse(JSON.stringify(current.player)),
     }
     if (fighters.player.mana >= spell.cost) {
       fighters = playerTurn(fighters.player, fighters.boss, i, part)
@@ -142,7 +153,7 @@ function* generatePossibleNexts(current: SearchNode, part: 1 | 2): Generator<Sea
           boss: fighters.boss,
           player: fighters.player,
           spellsCast: `${current.spellsCast}${i}`,
-          totalManaSpent: current.totalManaSpent + spell.cost
+          totalManaSpent: current.totalManaSpent + spell.cost,
         } as SearchNode
       }
     }
@@ -150,16 +161,19 @@ function* generatePossibleNexts(current: SearchNode, part: 1 | 2): Generator<Sea
   return
 }
 
-const sortIntoSearchQueue = (insert: SearchNode, queue: SLL<SearchNode>): void => {
+const sortIntoSearchQueue = (
+  insert: SearchNode,
+  queue: SLL<SearchNode>
+): void => {
   if (!queue.length) {
     queue.push(insert)
   } else {
     let insertAfter = queue.head
     while (
-      insertAfter
-      && insertAfter.value.totalManaSpent <= insert.totalManaSpent
-      && insertAfter.next
-      && insertAfter.next.value.totalManaSpent <= insert.totalManaSpent
+      insertAfter &&
+      insertAfter.value.totalManaSpent <= insert.totalManaSpent &&
+      insertAfter.next &&
+      insertAfter.next.value.totalManaSpent <= insert.totalManaSpent
     ) {
       insertAfter = insertAfter.next
     }
@@ -180,7 +194,7 @@ const findBestFight = (part: 1 | 2): number => {
       mana: 0,
       poisonIsActive: 0,
       rechargeIsActive: 0,
-      shieldIsActive: 0
+      shieldIsActive: 0,
     },
     player: {
       armor: 0,
@@ -189,10 +203,10 @@ const findBestFight = (part: 1 | 2): number => {
       mana: 500,
       poisonIsActive: 0,
       rechargeIsActive: 0,
-      shieldIsActive: 0
+      shieldIsActive: 0,
     },
     spellsCast: '',
-    totalManaSpent: 0
+    totalManaSpent: 0,
   } as SearchNode)
   const seenBefore: Map<string, true> = new Map()
 
@@ -202,8 +216,10 @@ const findBestFight = (part: 1 | 2): number => {
       return current.totalManaSpent
     }
 
-    for (let nextStep of generatePossibleNexts(current, part)) {
-      const seenBeforeKey = `${JSON.stringify(nextStep.player)}...${JSON.stringify(nextStep.boss)}`
+    for (const nextStep of generatePossibleNexts(current, part)) {
+      const seenBeforeKey = `${JSON.stringify(
+        nextStep.player
+      )}...${JSON.stringify(nextStep.boss)}`
       if (seenBefore.get(seenBeforeKey)) continue
       seenBefore.set(seenBeforeKey, true)
       sortIntoSearchQueue(nextStep, queue)
@@ -214,25 +230,26 @@ const findBestFight = (part: 1 | 2): number => {
 }
 
 export const findBestFightPart1 = () => ({
-  answer1: findBestFight(1)
+  answer1: findBestFight(1),
 })
 
 export const findBestFightOnHard = () => ({
-  answer2: findBestFight(2)
+  answer2: findBestFight(2),
 })
 
 const day22: Omit<DayConfig, 'year'> = {
   answer1Text: 'You must spend at least answer mana to win the fight.',
-  answer2Text: 'On Hard difficulty, you must spend at least answer mana to win the fight.',
+  answer2Text:
+    'On Hard difficulty, you must spend at least answer mana to win the fight.',
   buttons: [
     {
       label: 'Find Best Fight',
-      onClick: findBestFightPart1
+      onClick: findBestFightPart1,
     },
     {
       label: 'Find Best Fight on Hard Mode',
-      onClick: findBestFightOnHard
-    }
+      onClick: findBestFightOnHard,
+    },
   ],
   id: 22,
   inputs,

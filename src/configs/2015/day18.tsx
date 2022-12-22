@@ -13,13 +13,17 @@ const countOnNeighbors = (grid: string, x: number, y: number): number => {
     [x + 1, y - 1],
     [x + 1, y],
     [x + 1, y + 1],
-  ]
-    .filter(([x, y]) => x >= 0 && y >= 0 && x <= parsedGrid[0].length - 1 && y <= parsedGrid.length - 1)
+  ].filter(
+    ([x, y]) =>
+      x >= 0 &&
+      y >= 0 &&
+      x <= parsedGrid[0].length - 1 &&
+      y <= parsedGrid.length - 1
+  )
 
   return coordsToCheck
     .map(([x, y]) => parsedGrid[y].charAt(x))
-    .filter(x => x === '#')
-    .length
+    .filter((x) => x === '#').length
 }
 
 const getNextGrid = (grid: string, part: 1 | 2): string => {
@@ -33,12 +37,10 @@ const getNextGrid = (grid: string, part: 1 | 2): string => {
     let onNeighborsCount = 0
     if (
       part === 2 &&
-      (
-        (x === 0 && y === 0) ||
+      ((x === 0 && y === 0) ||
         (x === 0 && y === gridSize - 1) ||
         (x === gridSize - 1 && y === 0) ||
-        (x === gridSize - 1 && y === gridSize - 1)
-      )
+        (x === gridSize - 1 && y === gridSize - 1))
     ) {
       nextGrid += '#'
       x++
@@ -84,7 +86,7 @@ export const runLightAnimation = (inputKey: string) => {
     grid = getNextGrid(grid, 1)
   }
   return {
-    answer1: grid.split('').filter(x => x === '#').length
+    answer1: grid.split('').filter((x) => x === '#').length,
   }
 }
 
@@ -94,32 +96,36 @@ export const runLightAnimationWithStuckOnLights = (inputKey: string) => {
   // Top left and bottom right
   grid = `#${grid.slice(1, -1)}#`
   // Top right and bottom left are trickier
-  grid = grid.split('\n').map((line, i, gridLines) => {
-    if (i === 0) return `${line.slice(0, -1)}#`
-    if (i === gridLines.length - 1) return `#${line.slice(1)}`
-    return line
-  }).join('\n')
+  grid = grid
+    .split('\n')
+    .map((line, i, gridLines) => {
+      if (i === 0) return `${line.slice(0, -1)}#`
+      if (i === gridLines.length - 1) return `#${line.slice(1)}`
+      return line
+    })
+    .join('\n')
   const animationSteps = inputKey.startsWith('DEMO') ? 5 : 100
   for (let i = 0; i < animationSteps; i++) {
     grid = getNextGrid(grid, 2)
   }
   return {
-    answer2: grid.split('').filter(x => x === '#').length
+    answer2: grid.split('').filter((x) => x === '#').length,
   }
 }
 
 const day18: Omit<DayConfig, 'year'> = {
   answer1Text: 'At the end of the animation, answer lights are turned on.',
-  answer2Text: 'At the end of the animation, answer lights are turned on (including the corner lights which are stuck on).',
+  answer2Text:
+    'At the end of the animation, answer lights are turned on (including the corner lights which are stuck on).',
   buttons: [
     {
       label: 'Run Light Animation',
-      onClick: runLightAnimation
+      onClick: runLightAnimation,
     },
     {
       label: 'Run Light Animation with Stuck On Lights',
-      onClick: runLightAnimationWithStuckOnLights
-    }
+      onClick: runLightAnimationWithStuckOnLights,
+    },
   ],
   id: 18,
   inputs,

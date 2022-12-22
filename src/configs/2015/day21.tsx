@@ -26,32 +26,32 @@ const weapons: ShopItem[] = [
     armor: 0,
     cost: 8,
     damage: 4,
-    name: 'Dagger'
+    name: 'Dagger',
   },
   {
     armor: 0,
     cost: 10,
     damage: 5,
-    name: 'Shortsword'
+    name: 'Shortsword',
   },
   {
     armor: 0,
     cost: 25,
     damage: 6,
-    name: 'Warhammer'
+    name: 'Warhammer',
   },
   {
     armor: 0,
     cost: 40,
     damage: 7,
-    name: 'Longsword'
+    name: 'Longsword',
   },
   {
     armor: 0,
     cost: 74,
     damage: 8,
-    name: 'Greataxe'
-  }
+    name: 'Greataxe',
+  },
 ]
 
 const armors: ShopItem[] = [
@@ -59,31 +59,31 @@ const armors: ShopItem[] = [
     armor: 1,
     cost: 13,
     damage: 0,
-    name: 'Leather'
+    name: 'Leather',
   },
   {
     armor: 2,
     cost: 31,
     damage: 0,
-    name: 'Chainmail'
+    name: 'Chainmail',
   },
   {
     armor: 3,
     cost: 53,
     damage: 0,
-    name: 'Splintmail'
+    name: 'Splintmail',
   },
   {
     armor: 4,
     cost: 75,
     damage: 0,
-    name: 'Bandedmail'
+    name: 'Bandedmail',
   },
   {
     armor: 5,
     cost: 102,
     damage: 0,
-    name: 'Platemail'
+    name: 'Platemail',
   },
 ]
 
@@ -92,44 +92,44 @@ const rings: ShopItem[] = [
     armor: 0,
     cost: 25,
     damage: 1,
-    name: 'Damage +1'
+    name: 'Damage +1',
   },
   {
     armor: 0,
     cost: 50,
     damage: 2,
-    name: 'Damage +2'
+    name: 'Damage +2',
   },
   {
     armor: 0,
     cost: 100,
     damage: 3,
-    name: 'Damage +3'
+    name: 'Damage +3',
   },
   {
     armor: 1,
     cost: 20,
     damage: 0,
-    name: 'Defense +1'
+    name: 'Defense +1',
   },
   {
     armor: 2,
     cost: 40,
     damage: 0,
-    name: 'Defense +2'
+    name: 'Defense +2',
   },
   {
     armor: 3,
     cost: 80,
     damage: 0,
-    name: 'Defense +3'
+    name: 'Defense +3',
   },
 ]
 
 const generateEquipmentCombos = (): Equipment[] => {
   const combosList: Equipment[] = []
 
-  for (let weapon of weapons) {
+  for (const weapon of weapons) {
     // You must have exactly one weapon.
     // You can have 0 or 1 Armors.
     // You can have 0, 1, or 2 Rings.
@@ -137,41 +137,49 @@ const generateEquipmentCombos = (): Equipment[] => {
     combosList.push({
       rings: [],
       totalCost: weapon.cost,
-      weapon
+      weapon,
     })
 
     // Then start looking at armors.
-    for (let armor of armors) {
+    for (const armor of armors) {
       // Just the weapon and the armor
       combosList.push({
         armor,
         rings: [],
         totalCost: weapon.cost + armor.cost,
-        weapon
+        weapon,
       })
 
       // Start looking at rings with the armor equipped
       for (let ring1Index = 0; ring1Index < rings.length; ring1Index++) {
-        const ringsList = [ rings[ring1Index] ]
+        const ringsList = [rings[ring1Index]]
         // Just the weapon, the armor, and one ring
         combosList.push({
           armor,
           rings: ringsList,
-          totalCost: weapon.cost + armor.cost
-            + ringsList.reduce((totalCost, ring) => totalCost + ring.cost, 0),
-          weapon
+          totalCost:
+            weapon.cost +
+            armor.cost +
+            ringsList.reduce((totalCost, ring) => totalCost + ring.cost, 0),
+          weapon,
         })
 
         // Now let's look at adding a second ring
-        for (let ring2Index = ring1Index + 1; ring2Index < rings.length; ring2Index++) {
-          const ringsList = [ rings[ring1Index], rings[ring2Index] ]
+        for (
+          let ring2Index = ring1Index + 1;
+          ring2Index < rings.length;
+          ring2Index++
+        ) {
+          const ringsList = [rings[ring1Index], rings[ring2Index]]
           // Weapon, armor, and two rings
           combosList.push({
             armor,
             rings: ringsList,
-            totalCost: weapon.cost + armor.cost
-              + ringsList.reduce((totalCost, ring) => totalCost + ring.cost, 0),
-            weapon
+            totalCost:
+              weapon.cost +
+              armor.cost +
+              ringsList.reduce((totalCost, ring) => totalCost + ring.cost, 0),
+            weapon,
           })
         }
       }
@@ -179,22 +187,30 @@ const generateEquipmentCombos = (): Equipment[] => {
 
     // Now let's look at rings with no armor equipped
     for (let ring1Index = 0; ring1Index < rings.length; ring1Index++) {
-      const ringsList = [ rings[ring1Index] ]
+      const ringsList = [rings[ring1Index]]
       // Just the weapon and one ring
       combosList.push({
         rings: ringsList,
-        totalCost: weapon.cost + ringsList.reduce((totalCost, ring) => totalCost + ring.cost, 0),
-        weapon
+        totalCost:
+          weapon.cost +
+          ringsList.reduce((totalCost, ring) => totalCost + ring.cost, 0),
+        weapon,
       })
 
       // Now let's look at adding a second ring
-      for (let ring2Index = ring1Index + 1; ring2Index < rings.length; ring2Index++) {
-        const ringsList = [ rings[ring1Index], rings[ring2Index] ]
+      for (
+        let ring2Index = ring1Index + 1;
+        ring2Index < rings.length;
+        ring2Index++
+      ) {
+        const ringsList = [rings[ring1Index], rings[ring2Index]]
         // Weapon and two rings
         combosList.push({
           rings: ringsList,
-          totalCost: weapon.cost + ringsList.reduce((totalCost, ring) => totalCost + ring.cost, 0),
-          weapon
+          totalCost:
+            weapon.cost +
+            ringsList.reduce((totalCost, ring) => totalCost + ring.cost, 0),
+          weapon,
         })
       }
     }
@@ -204,10 +220,13 @@ const generateEquipmentCombos = (): Equipment[] => {
 }
 
 const getFighterStatsFromEquipmentCombo = (equipment: Equipment): Fighter => ({
-  armor: equipment.rings.reduce((total, ring) => total + ring.armor, 0)
-    + (equipment.armor ? equipment.armor.armor : 0),
-  damage: equipment.weapon.damage + equipment.rings.reduce((total, ring) => total + ring.damage, 0),
-  hitPoints: 100
+  armor:
+    equipment.rings.reduce((total, ring) => total + ring.armor, 0) +
+    (equipment.armor ? equipment.armor.armor : 0),
+  damage:
+    equipment.weapon.damage +
+    equipment.rings.reduce((total, ring) => total + ring.damage, 0),
+  hitPoints: 100,
 })
 
 // Returns true if the first player wins or false if the second player wins
@@ -217,9 +236,12 @@ export const runFight = (fighters: Fighter[]): boolean => {
   // But I figure this is more fun for the browser's JS engine ... ;)
   if (fighters.length !== 2) throw new Error('fuck')
   let attackerIndex = 0
-  while (fighters.every(fighter => fighter.hitPoints > 0)) {
+  while (fighters.every((fighter) => fighter.hitPoints > 0)) {
     const defenderIndex = (attackerIndex + 1) % fighters.length
-    const damageDealt = Math.max(1, fighters[attackerIndex].damage - fighters[defenderIndex].armor)
+    const damageDealt = Math.max(
+      1,
+      fighters[attackerIndex].damage - fighters[defenderIndex].armor
+    )
     fighters[defenderIndex].hitPoints -= damageDealt
     attackerIndex = (attackerIndex + 1) % fighters.length
   }
@@ -227,25 +249,27 @@ export const runFight = (fighters: Fighter[]): boolean => {
 }
 
 export const checkAllEquipmentCombos = () => {
-  const equipmentCombosList = generateEquipmentCombos().sort((a, b) => a.totalCost - b.totalCost)
-      let mostExpensiveLoss = 0
-      let leastExpensiveWin = Number.MAX_SAFE_INTEGER
+  const equipmentCombosList = generateEquipmentCombos().sort(
+    (a, b) => a.totalCost - b.totalCost
+  )
+  let mostExpensiveLoss = 0
+  let leastExpensiveWin = Number.MAX_SAFE_INTEGER
 
-      for (let equipmentCombo of equipmentCombosList) {
-        const player = getFighterStatsFromEquipmentCombo(equipmentCombo)
-        const boss: Fighter = { armor: 2, damage: 8, hitPoints: 100 }
-        const result = runFight([player, boss])
-        if (!result) {
-          mostExpensiveLoss = Math.max(mostExpensiveLoss, equipmentCombo.totalCost)
-        } else {
-          leastExpensiveWin = Math.min(leastExpensiveWin, equipmentCombo.totalCost)
-        }
-      }
+  for (const equipmentCombo of equipmentCombosList) {
+    const player = getFighterStatsFromEquipmentCombo(equipmentCombo)
+    const boss: Fighter = { armor: 2, damage: 8, hitPoints: 100 }
+    const result = runFight([player, boss])
+    if (!result) {
+      mostExpensiveLoss = Math.max(mostExpensiveLoss, equipmentCombo.totalCost)
+    } else {
+      leastExpensiveWin = Math.min(leastExpensiveWin, equipmentCombo.totalCost)
+    }
+  }
 
-      return {
-        answer1: leastExpensiveWin,
-        answer2: mostExpensiveLoss
-      }
+  return {
+    answer1: leastExpensiveWin,
+    answer2: mostExpensiveLoss,
+  }
 }
 
 const day21: Omit<DayConfig, 'year'> = {
@@ -254,7 +278,7 @@ const day21: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Check All Equipment Combos',
-      onClick: checkAllEquipmentCombos
+      onClick: checkAllEquipmentCombos,
     },
   ],
   id: 21,

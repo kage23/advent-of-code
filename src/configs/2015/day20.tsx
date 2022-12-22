@@ -1,7 +1,10 @@
 import inputs from '../../inputs/2015/day20'
 import { DayConfig } from '../../routes/Day'
 
-const sumOfAllDivisors = (houseNumber: number, maxHousesPerElf?: number): number => {
+const sumOfAllDivisors = (
+  houseNumber: number,
+  maxHousesPerElf?: number
+): number => {
   if (houseNumber === 1) return 0
 
   let result = 0
@@ -13,14 +16,23 @@ const sumOfAllDivisors = (houseNumber: number, maxHousesPerElf?: number): number
       const otherElf = houseNumber / elfNumber
       // If both divisors are the same, add it once. Otherwise, add them both
       if (elfNumber === otherElf) {
-        if (typeof maxHousesPerElf === 'undefined' || houseNumber <= (elfNumber * maxHousesPerElf)) {
+        if (
+          typeof maxHousesPerElf === 'undefined' ||
+          houseNumber <= elfNumber * maxHousesPerElf
+        ) {
           result += elfNumber
         }
       } else {
-        if (typeof maxHousesPerElf === 'undefined' || houseNumber <= (elfNumber * maxHousesPerElf)) {
+        if (
+          typeof maxHousesPerElf === 'undefined' ||
+          houseNumber <= elfNumber * maxHousesPerElf
+        ) {
           result += elfNumber
         }
-        if (typeof maxHousesPerElf === 'undefined' || houseNumber <= (otherElf * maxHousesPerElf)) {
+        if (
+          typeof maxHousesPerElf === 'undefined' ||
+          houseNumber <= otherElf * maxHousesPerElf
+        ) {
           result += otherElf
         }
       }
@@ -31,8 +43,13 @@ const sumOfAllDivisors = (houseNumber: number, maxHousesPerElf?: number): number
   return result + 1
 }
 
-export const presentsAtHouseNumber = (houseNumber: number, presentsPerElf: number, maxHousesPerElf?: number): number =>
-  (sumOfAllDivisors(houseNumber, maxHousesPerElf) + houseNumber) * presentsPerElf
+export const presentsAtHouseNumber = (
+  houseNumber: number,
+  presentsPerElf: number,
+  maxHousesPerElf?: number
+): number =>
+  (sumOfAllDivisors(houseNumber, maxHousesPerElf) + houseNumber) *
+  presentsPerElf
 
 export const findThePresentHouse = (inputKey: string) => {
   const target = parseInt(inputs.get(inputKey)!)
@@ -45,7 +62,7 @@ export const findThePresentHouse = (inputKey: string) => {
   }
 
   return {
-    answer1: i
+    answer1: i,
   }
 }
 
@@ -60,7 +77,7 @@ export const findThePresentHouseWithLazierElves = (inputKey: string) => {
   }
 
   return {
-    answer2: i
+    answer2: i,
   }
 }
 
@@ -70,12 +87,12 @@ const day20: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Find the Present House',
-      onClick: findThePresentHouse
+      onClick: findThePresentHouse,
     },
     {
       label: 'Find the Present House with Lazier Elves',
-      onClick: findThePresentHouseWithLazierElves
-    }
+      onClick: findThePresentHouseWithLazierElves,
+    },
   ],
   id: 20,
   inputs,

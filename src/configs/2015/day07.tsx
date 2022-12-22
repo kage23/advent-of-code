@@ -1,13 +1,18 @@
 import inputs from '../../inputs/2015/day07'
 import { DayConfig } from '../../routes/Day'
 
-export const constructCircuit = (instructions: string[], part: 1 | 2): Map<string, number> => {
+export const constructCircuit = (
+  instructions: string[],
+  part: 1 | 2
+): Map<string, number> => {
   const circuit: Map<string, number> = new Map()
 
-  const outputs = instructions.map(instruction => instruction.split(' -> ')[1])
+  const outputs = instructions.map(
+    (instruction) => instruction.split(' -> ')[1]
+  )
 
-  while (outputs.some(output => circuit.get(output) === undefined)) {
-    instructions.forEach(instruction => {
+  while (outputs.some((output) => circuit.get(output) === undefined)) {
+    instructions.forEach((instruction) => {
       const [input, output] = instruction.split(' -> ')
       if (circuit.get(output) === undefined) {
         if (output === 'b' && part === 2) {
@@ -68,7 +73,7 @@ export const constructTheCircuit = (inputKey: string, part: 1 | 2) => {
 
   return {
     answer1: part === 1 ? circuit.get('a') : undefined,
-    answer2: part === 2 ? circuit.get('a') : undefined
+    answer2: part === 2 ? circuit.get('a') : undefined,
   }
 }
 
@@ -78,12 +83,12 @@ const day07: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Construct the Circuit',
-      onClick: (inputKey) => constructTheCircuit(inputKey, 1)
+      onClick: (inputKey) => constructTheCircuit(inputKey, 1),
     },
     {
       label: 'Construct Circuit with Override',
-      onClick: (inputKey) => constructTheCircuit(inputKey, 2)
-    }
+      onClick: (inputKey) => constructTheCircuit(inputKey, 2),
+    },
   ],
   id: 7,
   inputs,

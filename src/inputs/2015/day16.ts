@@ -500,7 +500,7 @@ Sue 496: vizslas: 1, trees: 5, akitas: 1
 Sue 497: vizslas: 10, perfumes: 10, pomeranians: 3
 Sue 498: samoyeds: 3, trees: 2, cars: 5
 Sue 499: cats: 6, children: 3, perfumes: 0
-Sue 500: pomeranians: 10, cats: 3, vizslas: 5`
+Sue 500: pomeranians: 10, cats: 3, vizslas: 5`,
   ],
 ])
 

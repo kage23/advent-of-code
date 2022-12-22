@@ -15,24 +15,31 @@ interface RecipeItem {
   quantity: number
 }
 
-const parseInput = (inputKey: string): Ingredient[] => inputs.get(inputKey)!.split('\n').map(ingredLine => {
-  const calories = parseInt(ingredLine.split('calories ')[1])
-  const capacity = parseInt(ingredLine.split('capacity ')[1])
-  const durability = parseInt(ingredLine.split('durability ')[1])
-  const flavor = parseInt(ingredLine.split('flavor ')[1])
-  const name = ingredLine.split(': ')[0]
-  const texture = parseInt(ingredLine.split('texture ')[1])
-  return {
-    calories,
-    capacity,
-    durability,
-    flavor,
-    name,
-    texture
-  }
-})
+const parseInput = (inputKey: string): Ingredient[] =>
+  inputs
+    .get(inputKey)!
+    .split('\n')
+    .map((ingredLine) => {
+      const calories = parseInt(ingredLine.split('calories ')[1])
+      const capacity = parseInt(ingredLine.split('capacity ')[1])
+      const durability = parseInt(ingredLine.split('durability ')[1])
+      const flavor = parseInt(ingredLine.split('flavor ')[1])
+      const name = ingredLine.split(': ')[0]
+      const texture = parseInt(ingredLine.split('texture ')[1])
+      return {
+        calories,
+        capacity,
+        durability,
+        flavor,
+        name,
+        texture,
+      }
+    })
 
-const generateRecipes = (ingredients: Ingredient[], totalSize = 100): RecipeItem[][] => {
+const generateRecipes = (
+  ingredients: Ingredient[],
+  totalSize = 100
+): RecipeItem[][] => {
   if (ingredients.length === 1) {
     return [[{ ingredient: ingredients[0], quantity: totalSize }]]
   }
@@ -42,49 +49,90 @@ const generateRecipes = (ingredients: Ingredient[], totalSize = 100): RecipeItem
   for (let i = 0; i <= totalSize; i++) {
     const firstIngredient = {
       ingredient: ingredients[0],
-      quantity: i
+      quantity: i,
     }
-    const remainingIngredientRecipes = generateRecipes(ingredients.slice(1), totalSize - i)
-    remainingIngredientRecipes.forEach(recipe => recipes.push([firstIngredient, ...recipe]))
+    const remainingIngredientRecipes = generateRecipes(
+      ingredients.slice(1),
+      totalSize - i
+    )
+    remainingIngredientRecipes.forEach((recipe) =>
+      recipes.push([firstIngredient, ...recipe])
+    )
   }
 
   return recipes
 }
 
 const scoreRecipe = (recipe: RecipeItem[]): number => {
-  const capacityScore = Math.max(recipe.reduce((total, recipeItem) => total + (recipeItem.quantity * recipeItem.ingredient.capacity), 0), 0)
-  const durabilityScore = Math.max(recipe.reduce((total, recipeItem) => total + (recipeItem.quantity * recipeItem.ingredient.durability), 0), 0)
-  const flavorScore = Math.max(recipe.reduce((total, recipeItem) => total + (recipeItem.quantity * recipeItem.ingredient.flavor), 0), 0)
-  const textureScore = Math.max(recipe.reduce((total, recipeItem) => total + (recipeItem.quantity * recipeItem.ingredient.texture), 0), 0)
+  const capacityScore = Math.max(
+    recipe.reduce(
+      (total, recipeItem) =>
+        total + recipeItem.quantity * recipeItem.ingredient.capacity,
+      0
+    ),
+    0
+  )
+  const durabilityScore = Math.max(
+    recipe.reduce(
+      (total, recipeItem) =>
+        total + recipeItem.quantity * recipeItem.ingredient.durability,
+      0
+    ),
+    0
+  )
+  const flavorScore = Math.max(
+    recipe.reduce(
+      (total, recipeItem) =>
+        total + recipeItem.quantity * recipeItem.ingredient.flavor,
+      0
+    ),
+    0
+  )
+  const textureScore = Math.max(
+    recipe.reduce(
+      (total, recipeItem) =>
+        total + recipeItem.quantity * recipeItem.ingredient.texture,
+      0
+    ),
+    0
+  )
 
   return capacityScore * durabilityScore * flavorScore * textureScore
 }
 
 const getCalories = (recipe: RecipeItem[]): number =>
-  Math.max(recipe.reduce((total, recipeItem) => total + (recipeItem.quantity * recipeItem.ingredient.calories), 0), 0)
+  Math.max(
+    recipe.reduce(
+      (total, recipeItem) =>
+        total + recipeItem.quantity * recipeItem.ingredient.calories,
+      0
+    ),
+    0
+  )
 
 export const findBestRecipe = (inputKey: string) => {
   const ingredients = parseInput(inputKey)
   const recipes = generateRecipes(ingredients)
   let bestRecipeScore = Number.MIN_SAFE_INTEGER
-  recipes.forEach(recipe => {
+  recipes.forEach((recipe) => {
     bestRecipeScore = Math.max(bestRecipeScore, scoreRecipe(recipe))
   })
   return {
-    answer1: bestRecipeScore
+    answer1: bestRecipeScore,
   }
 }
 
 export const findBestLowCalRecipe = (inputKey: string) => {
   const ingredients = parseInput(inputKey)
-  const recipes = generateRecipes(ingredients)
-    .filter(recipe => getCalories(recipe) === 500)
+  const recipes = generateRecipes(ingredients).filter(
+    (recipe) => getCalories(recipe) === 500
+  )
   let bestRecipeScore = Number.MIN_SAFE_INTEGER
-  recipes.forEach(recipe => {
+  recipes.forEach((recipe) => {
     bestRecipeScore = Math.max(bestRecipeScore, scoreRecipe(recipe))
   })
   return {
-    answer2: bestRecipeScore
+    answer2: bestRecipeScore,
   }
 }
 
@@ -94,12 +142,12 @@ const day15: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Find Best Recipe',
-      onClick: findBestRecipe
+      onClick: findBestRecipe,
     },
     {
       label: 'Find Best Low-Calorie Recipe',
-      onClick: findBestLowCalRecipe
-    }
+      onClick: findBestLowCalRecipe,
+    },
   ],
   id: 15,
   inputs,
