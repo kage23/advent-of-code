@@ -24,6 +24,7 @@ import day21 from './day21'
 import day22 from './day22'
 import day23 from './day23'
 import day24 from './day24'
+import day25 from './day25'
 
 const year2015: YearConfig = {
   cover,
@@ -52,6 +53,7 @@ const year2015: YearConfig = {
     [22, day22],
     [23, day23],
     [24, day24],
+    [25, day25],
   ]),
   extraText: 'Go do it yourself to see the snow and sleigh animated!!',
   id: 2015,

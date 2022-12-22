@@ -25,6 +25,7 @@ import { checkAllEquipmentCombos } from './day21'
 import { findBestFightOnHard, findBestFightPart1 } from './day22'
 import { runCodePart1, runCodePart2 } from './day23'
 import { sortThePackages, sortThePackagesWithTheTrunk } from './day24'
+import { getTheDesignatedCode } from './day25'
 
 describe('2015 Answers', () => {
   it('Day 01', () => {
@@ -152,5 +153,9 @@ describe('2015 Answers', () => {
   it('Day 24', () => {
     console.log(`Day 24, Part 1: ${sortThePackages('REAL').answer1}`)
     console.log(`Day 24, Part 1: ${sortThePackagesWithTheTrunk('REAL').answer2}`)
+  })
+
+  it('Day 25', () => {
+    console.log(`Day 25: ${getTheDesignatedCode('REAL').answer1}`)
   })
 })
