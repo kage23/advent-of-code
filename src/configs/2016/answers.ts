@@ -3,6 +3,7 @@ import {
   findBathroomCodePhonepadNumbers,
   findBathroomCodeRealButtons,
 } from './day02'
+import { evaluateTriangles, evaluateTrianglesVertically } from './day03'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -16,6 +17,13 @@ describe('2016 Answers', () => {
     )
     console.log(
       `Day 02, Part 2: ${findBathroomCodeRealButtons('REAL').answer2}`
+    )
+  })
+
+  it('Day 03', () => {
+    console.log(`Day 03, Part 1: ${evaluateTriangles('REAL').answer1}`)
+    console.log(
+      `Day 03, Part 2: ${evaluateTrianglesVertically('REAL').answer2}`
     )
   })
 })
