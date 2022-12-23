@@ -29,7 +29,8 @@
     "answers": "react-scripts test --testMatch [ \"**/?(*.)+(answers).[jt]s?(x)\" ]",
     "eject": "react-scripts eject",
     "eslint": "eslint src/**",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "precommit": "yarn run prettier"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +56,7 @@
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-react": "^7.31.11",
+    "husky": "^8.0.2",
     "prettier": "2.8.1"
   }
 }
