@@ -4,6 +4,7 @@ import {
   findBathroomCodeRealButtons,
 } from './day02'
 import { evaluateTriangles, evaluateTrianglesVertically } from './day03'
+import { printDecryptedRoomNames, sumRealRooms } from './day04'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -24,6 +25,15 @@ describe('2016 Answers', () => {
     console.log(`Day 03, Part 1: ${evaluateTriangles('REAL').answer1}`)
     console.log(
       `Day 03, Part 2: ${evaluateTrianglesVertically('REAL').answer2}`
+    )
+  })
+
+  it('Day 04', () => {
+    console.log(`Day 04, Part 1: ${sumRealRooms('REAL').answer1}`)
+    console.log(
+      `Day 04, Part 2: ${JSON.stringify(
+        printDecryptedRoomNames('REAL').specialRender
+      )}`
     )
   })
 })

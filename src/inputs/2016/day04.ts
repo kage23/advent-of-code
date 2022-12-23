@@ -1,14 +1,15 @@
-const INPUT: { [key:string]: string } = {
-DEMO_1:
-`aaaaa-bbb-z-y-x-123[abxyz]
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO_1_1',
+    `aaaaa-bbb-z-y-x-123[abxyz]
 a-b-c-d-e-f-g-h-987[abcde]
 not-a-real-room-404[oarel]
 totally-real-room-200[decoy]`,
-
-DEMO_2: 'qzmt-zixmtkozy-ivhz-343[zimth]',
-
-REAL:
-`nzydfxpc-rclop-qwzhpc-qtylyntyr-769[oshgk]
+  ],
+  ['DEMO_2_1', 'qzmt-zixmtkozy-ivhz-343[zimth]'],
+  [
+    'REAL',
+    `nzydfxpc-rclop-qwzhpc-qtylyntyr-769[oshgk]
 qzlozfhmf-bzmcx-bnzshmf-zbpthrhshnm-339[zmxdi]
 xtwtelcj-rclop-upwwjmply-zapcletzyd-743[itbds]
 mrxivrexmsrep-fewoix-ywiv-xiwxmrk-308[kzypw]
@@ -1073,7 +1074,8 @@ oknkvcta-itcfg-uecxgpigt-jwpv-fgukip-856[gcikp]
 shoewudys-rkddo-qdqboiyi-530[doiqs]
 mrxivrexmsrep-gerhc-pefsvexsvc-828[ubzia]
 fydelmwp-mfyyj-hzcvdsza-769[anbml]
-rwcnawjcrxwju-ljwmh-bqryyrwp-277[nxatm]`
-}
+rwcnawjcrxwju-ljwmh-bqryyrwp-277[nxatm]`,
+  ],
+])
 
-export default INPUT
+export default inputs
