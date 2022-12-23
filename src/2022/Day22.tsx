@@ -203,7 +203,190 @@ const WARP_ZONES: {
       },
     },
   ],
-  REAL: [],
+  REAL: [
+    // A = Top left - edge going up
+    {
+      startRange: {
+        row: [0, 0],
+        col: [50, 99],
+        dir: 3
+      },
+      endRange: {
+        row: [150, 199],
+        col: [0, 0],
+        dir: 0
+      }
+    },
+    // A = Bottom left | edge going left
+    {
+      startRange: {
+        row: [150, 199],
+        col: [0, 0],
+        dir: 2
+      },
+      endRange: {
+        row: [0, 0],
+        col: [50, 99],
+        dir: 1
+      }
+    },
+    // B = Top right - edge going up
+    {
+      startRange: {
+        row: [0, 0],
+        col: [100, 149],
+        dir: 3
+      },
+      endRange: {
+        row: [199, 199],
+        col: [0, 49],
+        dir: 3
+      }
+    },
+    // B = Bottom - edge going down
+    {
+      startRange: {
+        row: [199, 199],
+        col: [0, 49],
+        dir: 1
+      },
+      endRange: {
+        row: [0, 0],
+        col: [100, 149],
+        dir: 1
+      }
+    },
+    // C = Top right | edge going right
+    {
+      startRange: {
+        row: [0, 49],
+        col: [149, 149],
+        dir: 0
+      },
+      endRange: {
+        row: [149, 100],
+        col: [99, 99],
+        dir: 2
+      }
+    },
+    // C = Lower mid | edge going right
+    {
+      startRange: {
+        row: [100, 149],
+        col: [99, 99],
+        dir: 0
+      },
+      endRange: {
+        row: [49, 0],
+        col: [149, 149],
+        dir: 2
+      }
+    },
+    // D = Top lower - edge going down
+    {
+      startRange: {
+        row: [49, 49],
+        col: [100, 149],
+        dir: 1
+      },
+      endRange: {
+        row: [50, 99],
+        col: [99, 99],
+        dir: 2
+      }
+    },
+    // D = Upper mid | edge going right
+    {
+      startRange: {
+        row: [50, 99],
+        col: [99, 99],
+        dir: 0
+      },
+      endRange: {
+        row: [49, 49],
+        col: [100, 149],
+        dir: 3
+      }
+    },
+    // E = Lower - edge going down
+    {
+      startRange: {
+        row: [149, 149],
+        col: [50, 99],
+        dir: 1
+      },
+      endRange: {
+        row: [150, 199],
+        col: [49, 49],
+        dir: 2
+      }
+    },
+    // E = Bottom right | edge going right
+    {
+      startRange: {
+        row: [150, 199],
+        col: [49, 49],
+        dir: 0
+      },
+      endRange: {
+        row: [149, 149],
+        col: [50, 99],
+        dir: 3
+      }
+    },
+    // F = Upper left | edge going left
+    {
+      startRange: {
+        row: [0, 49],
+        col: [50, 50],
+        dir: 2
+      },
+      endRange: {
+        row: [149, 100],
+        col: [0, 0],
+        dir: 0
+      }
+    },
+    // F = Mid lower | edge going left
+    {
+      startRange: {
+        row: [100, 149],
+        col: [0, 0],
+        dir: 2
+      },
+      endRange: {
+        row: [49, 0],
+        col: [50, 50],
+        dir: 0
+      }
+    },
+    // G = Upper mid | edge going left
+    {
+      startRange: {
+        row: [50, 99],
+        col: [50, 50],
+        dir: 2
+      },
+      endRange: {
+        row: [100, 100],
+        col: [0, 49],
+        dir: 1
+      }
+    },
+    // G = Mid left - edge going up
+    {
+      startRange: {
+        row: [100, 100],
+        col: [0, 49],
+        dir: 3
+      },
+      endRange: {
+        row: [50, 99],
+        col: [50, 50],
+        dir: 0
+      }
+    }
+  ],
 }
 
 const cubeWrap = (
@@ -373,11 +556,10 @@ const takeStep = (
         }
         // Left
         case 2: {
-          const nextPosition = map[position[0]].charAt(
-            (position[1] - 1 + map[position[0]].length) %
-              map[position[0]].length
-          )
-          switch (nextPosition) {
+          let nextCol = position[1] - 1
+          if (!isCube) nextCol = (nextCol + map[position[0]].length) % map[position[0]].length
+          const nextSpot = nextCol >= 0 ? map[position[0]].charAt(nextCol) : ''
+          switch (nextSpot) {
             case '.': {
               // Open space, we can move there
               position[1] =
@@ -430,8 +612,9 @@ const takeStep = (
         }
         // Up
         case 3: {
-          let nextRow = (position[0] - 1 + map.length) % map.length
-          let nextPosition = map[nextRow].charAt(position[1])
+          let nextRow = position[0] - 1
+          if (!isCube) nextRow = (nextRow + map.length) % map.length
+          let nextPosition = map[nextRow] !== undefined ? map[nextRow].charAt(position[1]) : ''
           switch (nextPosition) {
             case '.': {
               // Open space, we can move there
@@ -548,3 +731,47 @@ const config: IDayConfig = {
 }
 
 export default config
+
+/**
+ * Notes:
+
+DEMO
+
+        AAAA
+        B#.G
+        B..G
+        B..G
+AAAABBBB...F
+C.......#..F
+C.#....#...F
+CDDDEEEE..#F
+        E..#FFFF
+        E....#.G
+        E#.....G
+        DDDDCCCG
+
+
+REAL
+
+     AAAAABBBBB
+     F........C
+     F........C
+     F........C
+     F....DDDDC
+     G...D
+     G...D
+     G...D
+     G...D
+     G...D
+FGGGG....C
+F........C
+F........C
+F........C
+F....EEEEC
+A...E
+A...E
+A...E
+A...E
+ABBBB
+
+ */
