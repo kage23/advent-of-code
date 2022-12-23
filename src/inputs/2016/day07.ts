@@ -1,18 +1,21 @@
-const INPUT: { [key:string]: string } = {
-DEMO_1:
-`abba[mnop]qrst
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO_1_1',
+    `abba[mnop]qrst
 abcd[bddb]xyyx
 aaaa[qwer]tyui
 ioxxoj[asdfgh]zxcvbn`,
-
-DEMO_2:
-`aba[bab]xyz
-xyx[xyx]xyx
-aaa[kek]eke
-zazbz[bzb]cdb`,
-
-REAL:
-`dnwtsgywerfamfv[gwrhdujbiowtcirq]bjbhmuxdcasenlctwgh
+  ],
+  [
+    'DEMO_2_1',
+    `aba[bab]xyz
+  xyx[xyx]xyx
+  aaa[kek]eke
+  zazbz[bzb]cdb`,
+  ],
+  [
+    'REAL',
+    `dnwtsgywerfamfv[gwrhdujbiowtcirq]bjbhmuxdcasenlctwgh
 rnqfzoisbqxbdlkgfh[lwlybvcsiupwnsyiljz]kmbgyaptjcsvwcltrdx[ntrpwgkrfeljpye]jxjdlgtntpljxaojufe
 jgltdnjfjsbrffzwbv[nclpjchuobdjfrpavcq]sbzanvbimpahadkk[yyoasqmddrzunoyyk]knfdltzlirrbypa
 vvrchszuidkhtwx[ebqaetowcthddea]cxgxbffcoudllbtxsa
@@ -2011,7 +2014,8 @@ zwosebsoogknldkh[mkcucbphbvnaqyxjope]aibznttouadentsy[xfucuvnlnchuawcapcq]jqherk
 xondkuknycfwyenkceu[ugjlxueqtcyhyhni]bbofydvkhtjgxxnyrc[gpnwoarvjltzyhhe]qebolgjnwnstokco
 cygilweroxmbmbmx[hopxissehjarmezawol]exywzaffjuhehvmbm
 nbndomwcaauiluzbg[qjxqxhccqsvtkwm]oazwbouchccdhtrbnbv[vetwfilwgnxxxrhxar]mrbcnwlpciwpizkxj
-xuabbxdwkutpsogcfea[tgetfqpgstsxrokcemk]cbftstsldgcqbxf[vwjejomptmifhdulc]ejeroshnazbwjjzofbe`
-}
+xuabbxdwkutpsogcfea[tgetfqpgstsxrokcemk]cbftstsldgcqbxf[vwjejomptmifhdulc]ejeroshnazbwjjzofbe`,
+  ],
+])
 
-export default INPUT
+export default inputs

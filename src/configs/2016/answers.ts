@@ -7,6 +7,7 @@ import { evaluateTriangles, evaluateTrianglesVertically } from './day03'
 import { printDecryptedRoomNames, sumRealRooms } from './day04'
 import { findBetterPassword, findPassword } from './day05'
 import { findHighestCountMessage, findLowestCountMessage } from './day06'
+import { checkIPsForSSLSupport, checkIPsForTLSSupport } from './day07'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -47,5 +48,10 @@ describe('2016 Answers', () => {
   it('Day 06', () => {
     console.log(`Day 06, Part 1: ${findHighestCountMessage('REAL').answer1}`)
     console.log(`Day 06, Part 2: ${findLowestCountMessage('REAL').answer2}`)
+  })
+
+  it('Day 07', () => {
+    console.log(`Day 07, Part 1: ${checkIPsForTLSSupport('REAL').answer1}`)
+    console.log(`Day 07, Part 2: ${checkIPsForSSLSupport('REAL').answer2}`)
   })
 })
