@@ -2,11 +2,7 @@ import inputs from '../../inputs/2016/day02'
 import { DayConfig } from '../../routes/Day'
 
 export const findBathroomCodePhonepadNumbers = (inputKey: string) => {
-  const DOOR_BUTTONS = [
-    '123',
-    '456',
-    '789'
-  ]
+  const DOOR_BUTTONS = ['123', '456', '789']
 
   const inputLines = inputs.get(inputKey)!.split('\n')
   const currentPosition = [1, 1]
@@ -39,24 +35,18 @@ export const findBathroomCodePhonepadNumbers = (inputKey: string) => {
   }
 
   return {
-    answer1: code
+    answer1: code,
   }
 }
 
 export const findBathroomCodeRealButtons = (inputKey: string) => {
-  const DOOR_BUTTONS = [
-    '  1  ',
-    ' 234 ',
-    '56789',
-    ' ABC ',
-    '  D  '
-  ]
+  const DOOR_BUTTONS = ['  1  ', ' 234 ', '56789', ' ABC ', '  D  ']
   const buttonRowLimits = [
     [2, 2],
     [1, 3],
     [0, 4],
     [1, 3],
-    [2, 2]
+    [2, 2],
   ]
 
   const inputLines = inputs.get(inputKey)!.split('\n')
@@ -68,8 +58,9 @@ export const findBathroomCodeRealButtons = (inputKey: string) => {
       switch (line.charAt(i)) {
         case 'U':
           if (
-            currentPosition[1] - 1 >= 0
-            && DOOR_BUTTONS[currentPosition[1] - 1].charAt(currentPosition[0]) !== ' '
+            currentPosition[1] - 1 >= 0 &&
+            DOOR_BUTTONS[currentPosition[1] - 1].charAt(currentPosition[0]) !==
+              ' '
           ) {
             currentPosition[1] = Math.max(0, currentPosition[1] - 1)
           }
@@ -77,19 +68,26 @@ export const findBathroomCodeRealButtons = (inputKey: string) => {
 
         case 'D':
           if (
-            currentPosition[1] + 1 < DOOR_BUTTONS.length
-            && DOOR_BUTTONS[currentPosition[1] + 1].charAt(currentPosition[0]) !== ' '
+            currentPosition[1] + 1 < DOOR_BUTTONS.length &&
+            DOOR_BUTTONS[currentPosition[1] + 1].charAt(currentPosition[0]) !==
+              ' '
           ) {
             currentPosition[1] += 1
           }
           break
 
         case 'L':
-          currentPosition[0] = Math.max(buttonRowLimits[currentPosition[1]][0], currentPosition[0] - 1)
+          currentPosition[0] = Math.max(
+            buttonRowLimits[currentPosition[1]][0],
+            currentPosition[0] - 1
+          )
           break
 
         case 'R':
-          currentPosition[0] = Math.min(buttonRowLimits[currentPosition[1]][1], currentPosition[0] + 1)
+          currentPosition[0] = Math.min(
+            buttonRowLimits[currentPosition[1]][1],
+            currentPosition[0] + 1
+          )
           break
 
         default:
@@ -100,7 +98,7 @@ export const findBathroomCodeRealButtons = (inputKey: string) => {
   }
 
   return {
-    answer2: code
+    answer2: code,
   }
 }
 

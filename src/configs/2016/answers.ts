@@ -1,5 +1,8 @@
 import { findEndOfPath, findFirstRepeatLocation } from './day01'
-import { findBathroomCodePhonepadNumbers, findBathroomCodeRealButtons } from './day02'
+import {
+  findBathroomCodePhonepadNumbers,
+  findBathroomCodeRealButtons,
+} from './day02'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -8,7 +11,11 @@ describe('2016 Answers', () => {
   })
 
   it('Day 02', () => {
-    console.log(`Day 02, Part 1: ${findBathroomCodePhonepadNumbers('REAL').answer1}`)
-    console.log(`Day 02, Part 2: ${findBathroomCodeRealButtons('REAL').answer2}`)
+    console.log(
+      `Day 02, Part 1: ${findBathroomCodePhonepadNumbers('REAL').answer1}`
+    )
+    console.log(
+      `Day 02, Part 2: ${findBathroomCodeRealButtons('REAL').answer2}`
+    )
   })
 })

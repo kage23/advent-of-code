@@ -1,10 +1,15 @@
-import { findBathroomCodePhonepadNumbers, findBathroomCodeRealButtons } from './day02'
+import {
+  findBathroomCodePhonepadNumbers,
+  findBathroomCodeRealButtons,
+} from './day02'
 
 describe('2016 Day 02', () => {
   describe('Part 1', () => {
     describe('findBathroomCodePhonepadNumbers', () => {
       it('should determine the bathroom code on phonepad numbers', () => {
-        expect(findBathroomCodePhonepadNumbers('DEMO_1').answer1).toEqual('1985')
+        expect(findBathroomCodePhonepadNumbers('DEMO_1').answer1).toEqual(
+          '1985'
+        )
       })
     })
   })
