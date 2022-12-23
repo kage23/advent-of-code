@@ -24,7 +24,7 @@ import Day19__2022__Config from './Day19'
 import Day20__2022__Config from './Day20'
 import Day21__2022__Config from './Day21'
 import Day22__2022__Config from './Day22'
-// import Day23__2022__Config from './Day23'
+import Day23__2022__Config from './Day23'
 // import Day24__2022__Config from './Day24'
 // import Day25__2022__Config from './Day25'
 
@@ -38,7 +38,7 @@ const CONFIG_2022: IYearConfig = {
       river! Going down the river! Climbing the hill! Fell into an underground
       cave behind a waterfall! Going through underground tunnels! We found some
       elephants in the volcano! Oh no, TETRIS-y rocks! Dodging lava! Let's get
-      some geodes! Looking for the star fruit grove!
+      some geodes! Looking for the star fruit grove! Planting star fruit seeds!
     </p>
   ),
   days: [
@@ -64,7 +64,7 @@ const CONFIG_2022: IYearConfig = {
     Day20__2022__Config,
     Day21__2022__Config,
     Day22__2022__Config,
-    // Day23__2022__Config,
+    Day23__2022__Config,
     // Day24__2022__Config,
     // Day25__2022__Config
   ],
