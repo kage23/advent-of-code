@@ -1,71 +1,70 @@
 import { defaultRenderDay, IButton, IDayConfig } from '../Config'
 
 import INPUT from '../Inputs/2022/Day24'
-import AStar from '../utils/AStar'
-import { manhattanDistance } from '../utils/Various'
 
 type Direction = '^' | '>' | '<' | 'v'
 type Space = Direction | '.' | '#'
 
 const advanceBlizzards = (
   blizzards: string[],
-  map: string[]
-): { blizzards: string[]; map: string[] } => {
-  for (let b = 0; b < blizzards.length; b++) {
-    const blizzard = blizzards[b]
+  rowCount: number,
+  colCount: number
+): string[] =>
+  blizzards.map((blizzard) => {
     const [row, col, dir] = blizzard.split(',')
     let nextRow = Number(row)
     let nextCol = Number(col)
     switch (dir as Direction) {
       case '<': {
         nextCol -= 1
-        if (nextCol === 0) nextCol = map[0].length - 2
-        blizzards[b] = `${row},${nextCol},${dir}`
-        break
+        if (nextCol === 0) nextCol = colCount
+        return `${row},${nextCol},${dir}`
       }
       case '>': {
         nextCol += 1
-        if (nextCol === map[0].length - 1) nextCol = 1
-        blizzards[b] = `${row},${nextCol},${dir}`
-        break
+        if (nextCol > colCount) nextCol = 1
+        return `${row},${nextCol},${dir}`
       }
       case '^': {
         nextRow -= 1
-        if (nextRow === 0) nextRow = map.length - 2
-        blizzards[b] = `${nextRow},${col},${dir}`
-        break
+        if (nextRow === 0) nextRow = rowCount
+        return `${nextRow},${col},${dir}`
       }
       case 'v': {
         nextRow += 1
-        if (nextRow === map.length - 1) nextRow = 1
-        blizzards[b] = `${nextRow},${col},${dir}`
-        break
+        if (nextRow > rowCount) nextRow = 1
+        return `${nextRow},${col},${dir}`
       }
     }
-  }
-  const nextMap = Array(map.length - 2).fill(
-    `${'#'.padEnd(map[0].length - 1, '.')}#`
-  )
-  nextMap.unshift(map[0])
-  nextMap.push(map[map.length - 1])
-  blizzards.forEach((blizzard) => {
-    const [row, col, dir] = blizzard.split(',')
-    nextMap[Number(row)] = `${nextMap[Number(row)].slice(
-      0,
-      Number(col)
-    )}${dir}${nextMap[Number(row)].slice(Number(col) + 1)}`
+    return ''
   })
-  return { blizzards, map: nextMap }
+
+const generateBlizzardLists = (
+  rowCount: number,
+  colCount: number,
+  blizzards: string[]
+) => {
+  const blizzardsAtTime: Map<number, string[]> = new Map([[0, blizzards]])
+  let nextBlizzards = [...blizzards]
+  for (let t = 1; t < rowCount * colCount; t++) {
+    nextBlizzards = advanceBlizzards(nextBlizzards, rowCount, colCount)
+    blizzardsAtTime.set(t, nextBlizzards)
+  }
+  return blizzardsAtTime
 }
 
 const BUTTONS: IButton[] = [
   {
     label: 'Avoid the Blizzards',
     onClick: (inputKey: string) => {
+      const timerLabel = 'Avoid the blizzards'
+      console.time(timerLabel)
+
       const map = INPUT[inputKey].split('\n')
       const rowMax = map.length - 1
       const colMax = map[0].length - 1
       let blizzards: string[] = []
+
       for (let row = 0; row <= rowMax; row++) {
         for (let col = 0; col <= colMax; col++) {
           const char = map[row].charAt(col) as Space
@@ -75,56 +74,59 @@ const BUTTONS: IButton[] = [
         }
       }
 
-      const startKey = `0,${map[0].indexOf('.')};${map.join(
-        '\n'
-      )};${blizzards.join('B')}`
+      const timerLabel2 = 'Precalculate the blizzards'
+      console.time(timerLabel2)
+      const blizzardsAtTime = generateBlizzardLists(
+        rowMax - 1,
+        colMax - 1,
+        blizzards
+      )
+      console.timeEnd(timerLabel2)
       const endKey = `${map.length - 1},${map[map.length - 1].indexOf('.')}`
-      const h = (from: string, to: string) => {
-        const fromCoords = from
-          .split(';')[0]
-          .split(',')
-          .map((n) => Number(n))
-        const toCoords = to
-          .split(',')
-          .slice(0, 2)
-          .map((n) => Number(n))
-        return manhattanDistance(fromCoords, toCoords)
-      }
-      const getNeighbors = (current: string) => {
-        const [coords, currentMap, blizzardList] = current.split(';')
-        const [row, col] = coords.split(',').map((n) => Number(n))
-        const next = advanceBlizzards(
-          blizzardList.split('B'),
-          currentMap.split('\n')
+
+      let time = 0
+      const possibleSquaresAtTime = [[`0,${map[0].indexOf('.')}`]]
+      while (
+        !possibleSquaresAtTime[possibleSquaresAtTime.length - 1].includes(
+          endKey
         )
-        const possibleNeighbors = [
-          [row - 1, col],
-          [row + 1, col],
-          [row, col - 1],
-          [row, col + 1],
-          [row, col],
-        ]
-        return possibleNeighbors
-          .filter(
-            ([neighborRow, neighborCol]) =>
-              `${neighborRow},${neighborCol}` === endKey ||
-              (neighborRow >= 0 &&
-                neighborRow < rowMax &&
-                neighborCol >= 0 &&
-                neighborCol < colMax &&
-                (next.map[neighborRow].charAt(neighborCol) as Space) === '.')
-          )
-          .map(([neighborRow, neighborCol]) =>
-            `${neighborRow},${neighborCol}` === endKey
-              ? endKey
-              : `${neighborRow},${neighborCol};${next.map.join(
-                  '\n'
-                )};${next.blizzards.join('B')}`
-          )
+      ) {
+        time += 1
+        const currentBlizzards = blizzardsAtTime
+          .get(time % blizzardsAtTime.size)!
+          .map((b) => b.split(',').slice(0, 2).join(','))
+        const possibleSquares: string[] = []
+        possibleSquaresAtTime[possibleSquaresAtTime.length - 1].forEach(
+          (prevSquare) => {
+            const [row, col] = prevSquare.split(',').map((n) => Number(n))
+            const neighbors = [
+              [row - 1, col],
+              [row + 1, col],
+              [row, col - 1],
+              [row, col + 1],
+              [row, col],
+            ].filter(
+              ([row, col]) =>
+                (row === 0 && col === 1) ||
+                (row > 0 && row <= rowMax && col > 0 && col <= colMax)
+            )
+            neighbors.forEach((neighbor) => {
+              if (
+                !currentBlizzards.includes(neighbor.join(',')) &&
+                !possibleSquares.includes(neighbor.join(','))
+              )
+                possibleSquares.push(neighbor.join(','))
+            })
+            possibleSquaresAtTime.push(possibleSquares)
+          }
+        )
       }
-      return {
-        answer1: AStar(startKey, endKey, () => 1, h, getNeighbors).toString(),
-      }
+
+      console.timeEnd(timerLabel)
+
+      // 181 is too low
+
+      return { answer1: time.toString() }
     },
   },
 ]
