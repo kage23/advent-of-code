@@ -10,6 +10,7 @@ import { findHighestCountMessage, findLowestCountMessage } from './day06'
 import { checkIPsForSSLSupport, checkIPsForTLSSupport } from './day07'
 import { swipeCard } from './day08'
 import { decompressSequence, getDecompressedLength } from './day09'
+import { runBots } from './day10'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -66,5 +67,11 @@ describe('2016 Answers', () => {
   it('Day 09', () => {
     console.log(`Day 09, Part 1: ${decompressSequence('REAL').answer1}`)
     console.log(`Day 09, Part 2: ${getDecompressedLength('REAL').answer2}`)
+  })
+
+  it('Day 10', () => {
+    const result = runBots('REAL')
+    console.log(`Day 10, Part 1: ${result.answer1}`)
+    console.log(`Day 10, Part 2: ${result.answer2}`)
   })
 })

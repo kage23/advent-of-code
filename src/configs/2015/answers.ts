@@ -149,7 +149,8 @@ describe('2015 Answers', () => {
 
   it('Day 21', () => {
     const result = checkAllEquipmentCombos()
-    console.log(`Day 21, Parts 1 & 2: ${result.answer1}, ${result.answer2}`)
+    console.log(`Day 21, Part 1: ${result.answer1}`)
+    console.log(`Day 21, Part 2: ${result.answer2}`)
   })
 
   it('Day 22', () => {
@@ -159,13 +160,13 @@ describe('2015 Answers', () => {
 
   it('Day 23', () => {
     console.log(`Day 23, Part 1: ${runCodePart1('REAL').answer1}`)
-    console.log(`Day 23, Part 1: ${runCodePart2('REAL').answer2}`)
+    console.log(`Day 23, Part 2: ${runCodePart2('REAL').answer2}`)
   })
 
   it('Day 24', () => {
     console.log(`Day 24, Part 1: ${sortThePackages('REAL').answer1}`)
     console.log(
-      `Day 24, Part 1: ${sortThePackagesWithTheTrunk('REAL').answer2}`
+      `Day 24, Part 2: ${sortThePackagesWithTheTrunk('REAL').answer2}`
     )
   })
 

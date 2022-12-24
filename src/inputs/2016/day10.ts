@@ -1,14 +1,16 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`value 5 goes to bot 2
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO_1',
+    `value 5 goes to bot 2
 bot 2 gives low to bot 1 and high to bot 0
 value 3 goes to bot 1
 bot 1 gives low to output 1 and high to bot 0
 bot 0 gives low to output 2 and high to output 0
 value 2 goes to bot 2`,
-
-REAL:
-`bot 75 gives low to bot 145 and high to bot 95
+  ],
+  [
+    'REAL',
+    `bot 75 gives low to bot 145 and high to bot 95
 bot 116 gives low to bot 157 and high to bot 197
 bot 185 gives low to bot 57 and high to bot 139
 bot 202 gives low to bot 105 and high to bot 209
@@ -238,7 +240,8 @@ bot 15 gives low to bot 200 and high to bot 193
 bot 96 gives low to output 10 and high to bot 66
 value 73 goes to bot 165
 bot 151 gives low to bot 137 and high to bot 123
-bot 122 gives low to bot 9 and high to bot 201`
-}
+bot 122 gives low to bot 9 and high to bot 201`,
+  ],
+])
 
-export default INPUT
+export default inputs
