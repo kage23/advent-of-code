@@ -1,6 +1,6 @@
 import { checkIPsForSSLSupport, checkIPsForTLSSupport } from './day07'
 
-describe('2016 Day 06', () => {
+describe('2016 Day 07', () => {
   describe('Part 1', () => {
     describe('checkIPsForTLSSupport', () => {
       it('should determine how many IPs support TLS', () => {

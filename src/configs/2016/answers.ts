@@ -8,6 +8,7 @@ import { printDecryptedRoomNames, sumRealRooms } from './day04'
 import { findBetterPassword, findPassword } from './day05'
 import { findHighestCountMessage, findLowestCountMessage } from './day06'
 import { checkIPsForSSLSupport, checkIPsForTLSSupport } from './day07'
+import { swipeCard } from './day08'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -53,5 +54,11 @@ describe('2016 Answers', () => {
   it('Day 07', () => {
     console.log(`Day 07, Part 1: ${checkIPsForTLSSupport('REAL').answer1}`)
     console.log(`Day 07, Part 2: ${checkIPsForSSLSupport('REAL').answer2}`)
+  })
+
+  it('Day 08', () => {
+    const result = swipeCard('REAL')
+    console.log(`Day 08, Part 1: ${result.answer1}`)
+    console.log(`Day 08, Part 2: ${JSON.stringify(result.specialRender)}`)
   })
 })

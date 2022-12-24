@@ -1,12 +1,14 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`rect 3x2
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO_1',
+    `rect 3x2
 rotate column x=1 by 1
 rotate row y=0 by 4
 rotate column x=1 by 1`,
-
-REAL:
-`rect 1x1
+  ],
+  [
+    'REAL',
+    `rect 1x1
 rotate row y=0 by 5
 rect 1x1
 rotate row y=0 by 6
@@ -150,7 +152,8 @@ rotate column x=12 by 5
 rotate column x=11 by 5
 rotate column x=3 by 5
 rotate column x=2 by 5
-rotate column x=1 by 5`
-}
+rotate column x=1 by 5`,
+  ],
+])
 
-export default INPUT
+export default inputs
