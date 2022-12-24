@@ -9,6 +9,7 @@ import { findBetterPassword, findPassword } from './day05'
 import { findHighestCountMessage, findLowestCountMessage } from './day06'
 import { checkIPsForSSLSupport, checkIPsForTLSSupport } from './day07'
 import { swipeCard } from './day08'
+import { decompressSequence, getDecompressedLength } from './day09'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -60,5 +61,10 @@ describe('2016 Answers', () => {
     const result = swipeCard('REAL')
     console.log(`Day 08, Part 1: ${result.answer1}`)
     console.log(`Day 08, Part 2: ${JSON.stringify(result.specialRender)}`)
+  })
+
+  it('Day 09', () => {
+    console.log(`Day 09, Part 1: ${decompressSequence('REAL').answer1}`)
+    console.log(`Day 09, Part 2: ${getDecompressedLength('REAL').answer2}`)
   })
 })
