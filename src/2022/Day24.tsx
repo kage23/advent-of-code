@@ -107,8 +107,9 @@ const BUTTONS: IButton[] = [
               [row, col],
             ].filter(
               ([row, col]) =>
+                `${row},${col}` === endKey ||
                 (row === 0 && col === 1) ||
-                (row > 0 && row <= rowMax && col > 0 && col <= colMax)
+                (row > 0 && row <= rowMax - 1 && col > 0 && col <= colMax - 1)
             )
             neighbors.forEach((neighbor) => {
               if (
