@@ -11,6 +11,7 @@ import { checkIPsForSSLSupport, checkIPsForTLSSupport } from './day07'
 import { swipeCard } from './day08'
 import { decompressSequence, getDecompressedLength } from './day09'
 import { runBots } from './day10'
+import { takeEverythingToFourthFloor, takeObjectsToFourthFloor } from './day11'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -73,5 +74,12 @@ describe('2016 Answers', () => {
     const result = runBots('REAL')
     console.log(`Day 10, Part 1: ${result.answer1}`)
     console.log(`Day 10, Part 2: ${result.answer2}`)
+  })
+
+  it('Day 11', () => {
+    console.log(`Day 11, Part 1: ${takeObjectsToFourthFloor('REAL').answer1}`)
+    console.log(
+      `Day 11, Part 2: ${takeEverythingToFourthFloor('REAL').answer2}`
+    )
   })
 })
