@@ -12,7 +12,7 @@ import day09 from './day09'
 import day10 from './day10'
 import day11 from './day11'
 import day12 from './day12'
-// import day13 from './day13'
+import day13 from './day13'
 // import day14 from './day14'
 // import day15 from './day15'
 // import day16 from './day16'
@@ -41,7 +41,7 @@ const year2016: YearConfig = {
     [10, day10],
     [11, day11],
     [12, day12],
-    // [13, day13],
+    [13, day13],
     // [14, day14],
     // [15, day15],
     // [16, day16],

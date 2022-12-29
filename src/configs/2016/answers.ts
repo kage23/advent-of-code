@@ -13,6 +13,7 @@ import { decompressSequence, getDecompressedLength } from './day09'
 import { runBots } from './day10'
 import { takeEverythingToFourthFloor, takeObjectsToFourthFloor } from './day11'
 import { runAssembunnyCode, runAssembunnyCodeWithIgnitionSet } from './day12'
+import { countLocations, findShortestPath } from './day13'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -89,5 +90,10 @@ describe('2016 Answers', () => {
     console.log(
       `Day 12, Part 2: ${runAssembunnyCodeWithIgnitionSet('REAL').answer2}`
     )
+  })
+
+  it('Day 13', () => {
+    console.log(`Day 13, Part 1: ${findShortestPath('REAL').answer1}`)
+    console.log(`Day 13, Part 2: ${countLocations('REAL').answer2}`)
   })
 })
