@@ -12,6 +12,7 @@ import { swipeCard } from './day08'
 import { decompressSequence, getDecompressedLength } from './day09'
 import { runBots } from './day10'
 import { takeEverythingToFourthFloor, takeObjectsToFourthFloor } from './day11'
+import { runAssembunnyCode, runAssembunnyCodeWithIgnitionSet } from './day12'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -80,6 +81,13 @@ describe('2016 Answers', () => {
     console.log(`Day 11, Part 1: ${takeObjectsToFourthFloor('REAL').answer1}`)
     console.log(
       `Day 11, Part 2: ${takeEverythingToFourthFloor('REAL').answer2}`
+    )
+  })
+
+  it('Day 12', () => {
+    console.log(`Day 12, Part 1: ${runAssembunnyCode('REAL').answer1}`)
+    console.log(
+      `Day 12, Part 2: ${runAssembunnyCodeWithIgnitionSet('REAL').answer2}`
     )
   })
 })
