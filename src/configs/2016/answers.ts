@@ -15,6 +15,7 @@ import { takeEverythingToFourthFloor, takeObjectsToFourthFloor } from './day11'
 import { runAssembunnyCode, runAssembunnyCodeWithIgnitionSet } from './day12'
 import { countLocations, findShortestPath } from './day13'
 import { generateKeys, generateStretchedKeys } from './day14'
+import { getACapsule, getAnAdvancedCapsule } from './day15'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -101,5 +102,10 @@ describe('2016 Answers', () => {
   it('Day 14', () => {
     console.log(`Day 14, Part 1: ${generateKeys('REAL').answer1}`)
     console.log(`Day 14, Part 2: ${generateStretchedKeys('REAL').answer2}`)
+  })
+
+  it('Day 15', () => {
+    console.log(`Day 15, Part 1: ${getACapsule('REAL').answer1}`)
+    console.log(`Day 15, Part 2: ${getAnAdvancedCapsule('REAL').answer2}`)
   })
 })
