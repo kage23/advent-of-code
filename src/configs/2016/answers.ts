@@ -16,6 +16,7 @@ import { runAssembunnyCode, runAssembunnyCodeWithIgnitionSet } from './day12'
 import { countLocations, findShortestPath } from './day13'
 import { generateKeys, generateStretchedKeys } from './day14'
 import { getACapsule, getAnAdvancedCapsule } from './day15'
+import { fillBiggerDisk, fillDisk } from './day16'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -107,5 +108,10 @@ describe('2016 Answers', () => {
   it('Day 15', () => {
     console.log(`Day 15, Part 1: ${getACapsule('REAL').answer1}`)
     console.log(`Day 15, Part 2: ${getAnAdvancedCapsule('REAL').answer2}`)
+  })
+
+  it('Day 16', () => {
+    console.log(`Day 16, Part 1: ${fillDisk('REAL').answer1}`)
+    console.log(`Day 16, Part 2: ${fillBiggerDisk('REAL').answer2}`)
   })
 })
