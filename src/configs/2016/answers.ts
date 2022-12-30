@@ -17,6 +17,7 @@ import { countLocations, findShortestPath } from './day13'
 import { generateKeys, generateStretchedKeys } from './day14'
 import { getACapsule, getAnAdvancedCapsule } from './day15'
 import { fillBiggerDisk, fillDisk } from './day16'
+import { findLongestVaultPath, findShortestVaultPath } from './day17'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -113,5 +114,10 @@ describe('2016 Answers', () => {
   it('Day 16', () => {
     console.log(`Day 16, Part 1: ${fillDisk('REAL').answer1}`)
     console.log(`Day 16, Part 2: ${fillBiggerDisk('REAL').answer2}`)
+  })
+
+  it('Day 17', () => {
+    console.log(`Day 17, Part 1: ${findShortestVaultPath('REAL').answer1}`)
+    console.log(`Day 17, Part 2: ${findLongestVaultPath('REAL').answer2}`)
   })
 })
