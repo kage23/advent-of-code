@@ -19,6 +19,7 @@ import { getACapsule, getAnAdvancedCapsule } from './day15'
 import { fillBiggerDisk, fillDisk } from './day16'
 import { findLongestVaultPath, findShortestVaultPath } from './day17'
 import { countSafeTiles, countSafeTilesInHugeField } from './day18'
+import { doTheBadWhiteElephant, doTheBadWhiteElephant_v2 } from './day19'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -125,5 +126,10 @@ describe('2016 Answers', () => {
   it('Day 18', () => {
     console.log(`Day 18, Part 1: ${countSafeTiles('REAL').answer1}`)
     console.log(`Day 18, Part 2: ${countSafeTilesInHugeField('REAL').answer2}`)
+  })
+
+  it('Day 19', () => {
+    console.log(`Day 19, Part 1: ${doTheBadWhiteElephant('REAL').answer1}`)
+    console.log(`Day 19, Part 2: ${doTheBadWhiteElephant_v2('REAL').answer2}`)
   })
 })

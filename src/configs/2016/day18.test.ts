@@ -11,7 +11,7 @@ describe('2016 Day 18', () => {
   })
 
   describe('Part 2', () => {
-    describe('countSafeTiles', () => {
+    describe('countSafeTilesInHugeField', () => {
       it('should determine how many safe tiles are in the smaller grid', () => {
         expect(countSafeTilesInHugeField('DEMO_1').answer2).toEqual(600001)
         expect(countSafeTilesInHugeField('DEMO_2').answer2).toEqual(1935478)

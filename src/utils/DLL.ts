@@ -1,4 +1,4 @@
-class DLL<T = any> {
+class DLL<T> {
   head: IDLLNode<T> | undefined
   length: number
 
@@ -90,7 +90,7 @@ class DLL<T = any> {
   }
 }
 
-export interface IDLLNode<T = any> {
+export interface IDLLNode<T> {
   value: T
   next?: IDLLNode<T>
   prev?: IDLLNode<T>
