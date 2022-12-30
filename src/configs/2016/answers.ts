@@ -14,6 +14,7 @@ import { runBots } from './day10'
 import { takeEverythingToFourthFloor, takeObjectsToFourthFloor } from './day11'
 import { runAssembunnyCode, runAssembunnyCodeWithIgnitionSet } from './day12'
 import { countLocations, findShortestPath } from './day13'
+import { generateKeys, generateStretchedKeys } from './day14'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -95,5 +96,10 @@ describe('2016 Answers', () => {
   it('Day 13', () => {
     console.log(`Day 13, Part 1: ${findShortestPath('REAL').answer1}`)
     console.log(`Day 13, Part 2: ${countLocations('REAL').answer2}`)
+  })
+
+  it('Day 14', () => {
+    console.log(`Day 14, Part 1: ${generateKeys('REAL').answer1}`)
+    console.log(`Day 14, Part 2: ${generateStretchedKeys('REAL').answer2}`)
   })
 })
