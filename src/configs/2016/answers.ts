@@ -22,6 +22,7 @@ import { countSafeTiles, countSafeTilesInHugeField } from './day18'
 import { doTheBadWhiteElephant, doTheBadWhiteElephant_v2 } from './day19'
 import { findAllUnbannedIPs, findLowestUnbannedIP } from './day20'
 import { scramblePassword, unscramblePassword } from './day21'
+import { accessData, findViablePairs } from './day22'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -143,5 +144,10 @@ describe('2016 Answers', () => {
   it('Day 21', () => {
     console.log(`Day 21, Part 1: ${scramblePassword('REAL').answer1}`)
     console.log(`Day 21, Part 2: ${unscramblePassword('REAL').answer2}`)
+  })
+
+  fit('Day 22', () => {
+    console.log(`Day 22, Part 1: ${findViablePairs('REAL').answer1}`)
+    console.log(`Day 22, Part 2: ${accessData('REAL').answer2}`)
   })
 })
