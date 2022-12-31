@@ -1,5 +1,7 @@
-const INPUT: { [key:string]: string } = {
-DEMO: `swap position 4 with position 0
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO_1',
+    `swap position 4 with position 0
 swap letter d with letter b
 reverse positions 0 through 4
 rotate left 1 step
@@ -7,7 +9,10 @@ move position 1 to position 4
 move position 3 to position 0
 rotate based on position of letter b
 rotate based on position of letter d`,
-REAL: `rotate right 3 steps
+  ],
+  [
+    'REAL',
+    `rotate right 3 steps
 swap letter b with letter a
 move position 3 to position 4
 swap position 0 with position 7
@@ -106,7 +111,8 @@ reverse positions 3 through 5
 swap letter d with letter e
 move position 0 to position 7
 move position 1 to position 3
-reverse positions 4 through 7`
-}
+reverse positions 4 through 7`,
+  ],
+])
 
-export default INPUT
+export default inputs
