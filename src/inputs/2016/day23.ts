@@ -1,12 +1,17 @@
-const INPUT: { [key:string]: string } = {
-DEMO: `cpy 2 a
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `cpy 2 a
 tgl a
 tgl a
 tgl a
 cpy 1 a
 dec a
-dec a`,
-REAL: `cpy a b
+dec a`
+  ],
+  [
+    'REAL',
+    `cpy a b
 dec b
 cpy a d
 cpy 0 a
@@ -31,8 +36,11 @@ inc a
 inc d
 jnz d -2
 inc c
-jnz c -5`,
-REAL_MOD: `cpy a b
+jnz c -5`
+  ],
+  [
+    'REAL_MOD',
+    `cpy a b
 dec b
 mul a b
 jnz 0 0
@@ -58,6 +66,7 @@ inc d
 jnz d -2
 inc c
 jnz c -5`
-}
+  ]
+])
 
-export default INPUT
+export default inputs

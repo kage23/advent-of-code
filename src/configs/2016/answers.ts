@@ -23,6 +23,7 @@ import { doTheBadWhiteElephant, doTheBadWhiteElephant_v2 } from './day19'
 import { findAllUnbannedIPs, findLowestUnbannedIP } from './day20'
 import { scramblePassword, unscramblePassword } from './day21'
 import { accessData, findViablePairs } from './day22'
+import { runPart1, runPart2 } from './day23'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -146,8 +147,13 @@ describe('2016 Answers', () => {
     console.log(`Day 21, Part 2: ${unscramblePassword('REAL').answer2}`)
   })
 
-  fit('Day 22', () => {
+  it('Day 22', () => {
     console.log(`Day 22, Part 1: ${findViablePairs('REAL').answer1}`)
-    console.log(`Day 22, Part 2: ${accessData('REAL').answer2}`)
+    console.log(`Day 22, Part 2: ${accessData('REAL_ADD_30_TO_ANSWER').answer2 + 30}`)
+  })
+
+  fit('Day 23', () => {
+    console.log(`Day 23, Part 1: ${runPart1('REAL_MOD').answer1}`)
+    console.log(`Day 23, Part 2: ${runPart2('REAL_MOD').answer2}`)
   })
 })
