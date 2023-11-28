@@ -1,11 +1,7 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2016/day24'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2016/Day24'
-import SLL from '../utils/SLL'
+import SLL from '../../utils/SLL'
 
 const getNeighbors = ([x, y]: [number, number], grid: Map<string, string>): [number, number][] => (
   [
@@ -20,8 +16,13 @@ const getNeighbors = ([x, y]: [number, number], grid: Map<string, string>): [num
     })
 )
 
+interface Node {
+  gridNode: [number, number]
+  pathLength: number
+}
+
 const getDistanceBetweenNodes = (grid: Map<string, string>, start: [number, number], end: [number, number]): number => {
-  const queue: SLL = new SLL(
+  const queue: SLL<Node> = new SLL(
     {
       gridNode: start,
       pathLength: 0
@@ -48,13 +49,57 @@ const getDistanceBetweenNodes = (grid: Map<string, string>, start: [number, numb
   return 0
 }
 
+const precompute = (input: string): {
+  distances: Map<string, number>
+  nodeLocations: Map<string, [number, number]>
+} => {
+  const nodeLocations: Map<string, [number, number]> = new Map()
+  const distances: Map<string, number> = new Map()
+  const grid: Map<string, string> = new Map()
+
+  let x = 0
+  let y = 0
+
+  // Set up grid
+  for (let i = 0; i < input.length; i++) {
+    const char = input.charAt(i)
+    if (char === '\n') {
+      y++
+      x = 0
+    } else {
+      grid.set(`${x}-${y}`, char)
+      if (!isNaN(parseInt(char))) {
+        nodeLocations.set(char, [x, y])
+      }
+      x++
+    }
+  }
+
+  // Loop through all nodes and compute distances to other nodes
+  for (const [nodeAKey, nodeALocation] of nodeLocations.entries()) {
+    for (const [nodeBKey, nodeBLocation] of nodeLocations.entries()) {
+      if (nodeAKey !== nodeBKey) {
+        if (!distances.get(`${nodeAKey}-${nodeBKey}`)) {
+          const distance = getDistanceBetweenNodes(grid, nodeALocation, nodeBLocation)
+          distances.set(`${nodeAKey}-${nodeBKey}`, distance)
+          if (!distances.get(`${nodeBKey}-${nodeAKey}`)) {
+            distances.set(`${nodeBKey}-${nodeAKey}`, distance)
+          }
+        }
+      }
+    }
+  }
+
+  return { distances, nodeLocations }
+}
+
 const getShortestPathLengthToAllNodes = (nodeCount: number, distances: Map<string, number>, part: 1 | 2): number => {
   interface ISearchNode {
     distance: number
     path: string
   }
 
-  const queue: SLL = new SLL(
+  const queue: SLL<ISearchNode> = new SLL(
     {
       distance: 0,
       path: '0'
@@ -114,91 +159,36 @@ const getShortestPathLengthToAllNodes = (nodeCount: number, distances: Map<strin
   return shortestPathDistance
 }
 
-const precompute = (input: string): {
-  distances: Map<string, number>
-  nodeLocations: Map<string, [number, number]>
-} => {
-  const nodeLocations: Map<string, [number, number]> = new Map()
-  const distances: Map<string, number> = new Map()
-  const grid: Map<string, string> = new Map()
+export const findShortestPath = (inputKey: string) => {
+  const { distances, nodeLocations } = precompute(inputs.get(inputKey)!)
+  const pathLength = getShortestPathLengthToAllNodes(nodeLocations.size, distances, 1)
 
-  let x = 0
-  let y = 0
-
-  // Set up grid
-  for (let i = 0; i < input.length; i++) {
-    const char = input.charAt(i)
-    if (char === '\n') {
-      y++
-      x = 0
-    } else {
-      grid.set(`${x}-${y}`, char)
-      if (!isNaN(parseInt(char))) {
-        nodeLocations.set(char, [x, y])
-      }
-      x++
-    }
-  }
-
-  // Loop through all nodes and compute distances to other nodes
-  for (let [nodeAKey, nodeALocation] of nodeLocations.entries()) {
-    for (let [nodeBKey, nodeBLocation] of nodeLocations.entries()) {
-      if (nodeAKey !== nodeBKey) {
-        if (!distances.get(`${nodeAKey}-${nodeBKey}`)) {
-          const distance = getDistanceBetweenNodes(grid, nodeALocation, nodeBLocation)
-          distances.set(`${nodeAKey}-${nodeBKey}`, distance)
-          if (!distances.get(`${nodeBKey}-${nodeAKey}`)) {
-            distances.set(`${nodeBKey}-${nodeAKey}`, distance)
-          }
-        }
-      }
-    }
-  }
-
-  return { distances, nodeLocations }
+  return { answer1: pathLength }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Find Shortest Path',
-    onClick: (inputKey: string) => {
-      const { distances, nodeLocations } = precompute(INPUT[inputKey])
-      const pathLength = getShortestPathLengthToAllNodes(nodeLocations.size, distances, 1)
+export const findShortestPathWithReturn = (inputKey: string) => {
+  const { distances, nodeLocations } = precompute(inputs.get(inputKey)!)
+  const pathLength = getShortestPathLengthToAllNodes(nodeLocations.size, distances, 2)
 
-      return {
-        answer1: pathLength.toString()
-      }
+  return { answer2: pathLength }
+}
+
+const day24: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The shortest path is answer steps.',
+  answer2Text: 'The shortest path including returning to 0 is answer.',
+  buttons: [
+    {
+      label: 'Find Shortest Path',
+      onClick: findShortestPath,
+    },
+    {
+      label: 'Find Shortest Path (incl Return)',
+      onClick: findShortestPathWithReturn,
     }
-  },
-  {
-    label: 'Find Shortest Path (incl Return)',
-    onClick: (inputKey: string) => {
-      const { distances, nodeLocations } = precompute(INPUT[inputKey])
-      const pathLength = getShortestPathLengthToAllNodes(nodeLocations.size, distances, 2)
-
-      return {
-        answer2: pathLength.toString()
-      }
-    }
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The shortest path is <code>{answer}</code> steps.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The shortest path including returning to <code>0</code> is <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 24,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+  ],
+  id: 24,
+  inputs,
   title: 'Air Duct Spelunking'
 }
 
-export default config
+export default day24

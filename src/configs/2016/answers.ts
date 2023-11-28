@@ -13,7 +13,7 @@ import { decompressSequence, getDecompressedLength } from './day09'
 import { runBots } from './day10'
 import { takeEverythingToFourthFloor, takeObjectsToFourthFloor } from './day11'
 import { runAssembunnyCode, runAssembunnyCodeWithIgnitionSet } from './day12'
-import { countLocations, findShortestPath } from './day13'
+import { countLocations, findShortestPath as findShortestPathDay13 } from './day13'
 import { generateKeys, generateStretchedKeys } from './day14'
 import { getACapsule, getAnAdvancedCapsule } from './day15'
 import { fillBiggerDisk, fillDisk } from './day16'
@@ -24,6 +24,7 @@ import { findAllUnbannedIPs, findLowestUnbannedIP } from './day20'
 import { scramblePassword, unscramblePassword } from './day21'
 import { accessData, findViablePairs } from './day22'
 import { runPart1, runPart2 } from './day23'
+import { findShortestPath as findShortestPathDay24, findShortestPathWithReturn } from './day24'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -103,7 +104,7 @@ describe('2016 Answers', () => {
   })
 
   it('Day 13', () => {
-    console.log(`Day 13, Part 1: ${findShortestPath('REAL').answer1}`)
+    console.log(`Day 13, Part 1: ${findShortestPathDay13('REAL').answer1}`)
     console.log(`Day 13, Part 2: ${countLocations('REAL').answer2}`)
   })
 
@@ -152,8 +153,13 @@ describe('2016 Answers', () => {
     console.log(`Day 22, Part 2: ${accessData('REAL_ADD_30_TO_ANSWER').answer2 + 30}`)
   })
 
-  fit('Day 23', () => {
+  it('Day 23', () => {
     console.log(`Day 23, Part 1: ${runPart1('REAL_MOD').answer1}`)
     console.log(`Day 23, Part 2: ${runPart2('REAL_MOD').answer2}`)
+  })
+
+  fit('Day 24', () => {
+    console.log(`Day 24, Part 1: ${findShortestPathDay24('REAL').answer1}`)
+    console.log(`Day 24, Part 2: ${findShortestPathWithReturn('REAL').answer2}`)
   })
 })
