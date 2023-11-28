@@ -1,15 +1,8 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2017/day03'
+import { DayConfig } from '../../routes/Day'
+import manhattanDistance from '../../utils/manhattanDistance'
 
-import INPUT from '../Inputs/2017/Day03'
-import { manhattanDistance } from '../utils/Various'
-
-const Directions: Array<'R' | 'U' | 'L' | 'D'> = [
-  'R', 'U', 'L', 'D'
-]
+const Directions = ['R', 'U', 'L', 'D']
 
 const getAdjacentSquares = (position: number[]): number[][] => [
   [position[0] - 1, position[1] - 1],
@@ -23,15 +16,12 @@ const getAdjacentSquares = (position: number[]): number[][] => [
   [position[0] + 1, position[1] + 1]
 ]
 
-const figureSolution = (input: number, whichPart: 1 | 2): {
-  answer1?: string
-  answer2?: string
-} => {
+const figureSolution = (input: number, whichPart: 1 | 2) => {
   let currentId = 1
-  let currentPosition = [0, 0]
+  const currentPosition = [0, 0]
   let currentValue = 1
-  let max = [0, 0]
-  let min = [0, 0]
+  const max = [0, 0]
+  const min = [0, 0]
   let directionIndex = 0
   const posValueMap: { [key: string]: number } = {
     [`${JSON.stringify(currentPosition)}`]: 1
@@ -83,45 +73,33 @@ const figureSolution = (input: number, whichPart: 1 | 2): {
 
   return whichPart === 1
     ? {
-      answer1: manhattanDistance(currentPosition, [0, 0]).toString()
+      answer1: manhattanDistance(currentPosition, [0, 0])
     }
     : {
-      answer2: currentValue.toString()
+      answer2: currentValue
     }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Calculate Distance to Access Port',
-    onClick: (inputKey) => ({
-      ...figureSolution(parseInt(INPUT[inputKey]), 1)
-    })
-  },
-  {
-    label: 'Find Value Larger than Input',
-    onClick: (inputKey) => ({
-      ...figureSolution(parseInt(INPUT[inputKey]), 2)
-    })
-  }
-]
 
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The data is carried <code>{answer}</code> steps.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The first value written larger than the input is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 3,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Spiral Memory'
+export const calculateDistance = (inputKey: string) => figureSolution(Number(inputs.get(inputKey)!), 1)
+export const findLargeValue = (inputKey: string) => figureSolution(Number(inputs.get(inputKey)!), 2)
+
+const day03: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The data is carried answer steps.',
+  answer2Text: 'The first value written larger than the input is answer.',
+  buttons: [
+    {
+      label: 'Calculate Distance to Access Port',
+      onClick: calculateDistance
+    },
+    {
+      label: 'Find Value Larger than Input',
+      onClick: findLargeValue
+    }
+  ],
+  id: 3,
+  inputs,
+  title: 'Spiral Memory',
 }
 
-export default config
+export default day03

@@ -1,5 +1,6 @@
 import { solveCaptcha1, solveCaptcha2 } from './day01'
 import { divideRowNumbers, getChecksum } from './day02'
+import { calculateDistance, findLargeValue } from './day03'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -9,5 +10,9 @@ describe('2016 Answers', () => {
   it('Day 02', () => {
     console.log(`Day 02, Part 1: ${getChecksum('REAL').answer1}`)
     console.log(`Day 02, Part 2: ${divideRowNumbers('REAL').answer2}`)
+  })
+  it('Day 03', () => {
+    console.log(`Day 03, Part 1: ${calculateDistance('REAL').answer1}`)
+    console.log(`Day 03, Part 2: ${findLargeValue('REAL').answer2}`)
   })
 })
