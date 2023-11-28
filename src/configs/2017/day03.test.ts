@@ -1,6 +1,6 @@
 import { calculateDistance, findLargeValue } from './day03'
 
-describe('2017 Day 01', () => {
+describe('2017 Day 03', () => {
   describe('Part 1', () => {
     it('should figure how far the data is carried', () => {
       expect(calculateDistance('DEMO_0').answer1).toEqual(0)
