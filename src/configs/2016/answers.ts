@@ -25,6 +25,7 @@ import { scramblePassword, unscramblePassword } from './day21'
 import { accessData, findViablePairs } from './day22'
 import { runPart1, runPart2 } from './day23'
 import { findShortestPath as findShortestPathDay24, findShortestPathWithReturn } from './day24'
+import { findAGoodNumber } from './day25'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -158,8 +159,12 @@ describe('2016 Answers', () => {
     console.log(`Day 23, Part 2: ${runPart2('REAL_MOD').answer2}`)
   })
 
-  fit('Day 24', () => {
+  it('Day 24', () => {
     console.log(`Day 24, Part 1: ${findShortestPathDay24('REAL').answer1}`)
     console.log(`Day 24, Part 2: ${findShortestPathWithReturn('REAL').answer2}`)
+  })
+
+  it('Day 25', () => {
+    console.log(`Day 25, Part 1: ${findAGoodNumber().answer1}`)
   })
 })
