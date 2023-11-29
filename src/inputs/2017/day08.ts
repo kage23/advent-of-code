@@ -1,12 +1,14 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`b inc 5 if a > 1
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `b inc 5 if a > 1
 a inc 1 if b < 5
 c dec -10 if a >= 1
-c inc -20 if c == 10`,
-
-REAL:
-`a dec -511 if x >= -4
+c inc -20 if c == 10`
+  ],
+  [
+    'REAL',
+    `a dec -511 if x >= -4
 pq inc -45 if cfa == 7
 vby dec 69 if tl < 1
 yg dec 844 if v > -6
@@ -1006,6 +1008,7 @@ ewg dec 72 if cfa > -174
 jus inc 897 if zo == 2455
 v dec -582 if zo > 2452
 x dec 368 if f >= 5212`
-}
+  ]
+])
 
-export default INPUT
+export default inputs

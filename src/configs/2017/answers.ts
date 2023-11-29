@@ -5,6 +5,7 @@ import { passphrasesNoAnagrams, passphrasesNoRepetition } from './day04'
 import { stepToEnd1, stepToEnd2 } from './day05'
 import { findLoop } from './day06'
 import { balanceTower, findBottomProgram } from './day07'
+import { runProcess } from './day08'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -34,5 +35,9 @@ describe('2016 Answers', () => {
   it('Day 07', () => {
     console.log(`Day 07, Part 1: ${findBottomProgram('REAL')!.answer1}`)
     console.log(`Day 07, Part 2: ${balanceTower('REAL')!.answer2}`)
+  })
+  it('Day 08', () => {
+    console.log(`Day 08, Part 1: ${runProcess('REAL')!.answer1}`)
+    console.log(`Day 08, Part 2: ${runProcess('REAL')!.answer2}`)
   })
 })
