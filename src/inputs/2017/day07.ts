@@ -1,6 +1,7 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`pbga (66)
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `pbga (66)
 xhth (57)
 ebii (61)
 havc (66)
@@ -12,10 +13,11 @@ tknk (41) -> ugml, padx, fwft
 jptl (61)
 ugml (68) -> gyxo, ebii, jptl
 gyxo (61)
-cntj (57)`,
-
-REAL:
-`jovejmr (40)
+cntj (57)`
+  ],
+  [
+    'REAL',
+    `jovejmr (40)
 fesmk (24)
 gwhfv (74)
 vxfoyx (101) -> aqytxb, ltnnn
@@ -1307,6 +1309,7 @@ srpftd (74)
 gwxeoes (27)
 gynzo (86)
 wnwzo (37)`
-}
+  ]
+])
 
-export default INPUT
+export default inputs

@@ -1,12 +1,7 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2017/day07'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2017/Day07'
-
-interface IProgram {
+interface Program {
   name: string
   children: string[]
   parent?: string
@@ -14,8 +9,8 @@ interface IProgram {
   totalWeight?: number
 }
 
-const parseInput = (input: string): Map<string, IProgram> => {
-  const programs: Map<string, IProgram> = new Map()
+const parseInput = (input: string): Map<string, Program> => {
+  const programs: Map<string, Program> = new Map()
 
   input.split('\n').forEach(row => {
     const name = row.split(' ')[0]
@@ -47,7 +42,7 @@ const parseInput = (input: string): Map<string, IProgram> => {
   return programs
 }
 
-const calculateTotalWeight = (node: IProgram | undefined, nodes: Map<string, IProgram>): number => {
+const calculateTotalWeight = (node: Program | undefined, nodes: Map<string, Program>): number => {
   if (node === undefined) return NaN
   if (node.children.length === 0) {
     node.totalWeight = node.weight || 0
@@ -59,11 +54,11 @@ const calculateTotalWeight = (node: IProgram | undefined, nodes: Map<string, IPr
   return node.totalWeight
 }
 
-const findWrongNode = (nodes: Map<string, IProgram>, bottomNode: IProgram, inWeight: number): {
-  node: IProgram
+const findWrongNode = (nodes: Map<string, Program>, bottomNode: Program, inWeight: number): {
+  node: Program
   weight: number
 } => {
-  let childrenWeights = bottomNode.children.map(node => {
+  const childrenWeights = bottomNode.children.map(node => {
     const childNode = nodes.get(node)
     return childNode ? childNode.totalWeight : 0
   })
@@ -83,55 +78,42 @@ const findWrongNode = (nodes: Map<string, IProgram>, bottomNode: IProgram, inWei
   }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Find Bottom Program',
-    onClick: (inputKey) => {
-      const programs = parseInput(INPUT[inputKey])
 
-      for (const [, program] of programs)
-        if (!program.parent) return { answer1: program.name }
+export const findBottomProgram = (inputKey: string) => {
+  const programs = parseInput(inputs.get(inputKey)!)
 
-      return {
-        answer1: undefined
-      }
-    }
-  },
-  {
-    label: 'Balance Tower',
-    onClick: (inputKey) => {
-      const nodes = parseInput(INPUT[inputKey])
-      let bottomNode: IProgram | undefined
-      for (const [, node] of nodes) if (!node.parent) bottomNode = node
-      if (bottomNode) {
-        calculateTotalWeight(bottomNode, nodes)
-        return {
-          answer2: findWrongNode(nodes, bottomNode, 0).weight.toString()
-        }
-      }
-
-      return {}
-    }
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The bottom program is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The weight of the incorrect node should be{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 7,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Recursive Circus'
+  for (const [, program] of programs)
+    if (!program.parent) return { answer1: program.name }
 }
 
-export default config
+export const balanceTower = (inputKey: string) => {
+  const nodes = parseInput(inputs.get(inputKey)!)
+  let bottomNode: Program | undefined
+  for (const [, node] of nodes) if (!node.parent) bottomNode = node
+  if (bottomNode) {
+    calculateTotalWeight(bottomNode, nodes)
+    return {
+      answer2: findWrongNode(nodes, bottomNode, 0).weight
+    }
+  }
+}
+
+const day07: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The bottom program is answer.',
+  answer2Text: 'The weight of the incorrect node should be answer.',
+  buttons: [
+    {
+      label: 'Find Bottom Program',
+      onClick: findBottomProgram
+    },
+    {
+      label: 'Balance Tower',
+      onClick: balanceTower
+    }
+  ],
+  id: 7,
+  inputs,
+  title: 'Recursive Circus',
+}
+
+export default day07

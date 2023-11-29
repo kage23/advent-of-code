@@ -4,6 +4,7 @@ import { calculateDistance, findLargeValue } from './day03'
 import { passphrasesNoAnagrams, passphrasesNoRepetition } from './day04'
 import { stepToEnd1, stepToEnd2 } from './day05'
 import { findLoop } from './day06'
+import { balanceTower, findBottomProgram } from './day07'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -29,5 +30,9 @@ describe('2016 Answers', () => {
   it('Day 06', () => {
     console.log(`Day 06, Part 1: ${findLoop('REAL').answer1}`)
     console.log(`Day 06, Part 2: ${findLoop('REAL').answer2}`)
+  })
+  it('Day 07', () => {
+    console.log(`Day 07, Part 1: ${findBottomProgram('REAL')!.answer1}`)
+    console.log(`Day 07, Part 2: ${balanceTower('REAL')!.answer2}`)
   })
 })
