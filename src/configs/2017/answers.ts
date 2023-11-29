@@ -6,6 +6,7 @@ import { stepToEnd1, stepToEnd2 } from './day05'
 import { findLoop } from './day06'
 import { balanceTower, findBottomProgram } from './day07'
 import { runProcess } from './day08'
+import { processStream } from './day09'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -39,5 +40,9 @@ describe('2016 Answers', () => {
   it('Day 08', () => {
     console.log(`Day 08, Part 1: ${runProcess('REAL')!.answer1}`)
     console.log(`Day 08, Part 2: ${runProcess('REAL')!.answer2}`)
+  })
+  it('Day 09', () => {
+    console.log(`Day 09, Part 1: ${processStream('REAL')!.answer1}`)
+    console.log(`Day 09, Part 2: ${processStream('REAL')!.answer2}`)
   })
 })
