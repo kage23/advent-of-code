@@ -3,6 +3,7 @@ import { divideRowNumbers, getChecksum } from './day02'
 import { calculateDistance, findLargeValue } from './day03'
 import { passphrasesNoAnagrams, passphrasesNoRepetition } from './day04'
 import { stepToEnd1, stepToEnd2 } from './day05'
+import { findLoop } from './day06'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -24,5 +25,9 @@ describe('2016 Answers', () => {
   it('Day 05', () => {
     console.log(`Day 05, Part 1: ${stepToEnd1('REAL').answer1}`)
     console.log(`Day 05, Part 2: ${stepToEnd2('REAL').answer2}`)
+  })
+  it('Day 06', () => {
+    console.log(`Day 06, Part 1: ${findLoop('REAL').answer1}`)
+    console.log(`Day 06, Part 2: ${findLoop('REAL').answer2}`)
   })
 })
