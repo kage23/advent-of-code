@@ -2,6 +2,7 @@ import { solveCaptcha1, solveCaptcha2 } from './day01'
 import { divideRowNumbers, getChecksum } from './day02'
 import { calculateDistance, findLargeValue } from './day03'
 import { passphrasesNoAnagrams, passphrasesNoRepetition } from './day04'
+import { stepToEnd1, stepToEnd2 } from './day05'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -19,5 +20,9 @@ describe('2016 Answers', () => {
   it('Day 04', () => {
     console.log(`Day 04, Part 1: ${passphrasesNoRepetition('REAL').answer1}`)
     console.log(`Day 04, Part 2: ${passphrasesNoAnagrams('REAL').answer2}`)
+  })
+  it('Day 05', () => {
+    console.log(`Day 05, Part 1: ${stepToEnd1('REAL').answer1}`)
+    console.log(`Day 05, Part 2: ${stepToEnd2('REAL').answer2}`)
   })
 })
