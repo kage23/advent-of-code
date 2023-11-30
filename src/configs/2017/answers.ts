@@ -8,6 +8,7 @@ import { balanceTower, findBottomProgram } from './day07'
 import { runProcess } from './day08'
 import { processStream } from './day09'
 import { fullTwists, oneTwist } from './day10'
+import { findDistance, findFurthestDistance } from './day11'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -49,5 +50,9 @@ describe('2016 Answers', () => {
   it('Day 10', () => {
     console.log(`Day 10, Part 1: ${oneTwist('REAL')!.answer1}`)
     console.log(`Day 10, Part 2: ${fullTwists('REAL')!.answer2}`)
+  })
+  it('Day 11', () => {
+    console.log(`Day 11, Part 1: ${findDistance('REAL')!.answer1}`)
+    console.log(`Day 11, Part 2: ${findFurthestDistance('REAL')!.answer2}`)
   })
 })
