@@ -7,6 +7,7 @@ import { findLoop } from './day06'
 import { balanceTower, findBottomProgram } from './day07'
 import { runProcess } from './day08'
 import { processStream } from './day09'
+import { fullTwists, oneTwist } from './day10'
 
 describe('2016 Answers', () => {
   it('Day 01', () => {
@@ -44,5 +45,9 @@ describe('2016 Answers', () => {
   it('Day 09', () => {
     console.log(`Day 09, Part 1: ${processStream('REAL')!.answer1}`)
     console.log(`Day 09, Part 2: ${processStream('REAL')!.answer2}`)
+  })
+  it('Day 10', () => {
+    console.log(`Day 10, Part 1: ${oneTwist('REAL')!.answer1}`)
+    console.log(`Day 10, Part 2: ${fullTwists('REAL')!.answer2}`)
   })
 })
