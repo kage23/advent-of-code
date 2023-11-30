@@ -1,6 +1,6 @@
 import { findDistance, findFurthestDistance } from './day11'
 
-describe('2017 Day 10', () => {
+describe('2017 Day 11', () => {
   describe('Part 1', () => {
     it('should find the distance to the end', () => {
       expect(findDistance('DEMO_1')!.answer1).toEqual(3)

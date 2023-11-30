@@ -9,8 +9,9 @@ import { runProcess } from './day08'
 import { processStream } from './day09'
 import { fullTwists, oneTwist } from './day10'
 import { findDistance, findFurthestDistance } from './day11'
+import { countGroups, findConnectedToZero } from './day12'
 
-describe('2016 Answers', () => {
+describe('2017 Answers', () => {
   it('Day 01', () => {
     console.log(`Day 01, Part 1: ${solveCaptcha1('REAL').answer1}`)
     console.log(`Day 01, Part 2: ${solveCaptcha2('REAL').answer2}`)
@@ -54,5 +55,9 @@ describe('2016 Answers', () => {
   it('Day 11', () => {
     console.log(`Day 11, Part 1: ${findDistance('REAL')!.answer1}`)
     console.log(`Day 11, Part 2: ${findFurthestDistance('REAL')!.answer2}`)
+  })
+  it('Day 12', () => {
+    console.log(`Day 12, Part 1: ${findConnectedToZero('REAL')!.answer1}`)
+    console.log(`Day 12, Part 2: ${countGroups('REAL')!.answer2}`)
   })
 })
