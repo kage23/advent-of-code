@@ -10,6 +10,7 @@ import { processStream } from './day09'
 import { fullTwists, oneTwist } from './day10'
 import { findDistance, findFurthestDistance } from './day11'
 import { countGroups, findConnectedToZero } from './day12'
+import { findDelayFastMethod, takeTrip } from './day13'
 
 describe('2017 Answers', () => {
   it('Day 01', () => {
@@ -59,5 +60,9 @@ describe('2017 Answers', () => {
   it('Day 12', () => {
     console.log(`Day 12, Part 1: ${findConnectedToZero('REAL')!.answer1}`)
     console.log(`Day 12, Part 2: ${countGroups('REAL')!.answer2}`)
+  })
+  it('Day 13', () => {
+    console.log(`Day 12, Part 1: ${takeTrip('REAL')!.answer1}`)
+    console.log(`Day 12, Part 2: ${findDelayFastMethod('REAL')!.answer2}`)
   })
 })

@@ -1,12 +1,14 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`0: 3
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `0: 3
 1: 2
 4: 4
 6: 4`,
-
-REAL:
-`0: 4
+  ],
+  [
+    'REAL',
+    `0: 4
 1: 2
 2: 3
 4: 5
@@ -48,7 +50,8 @@ REAL:
 78: 18
 82: 14
 88: 18
-90: 14`
-}
+90: 14`,
+  ],
+])
 
-export default INPUT
+export default inputs
