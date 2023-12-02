@@ -12,6 +12,7 @@ import { findDistance, findFurthestDistance } from './day11'
 import { countGroups, findConnectedToZero } from './day12'
 import { findDelayFastMethod, takeTrip } from './day13'
 import { countUsedSquares, findRegions } from './day14'
+import { solvePart1, solvePart2 } from './day15'
 
 describe('2017 Answers', () => {
   it('Day 01', () => {
@@ -69,5 +70,9 @@ describe('2017 Answers', () => {
   it('Day 14', () => {
     console.log(`Day 14, Part 1: ${countUsedSquares('REAL')!.answer1}`)
     console.log(`Day 14, Part 2: ${findRegions('REAL')!.answer2}`)
+  })
+  it('Day 15', () => {
+    console.log(`Day 15, Part 1: ${solvePart1('REAL')!.answer1}`)
+    console.log(`Day 15, Part 2: ${solvePart2('REAL')!.answer2}`)
   })
 })
