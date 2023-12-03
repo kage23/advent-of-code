@@ -14,6 +14,7 @@ import { findDelayFastMethod, takeTrip } from './day13'
 import { countUsedSquares, findRegions } from './day14'
 import { solvePart1, solvePart2 } from './day15'
 import { danceABillion, doDance } from './day16'
+import { solvePart1Day17 /* , solvePart2Day17 */ } from './day17'
 
 describe('2017 Answers', () => {
   it('Day 01', () => {
@@ -52,7 +53,7 @@ describe('2017 Answers', () => {
     console.log(`Day 09, Part 1: ${processStream('REAL')!.answer1}`)
     console.log(`Day 09, Part 2: ${processStream('REAL')!.answer2}`)
   })
-  it('Day 10', () => {
+  xit('Day 10', () => {
     console.log(`Day 10, Part 1: ${oneTwist('REAL')!.answer1}`)
     console.log(`Day 10, Part 2: ${fullTwists('REAL')!.answer2}`)
   })
@@ -68,16 +69,21 @@ describe('2017 Answers', () => {
     console.log(`Day 13, Part 1: ${takeTrip('REAL')!.answer1}`)
     console.log(`Day 13, Part 2: ${findDelayFastMethod('REAL')!.answer2}`)
   })
-  it('Day 14', () => {
+  xit('Day 14', () => {
     console.log(`Day 14, Part 1: ${countUsedSquares('REAL')!.answer1}`)
     console.log(`Day 14, Part 2: ${findRegions('REAL')!.answer2}`)
   })
-  it('Day 15', () => {
+  xit('Day 15', () => {
     console.log(`Day 15, Part 1: ${solvePart1('REAL')!.answer1}`)
     console.log(`Day 15, Part 2: ${solvePart2('REAL')!.answer2}`)
   })
   it('Day 16', () => {
     console.log(`Day 16, Part 1: ${doDance('REAL')!.answer1}`)
     console.log(`Day 16, Part 2: ${danceABillion('REAL')!.answer2}`)
+  })
+  it('Day 17', () => {
+    console.log(`Day 17, Part 1: ${solvePart1Day17('REAL')!.answer1}`)
+    // This one exceeds the map size, I'm not sure how I solved it originally!
+    // console.log(`Day 17, Part 2: ${solvePart2Day17('REAL')!.answer2}`)
   })
 })

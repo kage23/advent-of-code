@@ -9,7 +9,6 @@ interface ILayer {
 
 let firewall: Map<number, ILayer> = new Map()
 let totalFirewallDepth = 0
-let time = -1
 let currentPosition = -1
 let ongoingSeverity = 0
 const startingInputWithDelay: Map<number, string> = new Map()
@@ -32,7 +31,6 @@ const reset = (inputKey: string): void => {
   startingInputWithDelay.clear()
   totalFirewallDepth = 0
   firewall = parseInput(inputs.get(inputKey)!)
-  time = -1
   currentPosition = -1
   ongoingSeverity = 0
   startingInputWithDelay.set(0, inputs.get(inputKey)!)
@@ -71,7 +69,6 @@ export const takeTrip = (inputKey: string) => {
     currentPosition++
     judgeSeverity()
     advanceScanners()
-    time++
   }
   return {
     answer1: ongoingSeverity,

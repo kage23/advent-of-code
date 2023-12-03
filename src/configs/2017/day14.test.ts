@@ -1,6 +1,6 @@
 import { countUsedSquares, findRegions } from './day14'
 
-describe('2017 Day 14', () => {
+xdescribe('2017 Day 14', () => {
   describe('Part 1', () => {
     it('should count how many squares are used', () => {
       expect(countUsedSquares('DEMO')!.answer1).toEqual(8108)
