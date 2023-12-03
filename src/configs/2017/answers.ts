@@ -13,6 +13,7 @@ import { countGroups, findConnectedToZero } from './day12'
 import { findDelayFastMethod, takeTrip } from './day13'
 import { countUsedSquares, findRegions } from './day14'
 import { solvePart1, solvePart2 } from './day15'
+import { danceABillion, doDance } from './day16'
 
 describe('2017 Answers', () => {
   it('Day 01', () => {
@@ -74,5 +75,9 @@ describe('2017 Answers', () => {
   it('Day 15', () => {
     console.log(`Day 15, Part 1: ${solvePart1('REAL')!.answer1}`)
     console.log(`Day 15, Part 2: ${solvePart2('REAL')!.answer2}`)
+  })
+  it('Day 16', () => {
+    console.log(`Day 16, Part 1: ${doDance('REAL')!.answer1}`)
+    console.log(`Day 16, Part 2: ${danceABillion('REAL')!.answer2}`)
   })
 })
