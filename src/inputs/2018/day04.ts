@@ -1,6 +1,7 @@
-const INPUT: { [key:string]: string } = {
-DEMO_0:
-`[1518-11-01 00:00] Guard #10 begins shift
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `[1518-11-01 00:00] Guard #10 begins shift
 [1518-11-01 00:05] falls asleep
 [1518-11-01 00:25] wakes up
 [1518-11-01 00:30] falls asleep
@@ -17,9 +18,10 @@ DEMO_0:
 [1518-11-05 00:03] Guard #99 begins shift
 [1518-11-05 00:45] falls asleep
 [1518-11-05 00:55] wakes up`,
-
-REAL:
-`[1518-06-05 00:46] falls asleep
+  ],
+  [
+    'REAL',
+    `[1518-06-05 00:46] falls asleep
 [1518-06-27 00:21] falls asleep
 [1518-11-10 23:52] Guard #881 begins shift
 [1518-11-08 00:51] wakes up
@@ -1062,7 +1064,8 @@ REAL:
 [1518-05-11 00:58] wakes up
 [1518-03-10 00:56] wakes up
 [1518-08-17 00:01] Guard #1021 begins shift
-[1518-03-16 00:39] falls asleep`
-}
+[1518-03-16 00:39] falls asleep`,
+  ],
+])
 
-export default INPUT
+export default inputs

@@ -1,8 +1,8 @@
 import inputs from '../../inputs/2018/day03'
 import { DayConfig } from '../../routes/Day'
 
-const parseInput = (input: string): number[][] => {
-  return input.split('\n').map((line) => {
+const parseInput = (input: string): number[][] =>
+  input.split('\n').map((line) => {
     const id = parseInt(line.slice(1))
     const x = parseInt(line.slice(line.indexOf('@') + 2))
     const y = parseInt(line.slice(line.indexOf(',') + 1))
@@ -11,7 +11,6 @@ const parseInput = (input: string): number[][] => {
 
     return [id, x, y, w, h]
   })
-}
 
 const pathKey = (x: number, y: number): string => `${x}_${y}`
 

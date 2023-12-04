@@ -1,6 +1,6 @@
 import { determineFabricOverlap, determineClaimOverlap } from './day03'
 
-describe('2018 Day 02', () => {
+describe('2018 Day 03', () => {
   describe('Part 1', () => {
     it('should determine overlapping fabric', () => {
       expect(determineFabricOverlap('DEMO')!.answer1).toEqual(4)
