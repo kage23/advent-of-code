@@ -21,6 +21,7 @@ import { findClosestParticle, runSimulation } from './day20'
 import { /* iterateEighteenTimes, */ iterateFiveTimes } from './day21'
 import { burstToTenMillion, burstToTenThousand } from './day22'
 import { runProgram, solvePart2 as solvePart2Day23 } from './day23'
+import { findLongestBridge, findStrongestBridge } from './day24'
 
 describe('2017 Answers', () => {
   it('Day 01', () => {
@@ -116,5 +117,9 @@ describe('2017 Answers', () => {
   it('Day 23', () => {
     console.log(`Day 23, Part 1: ${runProgram('REAL')!.answer1}`)
     console.log(`Day 23, Part 2: ${solvePart2Day23()!.answer2}`)
+  })
+  xit('Day 24', () => {
+    console.log(`Day 24, Part 1: ${findStrongestBridge('REAL')!.answer1}`)
+    console.log(`Day 24, Part 2: ${findLongestBridge('REAL')!.answer2}`)
   })
 })
