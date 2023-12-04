@@ -17,6 +17,7 @@ import { danceABillion, doDance } from './day16'
 import { solvePart1Day17 /* , solvePart2Day17 */ } from './day17'
 import { findFrequencyPart1, runBothPrograms } from './day18'
 import { followPath } from './day19'
+import { findClosestParticle, runSimulation } from './day20'
 
 describe('2017 Answers', () => {
   it('Day 01', () => {
@@ -95,5 +96,9 @@ describe('2017 Answers', () => {
   it('Day 19', () => {
     console.log(`Day 19, Part 1: ${followPath('REAL')!.answer1}`)
     console.log(`Day 19, Part 2: ${followPath('REAL')!.answer2}`)
+  })
+  it('Day 20', () => {
+    console.log(`Day 20, Part 1: ${findClosestParticle('REAL')!.answer1}`)
+    console.log(`Day 20, Part 2: ${runSimulation('REAL')!.answer2}`)
   })
 })
