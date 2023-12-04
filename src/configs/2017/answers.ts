@@ -22,6 +22,7 @@ import { /* iterateEighteenTimes, */ iterateFiveTimes } from './day21'
 import { burstToTenMillion, burstToTenThousand } from './day22'
 import { runProgram, solvePart2 as solvePart2Day23 } from './day23'
 import { findLongestBridge, findStrongestBridge } from './day24'
+import { runProgram as runDay25 } from './day25'
 
 describe('2017 Answers', () => {
   it('Day 01', () => {
@@ -121,5 +122,8 @@ describe('2017 Answers', () => {
   xit('Day 24', () => {
     console.log(`Day 24, Part 1: ${findStrongestBridge('REAL')!.answer1}`)
     console.log(`Day 24, Part 2: ${findLongestBridge('REAL')!.answer2}`)
+  })
+  it('Day 25', () => {
+    console.log(`Day 25: ${runDay25('REAL')!.answer1}`)
   })
 })

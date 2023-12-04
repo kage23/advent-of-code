@@ -1,6 +1,7 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`Begin in state A.
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `Begin in state A.
 Perform a diagnostic checksum after 6 steps.
 
 In state A:
@@ -22,9 +23,10 @@ In state B:
     - Write the value 1.
     - Move one slot to the right.
     - Continue with state A.`,
-
-REAL:
-`Begin in state A.
+  ],
+  [
+    'REAL',
+    `Begin in state A.
 Perform a diagnostic checksum after 12302209 steps.
 
 In state A:
@@ -85,7 +87,8 @@ In state F:
   If the current value is 1:
     - Write the value 0.
     - Move one slot to the right.
-    - Continue with state E.`
-}
+    - Continue with state E.`,
+  ],
+])
 
-export default INPUT
+export default inputs
