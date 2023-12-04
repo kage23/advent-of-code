@@ -1,20 +1,15 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2018/day02'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2018/Day02'
-
-const findChecksum = (inputKey: string) => {
-  const boxIDs = INPUT[inputKey].split('\n')
+export const findChecksum = (inputKey: string) => {
+  const boxIDs = inputs.get(inputKey)!.split('\n')
   let twoCount = 0
   let threeCount = 0
-  boxIDs.forEach(boxID => {
+  boxIDs.forEach((boxID) => {
     const letterCounts: { [key: string]: number } = {}
     let twos = false
     let threes = false
-    boxID.split('').forEach(letter => {
+    boxID.split('').forEach((letter) => {
       if (!letterCounts[letter]) letterCounts[letter] = 1
       else letterCounts[letter]++
     })
@@ -27,12 +22,12 @@ const findChecksum = (inputKey: string) => {
     if (threes) threeCount++
   })
   return {
-    answer1: (twoCount * threeCount).toString()
+    answer1: twoCount * threeCount,
   }
 }
 
-const findCommonLetters = (inputKey: string): { answer2: string | undefined } => {
-  const boxIDs = INPUT[inputKey].split('\n')
+export const findCommonLetters = (inputKey: string) => {
+  const boxIDs = inputs.get(inputKey)!.split('\n')
   const n = boxIDs.length
   const l = boxIDs[0].length
   for (const boxID of boxIDs) {
@@ -53,46 +48,30 @@ const findCommonLetters = (inputKey: string): { answer2: string | undefined } =>
               for (let i = 0; i < n; i++) if (a[i] === b[i]) result += a[i]
 
               return result
-            })
+            }),
           }
         }
       }
     }
   }
-  return {
-    answer2: undefined
-  }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Find Checksum',
-    onClick: findChecksum
-  },
-  {
-    label: 'Find Common Letters',
-    onClick: findCommonLetters
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The checksum is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The common letters are{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 2,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Inventory Management System'
+const day02: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The checksum is answer.',
+  answer2Text: 'The common letters are answer.',
+  buttons: [
+    {
+      label: 'Find Checksum',
+      onClick: findChecksum,
+    },
+    {
+      label: 'Find Common Letters',
+      onClick: findCommonLetters,
+    },
+  ],
+  id: 2,
+  inputs,
+  title: 'Inventory Management System',
 }
 
-export default config
+export default day02

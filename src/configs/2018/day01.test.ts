@@ -1,6 +1,6 @@
 import { findFrequency, findRepeatedFrequency } from './day01'
 
-describe('2017 Day 25', () => {
+describe('2018 Day 01', () => {
   describe('Part 1', () => {
     it('should find the resulting frequency', () => {
       expect(findFrequency('DEMO_1')!.answer1).toEqual(3)

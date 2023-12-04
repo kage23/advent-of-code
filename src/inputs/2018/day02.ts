@@ -1,24 +1,27 @@
-const INPUT: { [key:string]: string } = {
-DEMO_0:
-`abcdef
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO_1',
+    `abcdef
 bababc
 abbcde
 abcccd
 aabcdd
 abcdee
 ababab`,
-
-DEMO_1:
-`abcde
+  ],
+  [
+    'DEMO_2',
+    `abcde
 fghij
 klmno
 pqrst
 fguij
 axcye
 wvxyz`,
-
-REAL:
-`wxlnjevbfozadyiqpuzkrhstkg
+  ],
+  [
+    'REAL',
+    `wxlnjevbfozadyiqpuzkrhstkg
 wxlsjivbfodamyiqpuzcxhstkg
 wxlnjevbfouammnqpuzcrhstkg
 wxlnjevbfobwmyiqpuzprhstkg
@@ -267,7 +270,8 @@ wxlnjcvbfodamyicpuzcrhsckg
 wxlnjekbfodlmyiqpuzcthstkg
 wxlnjvvbfodamyiopuzcrhstqg
 wxlnjevbsodamyiqpuhcrhstwg
-wxxnjevufodamyiqruzcrhstkg`
-}
+wxxnjevufodamyiqruzcrhstkg`,
+  ],
+])
 
-export default INPUT
+export default inputs
