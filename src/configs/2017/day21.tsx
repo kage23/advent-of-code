@@ -1,7 +1,7 @@
 import inputs from '../../inputs/2017/day21'
 import { DayConfig } from '../../routes/Day'
 
-interface IRule {
+interface Rule {
   before: string[]
   after: string[]
 }
@@ -11,7 +11,7 @@ let patternStr = `.#.
 ..#
 ###`
 
-const parseInput = (input: string): IRule[] =>
+const parseInput = (input: string): Rule[] =>
   input.split('\n').map((line) => {
     const [before, after] = line.split(' => ')
     return {
@@ -70,14 +70,14 @@ const theyMatch = (patternA: string[], patternB: string[]): boolean => {
   return true
 }
 
-const checkForRuleMatch = (rule: IRule, pattern: string[]): boolean =>
+const checkForRuleMatch = (rule: Rule, pattern: string[]): boolean =>
   getPermutations(pattern).some((permutation) =>
     theyMatch(permutation, rule.before)
   )
 
 const step = (inputKey: string) => {
   steps++
-  const rules: IRule[] = parseInput(inputs.get(inputKey)!)
+  const rules: Rule[] = parseInput(inputs.get(inputKey)!)
   const oldPattern: string[] = patternStr.split('\n')
   const mod = oldPattern.length % 2 === 0 ? 2 : 3
   const newWidthInPatterns = oldPattern.length / mod
