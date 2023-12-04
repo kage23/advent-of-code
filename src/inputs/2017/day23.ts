@@ -1,6 +1,7 @@
-const INPUT: { [key:string]: string } = {
-REAL:
-`set b 65
+const inputs: Map<string, string> = new Map([
+  [
+    'REAL',
+    `set b 65
 set c b
 jnz a 2
 jnz 1 5
@@ -31,7 +32,8 @@ sub g c
 jnz g 2
 jnz 1 3
 sub b -17
-jnz 1 -23`
-}
+jnz 1 -23`,
+  ],
+])
 
-export default INPUT
+export default inputs
