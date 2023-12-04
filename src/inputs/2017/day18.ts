@@ -1,6 +1,7 @@
-const INPUT: { [key:string]: string } = {
-DEMO_1:
-`set a 1
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO_1',
+    `set a 1
 add a 2
 mul a a
 mod a 5
@@ -10,18 +11,20 @@ rcv a
 jgz a -1
 set a 1
 jgz a -2`,
-
-DEMO_2:
-`snd 1
+  ],
+  [
+    'DEMO_2',
+    `snd 1
 snd 2
 snd p
 rcv a
 rcv b
 rcv c
 rcv d`,
-
-REAL:
-`set i 31
+  ],
+  [
+    'REAL',
+    `set i 31
 set a 1
 mul p 17
 jgz p p
@@ -61,7 +64,8 @@ add i -1
 jgz i -11
 snd a
 jgz f -16
-jgz a -19`
-}
+jgz a -19`,
+  ],
+])
 
-export default INPUT
+export default inputs
