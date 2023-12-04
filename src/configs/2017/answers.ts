@@ -18,6 +18,7 @@ import { solvePart1Day17 /* , solvePart2Day17 */ } from './day17'
 import { findFrequencyPart1, runBothPrograms } from './day18'
 import { followPath } from './day19'
 import { findClosestParticle, runSimulation } from './day20'
+import { /* iterateEighteenTimes, */ iterateFiveTimes } from './day21'
 
 describe('2017 Answers', () => {
   it('Day 01', () => {
@@ -100,5 +101,10 @@ describe('2017 Answers', () => {
   it('Day 20', () => {
     console.log(`Day 20, Part 1: ${findClosestParticle('REAL')!.answer1}`)
     console.log(`Day 20, Part 2: ${runSimulation('REAL')!.answer2}`)
+  })
+  it('Day 21', () => {
+    console.log(`Day 21, Part 1: ${iterateFiveTimes('REAL')!.answer1}`)
+    // This one is pretty slow!
+    // console.log(`Day 21, Part 2: ${iterateEighteenTimes('REAL')!.answer2}`)
   })
 })
