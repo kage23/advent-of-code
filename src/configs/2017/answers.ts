@@ -16,6 +16,7 @@ import { solvePart1, solvePart2 } from './day15'
 import { danceABillion, doDance } from './day16'
 import { solvePart1Day17 /* , solvePart2Day17 */ } from './day17'
 import { findFrequencyPart1, runBothPrograms } from './day18'
+import { followPath } from './day19'
 
 describe('2017 Answers', () => {
   it('Day 01', () => {
@@ -90,5 +91,9 @@ describe('2017 Answers', () => {
   it('Day 18', () => {
     console.log(`Day 18, Part 1: ${findFrequencyPart1('REAL')!.answer1}`)
     console.log(`Day 18, Part 2: ${runBothPrograms('REAL')!.answer2}`)
+  })
+  it('Day 19', () => {
+    console.log(`Day 19, Part 1: ${followPath('REAL')!.answer1}`)
+    console.log(`Day 19, Part 2: ${followPath('REAL')!.answer2}`)
   })
 })
