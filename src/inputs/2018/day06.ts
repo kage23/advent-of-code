@@ -1,19 +1,16 @@
-export const DISTANCE: { [key:string]: number } = {
-  DEMO: 32,
-  REAL: 10000
-}
-
-const INPUT: { [key:string]: string } = {
-DEMO:
-`1, 1
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `1, 1
 1, 6
 8, 3
 3, 4
 5, 5
 8, 9`,
-
-REAL:
-`165, 169
+  ],
+  [
+    'REAL',
+    `165, 169
 334, 217
 330, 227
 317, 72
@@ -62,7 +59,8 @@ REAL:
 336, 291
 72, 300
 223, 286
-179, 257`
-}
+179, 257`,
+  ],
+])
 
-export default INPUT
+export default inputs

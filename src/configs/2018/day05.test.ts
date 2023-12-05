@@ -1,6 +1,6 @@
 import { part1, part2 } from './day05'
 
-describe('2018 Day 04', () => {
+describe('2018 Day 05', () => {
   describe('Part 1', () => {
     it('should determine the length of the polymer', () => {
       expect(part1('DEMO_1')!.answer1).toEqual(0)
