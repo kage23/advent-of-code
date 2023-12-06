@@ -4,6 +4,7 @@ import { determineClaimOverlap, determineFabricOverlap } from './day03'
 import { strategy1, strategy2 } from './day04'
 import { part1, part2 } from './day05'
 import { findAreaClosestToMost, findLargestNonInfinite } from './day06'
+import { calculateStepOrder, useWorkers } from './day07'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -29,5 +30,9 @@ describe('2018 Answers', () => {
   it('Day 06', () => {
     console.log(`Day 06, Part 1: ${findLargestNonInfinite('REAL').answer1}`)
     console.log(`Day 06, Part 2: ${findAreaClosestToMost('REAL')!.answer2}`)
+  })
+  it('Day 07', () => {
+    console.log(`Day 07, Part 1: ${calculateStepOrder('REAL').answer1}`)
+    console.log(`Day 07, Part 2: ${useWorkers('REAL')!.answer2}`)
   })
 })

@@ -20,7 +20,7 @@ export const findRepeatedFrequency = (inputKey: string) => {
   const input = parseInput(inputKey)
   const n = input.length
   let freq = 0
-  let foundFreqs: boolean[] = []
+  const foundFreqs: boolean[] = []
   let i = 0
   while (!foundFreqs[freq]) {
     foundFreqs[freq] = true

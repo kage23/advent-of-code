@@ -1,10 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT, { PART_2_CONFIGS } from '../Inputs/2018/Day07'
+import inputs from '../../inputs/2018/day07'
+import { DayConfig } from '../../routes/Day'
 
 interface IStep {
   id: string
@@ -13,7 +8,7 @@ interface IStep {
 
 const parseInput = (inputKey: string): IStep[] => {
   const steps: IStep[] = []
-  INPUT[inputKey].split('\n')
+  inputs.get(inputKey)!.split('\n')
     .forEach(stepStr => {
       const prereq = stepStr.charAt(5)
       const stepId = stepStr.charAt(36)
@@ -32,8 +27,18 @@ const parseInput = (inputKey: string): IStep[] => {
   return steps
 }
 
+const PART_2_CONFIGS: { [key: string]: { baseTime: number, workers: number } } = {
+  DEMO: {
+    baseTime: 1,
+    workers: 2
+  },
+  REAL: {
+    baseTime: 61,
+    workers: 5
+  }
+}
 
-const part1 = (inputKey: string): { answer1: string } => {
+export const calculateStepOrder = (inputKey: string) => {
   const steps = parseInput(inputKey)
   let stepsCompleted = ''
   let i = 0
@@ -52,9 +57,7 @@ const part1 = (inputKey: string): { answer1: string } => {
   }
 }
 
-let answer2_a = ''
-
-const part2 = (inputKey: string): { answer2: string } => {
+export const useWorkers = (inputKey: string) => {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const { baseTime } = PART_2_CONFIGS[inputKey]
   const workers = new Array(PART_2_CONFIGS[inputKey].workers)
@@ -69,6 +72,7 @@ const part2 = (inputKey: string): { answer2: string } => {
   let stepsClaimed = ''
   let time = 0
   const preReqCompleted = (prereqStep: string) => stepsCompleted.indexOf(prereqStep) !== -1
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     // First, advance all worker jobs
     for (const worker of workers) {
@@ -80,9 +84,8 @@ const part2 = (inputKey: string): { answer2: string } => {
           worker.stepClaimed = ''
           worker.duration = 0
           if (stepsCompleted.length === steps.length) {
-            answer2_a = stepsCompleted
             return {
-              answer2: time.toString()
+              answer2: time
             }
           }
         }
@@ -109,34 +112,22 @@ const part2 = (inputKey: string): { answer2: string } => {
   }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Calculate Step Order',
-    onClick: part1
-  },
-  {
-    label: 'Calculate Step Order (w/ workers)',
-    onClick: part2
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The steps should be compelted in the following order: <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      It will take <code>{answer}</code> seconds to complete the steps in the following order:{' '}
-      <code>{answer2_a}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 7,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'The Sum of Its Parts'
+const day07: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The steps should be completed in the following order: answer.',
+  answer2Text: 'It will take answer seconds to complete the steps.',
+  buttons: [
+    {
+      label: 'Calculate Step Order',
+      onClick: calculateStepOrder,
+    },
+    {
+      label: 'Calculate Step Order (w/ workers)',
+      onClick: useWorkers,
+    },
+  ],
+  id: 7,
+  inputs,
+  title: 'The Sum of Its Parts',
 }
 
-export default config
+export default day07

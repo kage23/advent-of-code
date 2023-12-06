@@ -1,27 +1,17 @@
-export const PART_2_CONFIGS
-: { [key:string]: { baseTime: number, workers: number } } = {
-  DEMO: {
-    baseTime: 1,
-    workers: 2
-  },
-  REAL: {
-    baseTime: 61,
-    workers: 5
-  }
-}
-
-const INPUT: { [key:string]: string } = {
-DEMO:
-`Step C must be finished before step A can begin.
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `Step C must be finished before step A can begin.
 Step C must be finished before step F can begin.
 Step A must be finished before step B can begin.
 Step A must be finished before step D can begin.
 Step B must be finished before step E can begin.
 Step D must be finished before step E can begin.
-Step F must be finished before step E can begin.`,
-
-REAL:
-`Step E must be finished before step H can begin.
+Step F must be finished before step E can begin.`
+  ],
+  [
+    'REAL',
+    `Step E must be finished before step H can begin.
 Step Y must be finished before step T can begin.
 Step F must be finished before step S can begin.
 Step U must be finished before step K can begin.
@@ -122,6 +112,7 @@ Step W must be finished before step R can begin.
 Step S must be finished before step D can begin.
 Step O must be finished before step B can begin.
 Step I must be finished before step P can begin.`
-}
+  ],
+])
 
-export default INPUT
+export default inputs
