@@ -5,6 +5,7 @@ import { strategy1, strategy2 } from './day04'
 import { part1, part2 } from './day05'
 import { findAreaClosestToMost, findLargestNonInfinite } from './day06'
 import { calculateStepOrder, useWorkers } from './day07'
+import { getChecksum, getRootNodeValue } from './day08'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -34,5 +35,9 @@ describe('2018 Answers', () => {
   it('Day 07', () => {
     console.log(`Day 07, Part 1: ${calculateStepOrder('REAL').answer1}`)
     console.log(`Day 07, Part 2: ${useWorkers('REAL')!.answer2}`)
+  })
+  it('Day 08', () => {
+    console.log(`Day 08, Part 1: ${getChecksum('REAL').answer1}`)
+    console.log(`Day 08, Part 2: ${getRootNodeValue('REAL')!.answer2}`)
   })
 })

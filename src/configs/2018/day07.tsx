@@ -1,13 +1,13 @@
 import inputs from '../../inputs/2018/day07'
 import { DayConfig } from '../../routes/Day'
 
-interface IStep {
+interface Step {
   id: string
   prereqs: string[]
 }
 
-const parseInput = (inputKey: string): IStep[] => {
-  const steps: IStep[] = []
+const parseInput = (inputKey: string): Step[] => {
+  const steps: Step[] = []
   inputs.get(inputKey)!.split('\n')
     .forEach(stepStr => {
       const prereq = stepStr.charAt(5)
