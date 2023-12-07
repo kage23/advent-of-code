@@ -10,6 +10,7 @@ import { playGame } from './day09'
 import { alignTheStars } from './day10'
 import { findBestGrid, findBestVariableSizeGrid } from './day11'
 import { advance50Billion, advance20Generations } from './day12'
+import { findCollision, goToEnd } from './day13'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -59,5 +60,9 @@ describe('2018 Answers', () => {
   it('Day 12', () => {
     console.log(`Day 12, Part 1: ${advance20Generations('REAL').answer1}`)
     console.log(`Day 12, Part 2: ${advance50Billion('REAL').answer2}`)
+  })
+  it('Day 13', () => {
+    console.log(`Day 13, Part 1: ${findCollision('REAL').answer1}`)
+    console.log(`Day 13, Part 2: ${goToEnd('REAL').answer2}`)
   })
 })
