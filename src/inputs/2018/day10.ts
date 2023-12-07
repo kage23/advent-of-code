@@ -1,6 +1,7 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`position=< 9,  1> velocity=< 0,  2>
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `position=< 9,  1> velocity=< 0,  2>
 position=< 7,  0> velocity=<-1,  0>
 position=< 3, -2> velocity=<-1,  1>
 position=< 6, 10> velocity=<-2, -1>
@@ -30,10 +31,11 @@ position=< 5,  0> velocity=< 1,  0>
 position=<-6,  0> velocity=< 2,  0>
 position=< 5,  9> velocity=< 1, -2>
 position=<14,  7> velocity=<-2,  0>
-position=<-3,  6> velocity=< 2, -1>`,
-
-REAL:
-`position=< 31766, -52454> velocity=<-3,  5>
+position=<-3,  6> velocity=< 2, -1>`
+  ],
+  [
+    'REAL',
+    `position=< 31766, -52454> velocity=<-3,  5>
 position=<-52374, -41935> velocity=< 5,  4>
 position=< 31758, -31427> velocity=<-3,  3>
 position=<-41862,  31671> velocity=< 4, -3>
@@ -323,6 +325,7 @@ position=< 52805,  21156> velocity=<-5, -2>
 position=< 10709, -20910> velocity=<-1,  2>
 position=<-52370, -31420> velocity=< 5,  3>
 position=<-10326,  21152> velocity=< 1, -2>`
-}
+  ],
+])
 
-export default INPUT
+export default inputs

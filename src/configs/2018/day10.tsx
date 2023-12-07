@@ -1,31 +1,26 @@
-import {
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2018/day10'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2018/Day10'
-
-interface IStar {
+interface Star {
   id: number | 'max' | 'min'
   position: number[]
   velocity: number[]
 }
 
-interface IStarfield {
+interface Starfield {
   max: number[]
   min: number[]
-  stars: IStar[]
+  stars: Star[]
 }
 
-let starfield: IStarfield = {
+let time = 0
+let starfield: Starfield = {
   max: [0, 0],
   min: [0, 0],
   stars: []
 }
-let prevInputKey = ''
-let time = 0
 
-const step = (stars: IStar[]): IStarfield => {
+const step = (stars: Star[]): Starfield => {
   const min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]
   const max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
   for (const star of stars) {
@@ -45,7 +40,7 @@ const step = (stars: IStar[]): IStarfield => {
   }
 }
 
-const stepBack = (stars: IStar[]): IStarfield => {
+const stepBack = (stars: Star[]): Starfield => {
   const min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]
   const max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
   for (const star of stars) {
@@ -65,11 +60,10 @@ const stepBack = (stars: IStar[]): IStarfield => {
   }
 }
 
-const findMessage = (stars: IStar[], time: number = 0)
-  : {
-    starfield: IStarfield
-    time: number
-  } => {
+const findMessage = (stars: Star[], time = 0): {
+  starfield: Starfield
+  time: number
+} => {
   let currMin = [0, 0]
   let currMax = [0, 0]
   for (const star of stars) {
@@ -103,10 +97,10 @@ const findMessage = (stars: IStar[], time: number = 0)
   }
 }
 
-const getStars = (inputKey: string): IStarfield => {
+const getStars = (inputKey: string): Starfield => {
   const min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]
   const max = [Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
-  const stars: IStar[] = INPUT[inputKey].split('\n')
+  const stars: Star[] = inputs.get(inputKey)!.split('\n')
     .map((line, id) => {
       const posX = parseInt(line.slice(line.indexOf('<') + 1))
       const posY = parseInt(line.slice(line.indexOf(', ') + 1))
@@ -130,118 +124,54 @@ const getStars = (inputKey: string): IStarfield => {
   }
 }
 
-const getStarField = (stars: IStar[], min: number[], max: number[])
-  : Array<string | JSX.Element> => {
-  const field: Array<string | JSX.Element> = []
+const getStarfield = (stars: Star[], min: number[], max: number[]) => {
+  const field: string[] = []
 
   const yOff = min[1] * -1
   for (let y = min[1]; y <= max[1]; y++) {
     field[y + yOff] = ''
     for (let x = min[0]; x <= max[0]; x++) {
-      let star = stars.some(sStar => sStar.position[0] === x && sStar.position[1] === y)
+      const star = stars.some(sStar => sStar.position[0] === x && sStar.position[1] === y)
       field[y + yOff] += star ? '#' : '.'
     }
   }
   return field
 }
 
-const getStarRows = (starfield: IStarfield): JSX.Element[] => {
+const printStarfield = (starfield: Starfield) => {
   const { stars } = starfield
-  const starRows: JSX.Element[] = []
   const { min, max } = starfield
-  if (max[1] - min[1] < 400 && max[0] - min[0] < 400) {
-    getStarField(stars, min, max).forEach((row, i) => starRows.push(<div key={i}>{row}</div>))
-  } else {
-    starRows.push((
-      <div
-        key="no-render-stars"
-        style={{ minWidth: '330px' }}
-      >
-        The display will only render if the field width and height are each under 400!
-      </div>
-    ))
-  }
-  return starRows
+  let printedStarfield = ''
+  getStarfield(stars, min, max).forEach(row => printedStarfield += `${row.replaceAll('.', ' ')}\n`)
+  return printedStarfield
 }
 
-const renderDay = (dayConfig: IDayConfig, inputKey: string): JSX.Element => {
-  if (inputKey !== prevInputKey) {
-    starfield = getStars(inputKey)
-    time = 0
+export const alignTheStars = (inputKey: string) => {
+  starfield = getStars(inputKey)
+  time = 0
+  const result = findMessage(starfield.stars, time)
+  starfield = result.starfield
+  time = result.time
+  const printedStarfield = printStarfield(starfield)
+  console.log(printedStarfield)
+  return {
+    answer1: printedStarfield,
+    answer2: time
   }
-  prevInputKey = inputKey
-
-  return (
-    <div className="render-box render-box--no-wrap">
-      <pre>
-        <p>Input:</p>
-        <p>{dayConfig.INPUT[inputKey]}</p>
-      </pre>
-      <div
-        className="render-box--left-margin"
-        style={{
-          display: 'block',
-          flex: 0
-        }}
-      >
-        <p>Stars:</p>
-        <div style={{ display: 'flex' }}>
-          <fieldset>
-            {getStarRows(starfield)}
-          </fieldset>
-        </div>
-      </div>
-    </div>
-  )
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Advance One Second',
-    onClick: () => {
-      starfield = step(starfield.stars)
-      return {
-        answer1: time.toString()
-      }
-    }
-  },
-  {
-    label: 'Reverse One Second',
-    onClick: () => {
-      starfield = stepBack(starfield.stars)
-      return {
-        answer1: time.toString()
-      }
-    }
-  },
-  {
-    label: 'Find Message',
-    onClick: () => {
-      const result = findMessage(starfield.stars, time)
-      starfield = result.starfield
-      time = result.time
-      return {
-        answer1: result.time.toString(),
-        answer2: 'I hope you can see a message!!!'
-      }
-    }
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      Time: {answer}
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>{answer}</span>
-  ),
-  buttons: BUTTONS,
-  day: 10,
-  INPUT,
-  renderDay,
-  title: 'The Stars Align'
+const day10: Omit<DayConfig, 'year'> = {
+  answer1Text: 'Look in your console!',
+  answer2Text: 'The time until the message is answer.',
+  buttons: [
+    {
+      label: 'Find Message',
+      onClick: alignTheStars
+    },
+  ],
+  id: 10,
+  inputs,
+  title: 'The Stars Align',
 }
 
-export default config
+export default day10
