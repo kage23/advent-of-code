@@ -15,6 +15,7 @@ import { findGoodRecipes, findTargetRecipe } from './day14'
 import { doTheCombat, findBestElfPower } from './day15'
 import { runTheInputCode, threeOrMoreTest } from './day16'
 import { flowWater } from './day17'
+import { advanceTenMinutes, skipToMinuteOneBillion } from './day18'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -84,5 +85,9 @@ describe('2018 Answers', () => {
   it('Day 17', () => {
     console.log(`Day 17, Part 1: ${flowWater('REAL').answer1}`)
     console.log(`Day 17, Part 2: ${flowWater('REAL').answer2}`)
+  })
+  it('Day 18', () => {
+    console.log(`Day 18, Part 1: ${advanceTenMinutes('REAL').answer1}`)
+    console.log(`Day 18, Part 2: ${skipToMinuteOneBillion('REAL').answer2}`)
   })
 })
