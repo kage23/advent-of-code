@@ -9,6 +9,7 @@ import { getChecksum, getRootNodeValue } from './day08'
 import { playGame } from './day09'
 import { alignTheStars } from './day10'
 import { findBestGrid, findBestVariableSizeGrid } from './day11'
+import { advance50Billion, advance20Generations } from './day12'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -54,5 +55,9 @@ describe('2018 Answers', () => {
   xit('Day 11', () => {
     console.log(`Day 11, Part 1: ${findBestGrid('REAL').answer1}`)
     console.log(`Day 11, Part 2: ${findBestVariableSizeGrid('REAL').answer2}`)
+  })
+  it('Day 12', () => {
+    console.log(`Day 12, Part 1: ${advance20Generations('REAL').answer1}`)
+    console.log(`Day 12, Part 2: ${advance50Billion('REAL').answer2}`)
   })
 })
