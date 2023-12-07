@@ -13,6 +13,7 @@ import { advance50Billion, advance20Generations } from './day12'
 import { findCollision, goToEnd } from './day13'
 import { findGoodRecipes, findTargetRecipe } from './day14'
 import { doTheCombat, findBestElfPower } from './day15'
+import { runTheInputCode, threeOrMoreTest } from './day16'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -74,5 +75,9 @@ describe('2018 Answers', () => {
   it('Day 15', () => {
     console.log(`Day 15, Part 1: ${doTheCombat('REAL').answer1}`)
     console.log(`Day 15, Part 2: ${findBestElfPower('REAL').answer2}`)
+  })
+  it('Day 16', () => {
+    console.log(`Day 16, Part 1: ${threeOrMoreTest('REAL').answer1}`)
+    console.log(`Day 16, Part 2: ${runTheInputCode('REAL').answer2}`)
   })
 })

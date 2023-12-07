@@ -1,6 +1,13 @@
-const INPUT: { [key: string]: string } = {
-REAL:
-`Before: [1, 2, 3, 2]
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `Before: [3, 2, 1, 1]
+9 2 1 2
+After:  [3, 2, 2, 1]`
+  ],
+  [
+    'REAL',
+    `Before: [1, 2, 3, 2]
 3 1 3 0
 After:  [1, 2, 3, 2]
 
@@ -4152,6 +4159,7 @@ After:  [1, 1, 1, 2]
 5 1 1 1
 8 1 3 3
 2 3 0 0`
-}
+  ],
+])
 
-export default INPUT
+export default inputs
