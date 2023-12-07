@@ -11,6 +11,7 @@ import { alignTheStars } from './day10'
 import { findBestGrid, findBestVariableSizeGrid } from './day11'
 import { advance50Billion, advance20Generations } from './day12'
 import { findCollision, goToEnd } from './day13'
+import { findGoodRecipes, findTargetRecipe } from './day14'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -29,11 +30,11 @@ describe('2018 Answers', () => {
     console.log(`Day 04, Part 1: ${strategy1('REAL').answer1}`)
     console.log(`Day 04, Part 2: ${strategy2('REAL')!.answer2}`)
   })
-  it('Day 05', () => {
+  xit('Day 05', () => {
     console.log(`Day 05, Part 1: ${part1('REAL').answer1}`)
     console.log(`Day 05, Part 2: ${part2('REAL')!.answer2}`)
   })
-  it('Day 06', () => {
+  xit('Day 06', () => {
     console.log(`Day 06, Part 1: ${findLargestNonInfinite('REAL').answer1}`)
     console.log(`Day 06, Part 2: ${findAreaClosestToMost('REAL')!.answer2}`)
   })
@@ -64,5 +65,9 @@ describe('2018 Answers', () => {
   it('Day 13', () => {
     console.log(`Day 13, Part 1: ${findCollision('REAL').answer1}`)
     console.log(`Day 13, Part 2: ${goToEnd('REAL').answer2}`)
+  })
+  xit('Day 14', () => {
+    console.log(`Day 14, Part 1: ${findGoodRecipes('REAL').answer1}`)
+    console.log(`Day 14, Part 2: ${findTargetRecipe('REAL').answer2}`)
   })
 })
