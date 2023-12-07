@@ -8,6 +8,7 @@ import { calculateStepOrder, useWorkers } from './day07'
 import { getChecksum, getRootNodeValue } from './day08'
 import { playGame } from './day09'
 import { alignTheStars } from './day10'
+import { findBestGrid, findBestVariableSizeGrid } from './day11'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -42,12 +43,16 @@ describe('2018 Answers', () => {
     console.log(`Day 08, Part 1: ${getChecksum('REAL').answer1}`)
     console.log(`Day 08, Part 2: ${getRootNodeValue('REAL')!.answer2}`)
   })
-  it('Day 09', () => {
+  xit('Day 09', () => {
     console.log(`Day 09, Part 1: ${playGame('REAL', 1).answer1}`)
     console.log(`Day 09, Part 2: ${playGame('REAL', 2).answer2}`)
   })
-  it('Day 10', () => {
+  xit('Day 10', () => {
     console.log(`Day 10, Part 1:\n${alignTheStars('REAL').answer1}`)
     console.log(`Day 10, Part 2: ${alignTheStars('REAL').answer2}`)
+  })
+  xit('Day 11', () => {
+    console.log(`Day 11, Part 1: ${findBestGrid('REAL').answer1}`)
+    console.log(`Day 11, Part 2: ${findBestVariableSizeGrid('REAL').answer2}`)
   })
 })
