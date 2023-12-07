@@ -5,7 +5,7 @@ import DLL, { IDLLNode } from '../../utils/DLL'
 type RecipeList = DLL<number>
 type RecipeNode = IDLLNode<number>
 
-interface IState {
+interface State {
   elves: [RecipeNode | undefined, RecipeNode | undefined]
   recipes: RecipeList
 }
@@ -16,7 +16,7 @@ const resetRecipes = (): RecipeList => {
   return recipeList
 }
 
-const resetState = (): IState => {
+const resetState = (): State => {
   const recipes = resetRecipes()
   const elves = [recipes.head, recipes.head ? recipes.head.next : undefined] as [RecipeNode | undefined, RecipeNode | undefined]
 
@@ -26,7 +26,7 @@ const resetState = (): IState => {
   }
 }
 
-let state: IState = resetState()
+let state: State = resetState()
 
 const createRecipesAndAdvance = (elves: [RecipeNode | undefined, RecipeNode | undefined], recipes: RecipeList): {
   elves: [RecipeNode | undefined, RecipeNode | undefined]
@@ -68,7 +68,7 @@ const part1 = (betterAfter: number): {
   elves: [RecipeNode | undefined, RecipeNode | undefined]
   recipes: RecipeList
 } => {
-  let myState: IState = resetState()
+  let myState: State = resetState()
 
   while (myState.recipes.length < betterAfter + 10)
     myState = createRecipesAndAdvance(myState.elves, myState.recipes)
@@ -94,7 +94,7 @@ const part2 = (lookingFor: string): {
   const targetLength = lookingFor.length
   let checkString = ''
 
-  const { elves, recipes }: IState = resetState()
+  const { elves, recipes }: State = resetState()
 
   let nextSet: {
     elves: [RecipeNode | undefined, RecipeNode | undefined]

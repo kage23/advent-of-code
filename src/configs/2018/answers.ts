@@ -12,6 +12,7 @@ import { findBestGrid, findBestVariableSizeGrid } from './day11'
 import { advance50Billion, advance20Generations } from './day12'
 import { findCollision, goToEnd } from './day13'
 import { findGoodRecipes, findTargetRecipe } from './day14'
+import { doTheCombat, findBestElfPower } from './day15'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -69,5 +70,9 @@ describe('2018 Answers', () => {
   xit('Day 14', () => {
     console.log(`Day 14, Part 1: ${findGoodRecipes('REAL').answer1}`)
     console.log(`Day 14, Part 2: ${findTargetRecipe('REAL').answer2}`)
+  })
+  it('Day 15', () => {
+    console.log(`Day 15, Part 1: ${doTheCombat('REAL').answer1}`)
+    console.log(`Day 15, Part 2: ${findBestElfPower('REAL').answer2}`)
   })
 })
