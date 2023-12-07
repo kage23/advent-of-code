@@ -14,6 +14,7 @@ import { findCollision, goToEnd } from './day13'
 import { findGoodRecipes, findTargetRecipe } from './day14'
 import { doTheCombat, findBestElfPower } from './day15'
 import { runTheInputCode, threeOrMoreTest } from './day16'
+import { flowWater } from './day17'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -79,5 +80,9 @@ describe('2018 Answers', () => {
   it('Day 16', () => {
     console.log(`Day 16, Part 1: ${threeOrMoreTest('REAL').answer1}`)
     console.log(`Day 16, Part 2: ${runTheInputCode('REAL').answer2}`)
+  })
+  it('Day 17', () => {
+    console.log(`Day 17, Part 1: ${flowWater('REAL').answer1}`)
+    console.log(`Day 17, Part 2: ${flowWater('REAL').answer2}`)
   })
 })

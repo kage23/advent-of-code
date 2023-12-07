@@ -1,16 +1,18 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`x=495, y=2..7
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `x=495, y=2..7
 y=7, x=495..501
 x=501, y=3..7
 x=498, y=2..4
 x=506, y=1..2
 x=498, y=10..13
 x=504, y=10..13
-y=13, x=498..504`,
-
-REAL:
-`x=507, y=1652..1666
+y=13, x=498..504`
+  ],
+  [
+    'REAL',
+    `x=507, y=1652..1666
 x=541, y=962..989
 x=600, y=75..81
 y=650, x=583..593
@@ -1596,6 +1598,7 @@ y=561, x=474..479
 x=628, y=1466..1474
 x=635, y=1067..1077
 x=491, y=1474..1500`
-}
+  ],
+])
 
-export default INPUT
+export default inputs
