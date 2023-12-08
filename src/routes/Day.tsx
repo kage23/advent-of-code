@@ -19,6 +19,7 @@ export interface DayConfig {
     label: string
     onClick: (inputKey: string) => ButtonClickReturn
   }[]
+  extra?: () => ReactNode
   id: number
   inputs: Map<string, string>
   title: string
@@ -40,8 +41,7 @@ export async function loader({ params }: { params: Params }) {
 }
 
 const Day = () => {
-  const { answer1Text, answer2Text, buttons, id, inputs, title, year } =
-    useLoaderData() as DayConfig
+  const { answer1Text, answer2Text, buttons, extra, id, inputs, title, year } = useLoaderData() as DayConfig
 
   const [answer1, setAnswer1] = useState<string | number>()
   const [answer2, setAnswer2] = useState<string | number>()
@@ -121,6 +121,7 @@ const Day = () => {
           View Challenge
         </a>
       </h2>
+      {extra && <div>{extra()}</div>}
       <div className={styles.controlBoxes}>
         <fieldset className={styles.inputSelector}>
           <label className={styles.label}>Select an input:</label>

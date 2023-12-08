@@ -1,16 +1,18 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`#ip 0
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `#ip 0
 seti 5 0 1
 seti 6 0 2
 addi 0 1 0
 addr 1 2 3
 setr 1 0 0
 seti 8 0 4
-seti 9 0 5`,
-
-REAL:
-`#ip 4
+seti 9 0 5`
+  ],
+  [
+    'REAL',
+    `#ip 4
 addi 4 16 4
 seti 1 3 3
 seti 1 4 2
@@ -47,6 +49,7 @@ mulr 1 4 1
 addr 5 1 5
 seti 0 8 0
 seti 0 4 4`
-}
+  ],
+])
 
-export default INPUT
+export default inputs

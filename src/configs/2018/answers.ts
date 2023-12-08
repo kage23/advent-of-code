@@ -16,6 +16,7 @@ import { doTheCombat, findBestElfPower } from './day15'
 import { runTheInputCode, threeOrMoreTest } from './day16'
 import { flowWater } from './day17'
 import { advanceTenMinutes, skipToMinuteOneBillion } from './day18'
+import { runUntilDone } from './day19'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -89,5 +90,10 @@ describe('2018 Answers', () => {
   it('Day 18', () => {
     console.log(`Day 18, Part 1: ${advanceTenMinutes('REAL').answer1}`)
     console.log(`Day 18, Part 2: ${skipToMinuteOneBillion('REAL').answer2}`)
+  })
+  // Don't run this; it'll take a long time and part 2 isn't a one-click / one-function thing anyway
+  xit('Day 19', () => {
+    console.log(`Day 19, Part 1: ${runUntilDone('REAL').answer1}`)
+    // console.log(`Day 18, Part 2: ${skipToMinuteOneBillion('REAL').answer2}`)
   })
 })

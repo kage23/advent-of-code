@@ -2,7 +2,7 @@ import inputs from '../../inputs/2018/day16'
 import { DayConfig } from '../../routes/Day'
 
 interface Operation {
-  code: number
+  code?: number
   inputA: number
   inputB: number
   outputC: number
@@ -23,7 +23,7 @@ interface State {
   code: string
 }
 
-const Operations: {
+export const Operations: {
   [key:string]: (operation: Operation, registers: number[]) => number[]
 } = {
   // Add Register
@@ -285,7 +285,7 @@ export const runTheInputCode = (inputKey: string) => {
   state.registers = [0, 0, 0, 0]
 
   for (const op of instructions)
-    state.registers = Operations[state.opCodes[op.code]](op, state.registers)
+    state.registers = Operations[state.opCodes[op.code!]](op, state.registers)
 
   return {
     answer2: state.registers[0]

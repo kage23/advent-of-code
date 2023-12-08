@@ -194,7 +194,7 @@ export const skipToMinuteOneBillion = (inputKey: string) => {
 
 const day18: Omit<DayConfig, 'year'> = {
   answer1Text: 'The total resource value after 10 minutes is answer.',
-  answer2Text: 'The total resource value after 1,000,000,000 minutes is.',
+  answer2Text: 'The total resource value after 1,000,000,000 minutes is answer.',
   buttons: [
     {
       label: 'Advance Ten Minutes',
