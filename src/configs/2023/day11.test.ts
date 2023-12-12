@@ -8,7 +8,7 @@ describe('2023 Day 11', () => {
     })
   })
   describe('Part 2', () => {
-    it('should find the distances between all the galaxies after a small expansion', () => {
+    it('should find the distances between all the galaxies after a big expansion', () => {
       expect(findExpandedGalaxyPaths(inputs.get('DEMO_1')!, 2).answer2).toEqual(
         374
       )
