@@ -17,7 +17,7 @@ export interface DayConfig {
   answer2Text: string
   buttons: {
     label: string
-    onClick: (inputKey: string) => ButtonClickReturn
+    onClick: (input: string) => ButtonClickReturn
   }[]
   extra?: () => ReactNode
   id: number
@@ -45,17 +45,26 @@ const Day = () => {
 
   const [answer1, setAnswer1] = useState<string | number>()
   const [answer2, setAnswer2] = useState<string | number>()
+  const [paste, setPaste] = useState('')
   const [specialRender, setSpecialRender] = useState<ReactNode>(null)
   const [selectedInputKey, setSelectedInputKey] = useState<string>()
 
+  const getInput = (inputKey: string | undefined, inputs: Map<string, string>) => {
+    if (inputKey === undefined) return ''
+    if (inputKey !== 'paste') return inputs.get(inputKey)!
+    return paste
+  }
+
   const handleButtonClick = (
-    onClick: (inputKey: string) => ButtonClickReturn,
-    inputKey: string,
+    onClick: (input: string) => ButtonClickReturn,
+    inputKey: string | undefined,
     label: string
   ) => {
+    const input = getInput(inputKey, inputs)
+
     const timerLabel = `Year ${year.id}, Day ${id}, ${label} (${inputKey})`
     console.time(timerLabel)
-    const result = onClick(selectedInputKey!)
+    const result = onClick(input)
     console.timeEnd(timerLabel)
 
     if (result && result.answer1 !== undefined) setAnswer1(result.answer1)
@@ -66,6 +75,14 @@ const Day = () => {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget
     setSelectedInputKey(value)
+    setAnswer1(undefined)
+    setAnswer2(undefined)
+    setSpecialRender(null)
+  }
+
+  const handlePasteChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = event.currentTarget
+    setPaste(value)
     setAnswer1(undefined)
     setAnswer2(undefined)
     setSpecialRender(null)
@@ -126,6 +143,17 @@ const Day = () => {
         <fieldset className={styles.inputSelector}>
           <label className={styles.label}>Select an input:</label>
           {inputSelectors}
+          <label key="paste" className={styles.label}>
+            <input
+              className={styles.inputItem}
+              type="radio"
+              name="inputType"
+              value="paste"
+              checked={selectedInputKey === 'paste'}
+              onChange={handleInputChange}
+            />
+            Paste
+          </label>
         </fieldset>
         {buttons.length > 0 && (
           <fieldset className={styles.buttons}>
@@ -168,7 +196,11 @@ const Day = () => {
             className={classnames({ [styles.inputDisplay]: !!specialRender })}
           >
             <h3 className={styles.inputTitle}>Input:</h3>
-            <pre className={styles.input}>{inputs.get(selectedInputKey)}</pre>
+            {selectedInputKey === 'paste' ? (
+              <textarea cols={100} onChange={handlePasteChange} rows={8} />
+            ) : (
+              <pre className={styles.input}>{inputs.get(selectedInputKey)}</pre>
+            )}
           </div>
           {!!specialRender && (
             <div className={styles.specialRender}>{specialRender}</div>
