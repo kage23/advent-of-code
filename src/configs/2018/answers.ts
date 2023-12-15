@@ -22,6 +22,7 @@ import { findFirstExitCode /* findLastExitCode */ } from './day21'
 import { assessRisk /* calculateTimeForRescue */ } from './day22'
 import { countInRangeNanobots, findBestLocation } from './day23'
 import { fightFullCombat, findTheBoost } from './day24'
+import { countConstellations } from './day25'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -122,5 +123,8 @@ describe('2018 Answers', () => {
   it('Day 24', () => {
     console.log(`Day 24, Part 1: ${fightFullCombat('REAL').answer1}`)
     console.log(`Day 24, Part 2: ${findTheBoost('REAL').answer2}`)
+  })
+  it('Day 25', () => {
+    console.log(`Day 25, Part 1: ${countConstellations('REAL').answer1}`)
   })
 })
