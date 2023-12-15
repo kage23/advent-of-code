@@ -1,16 +1,9 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2018/day23'
+import { DayConfig } from '../../routes/Day'
+import manhattanDistance from '../../utils/manhattanDistance'
 
-import INPUT from '../Inputs/2018/Day23'
-import { manhattanDistance } from '../utils/Various'
-
-let answer2_a = ''
-
-const countInRangeNanobots = (input: string): number => {
-  const nanobots: number[][] = input.split('\n')
+export const countInRangeNanobots = (inputKey: string) => {
+  const nanobots: number[][] = inputs.get(inputKey)!.split('\n')
     .map(nanobotStr => {
       const [pos, rStr] = nanobotStr.split(', ')
       const [xStr, yStr, zStr] = pos.split(',')
@@ -26,12 +19,12 @@ const countInRangeNanobots = (input: string): number => {
     if (manhattanDistance(nanobot, strongestNanobot, 3) <= strongestNanobot[3]) nanobotsInRange++
   })
 
-  return nanobotsInRange
+  return { answer1: nanobotsInRange }
 }
 
-const findBestLocation = (input: string): number[] => {
+export const findBestLocation = (inputKey: string) => {
   let minX = 0, minY = 0, minZ = 0, maxX = 0, maxY = 0, maxZ = 0
-  const nanobots: number[][] = input.split('\n')
+  const nanobots: number[][] = inputs.get(inputKey)!.split('\n')
     .map(nanobotStr => {
       const [pos, rStr] = nanobotStr.split(', ')
       const [xStr, yStr, zStr] = pos.split(',')
@@ -84,49 +77,27 @@ const findBestLocation = (input: string): number[] => {
     scale = Math.floor(scale / 2)
   }
 
-  return bestOrigin
-}
-
-const BUTTONS: IButton[] = [
-  {
-    label: 'Count In-Range Nanobots',
-    onClick: (inputKey) => {
-      return {
-        answer1: countInRangeNanobots(INPUT[inputKey]).toString()
-      }
-    }
-  },
-  {
-    label: 'Find Best Location',
-    onClick: (inputKey) => {
-      const result = findBestLocation(INPUT[inputKey])
-      answer2_a = JSON.stringify(result)
-
-      return {
-        answer2: manhattanDistance(result, [0, 0, 0]).toString()
-      }
-    }
+  return {
+    answer2: manhattanDistance(bestOrigin, [0, 0, 0])
   }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      <code>{answer}</code> nanbots are in range of the strongest nanobot.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The best place to be is{' '}
-      <code>{answer2_a}</code>. It is {' '}
-      <code>{answer}</code> from <code>[0,0,0]</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 23,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Experimental Emergency Teleportation'
 }
 
-export default config
+const day23: Omit<DayConfig, 'year'> = {
+  answer1Text: 'answer nanbots are in range of the strongest nanobot.',
+  answer2Text: 'The best place is answer distance from [0,0,0].',
+  buttons: [
+    {
+      label: 'Count In-Range Nanobots',
+      onClick: countInRangeNanobots
+    },
+    {
+      label: 'Find Best Location',
+      onClick: findBestLocation
+    }
+  ],
+  id: 23,
+  inputs,
+  title: 'Experimental Emergency Teleportation',
+}
+
+export default day23

@@ -20,6 +20,7 @@ import { runUntilDone } from './day19'
 import { countFarRooms, findFarthestRoom } from './day20'
 import { findFirstExitCode /* findLastExitCode */ } from './day21'
 import { assessRisk /* calculateTimeForRescue */ } from './day22'
+import { countInRangeNanobots, findBestLocation } from './day23'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -112,5 +113,9 @@ describe('2018 Answers', () => {
     console.log(`Day 22, Part 1: ${assessRisk('REAL').answer1}`)
     // Part 2 takes about a minute and a half to run
     // console.log(`Day 22, Part 2: ${calculateTimeForRescue('REAL').answer2}`)
+  })
+  it('Day 23', () => {
+    console.log(`Day 23, Part 1: ${countInRangeNanobots('REAL').answer1}`)
+    console.log(`Day 23, Part 2: ${findBestLocation('REAL').answer2}`)
   })
 })
