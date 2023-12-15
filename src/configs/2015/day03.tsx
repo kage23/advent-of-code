@@ -1,8 +1,8 @@
 import inputs from '../../inputs/2015/day03'
 import { DayConfig } from '../../routes/Day'
 
-export const deliverPresents = (inputKey: string) => {
-  const instructions = inputs.get(inputKey)!
+export const deliverPresents = (input: string) => {
+  const instructions = input
   const visited: Map<string, true> = new Map()
   let x = 0
   let y = 0
@@ -32,8 +32,8 @@ export const deliverPresents = (inputKey: string) => {
   }
 }
 
-export const deliverPresentsWithRoboSanta = (inputKey: string) => {
-  const instructions = inputs.get(inputKey)!
+export const deliverPresentsWithRoboSanta = (input: string) => {
+  const instructions = input
   const visited: Map<string, true> = new Map()
   const santas = [
     [0, 0],

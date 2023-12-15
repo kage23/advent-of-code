@@ -30,9 +30,9 @@ export const getCodeNumberAtGridPosition = (
   return number
 }
 
-export const getTheDesignatedCode = (inputKey: string) => {
-  const row = parseInt(inputs.get(inputKey)!.split(' at row ')[1])
-  const col = parseInt(inputs.get(inputKey)!.split(', column ')[1])
+export const getTheDesignatedCode = (input: string) => {
+  const row = parseInt(input.split(' at row ')[1])
+  const col = parseInt(input.split(', column ')[1])
   return {
     answer1: getCodeFromCodeNumber(getCodeNumberAtGridPosition(row, col)),
   }

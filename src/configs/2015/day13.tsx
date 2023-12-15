@@ -2,14 +2,13 @@ import inputs from '../../inputs/2015/day13'
 import { DayConfig } from '../../routes/Day'
 
 const parseInput = (
-  inputKey: string,
+  input: string,
   part: 1 | 2,
   attendees?: string[]
 ): Map<string, number> => {
   const happinessUnits: Map<string, number> = new Map()
 
-  inputs
-    .get(inputKey)!
+  input
     .split('\n')
     .forEach((line) => {
       const [firstPerson, , gainOrLose, x, , , , , , , secondPerson] = line
@@ -69,14 +68,13 @@ const calculateHappiness = (
   return totalHappinessDiff
 }
 
-export const findOptimalSeatingArrangement = (inputKey: string) => {
-  const attendees = inputs
-    .get(inputKey)!
+export const findOptimalSeatingArrangement = (input: string) => {
+  const attendees = input
     .split('\n')
     .map((line) => line.split(' ')[0])
     .filter((name, index, array) => array.indexOf(name) === index)
 
-  const happinessLevels = parseInput(inputKey, 1, attendees)
+  const happinessLevels = parseInput(input, 1, attendees)
 
   const possibleSeatingArrangements =
     generatePossibleSeatingArrangements(attendees)
@@ -95,16 +93,15 @@ export const findOptimalSeatingArrangement = (inputKey: string) => {
   }
 }
 
-export const findOptimalSeatingArrangementWithYou = (inputKey: string) => {
-  const attendees = inputs
-    .get(inputKey)!
+export const findOptimalSeatingArrangementWithYou = (input: string) => {
+  const attendees = input
     .split('\n')
     .map((line) => line.split(' ')[0])
     .filter((name, index, array) => array.indexOf(name) === index)
 
   attendees.push('Kyle')
 
-  const happinessLevels = parseInput(inputKey, 2, attendees)
+  const happinessLevels = parseInput(input, 2, attendees)
 
   const possibleSeatingArrangements =
     generatePossibleSeatingArrangements(attendees)

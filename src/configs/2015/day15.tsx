@@ -15,9 +15,8 @@ interface RecipeItem {
   quantity: number
 }
 
-const parseInput = (inputKey: string): Ingredient[] =>
-  inputs
-    .get(inputKey)!
+const parseInput = (input: string): Ingredient[] =>
+  input
     .split('\n')
     .map((ingredLine) => {
       const calories = parseInt(ingredLine.split('calories ')[1])
@@ -110,8 +109,8 @@ const getCalories = (recipe: RecipeItem[]): number =>
     0
   )
 
-export const findBestRecipe = (inputKey: string) => {
-  const ingredients = parseInput(inputKey)
+export const findBestRecipe = (input: string) => {
+  const ingredients = parseInput(input)
   const recipes = generateRecipes(ingredients)
   let bestRecipeScore = Number.MIN_SAFE_INTEGER
   recipes.forEach((recipe) => {
@@ -122,8 +121,8 @@ export const findBestRecipe = (inputKey: string) => {
   }
 }
 
-export const findBestLowCalRecipe = (inputKey: string) => {
-  const ingredients = parseInput(inputKey)
+export const findBestLowCalRecipe = (input: string) => {
+  const ingredients = parseInput(input)
   const recipes = generateRecipes(ingredients).filter(
     (recipe) => getCalories(recipe) === 500
   )

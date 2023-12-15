@@ -1,6 +1,7 @@
 import { determineTheActualSue, determineTheSue } from './day16'
 
-describe('2015 Day 16', () => {
+// No demo data so no tests
+xdescribe('2015 Day 16', () => {
   describe('Part 1', () => {
     describe('determineTheSue', () => {
       it('should determine which Sue got you the gift', () => {

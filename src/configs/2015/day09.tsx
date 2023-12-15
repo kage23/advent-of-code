@@ -1,15 +1,14 @@
 import inputs from '../../inputs/2015/day09'
 import { DayConfig } from '../../routes/Day'
 
-export const findPaths = (inputKey: string) => {
+export const findPaths = (input: string) => {
   interface ISearchNode {
     distance: number
     path: string[]
   }
 
   const distances: Map<string, number> = new Map(
-    inputs
-      .get(inputKey)!
+    input
       .split('\n')
       .map((inputLine) => {
         const [places, distance] = inputLine.split(' = ')

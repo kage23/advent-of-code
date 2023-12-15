@@ -19,14 +19,14 @@ interface SearchNode {
   totalManaSpent: number
 }
 
-const SPELLS: {
+const Spells: {
   cost: number
   effect: (player: Fighter, boss: Fighter) => void
   name: string
 }[] = [
   {
     cost: 53,
-    effect: (player, boss) => {
+    effect: (_, boss) => {
       boss.hitPoints -= 4
     },
     name: 'Magic Missile',
@@ -50,7 +50,7 @@ const SPELLS: {
   },
   {
     cost: 173,
-    effect: (player, boss) => {
+    effect: (_, boss) => {
       if (boss.poisonIsActive === 0) {
         boss.poisonIsActive = 6
       }
@@ -107,7 +107,7 @@ const playerTurn = (
   if ([player, boss].some((fighter) => fighter.hitPoints <= 0)) {
     return { boss, player }
   }
-  const spell = SPELLS[spellIndex]
+  const spell = Spells[spellIndex]
   if (spell) {
     player.mana -= spell.cost
     spell.effect(player, boss)
@@ -137,8 +137,8 @@ function* generatePossibleNexts(
   current: SearchNode,
   part: 1 | 2
 ): Generator<SearchNode, SearchNode | undefined, undefined> {
-  for (let i = 0; i < SPELLS.length; i++) {
-    const spell = SPELLS[i]
+  for (let i = 0; i < Spells.length; i++) {
+    const spell = Spells[i]
     let fighters = {
       boss: JSON.parse(JSON.stringify(current.boss)),
       player: JSON.parse(JSON.stringify(current.player)),
@@ -185,17 +185,33 @@ const sortIntoSearchQueue = (
   }
 }
 
-const findBestFight = (part: 1 | 2): number => {
+const getBoss = (input: string) => {
+  const boss: Fighter = {
+    armor: 0,
+    damage: 0,
+    hitPoints: 0,
+    mana: 0,
+    poisonIsActive: 0,
+    rechargeIsActive: 0,
+    shieldIsActive: 0,
+  }
+  input.split('\n').forEach(line => {
+    const [label, value] = line.split(': ')
+    switch (label) {
+      case 'Hit Points':
+        boss.hitPoints = Number(value)
+        break
+      case 'Damage':
+        boss.damage = Number(value)
+        break
+    }
+  })
+  return boss
+}
+
+const findBestFight = (input: string, part: 1 | 2): number => {
   const queue: SLL<SearchNode> = new SLL({
-    boss: {
-      armor: 0,
-      damage: 8,
-      hitPoints: 55,
-      mana: 0,
-      poisonIsActive: 0,
-      rechargeIsActive: 0,
-      shieldIsActive: 0,
-    },
+    boss: getBoss(input),
     player: {
       armor: 0,
       damage: 8,
@@ -229,12 +245,12 @@ const findBestFight = (part: 1 | 2): number => {
   return NaN
 }
 
-export const findBestFightPart1 = () => ({
-  answer1: findBestFight(1),
+export const findBestFightPart1 = (input: string) => ({
+  answer1: findBestFight(input, 1),
 })
 
-export const findBestFightOnHard = () => ({
-  answer2: findBestFight(2),
+export const findBestFightOnHard = (input: string) => ({
+  answer2: findBestFight(input, 2),
 })
 
 const day22: Omit<DayConfig, 'year'> = {

@@ -1,8 +1,7 @@
 import inputs from '../../inputs/2015/day01'
 import { DayConfig } from '../../routes/Day'
 
-export const followInstructions = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
+export const followInstructions = (input: string) => {
   const { length } = input
 
   let floor = 0
@@ -26,8 +25,7 @@ export const followInstructions = (inputKey: string) => {
   }
 }
 
-export const findBasement = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
+export const findBasement = (input: string) => {
   const { length } = input
 
   let floor = 0

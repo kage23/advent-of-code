@@ -28,16 +28,16 @@ const findSum = (input: any, runningTotal = 0, part: 1 | 2): number => {
   )
 }
 
-export const sumInput = (inputKey: string) => {
-  const input = JSON.parse(inputs.get(inputKey)!)
+export const sumInput = (inputStr: string) => {
+  const input = JSON.parse(inputStr)
   const sum = findSum(input, 0, 1)
   return {
     answer1: sum,
   }
 }
 
-export const sumInputNoRed = (inputKey: string) => {
-  const input = JSON.parse(inputs.get(inputKey)!)
+export const sumInputNoRed = (inputStr: string) => {
+  const input = JSON.parse(inputStr)
   const sum = findSum(input, 0, 2)
   return {
     answer2: sum,

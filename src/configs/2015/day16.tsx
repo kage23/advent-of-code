@@ -30,9 +30,8 @@ const analysis: Sue = {
   vizslas: 0,
 }
 
-const parseInput = (inputKey: string): Sue[] =>
-  inputs
-    .get(inputKey)!
+const parseInput = (input: string): Sue[] =>
+  input
     .split('\n')
     .map((sueLine, i) => {
       const number = i + 1
@@ -72,8 +71,8 @@ const parseInput = (inputKey: string): Sue[] =>
       return sue
     })
 
-export const determineTheSue = (inputKey: string) => {
-  const sues = parseInput(inputKey)
+export const determineTheSue = (input: string) => {
+  const sues = parseInput(input)
   for (let i = 0; i < sues.length; i++) {
     const sue = sues[i]
     let theRightSue = true
@@ -91,8 +90,8 @@ export const determineTheSue = (inputKey: string) => {
   }
 }
 
-export const determineTheActualSue = (inputKey: string) => {
-  const sues = parseInput(inputKey)
+export const determineTheActualSue = (input: string) => {
+  const sues = parseInput(input)
   for (let i = 0; i < sues.length; i++) {
     const sue = sues[i]
     let theRightSue = true

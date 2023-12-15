@@ -28,26 +28,22 @@ const determineCombos = (
   return comboList
 }
 
-export const determineContainerCombos = (inputKey: string) => {
-  const containerSizes = inputs
-    .get(inputKey)!
+export const determineContainerCombos = (input: string, eggnog = 150) => {
+  const containerSizes = input
     .split('\n')
     .map((x) => parseInt(x))
     .sort((a, b) => a - b)
-  const eggnog = inputKey.startsWith('DEMO') ? 25 : 150
   const combos = determineCombos(containerSizes, eggnog, [])
   return {
     answer1: combos.length,
   }
 }
 
-export const determineEfficientContainerCombos = (inputKey: string) => {
-  const containerSizes = inputs
-    .get(inputKey)!
+export const determineEfficientContainerCombos = (input: string, eggnog = 150) => {
+  const containerSizes = input
     .split('\n')
     .map((x) => parseInt(x))
     .sort((a, b) => a - b)
-  const eggnog = inputKey.startsWith('DEMO') ? 25 : 150
   const combos = determineCombos(containerSizes, eggnog, [])
   let minNumOfContainers = Number.MAX_SAFE_INTEGER
   for (const combo of combos) {

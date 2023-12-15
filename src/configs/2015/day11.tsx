@@ -45,8 +45,8 @@ export const isViablePassword = (input: string): boolean =>
   // Passwords must contain at least two different, non-overlapping pairs of letters, like aa, bb, or zz.
   containsTwoSeparatePairs(input)
 
-export const findNextViablePassword = (inputKey: string) => {
-  let password = incrementPassword(inputs.get(inputKey) || inputKey)
+export const findNextViablePassword = (input: string) => {
+  let password = incrementPassword(input)
 
   while (!isViablePassword(password)) {
     password = incrementPassword(password)
@@ -57,8 +57,8 @@ export const findNextViablePassword = (inputKey: string) => {
   }
 }
 
-export const findNEXTNextViablePassword = (inputKey: string) => {
-  const nextViablePassword = findNextViablePassword(inputKey).answer1
+export const findNEXTNextViablePassword = (input: string) => {
+  const nextViablePassword = findNextViablePassword(input).answer1
   return {
     answer2: findNextViablePassword(nextViablePassword).answer1,
   }

@@ -51,8 +51,8 @@ export const presentsAtHouseNumber = (
   (sumOfAllDivisors(houseNumber, maxHousesPerElf) + houseNumber) *
   presentsPerElf
 
-export const findThePresentHouse = (inputKey: string) => {
-  const target = parseInt(inputs.get(inputKey)!)
+export const findThePresentHouse = (input: string) => {
+  const target = parseInt(input)
 
   let i = 1
   let presents = presentsAtHouseNumber(i, 10)
@@ -66,8 +66,8 @@ export const findThePresentHouse = (inputKey: string) => {
   }
 }
 
-export const findThePresentHouseWithLazierElves = (inputKey: string) => {
-  const target = parseInt(inputs.get(inputKey)!)
+export const findThePresentHouseWithLazierElves = (input: string) => {
+  const target = parseInt(input)
 
   let i = 1
   let presents = presentsAtHouseNumber(i, 11, 50)

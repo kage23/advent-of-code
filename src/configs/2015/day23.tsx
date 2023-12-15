@@ -47,17 +47,17 @@ export const runCode = (
   return registers
 }
 
-export const runCodePart1 = (inputKey: string) => {
+export const runCodePart1 = (input: string) => {
   const registers: { [key: string]: number } = { a: 0, b: 0 }
-  const instructions = inputs.get(inputKey)!.split('\n')
+  const instructions = input.split('\n')
   return {
     answer1: runCode(registers, instructions).b,
   }
 }
 
-export const runCodePart2 = (inputKey: string) => {
+export const runCodePart2 = (input: string) => {
   const registers: { [key: string]: number } = { a: 1, b: 0 }
-  const instructions = inputs.get(inputKey)!.split('\n')
+  const instructions = input.split('\n')
   return {
     answer2: runCode(registers, instructions).b,
   }

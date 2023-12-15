@@ -43,15 +43,15 @@ export const isStringNice__v2 = (string: string): boolean => {
   return false
 }
 
-export const areStringsNice = (inputKey: string) => {
-  const strings = inputs.get(inputKey)!.split('\n')
+export const areStringsNice = (input: string) => {
+  const strings = input.split('\n')
   return {
     answer1: strings.filter((string) => isStringNice(string)).length,
   }
 }
 
-export const areStringsNice__v2 = (inputKey: string) => {
-  const strings = inputs.get(inputKey)!.split('\n')
+export const areStringsNice__v2 = (input: string) => {
+  const strings = input.split('\n')
   return {
     answer2: strings.filter((string) => isStringNice__v2(string)).length,
   }

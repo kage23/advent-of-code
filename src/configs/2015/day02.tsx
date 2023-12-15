@@ -12,8 +12,8 @@ export const getRibbon = (present: string): number => {
   return Math.min(l * 2 + w * 2, l * 2 + h * 2, w * 2 + h * 2) + l * w * h
 }
 
-export const calculateWrappingPaper = (inputKey: string) => {
-  const presentSizeList = inputs.get(inputKey)!.split('\n')
+export const calculateWrappingPaper = (input: string) => {
+  const presentSizeList = input.split('\n')
 
   return {
     answer1: presentSizeList.reduce(
@@ -23,8 +23,8 @@ export const calculateWrappingPaper = (inputKey: string) => {
   }
 }
 
-export const calculateRibbon = (inputKey: string) => {
-  const presentSizeList = inputs.get(inputKey)!.split('\n')
+export const calculateRibbon = (input: string) => {
+  const presentSizeList = input.split('\n')
 
   return {
     answer2: presentSizeList.reduce(

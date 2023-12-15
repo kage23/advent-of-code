@@ -229,6 +229,25 @@ const getFighterStatsFromEquipmentCombo = (equipment: Equipment): Fighter => ({
   hitPoints: 100,
 })
 
+const getBoss = (input: string) => {
+  const boss = {} as Fighter
+  input.split('\n').forEach(line => {
+    const [label, value] = line.split(': ')
+    switch (label) {
+      case 'Hit Points':
+        boss.hitPoints = Number(value)
+        break
+      case 'Damage':
+        boss.damage = Number(value)
+        break
+      case 'Armor':
+        boss.armor = Number(value)
+        break
+    }
+  })
+  return boss
+}
+
 // Returns true if the first player wins or false if the second player wins
 // It's up to you to pass the player as the first player and the boss as the second player
 export const runFight = (fighters: Fighter[]): boolean => {
@@ -248,7 +267,7 @@ export const runFight = (fighters: Fighter[]): boolean => {
   return fighters[0].hitPoints > 0
 }
 
-export const checkAllEquipmentCombos = () => {
+export const checkAllEquipmentCombos = (input: string) => {
   const equipmentCombosList = generateEquipmentCombos().sort(
     (a, b) => a.totalCost - b.totalCost
   )
@@ -257,7 +276,7 @@ export const checkAllEquipmentCombos = () => {
 
   for (const equipmentCombo of equipmentCombosList) {
     const player = getFighterStatsFromEquipmentCombo(equipmentCombo)
-    const boss: Fighter = { armor: 2, damage: 8, hitPoints: 100 }
+    const boss: Fighter = getBoss(input)
     const result = runFight([player, boss])
     if (!result) {
       mostExpensiveLoss = Math.max(mostExpensiveLoss, equipmentCombo.totalCost)

@@ -68,8 +68,8 @@ export const constructCircuit = (
   return circuit
 }
 
-export const constructTheCircuit = (inputKey: string, part: 1 | 2) => {
-  const circuit = constructCircuit(inputs.get(inputKey)!.split('\n'), part)
+export const constructTheCircuit = (input: string, part: 1 | 2) => {
+  const circuit = constructCircuit(input.split('\n'), part)
 
   return {
     answer1: part === 1 ? circuit.get('a') : undefined,
@@ -83,11 +83,11 @@ const day07: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Construct the Circuit',
-      onClick: (inputKey) => constructTheCircuit(inputKey, 1),
+      onClick: (input) => constructTheCircuit(input, 1),
     },
     {
       label: 'Construct Circuit with Override',
-      onClick: (inputKey) => constructTheCircuit(inputKey, 2),
+      onClick: (input) => constructTheCircuit(input, 2),
     },
   ],
   id: 7,

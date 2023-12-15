@@ -47,10 +47,10 @@ const encodeString = (string: string): string => {
   return result
 }
 
-export const examineStringConversions = (inputKey: string) => {
-  const input = inputs.get(inputKey)!.split('\n')
-  const codeLength = input.reduce((total, current) => total + current.length, 0)
-  const stringsLength = input
+export const examineStringConversions = (input: string) => {
+  const lines = input.split('\n')
+  const codeLength = lines.reduce((total, current) => total + current.length, 0)
+  const stringsLength = lines
     .map((str) => convertString(str))
     .reduce((total, current) => total + current.length, 0)
 
@@ -59,10 +59,10 @@ export const examineStringConversions = (inputKey: string) => {
   }
 }
 
-export const examineStringEncodings = (inputKey: string) => {
-  const input = inputs.get(inputKey)!.split('\n')
-  const codeLength = input.reduce((total, current) => total + current.length, 0)
-  const encodedLength = input
+export const examineStringEncodings = (input: string) => {
+  const lines = input.split('\n')
+  const codeLength = lines.reduce((total, current) => total + current.length, 0)
+  const encodedLength = lines
     .map((str) => encodeString(str))
     .reduce((total, current) => total + current.length, 0)
 

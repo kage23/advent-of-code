@@ -8,9 +8,8 @@ interface Reindeer {
   velocity: number
 }
 
-const parseInput = (inputKey: string): Reindeer[] =>
-  inputs
-    .get(inputKey)!
+const parseInput = (input: string): Reindeer[] =>
+  input
     .split('\n')
     .map((reindeerLine) => {
       const [name, , , velocity, , , flyTime, , , , , , , restTime] =
@@ -47,9 +46,8 @@ const getLeadersAtTime = (reindeers: Reindeer[], time: number): string[] => {
     .map((reindeer) => reindeer.name)
 }
 
-export const raceReindeer = (inputKey: string) => {
-  const reindeers = parseInput(inputKey)
-  const raceTime = inputKey.startsWith('DEMO') ? 1000 : 2503
+export const raceReindeer = (input: string, raceTime = 2503) => {
+  const reindeers = parseInput(input)
   const winningDistance = Math.max(
     ...reindeers.map((reindeer) => getDistance(reindeer, raceTime))
   )
@@ -58,9 +56,8 @@ export const raceReindeer = (inputKey: string) => {
   }
 }
 
-export const raceReindeerV2 = (inputKey: string) => {
-  const reindeers = parseInput(inputKey)
-  const raceTime = inputKey.startsWith('DEMO') ? 1000 : 2503
+export const raceReindeerV2 = (input: string, raceTime = 2503) => {
+  const reindeers = parseInput(input)
   const scores: Map<string, number> = new Map(
     reindeers.map((reindeer) => [reindeer.name, 0])
   )

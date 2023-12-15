@@ -138,10 +138,10 @@ const findShortestPathToTarget = (
   return NaN
 }
 
-export const calibrateMachine = (inputKey: string) => {
-  const molecule = inputs.get(inputKey)!.split('\n').reverse()[0]
+export const calibrateMachine = (input: string) => {
+  const molecule = input.split('\n').reverse()[0]
   const replacements = parseReplacements(
-    inputs.get(inputKey)!.split('\n').slice(0, -2)
+    input.split('\n').slice(0, -2)
   )
   const nextMolecules = getPossibleNextMolecules(molecule, replacements)
   return {
@@ -149,10 +149,10 @@ export const calibrateMachine = (inputKey: string) => {
   }
 }
 
-export const generateMolecule = (inputKey: string) => {
-  const molecule = inputs.get(inputKey)!.split('\n').reverse()[0]
+export const generateMolecule = (input: string) => {
+  const molecule = input.split('\n').reverse()[0]
   const replacements = parseReplacements(
-    inputs.get(inputKey)!.split('\n').slice(0, -2),
+    input.split('\n').slice(0, -2),
     true
   )
   return {

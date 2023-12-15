@@ -3,8 +3,7 @@ import md5 from 'md5'
 import inputs from '../../inputs/2015/day04'
 import { DayConfig } from '../../routes/Day'
 
-export const lookForHash = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
+export const lookForHash = (input: string) => {
   let i = 0
   while (!md5(`${input}${i}`).startsWith('00000')) i++
   return {
@@ -12,8 +11,7 @@ export const lookForHash = (inputKey: string) => {
   }
 }
 
-export const lookForBetterHash = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
+export const lookForBetterHash = (input: string) => {
   let i = 0
   while (!md5(`${input}${i}`).startsWith('000000')) i++
   return {

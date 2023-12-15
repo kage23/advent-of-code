@@ -58,9 +58,8 @@ const parseLightingInstruction__v2 = (
   return lights
 }
 
-export const followLightingInstructions = (inputKey: string) => {
-  const lights: Map<string, boolean> = inputs
-    .get(inputKey)!
+export const followLightingInstructions = (input: string) => {
+  const lights: Map<string, boolean> = input
     .split('\n')
     .reduce(
       (lights, instruction) => parseLightingInstruction(lights, instruction),
@@ -72,9 +71,8 @@ export const followLightingInstructions = (inputKey: string) => {
   }
 }
 
-export const findTotalBrightness = (inputKey: string) => {
-  const lights: Map<string, number> = inputs
-    .get(inputKey)!
+export const findTotalBrightness = (input: string) => {
+  const lights: Map<string, number> = input
     .split('\n')
     .reduce(
       (lights, instruction) =>

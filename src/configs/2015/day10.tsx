@@ -20,9 +20,7 @@ export const doLookAndSay = (input: string): string => {
   return result
 }
 
-export const doHowManyLookAndSays = (inputKey: string, count: number) => {
-  let input = inputs.get(inputKey)!
-
+export const doHowManyLookAndSays = (input: string, count: number) => {
   for (let i = 0; i < count; i++) {
     input = doLookAndSay(input)
   }
@@ -39,11 +37,11 @@ const day10: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Do 40 Look-and-Says',
-      onClick: (inputKey) => doHowManyLookAndSays(inputKey, 40),
+      onClick: (input) => doHowManyLookAndSays(input, 40),
     },
     {
       label: 'Do 50 Look-and-Says',
-      onClick: (inputKey) => doHowManyLookAndSays(inputKey, 50),
+      onClick: (input) => doHowManyLookAndSays(input, 50),
     },
   ],
   id: 10,

@@ -1,10 +1,3 @@
-const inputs: Map<string, string> = new Map([
-  [
-    'REAL',
-    `Hit Points: 100
-Damage: 8
-Armor: 2`,
-  ],
-])
+const inputs: Map<string, string> = new Map()
 
 export default inputs

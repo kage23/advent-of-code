@@ -79,9 +79,7 @@ const getNextGrid = (grid: string, part: 1 | 2): string => {
   return nextGrid
 }
 
-export const runLightAnimation = (inputKey: string) => {
-  let grid = inputs.get(inputKey)!
-  const animationSteps = inputKey.startsWith('DEMO') ? 4 : 100
+export const runLightAnimation = (grid: string, animationSteps = 100) => {
   for (let i = 0; i < animationSteps; i++) {
     grid = getNextGrid(grid, 1)
   }
@@ -90,8 +88,7 @@ export const runLightAnimation = (inputKey: string) => {
   }
 }
 
-export const runLightAnimationWithStuckOnLights = (inputKey: string) => {
-  let grid = inputs.get(inputKey)!
+export const runLightAnimationWithStuckOnLights = (grid: string, animationSteps = 100) => {
   // Set the stuck-on lights
   // Top left and bottom right
   grid = `#${grid.slice(1, -1)}#`
@@ -104,7 +101,6 @@ export const runLightAnimationWithStuckOnLights = (inputKey: string) => {
       return line
     })
     .join('\n')
-  const animationSteps = inputKey.startsWith('DEMO') ? 5 : 100
   for (let i = 0; i < animationSteps; i++) {
     grid = getNextGrid(grid, 2)
   }

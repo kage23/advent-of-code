@@ -44,9 +44,8 @@ const findBestCombo = (numbers: number[], target: number): number[] => {
   return comboList[0]
 }
 
-export const sortThePackages = (inputKey: string) => {
-  const packageWeights: number[] = inputs
-    .get(inputKey)!
+export const sortThePackages = (input: string) => {
+  const packageWeights: number[] = input
     .split('\n')
     .map((x) => parseInt(x))
     .sort((a, b) => b - a)
@@ -60,9 +59,8 @@ export const sortThePackages = (inputKey: string) => {
   }
 }
 
-export const sortThePackagesWithTheTrunk = (inputKey: string) => {
-  const packageWeights: number[] = inputs
-    .get(inputKey)!
+export const sortThePackagesWithTheTrunk = (input: string) => {
+  const packageWeights: number[] = input
     .split('\n')
     .map((x) => parseInt(x))
     .sort((a, b) => b - a)

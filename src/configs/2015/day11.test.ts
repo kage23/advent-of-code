@@ -14,8 +14,8 @@ describe('2015 Day 11', () => {
 
   describe('findNextViablePassword', () => {
     it('should find the next viable password', () => {
-      expect(findNextViablePassword('DEMO_4').answer1).toEqual('abcdffaa')
-      expect(findNextViablePassword('DEMO_5').answer1).toEqual('ghjaabcc')
+      expect(findNextViablePassword(inputs.get('DEMO_4')!).answer1).toEqual('abcdffaa')
+      expect(findNextViablePassword(inputs.get('DEMO_5')!).answer1).toEqual('ghjaabcc')
     })
   })
 })
