@@ -1,15 +1,17 @@
-const INPUT: { [key:string]: string } = {
-DEMO:
-`Immune System:
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO',
+    `Immune System:
 17 units each with 5390 hit points (weak to radiation, bludgeoning) with an attack that does 4507 fire damage at initiative 2
 989 units each with 1274 hit points (immune to fire; weak to bludgeoning, slashing) with an attack that does 25 slashing damage at initiative 3
 
 Infection:
 801 units each with 4706 hit points (weak to radiation) with an attack that does 116 bludgeoning damage at initiative 1
-4485 units each with 2961 hit points (immune to radiation; weak to fire, cold) with an attack that does 12 slashing damage at initiative 4`,
-
-REAL:
-`Immune System:
+4485 units each with 2961 hit points (immune to radiation; weak to fire, cold) with an attack that does 12 slashing damage at initiative 4`
+  ],
+  [
+    'REAL',
+    `Immune System:
 8233 units each with 2012 hit points (immune to radiation) with an attack that does 2 fire damage at initiative 5
 2739 units each with 5406 hit points (immune to fire) with an attack that does 16 fire damage at initiative 3
 229 units each with 6782 hit points (weak to slashing) with an attack that does 260 cold damage at initiative 7
@@ -32,6 +34,7 @@ Infection:
 4165 units each with 21641 hit points (weak to radiation; immune to fire) with an attack that does 10 radiation damage at initiative 6
 7374 units each with 24948 hit points (weak to cold) with an attack that does 5 fire damage at initiative 13
 4821 units each with 26018 hit points with an attack that does 10 fire damage at initiative 15`
-}
+  ],
+])
 
-export default INPUT
+export default inputs

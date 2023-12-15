@@ -21,6 +21,7 @@ import { countFarRooms, findFarthestRoom } from './day20'
 import { findFirstExitCode /* findLastExitCode */ } from './day21'
 import { assessRisk /* calculateTimeForRescue */ } from './day22'
 import { countInRangeNanobots, findBestLocation } from './day23'
+import { fightFullCombat, findTheBoost } from './day24'
 
 describe('2018 Answers', () => {
   it('Day 01', () => {
@@ -117,5 +118,9 @@ describe('2018 Answers', () => {
   it('Day 23', () => {
     console.log(`Day 23, Part 1: ${countInRangeNanobots('REAL').answer1}`)
     console.log(`Day 23, Part 2: ${findBestLocation('REAL').answer2}`)
+  })
+  it('Day 24', () => {
+    console.log(`Day 24, Part 1: ${fightFullCombat('REAL').answer1}`)
+    console.log(`Day 24, Part 2: ${findTheBoost('REAL').answer2}`)
   })
 })
