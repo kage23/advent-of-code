@@ -1,7 +1,7 @@
 import inputs from '../../inputs/2023/day15'
 import { hashIt, initializeIt } from './day15'
 
-describe('2023 Day 14', () => {
+describe('2023 Day 15', () => {
   describe('Part 1', () => {
     it('should sum the hashes of comma-separated stuff', () => {
       expect(hashIt(inputs.get('DEMO_1')!).answer1).toEqual(52)
