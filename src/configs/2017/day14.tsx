@@ -2,10 +2,10 @@ import inputs from '../../inputs/2017/day14'
 import { DayConfig } from '../../routes/Day'
 import generateKnotHash from '../../utils/generateKnotHash'
 
-export const countUsedSquares = (inputKey: string) => {
+export const countUsedSquares = (input: string) => {
   let grid = ''
   for (let i = 0; i < 128; i++) {
-    const hash = generateKnotHash(`${inputs.get(inputKey)!}-${i}`, 256)
+    const hash = generateKnotHash(`${input}-${i}`, 256)
     for (let j = 0; j < hash.length; j++) {
       grid += parseInt(hash[j], 16).toString(2).padStart(4, '0')
     }
@@ -16,12 +16,12 @@ export const countUsedSquares = (inputKey: string) => {
   }
 }
 
-export const findRegions = (inputKey: string) => {
+export const findRegions = (input: string) => {
   const gridSize = 128
   let regionCount = 0
   const gridMap: Map<string, number> = new Map()
   for (let i = 0; i < gridSize; i++) {
-    const hash = generateKnotHash(`${inputs.get(inputKey)!}-${i}`, 256)
+    const hash = generateKnotHash(`${input}-${i}`, 256)
     for (let j = 0; j < hash.length; j++) {
       const hex = parseInt(hash[j], 16).toString(2).padStart(4, '0')
       gridMap.set(`${i},${j * 4 + 0}`, parseInt(hex.charAt(0)))

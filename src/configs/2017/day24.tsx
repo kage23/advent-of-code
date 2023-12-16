@@ -50,8 +50,8 @@ const totalNodeStrength = (node: number[]): number => node[0] + node[1]
 const totalBridgeStrength = (bridge: number[][]): number =>
   bridge.reduce((strength, node) => strength + totalNodeStrength(node), 0)
 
-export const findStrongestBridgeRecursively = (inputKey: string) => {
-  const ports: number[][] = parseInput(inputs.get(inputKey)!)
+export const findStrongestBridgeRecursively = (input: string) => {
+  const ports: number[][] = parseInput(input)
   const possibleBridges = findBridges__recursive(0, ports).sort((a, b) => {
     return totalBridgeStrength(b) - totalBridgeStrength(a)
   })
@@ -101,8 +101,8 @@ const findBridges = (ports: number[][]): Bridge[] => {
   return completeBridges
 }
 
-export const findStrongestBridge = (inputKey: string) => {
-  const ports: number[][] = parseInput(inputs.get(inputKey)!)
+export const findStrongestBridge = (input: string) => {
+  const ports: number[][] = parseInput(input)
   const possibleBridges = findBridges(ports).sort((a, b) => {
     return totalBridgeStrength(b.ports) - totalBridgeStrength(a.ports)
   })
@@ -112,8 +112,8 @@ export const findStrongestBridge = (inputKey: string) => {
   }
 }
 
-export const findLongestBridge = (inputKey: string) => {
-  const ports: number[][] = parseInput(inputs.get(inputKey)!)
+export const findLongestBridge = (input: string) => {
+  const ports: number[][] = parseInput(input)
   const possibleBridges = findBridges(ports).sort((a, b) => {
     return a.ports.length > b.ports.length
       ? -1

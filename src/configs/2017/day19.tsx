@@ -49,10 +49,10 @@ const findNewDirection = (
   }
 }
 
-export const followPath = (inputKey: string) => {
+export const followPath = (input: string) => {
   let answer1 = ''
   let steps = 0
-  const map = inputs.get(inputKey)!.split('\n')
+  const map = input.split('\n')
   const position: number[] = [0, map[0].indexOf('|')] // y, x
   let direction: 'U' | 'R' | 'D' | 'L' = 'D'
 

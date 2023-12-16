@@ -1,8 +1,7 @@
 import inputs from '../../inputs/2017/day09'
 import { DayConfig } from '../../routes/Day'
 
-export const processStream = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
+export const processStream = (input: string) => {
   const len = input.length
   let score = 0
   let garbage = 0

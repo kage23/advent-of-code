@@ -41,8 +41,8 @@ const stepFn = (step: string, currentPosition: number[]) => {
   return currentPosition
 }
 
-export const findDistance = (inputKey: string) => {
-  const steps = inputs.get(inputKey)!.split(',')
+export const findDistance = (input: string) => {
+  const steps = input.split(',')
   let currentPosition = [0, 0, 0]
 
   steps.forEach((step) => {
@@ -54,8 +54,8 @@ export const findDistance = (inputKey: string) => {
   }
 }
 
-export const findFurthestDistance = (inputKey: string) => {
-  const steps = inputs.get(inputKey)!.split(',')
+export const findFurthestDistance = (input: string) => {
+  const steps = input.split(',')
   let currentPosition = [0, 0, 0]
   let furthestPosition = 0
 

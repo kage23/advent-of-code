@@ -3,7 +3,7 @@ import { DayConfig } from '../../routes/Day'
 
 const noRepeatedWordsValidity = (passphrase: string) => {
   const words = passphrase.split(' ')
-  return !words.some(word => words.indexOf(word) !== words.lastIndexOf(word))
+  return !words.some((word) => words.indexOf(word) !== words.lastIndexOf(word))
 }
 
 const areAnagrams = (word1: string, word2: string): boolean => {
@@ -20,25 +20,21 @@ const areAnagrams = (word1: string, word2: string): boolean => {
 
 const noAnagramsValidity = (passphrase: string): boolean => {
   const words = passphrase.split(' ')
-  return !(
-    words.some((word, i) => (
-      words.some((someWord, j) => i !== j && areAnagrams(word, someWord))
-    ))
+  return !words.some((word, i) =>
+    words.some((someWord, j) => i !== j && areAnagrams(word, someWord))
   )
 }
 
-export const passphrasesNoRepetition = (inputKey: string) => ({
-  answer1: inputs.get(inputKey)!
+export const passphrasesNoRepetition = (input: string) => ({
+  answer1: input
     .split('\n')
-    .filter(passphrase => noRepeatedWordsValidity(passphrase))
-    .length
+    .filter((passphrase) => noRepeatedWordsValidity(passphrase)).length,
 })
 
-export const passphrasesNoAnagrams = (inputKey: string) => ({
-  answer2: inputs.get(inputKey)!
+export const passphrasesNoAnagrams = (input: string) => ({
+  answer2: input
     .split('\n')
-    .filter(passphrase => noAnagramsValidity(passphrase))
-    .length
+    .filter((passphrase) => noAnagramsValidity(passphrase)).length,
 })
 
 const day04: Omit<DayConfig, 'year'> = {
@@ -47,12 +43,12 @@ const day04: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Count Valid Passphrases (No Repeated Words)',
-      onClick: passphrasesNoRepetition
+      onClick: passphrasesNoRepetition,
     },
     {
       label: 'Count Valid Passphrases (No Anagrams)',
-      onClick: passphrasesNoAnagrams
-    }
+      onClick: passphrasesNoAnagrams,
+    },
   ],
   id: 4,
   inputs,

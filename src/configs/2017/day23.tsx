@@ -107,10 +107,10 @@ const executeInstruction = (
   }
 }
 
-export const runProgram = (inputKey: string) => {
+export const runProgram = (input: string) => {
   mulCount = 0
   REGISTERS = new Program(1)
-  REGISTERS.instructions = parseInput(inputs.get(inputKey)!)
+  REGISTERS.instructions = parseInput(input)
 
   let { command, x, y } = REGISTERS.instructions[REGISTERS.currentInstruction]
 

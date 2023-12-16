@@ -75,9 +75,9 @@ const checkForRuleMatch = (rule: Rule, pattern: string[]): boolean =>
     theyMatch(permutation, rule.before)
   )
 
-const step = (inputKey: string) => {
+const step = (input: string) => {
   steps++
-  const rules: Rule[] = parseInput(inputs.get(inputKey)!)
+  const rules: Rule[] = parseInput(input)
   const oldPattern: string[] = patternStr.split('\n')
   const mod = oldPattern.length % 2 === 0 ? 2 : 3
   const newWidthInPatterns = oldPattern.length / mod
@@ -139,7 +139,7 @@ const step = (inputKey: string) => {
   }
 }
 
-const runSimulation = (inputKey: string, stepsToTake: number) => {
+const runSimulation = (input: string, stepsToTake: number) => {
   steps = 0
   patternStr = `.#.
 ..#
@@ -148,7 +148,7 @@ const runSimulation = (inputKey: string, stepsToTake: number) => {
   let answer1: number | undefined
   let answer2: number | undefined
   while (steps < stepsToTake) {
-    step(inputKey)
+    step(input)
     if (steps === 5) {
       answer1 = patternStr.split('').filter((x) => x === '#').length
     }
@@ -162,10 +162,9 @@ const runSimulation = (inputKey: string, stepsToTake: number) => {
   }
 }
 
-export const iterateFiveTimes = (inputKey: string) => runSimulation(inputKey, 5)
+export const iterateFiveTimes = (input: string) => runSimulation(input, 5)
 
-export const iterateEighteenTimes = (inputKey: string) =>
-  runSimulation(inputKey, 18)
+export const iterateEighteenTimes = (input: string) => runSimulation(input, 18)
 
 const day21: Omit<DayConfig, 'year'> = {
   answer1Text: 'After 5 iterations, answer pixels are on.',

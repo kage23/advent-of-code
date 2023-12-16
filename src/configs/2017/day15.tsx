@@ -20,9 +20,9 @@ const generateNextPart2 = (input: number, genKey: 'a' | 'b'): number => {
   return next
 }
 
-export const solvePart1 = (inputKey: string) => {
-  let genA = parseInt(inputs.get(inputKey)!.split('\n')[0].slice(24))
-  let genB = parseInt(inputs.get(inputKey)!.split('\n')[1].slice(24))
+export const solvePart1 = (input: string) => {
+  let genA = parseInt(input.split('\n')[0].slice(24))
+  let genB = parseInt(input.split('\n')[1].slice(24))
 
   const target = 40000000
   let matchCount = 0
@@ -36,9 +36,9 @@ export const solvePart1 = (inputKey: string) => {
   }
 }
 
-export const solvePart2 = (inputKey: string) => {
-  let genA = parseInt(inputs.get(inputKey)!.split('\n')[0].slice(24))
-  let genB = parseInt(inputs.get(inputKey)!.split('\n')[1].slice(24))
+export const solvePart2 = (input: string) => {
+  let genA = parseInt(input.split('\n')[0].slice(24))
+  let genB = parseInt(input.split('\n')[1].slice(24))
 
   const target = 5000000
   let matchCount = 0

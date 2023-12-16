@@ -67,9 +67,9 @@ const viewNeighbors = (
   })
 }
 
-export const findConnectedToZero = (inputKey: string) => {
+export const findConnectedToZero = (input: string) => {
   let programCount = 0
-  const programMap = parseInput(inputs.get(inputKey)!)
+  const programMap = parseInput(input)
 
   for (const [id, program] of programMap) {
     if (connectedToZero(id, program, programMap, [])) programCount++
@@ -80,8 +80,8 @@ export const findConnectedToZero = (inputKey: string) => {
   }
 }
 
-export const countGroups = (inputKey: string) => {
-  const programMap = parseInput(inputs.get(inputKey)!)
+export const countGroups = (input: string) => {
+  const programMap = parseInput(input)
   const seenMap: Map<number, boolean> = new Map()
   let groupCount = 0
 

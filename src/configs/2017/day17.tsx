@@ -18,9 +18,9 @@ const createNodes = (max: number, skipSize: number): DLL<number> => {
   return numbers
 }
 
-export const solvePart1Day17 = (inputKey: string) => {
+export const solvePart1Day17 = (input: string) => {
   const max = 2017
-  const skipSize = parseInt(inputs.get(inputKey)!)
+  const skipSize = parseInt(input)
   const numbers = createNodes(max, skipSize)
   let currentNode = numbers.head
   while (currentNode && currentNode.value !== max)
@@ -31,9 +31,9 @@ export const solvePart1Day17 = (inputKey: string) => {
   }
 }
 
-export const solvePart2Day17 = (inputKey: string) => {
+export const solvePart2Day17 = (input: string) => {
   const max = 50000000
-  const skipSize = parseInt(inputs.get(inputKey)!)
+  const skipSize = parseInt(input)
   const numbers = createNodes(max, skipSize)
   let currentNode = numbers.head
   while (currentNode && currentNode.value !== 0) currentNode = currentNode.next

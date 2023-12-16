@@ -103,8 +103,8 @@ const advanceParticles = (particles: Particle[]): Particle[] => {
   return removeCollisions(particles)
 }
 
-export const findClosestParticle = (inputKey: string) => {
-  const particles = parseInput(inputs.get(inputKey)!).sort((a, b) => {
+export const findClosestParticle = (input: string) => {
+  const particles = parseInput(input).sort((a, b) => {
     const accelA = sumAbs(a.acceleration)
     const accelB = sumAbs(b.acceleration)
     const velA = sumAbs(a.velocity)
@@ -124,8 +124,8 @@ export const findClosestParticle = (inputKey: string) => {
   }
 }
 
-export const runSimulation = (inputKey: string) => {
-  let particles: Particle[] = parseInput(inputs.get(inputKey)!)
+export const runSimulation = (input: string) => {
+  let particles: Particle[] = parseInput(input)
 
   while (testForFurtherCollisions(particles)) {
     particles = advanceParticles(particles)

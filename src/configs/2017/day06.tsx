@@ -1,11 +1,11 @@
 import inputs from '../../inputs/2017/day06'
 import { DayConfig } from '../../routes/Day'
 
-const parseInput = (input: string) => input.split(/\s/).map(x => Number(x))
+const parseInput = (input: string) => input.split(/\s/).map((x) => Number(x))
 
-export const findLoop = (inputKey: string) => {
+export const findLoop = (input: string) => {
   let cycles = 0
-  const memoryBanks = parseInput(inputs.get(inputKey)!)
+  const memoryBanks = parseInput(input)
   const stateAtTimeMap: Map<string, number> = new Map()
   let memBanksStr = JSON.stringify(memoryBanks)
 
@@ -28,7 +28,7 @@ export const findLoop = (inputKey: string) => {
 
   return {
     answer1: cycles,
-    answer2: (cycles - (stateAtTimeMap.get(memBanksStr) || 0))
+    answer2: cycles - (stateAtTimeMap.get(memBanksStr) || 0),
   }
 }
 
@@ -38,8 +38,8 @@ const day06: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Find Loop',
-      onClick: findLoop
-    }
+      onClick: findLoop,
+    },
   ],
   id: 6,
   inputs,

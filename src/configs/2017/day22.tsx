@@ -150,10 +150,10 @@ const burst = (field: Field, part: 1 | 2): boolean => {
   return infected
 }
 
-export const burstToTenThousand = (inputKey: string) => {
+export const burstToTenThousand = (input: string) => {
   let infectionCount = 0
   bursts = 0
-  field = parseInput(inputs.get(inputKey)!)
+  field = parseInput(input)
 
   while (bursts !== 10000) {
     if (burst(field, 1)) infectionCount++
@@ -165,10 +165,10 @@ export const burstToTenThousand = (inputKey: string) => {
   }
 }
 
-export const burstToTenMillion = (inputKey: string) => {
+export const burstToTenMillion = (input: string) => {
   let infectionCount = 0
   bursts = 0
-  field = parseInput(inputs.get(inputKey)!)
+  field = parseInput(input)
 
   while (bursts !== 10000000) {
     if (burst(field, 2)) infectionCount++

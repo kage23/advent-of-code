@@ -1,49 +1,67 @@
 import inputs from '../../inputs/2017/day08'
 import { DayConfig } from '../../routes/Day'
 
-export const runProcess = (inputKey: string) => {
+export const runProcess = (input: string) => {
   const registers: Map<string, number> = new Map()
 
-  const processCode = (input: string): {
+  const processCode = (
+    input: string
+  ): {
     maxEver: number
   } => {
     let maxEver = Number.MIN_SAFE_INTEGER
-    input.split('\n').forEach(line => {
+    input.split('\n').forEach((line) => {
       const [
         registerToActOn,
         action,
-        amount,
-        , // the word 'if'
+        amount, // the word 'if'
+        ,
         registerForCondition,
         condition,
-        testAmount
+        testAmount,
       ] = line.split(' ')
       let doAction = false
-      if (typeof registers.get(registerToActOn) === 'undefined') registers.set(registerToActOn, 0)
-      if (typeof registers.get(registerForCondition) === 'undefined') registers.set(registerForCondition, 0)
+      if (typeof registers.get(registerToActOn) === 'undefined')
+        registers.set(registerToActOn, 0)
+      if (typeof registers.get(registerForCondition) === 'undefined')
+        registers.set(registerForCondition, 0)
       switch (condition) {
         case '>':
-          if ((registers.get(registerForCondition) || 0) > parseInt(testAmount)) doAction = true
+          if ((registers.get(registerForCondition) || 0) > parseInt(testAmount))
+            doAction = true
           break
 
         case '<':
-          if ((registers.get(registerForCondition) || 0) < parseInt(testAmount)) doAction = true
+          if ((registers.get(registerForCondition) || 0) < parseInt(testAmount))
+            doAction = true
           break
 
         case '>=':
-          if ((registers.get(registerForCondition) || 0) >= parseInt(testAmount)) doAction = true
+          if (
+            (registers.get(registerForCondition) || 0) >= parseInt(testAmount)
+          )
+            doAction = true
           break
 
         case '<=':
-          if ((registers.get(registerForCondition) || 0) <= parseInt(testAmount)) doAction = true
+          if (
+            (registers.get(registerForCondition) || 0) <= parseInt(testAmount)
+          )
+            doAction = true
           break
 
         case '==':
-          if ((registers.get(registerForCondition) || 0) === parseInt(testAmount)) doAction = true
+          if (
+            (registers.get(registerForCondition) || 0) === parseInt(testAmount)
+          )
+            doAction = true
           break
 
         case '!=':
-          if ((registers.get(registerForCondition) || 0) !== parseInt(testAmount)) doAction = true
+          if (
+            (registers.get(registerForCondition) || 0) !== parseInt(testAmount)
+          )
+            doAction = true
           break
 
         default:
@@ -51,10 +69,16 @@ export const runProcess = (inputKey: string) => {
       }
       if (doAction) {
         if (action === 'inc') {
-          registers.set(registerToActOn, (registers.get(registerToActOn) || 0) + parseInt(amount))
+          registers.set(
+            registerToActOn,
+            (registers.get(registerToActOn) || 0) + parseInt(amount)
+          )
         }
         if (action === 'dec') {
-          registers.set(registerToActOn, (registers.get(registerToActOn) || 0) - parseInt(amount))
+          registers.set(
+            registerToActOn,
+            (registers.get(registerToActOn) || 0) - parseInt(amount)
+          )
         }
         if ((registers.get(registerToActOn) || 0) > maxEver) {
           maxEver = registers.get(registerToActOn) || 0
@@ -64,7 +88,7 @@ export const runProcess = (inputKey: string) => {
     return { maxEver }
   }
 
-  const result = processCode(inputs.get(inputKey)!)
+  const result = processCode(input)
 
   let max = Number.MIN_SAFE_INTEGER
 
@@ -76,7 +100,7 @@ export const runProcess = (inputKey: string) => {
 
   return {
     answer1: max,
-    answer2: result.maxEver
+    answer2: result.maxEver,
   }
 }
 
@@ -86,7 +110,7 @@ const day08: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Process Code',
-      onClick: runProcess
+      onClick: runProcess,
     },
   ],
   id: 8,

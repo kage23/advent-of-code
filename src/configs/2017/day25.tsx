@@ -61,8 +61,8 @@ const parseInput = (input: string): TuringMachineStates => {
   }
 }
 
-export const runProgram = (inputKey: string) => {
-  const machine = parseInput(inputs.get(inputKey)!)
+export const runProgram = (input: string) => {
+  const machine = parseInput(input)
   const tape = [0]
   let currentIndex = 0
   let lowestIndex = 0

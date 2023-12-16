@@ -27,13 +27,13 @@ const parseInput = (input: string): Map<number, ILayer> => {
   return firewall
 }
 
-const reset = (inputKey: string): void => {
+const reset = (input: string): void => {
   startingInputWithDelay.clear()
   totalFirewallDepth = 0
-  firewall = parseInput(inputs.get(inputKey)!)
+  firewall = parseInput(input)
   currentPosition = -1
   ongoingSeverity = 0
-  startingInputWithDelay.set(0, inputs.get(inputKey)!)
+  startingInputWithDelay.set(0, input)
 }
 
 const judgeSeverity = (): boolean => {
@@ -63,8 +63,8 @@ const advanceScanners = (): void => {
   }
 }
 
-export const takeTrip = (inputKey: string) => {
-  reset(inputKey)
+export const takeTrip = (input: string) => {
+  reset(input)
   while (currentPosition < totalFirewallDepth) {
     currentPosition++
     judgeSeverity()
@@ -78,9 +78,8 @@ export const takeTrip = (inputKey: string) => {
 const isCaught = (range: number, time: number): boolean =>
   time % ((range - 1) * 2) === 0
 
-export const findDelayFastMethod = (inputKey: string) => {
+export const findDelayFastMethod = (input: string) => {
   let delay = 0
-  const input = inputs.get(inputKey)!
 
   // [ depth, range ]
   const guards: number[][] = input.split('\n').map((s) => {

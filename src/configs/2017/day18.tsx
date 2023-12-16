@@ -119,9 +119,9 @@ const executeInstruction = (
   }
 }
 
-export const findFrequencyPart1 = (inputKey: string) => {
+export const findFrequencyPart1 = (input: string) => {
   SOUND_PLAYER = new Program(1)
-  SOUND_PLAYER.instructions = parseInput(inputs.get(inputKey)!)
+  SOUND_PLAYER.instructions = parseInput(input)
 
   let { command, x, y } =
     SOUND_PLAYER.instructions[SOUND_PLAYER.currentInstruction]
@@ -141,12 +141,12 @@ export const findFrequencyPart1 = (inputKey: string) => {
   }
 }
 
-export const runBothPrograms = (inputKey: string) => {
+export const runBothPrograms = (input: string) => {
   let program1Send = 0
   const program0 = new Program(2, 0)
-  program0.instructions = parseInput(inputs.get(inputKey)!)
+  program0.instructions = parseInput(input)
   const program1 = new Program(2, 1)
-  program1.instructions = parseInput(inputs.get(inputKey)!)
+  program1.instructions = parseInput(input)
   let result0: number | boolean | void = false
   let result1: number | boolean | void = false
 

@@ -13,7 +13,7 @@ const getAdjacentSquares = (position: number[]): number[][] => [
   [position[0] + 1, position[1]],
   [position[0] - 1, position[1] + 1],
   [position[0], position[1] + 1],
-  [position[0] + 1, position[1] + 1]
+  [position[0] + 1, position[1] + 1],
 ]
 
 const figureSolution = (input: number, whichPart: 1 | 2) => {
@@ -24,12 +24,12 @@ const figureSolution = (input: number, whichPart: 1 | 2) => {
   const min = [0, 0]
   let directionIndex = 0
   const posValueMap: { [key: string]: number } = {
-    [`${JSON.stringify(currentPosition)}`]: 1
+    [`${JSON.stringify(currentPosition)}`]: 1,
   }
 
   while (
-    (whichPart === 1 && currentId < input)
-    || (whichPart === 2 && currentValue <= input)
+    (whichPart === 1 && currentId < input) ||
+    (whichPart === 2 && currentValue <= input)
   ) {
     switch (Directions[directionIndex]) {
       case 'R':
@@ -64,25 +64,28 @@ const figureSolution = (input: number, whichPart: 1 | 2) => {
         }
         break
     }
-    currentValue = getAdjacentSquares(currentPosition).reduce((value, position) => (
-      value + (posValueMap[`${JSON.stringify(position)}`] || 0)
-    ), 0)
+    currentValue = getAdjacentSquares(currentPosition).reduce(
+      (value, position) =>
+        value + (posValueMap[`${JSON.stringify(position)}`] || 0),
+      0
+    )
     posValueMap[JSON.stringify(currentPosition)] = currentValue
     currentId++
   }
 
   return whichPart === 1
     ? {
-      answer1: manhattanDistance(currentPosition, [0, 0])
-    }
+        answer1: manhattanDistance(currentPosition, [0, 0]),
+      }
     : {
-      answer2: currentValue
-    }
+        answer2: currentValue,
+      }
 }
 
-
-export const calculateDistance = (inputKey: string) => figureSolution(Number(inputs.get(inputKey)!), 1)
-export const findLargeValue = (inputKey: string) => figureSolution(Number(inputs.get(inputKey)!), 2)
+export const calculateDistance = (input: string) =>
+  figureSolution(Number(input), 1)
+export const findLargeValue = (input: string) =>
+  figureSolution(Number(input), 2)
 
 const day03: Omit<DayConfig, 'year'> = {
   answer1Text: 'The data is carried answer steps.',
@@ -90,12 +93,12 @@ const day03: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Calculate Distance to Access Port',
-      onClick: calculateDistance
+      onClick: calculateDistance,
     },
     {
       label: 'Find Value Larger than Input',
-      onClick: findLargeValue
-    }
+      onClick: findLargeValue,
+    },
   ],
   id: 3,
   inputs,

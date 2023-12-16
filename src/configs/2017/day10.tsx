@@ -4,12 +4,11 @@ import { DayConfig } from '../../routes/Day'
 import DLL from '../../utils/DLL'
 import generateKnotHash from '../../utils/generateKnotHash'
 
-export const oneTwist = (inputKey: string) => {
+export const oneTwist = (input: string, listSize = 256) => {
   const list = new DLL<number>()
   let currentPosition = 0
   let skipSize = 0
 
-  const listSize = inputKey === 'DEMO_1' ? 5 : 256
   for (let i = 0; i < listSize; i++) list.push(i)
 
   const twistAndAdvance = (length: number): void => {
@@ -38,10 +37,7 @@ export const oneTwist = (inputKey: string) => {
     skipSize++
   }
 
-  inputs
-    .get(inputKey)!
-    .split(',')
-    .forEach((x) => twistAndAdvance(parseInt(x)))
+  input.split(',').forEach((x) => twistAndAdvance(parseInt(x)))
 
   const head = list.head
   const headNext = head ? head.next : undefined
@@ -51,13 +47,9 @@ export const oneTwist = (inputKey: string) => {
   }
 }
 
-export const fullTwists = (inputKey: string) => {
+export const fullTwists = (input: string) => {
   return {
-    answer2: generateKnotHash(
-      inputs.get(inputKey)!,
-      256,
-      inputKey === 'DEMO_1'
-    ),
+    answer2: generateKnotHash(input, 256, false),
   }
 }
 

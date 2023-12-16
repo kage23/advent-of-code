@@ -44,28 +44,22 @@ const dance = (programs: string, instruction: string): string => {
   }
 }
 
-export const doDance = (inputKey: string) => {
-  let programs = inputKey === 'DEMO' ? 'abcde' : 'abcdefghijklmnop'
-
-  inputs
-    .get(inputKey)!
-    .split(',')
-    .forEach((instruction) => {
-      programs = dance(programs, instruction)
-    })
+export const doDance = (input: string, programs = 'abcdefghijklmnop') => {
+  input.split(',').forEach((instruction) => {
+    programs = dance(programs, instruction)
+  })
   return {
     answer1: programs,
   }
 }
 
-export const danceABillion = (inputKey: string) => {
+export const danceABillion = (input: string, programs = 'abcdefghijklmnop') => {
   const danceCount = 1000000000
-  const instructions = inputs.get(inputKey)!.split(',')
+  const instructions = input.split(',')
   const instrLen = instructions.length
   let count = 0
   const programsAtTime: string[] = []
   const seenBefore: Map<string, number> = new Map()
-  let programs = inputKey === 'DEMO' ? 'abcde' : 'abcdefghijklmnop'
   while (
     count < danceCount &&
     typeof seenBefore.get(programs) === 'undefined'

@@ -1,6 +1,3 @@
-const inputs: Map<string, string> = new Map([
-  ['DEMO', '3'],
-  ['REAL', '324'],
-])
+const inputs: Map<string, string> = new Map([['DEMO', '3']])
 
 export default inputs
