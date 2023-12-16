@@ -99,10 +99,9 @@ const getAnswer = (
   return NaN
 }
 
-export const findShortestPath = (inputKey: string) => {
-  const favoriteNumber = parseInt(inputs.get(inputKey)!)
+export const findShortestPath = (input: string, end = '31,39') => {
+  const favoriteNumber = parseInt(input)
   const start = '1,1'
-  const end = inputKey.startsWith('DEMO') ? '7,4' : '31,39'
 
   const pathLength = getAnswer(start, end, favoriteNumber, 1)
 
@@ -111,10 +110,9 @@ export const findShortestPath = (inputKey: string) => {
   }
 }
 
-export const countLocations = (inputKey: string) => {
-  const favoriteNumber = parseInt(inputs.get(inputKey)!)
+export const countLocations = (input: string, end = '31,39') => {
+  const favoriteNumber = parseInt(input)
   const start = '1,1'
-  const end = inputKey.startsWith('DEMO') ? '7,4' : '31,39'
 
   return {
     answer2: getAnswer(start, end, favoriteNumber, 2),

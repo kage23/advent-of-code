@@ -8,11 +8,10 @@ interface Bot {
   high?: { to: 'bot' | 'output'; id: number }
 }
 
-const getBots = (inputKey: string): Bot[] => {
+const getBots = (input: string): Bot[] => {
   const bots: Bot[] = []
 
-  inputs
-    .get(inputKey)!
+  input
     .split('\n')
     .forEach((line) => {
       const botId = parseInt(line.split('bot ')[1])
@@ -53,17 +52,10 @@ const getBots = (inputKey: string): Bot[] => {
   return bots
 }
 
-export const runBots = (
-  inputKey: string
-): {
-  answer1: number
-  answer2: number
-} => {
-  const bots = getBots(inputKey)
+export const runBots = (input: string, comparisonNumbers = [17, 61]) => {
+  const bots = getBots(input)
   const outputs: Map<number, number> = new Map()
   let answer1: undefined | number
-
-  const comparisonNumbers = inputKey.indexOf('DEMO') !== -1 ? [2, 5] : [17, 61]
 
   while (bots.some((bot) => (bot.numbers ? bot.numbers.length === 2 : false))) {
     for (const bot of bots) {

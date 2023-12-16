@@ -7,8 +7,8 @@ interface Elf {
   position: number
 }
 
-export const doTheBadWhiteElephant = (inputKey: string) => {
-  const elfCount = parseInt(inputs.get(inputKey)!)
+export const doTheBadWhiteElephant = (input: string) => {
+  const elfCount = parseInt(input)
   const circle = new DLL<Elf>()
 
   for (let i = 1; i <= elfCount; i++) {
@@ -32,8 +32,8 @@ export const doTheBadWhiteElephant = (inputKey: string) => {
   }
 }
 
-export const doTheBadWhiteElephant_v2 = (inputKey: string) => {
-  const elfCount = parseInt(inputs.get(inputKey)!)
+export const doTheBadWhiteElephant_v2 = (input: string) => {
+  const elfCount = parseInt(input)
   const circle = new DLL<Elf>()
 
   for (let i = 1; i <= elfCount; i++) {

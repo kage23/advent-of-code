@@ -9,12 +9,8 @@ const sortFacility = (a: number | number[], b: number | number[]) => {
   return a[0] - b[0] || a[1] - b[1]
 }
 
-const parseInput = (inputKey: string): (number | [number, number])[] => {
-  const input = inputs.get(inputKey) || inputKey
-
-  const facility: (number | [number, number])[] = [
-    inputKey === 'DEMO_TEST' ? 3 : 0,
-  ]
+const parseInput = (input: string): (number | [number, number])[] => {
+  const facility: (number | [number, number])[] = [0]
   const itemMap: { [key: string]: [number, number] } = {}
 
   validFacilities.clear()
@@ -202,8 +198,8 @@ const findShortestPath = (facility: (number | [number, number])[]): number => {
   return NaN
 }
 
-export const takeObjectsToFourthFloor = (inputKey: string) => {
-  const facility = parseInput(inputKey)
+export const takeObjectsToFourthFloor = (input: string) => {
+  const facility = parseInput(input)
 
   const shortestPathLength = findShortestPath(facility)
 
@@ -212,10 +208,8 @@ export const takeObjectsToFourthFloor = (inputKey: string) => {
   }
 }
 
-export const takeEverythingToFourthFloor = (inputKey: string) => {
-  if (inputKey.startsWith('DEMO'))
-    throw new Error('part 2 only works for the real input!')
-  const newInput = inputs.get(inputKey)!.split('\n')
+export const takeEverythingToFourthFloor = (input: string) => {
+  const newInput = input.split('\n')
   newInput[0] =
     'The first floor contains a elerium generator, a elerium-compatible microchip, a dilithium generator, a dilithium-compatible microchip, a strontium generator, a strontium-compatible microchip, a plutonium generator, and a plutonium-compatible microchip.'
 

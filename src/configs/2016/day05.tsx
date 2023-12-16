@@ -2,8 +2,7 @@ import md5 from 'md5'
 import inputs from '../../inputs/2016/day05'
 import { DayConfig } from '../../routes/Day'
 
-export const findPassword = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
+export const findPassword = (input: string) => {
   let password = ''
 
   let i = 0
@@ -20,8 +19,7 @@ export const findPassword = (inputKey: string) => {
   }
 }
 
-export const findBetterPassword = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
+export const findBetterPassword = (input: string) => {
   let password = '________'
 
   let i = 0

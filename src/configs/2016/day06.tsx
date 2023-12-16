@@ -1,9 +1,8 @@
 import inputs from '../../inputs/2016/day06'
 import { DayConfig } from '../../routes/Day'
 
-const countLettersInMessage = (inputKey: string) => {
+const countLettersInMessage = (input: string) => {
   const letterCountMaps: Map<string, number>[] = []
-  const input = inputs.get(inputKey)!
   input.split('\n').forEach((line) => {
     for (let i = 0; i < line.length; i++) {
       if (!letterCountMaps[i]) letterCountMaps[i] = new Map()
@@ -18,10 +17,10 @@ const countLettersInMessage = (inputKey: string) => {
   return letterCountMaps
 }
 
-export const findHighestCountMessage = (inputKey: string) => {
+export const findHighestCountMessage = (input: string) => {
   let message = ''
 
-  const letterCountMaps = countLettersInMessage(inputKey)
+  const letterCountMaps = countLettersInMessage(input)
   for (const letterCountMap of letterCountMaps) {
     let highestCount = 0
     let highestLetter = ''
@@ -39,10 +38,10 @@ export const findHighestCountMessage = (inputKey: string) => {
   }
 }
 
-export const findLowestCountMessage = (inputKey: string) => {
+export const findLowestCountMessage = (input: string) => {
   let message = ''
 
-  const letterCountMaps = countLettersInMessage(inputKey)
+  const letterCountMaps = countLettersInMessage(input)
   for (const letterCountMap of letterCountMaps) {
     let lowestCount = Number.MAX_SAFE_INTEGER
     let lowestLetter = ''

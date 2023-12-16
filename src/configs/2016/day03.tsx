@@ -43,16 +43,15 @@ const isTriangleValid = (input: number[]): boolean => {
   )
 }
 
-export const evaluateTriangles = (inputKey: string) => ({
-  answer1: inputs
-    .get(inputKey)!
+export const evaluateTriangles = (input: string) => ({
+  answer1: input
     .split('\n')
     .map(getTrianglePart1)
     .filter(isTriangleValid).length,
 })
 
-export const evaluateTrianglesVertically = (inputKey: string) => ({
-  answer2: getVerticalTriangles(inputs.get(inputKey)!.split('\n')).length,
+export const evaluateTrianglesVertically = (input: string) => ({
+  answer2: getVerticalTriangles(input.split('\n')).length,
 })
 
 const day03: Omit<DayConfig, 'year'> = {

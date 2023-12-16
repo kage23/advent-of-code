@@ -30,9 +30,8 @@ const isRealRoom = (room: string): boolean => {
   return !checksum.some((letter) => topFiveLetters.indexOf(letter) === -1)
 }
 
-export const sumRealRooms = (inputKey: string) => ({
-  answer1: inputs
-    .get(inputKey)!
+export const sumRealRooms = (input: string) => ({
+  answer1: input
     .split('\n')
     .filter((room) => isRealRoom(room))
     .map((roomLine) => {
@@ -61,11 +60,10 @@ export const decryptRoomName = (encrypted: string) => {
   return `${rotate}: ${result}`.trim()
 }
 
-export const printDecryptedRoomNames = (inputKey: string) => {
+export const printDecryptedRoomNames = (input: string) => {
   let answer2 = ''
 
-  inputs
-    .get(inputKey)!
+  input
     .split('\n')
     .filter((room) => isRealRoom(room))
     .forEach((roomLine) => {

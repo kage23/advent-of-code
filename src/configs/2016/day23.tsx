@@ -2,30 +2,30 @@ import inputs from '../../inputs/2016/day23'
 import { DayConfig } from '../../routes/Day'
 import Assembunny from './Assembunny'
 
-export const runPart1 = (inputKey: string) => {
+export const runPart1 = (input: string) => {
   const bunny = new Assembunny([])
-  const input = inputs.get(inputKey)!.split('\n')
+  const inputLines = input.split('\n')
   bunny.registers.clear()
   bunny.registers.set('a', 7)
   bunny.registers.set('b', 0)
   bunny.registers.set('c', 0)
   bunny.registers.set('d', 0)
-  bunny.runCode(input)
+  bunny.runCode(inputLines)
 
   return {
     answer1: bunny.registers.get('a')!
   }
 }
 
-export const runPart2 = (inputKey: string) => {
+export const runPart2 = (input: string) => {
   const bunny = new Assembunny([])
-  const input = inputs.get(inputKey)!.split('\n')
+  const inputLines = input.split('\n')
   bunny.registers.clear()
   bunny.registers.set('a', 12)
   bunny.registers.set('b', 0)
   bunny.registers.set('c', 0)
   bunny.registers.set('d', 0)
-  bunny.runCode(input)
+  bunny.runCode(inputLines)
 
   return {
     answer2: bunny.registers.get('a')!

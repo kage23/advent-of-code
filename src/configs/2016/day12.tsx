@@ -2,10 +2,10 @@ import inputs from '../../inputs/2016/day12'
 import { DayConfig } from '../../routes/Day'
 import Assembunny from './Assembunny'
 
-export const runAssembunnyCode = (inputKey: string) => {
+export const runAssembunnyCode = (input: string) => {
   const assembunny = new Assembunny([])
 
-  const input = inputs.get(inputKey)!.split('\n')
+  const inputLines = input.split('\n')
 
   assembunny.registers.clear()
   assembunny.registers.set('a', 0)
@@ -13,17 +13,17 @@ export const runAssembunnyCode = (inputKey: string) => {
   assembunny.registers.set('c', 0)
   assembunny.registers.set('d', 0)
 
-  assembunny.runCode(input)
+  assembunny.runCode(inputLines)
 
   return {
     answer1: assembunny.registers.get('a') || 0,
   }
 }
 
-export const runAssembunnyCodeWithIgnitionSet = (inputKey: string) => {
+export const runAssembunnyCodeWithIgnitionSet = (input: string) => {
   const assembunny = new Assembunny([])
 
-  const input = inputs.get(inputKey)!.split('\n')
+  const inputLines = input.split('\n')
 
   assembunny.registers.clear()
   assembunny.registers.set('a', 0)
@@ -31,7 +31,7 @@ export const runAssembunnyCodeWithIgnitionSet = (inputKey: string) => {
   assembunny.registers.set('c', 1)
   assembunny.registers.set('d', 0)
 
-  assembunny.runCode(input)
+  assembunny.runCode(inputLines)
 
   return {
     answer2: assembunny.registers.get('a') || 0,

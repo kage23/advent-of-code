@@ -23,13 +23,8 @@ const getNextRow = (row: string): string => {
   return newRow
 }
 
-export const countSafeTiles = (inputKey: string) => {
-  const field: string[] = [inputs.get(inputKey)!]
-  const fieldLength = inputKey.startsWith('DEMO')
-    ? field[0].length === 5
-      ? 3
-      : 10
-    : 40
+export const countSafeTiles = (input: string, fieldLength = 40) => {
+  const field: string[] = [input]
 
   while (field.length < fieldLength) {
     const lastRow = field[field.length - 1]
@@ -46,8 +41,8 @@ export const countSafeTiles = (inputKey: string) => {
   }
 }
 
-export const countSafeTilesInHugeField = (inputKey: string) => {
-  const field: string[] = [inputs.get(inputKey)!]
+export const countSafeTilesInHugeField = (input: string) => {
+  const field: string[] = [input]
   const fieldLength = 400000
 
   while (field.length < fieldLength) {

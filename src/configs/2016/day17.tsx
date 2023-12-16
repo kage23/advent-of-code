@@ -77,21 +77,13 @@ const findPath = (passcode: string, lookingForLongest?: boolean) => {
   return longestPathLength === 0 ? 'There is no path!' : longestPathLength
 }
 
-export const findShortestVaultPath = (inputKey: string) => {
-  const passcode = inputs.get(inputKey)!
+export const findShortestVaultPath = (passcode: string) => ({
+  answer1: findPath(passcode),
+})
 
-  return {
-    answer1: findPath(passcode),
-  }
-}
-
-export const findLongestVaultPath = (inputKey: string) => {
-  const passcode = inputs.get(inputKey)!
-
-  return {
-    answer2: findPath(passcode, true),
-  }
-}
+export const findLongestVaultPath = (passcode: string) => ({
+  answer2: findPath(passcode, true),
+})
 
 const day17: Omit<DayConfig, 'year'> = {
   answer1Text: 'The shortest path to the vault is answer.',

@@ -6,10 +6,8 @@ interface Disc {
   startingPosition: number
 }
 
-const parseInput = (inputKey: string): Disc[] => {
+const parseInput = (input: string): Disc[] => {
   const discs: Disc[] = []
-
-  const input = inputs.get(inputKey) || inputKey
 
   input.split('\n').forEach((line) => {
     const numberOfPositions = parseInt(line.split(' has ')[1])
@@ -37,8 +35,8 @@ const getPositionAtBallTime = (
   return (disc.startingPosition + ballTime) % disc.numberOfPositions
 }
 
-export const getACapsule = (inputKey: string) => {
-  const discs = parseInput(inputKey)
+export const getACapsule = (input: string) => {
+  const discs = parseInput(input)
 
   let t = 0
   const getDiscPositionAtBallTime = (disc: Disc, i: number) =>
@@ -50,14 +48,14 @@ export const getACapsule = (inputKey: string) => {
   }
 }
 
-export const getAnAdvancedCapsule = (inputKey: string) => {
-  const input = inputs.get(inputKey)!.split('\n')
-  input.push(
+export const getAnAdvancedCapsule = (input: string) => {
+  const inputLines = input.split('\n')
+  inputLines.push(
     `Disc #${
-      input.length + 1
+      inputLines.length + 1
     } has 11 positions; at time=0, it is at position 0.`
   )
-  const discs = parseInput(input.join('\n'))
+  const discs = parseInput(inputLines.join('\n'))
 
   let t = 0
   const getDiscPositionAtBallTime = (disc: Disc, i: number) =>

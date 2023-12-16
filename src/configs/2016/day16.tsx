@@ -26,10 +26,7 @@ const getChecksum = (data: string): string => {
   return checksum
 }
 
-export const fillDisk = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
-  const discSize = inputKey.startsWith('DEMO') ? 20 : 272
-
+export const fillDisk = (input: string, discSize = 272) => {
   let disc = input
 
   while (disc.length < discSize) {
@@ -43,8 +40,7 @@ export const fillDisk = (inputKey: string) => {
   }
 }
 
-export const fillBiggerDisk = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
+export const fillBiggerDisk = (input: string) => {
   const discSize = 35651584
 
   let disc = input

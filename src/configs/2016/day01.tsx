@@ -10,8 +10,8 @@ const DIRECTIONS = [
   [0, -1], // moving west
 ]
 
-export const findEndOfPath = (inputKey: string) => {
-  const directions = inputs.get(inputKey)!.split(', ')
+export const findEndOfPath = (input: string) => {
+  const directions = input.split(', ')
   const currentPosition = [0, 0]
   let currentDirectionIndex = 0
 
@@ -32,8 +32,8 @@ export const findEndOfPath = (inputKey: string) => {
   }
 }
 
-export const findFirstRepeatLocation = (inputKey: string) => {
-  const directions = inputs.get(inputKey)!.split(', ')
+export const findFirstRepeatLocation = (input: string) => {
+  const directions = input.split(', ')
   const currentPosition = [0, 0]
   let currentDirectionIndex = 0
   const visitedBefore: Map<string, boolean> = new Map()

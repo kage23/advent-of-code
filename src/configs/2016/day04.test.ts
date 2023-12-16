@@ -5,7 +5,7 @@ describe('2016 Day 04', () => {
   describe('Part 1', () => {
     describe('sumRealRooms', () => {
       it('should sum the sector IDs of the real rooms in the list', () => {
-        expect(sumRealRooms('DEMO_1_1').answer1).toEqual(1514)
+        expect(sumRealRooms(inputs.get('DEMO_1_1')!).answer1).toEqual(1514)
       })
     })
   })

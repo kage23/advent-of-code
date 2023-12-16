@@ -20,15 +20,15 @@ const maxY = 29
 
 const getRender = (
   nodeLine: string,
-  inputKey: string
+  isDemo: boolean
 ): '.' | '_' | '#' | 'G' => {
   const size = parseInt(nodeLine.slice(23))
   const usePercent = parseInt(nodeLine.slice(42))
   const x = parseInt(nodeLine.split('node-x')[1])
   const y = parseInt(nodeLine.split('-y')[1])
 
-  const localMaxX = inputKey.startsWith('DEMO') ? 2 : maxX
-  const maxSize = inputKey.startsWith('DEMO') ? 30 : 100
+  const localMaxX = isDemo ? 2 : maxX
+  const maxSize = isDemo ? 30 : 100
 
   if (usePercent === 0) return '_'
   if (size > maxSize) return '#'
@@ -36,11 +36,10 @@ const getRender = (
   return '.'
 }
 
-const parseInput = (inputKey: string): Map<string, INode> => {
+const parseInput = (input: string, isDemo: boolean): Map<string, INode> => {
   const nodes: Map<string, INode> = new Map()
 
-  inputs
-    .get(inputKey)!
+  input
     .split('\n')
     .slice(2)
     .forEach((nodeLine) => {
@@ -48,7 +47,7 @@ const parseInput = (inputKey: string): Map<string, INode> => {
         avail: parseInt(nodeLine.slice(34)),
         name: nodeLine.split(' ')[0],
         neighbors: [],
-        render: getRender(nodeLine, inputKey),
+        render: getRender(nodeLine, isDemo),
         size: parseInt(nodeLine.slice(23)),
         used: parseInt(nodeLine.slice(29)),
         usePercent: parseInt(nodeLine.slice(42)),
@@ -80,16 +79,12 @@ const isViablePair = (a: INode, b: INode): boolean =>
 
 const renderGridString = (
   grid: Map<string, INode>,
-  inputKey: string,
-  lineBreaks: boolean
+  lineBreaks: boolean,
+  isDemo: boolean
 ): string => {
   let gridStr = ''
-  const localMaxX = inputKey.startsWith('DEMO') ? 2 : maxX
-  const localMaxY = inputKey.startsWith('DEMO')
-    ? 2
-    : inputKey === 'REAL'
-    ? maxY
-    : 1
+  const localMaxX = isDemo ? 2 : maxX
+  const localMaxY = isDemo ? 2 : maxY
 
   for (let y = 0; y <= localMaxY; y++) {
     for (let x = 0; x <= localMaxX; x++) {
@@ -122,9 +117,9 @@ const getContentsFromCoords = (
   gridStr: string,
   x: number,
   y: number,
-  inputKey: string
+  isDemo: boolean
 ): string => {
-  const localMaxX = inputKey.startsWith('DEMO') ? 2 : maxX
+  const localMaxX = isDemo ? 2 : maxX
 
   return gridStr.charAt(getStringIndexFromCoords(x, y, localMaxX))
 }
@@ -133,12 +128,12 @@ const moveEmptyToCoords = (
   gridStr: string,
   nextCoords: [number, number],
   width: number,
-  inputKey: string
+  isDemo: boolean
 ): string => {
   // Remove old empty
   const nextGridStr = gridStr.replace(
     '_',
-    getContentsFromCoords(gridStr, nextCoords[0], nextCoords[1], inputKey)
+    getContentsFromCoords(gridStr, nextCoords[0], nextCoords[1], isDemo)
   )
   // Insert new empty
   const newEmptyStringIndex = getStringIndexFromCoords(
@@ -153,15 +148,11 @@ const moveEmptyToCoords = (
 
 const getPossibleNexts = (
   gridStr: string,
-  inputKey: string,
-  visited: Map<string, true>
+  visited: Map<string, true>,
+  isDemo: boolean
 ): string[] => {
-  const localMaxX = inputKey.startsWith('DEMO') ? 2 : maxX
-  const localMaxY = inputKey.startsWith('DEMO')
-    ? 2
-    : inputKey === 'REAL'
-    ? maxY
-    : 1
+  const localMaxX = isDemo ? 2 : maxX
+  const localMaxY = isDemo ? 2 : maxY
   // Find the x,y coords of the empty node and the G node
   const emptyIndex = gridStr.indexOf('_')
   const [emptyX, emptyY] = getCoordsFromStringIndex(emptyIndex, localMaxX + 1)
@@ -182,10 +173,10 @@ const getPossibleNexts = (
           y >= 0 &&
           y <= localMaxY &&
           // Not a full node
-          getContentsFromCoords(gridStr, x, y, inputKey) !== '#'
+          getContentsFromCoords(gridStr, x, y, isDemo) !== '#'
       )
       .map((nextCoords) =>
-        moveEmptyToCoords(gridStr, nextCoords, localMaxX, inputKey)
+        moveEmptyToCoords(gridStr, nextCoords, localMaxX, isDemo)
       )
       // Filter nexts against the visited list
       .filter((gridStr) => !visited.get(gridStr))
@@ -227,12 +218,13 @@ const getPossibleNexts = (
 
 const findShortestPath = (
   grid: Map<string, INode>,
-  inputKey: string
+  input: string,
+  isDemo: boolean
 ): number => {
   const visited: Map<string, true> = new Map()
 
   const queue = new SLL({
-    gridStr: renderGridString(grid, inputKey, false),
+    gridStr: renderGridString(grid, false, isDemo),
     pathLength: 0,
   })
 
@@ -246,8 +238,8 @@ const findShortestPath = (
       visited.set(currentSearchNode.gridStr, true)
       const nexts = getPossibleNexts(
         currentSearchNode.gridStr,
-        inputKey,
-        visited
+        visited,
+        isDemo
       )
       nexts.forEach((next) =>
         queue.push({
@@ -261,8 +253,8 @@ const findShortestPath = (
   return NaN
 }
 
-export const findViablePairs = (inputKey: string) => {
-  const nodes = parseInput(inputKey)
+export const findViablePairs = (input: string, isDemo = false) => {
+  const nodes = parseInput(input, isDemo)
 
   const nodeNames = Array.from(nodes.keys())
   let viablePairCount = 0
@@ -280,10 +272,10 @@ export const findViablePairs = (inputKey: string) => {
   }
 }
 
-export const accessData = (inputKey: string) => {
-  const nodes = parseInput(inputKey)
+export const accessData = (input: string, isDemo = false) => {
+  const nodes = parseInput(input, isDemo)
 
-  const pathLength = findShortestPath(nodes, inputKey)
+  const pathLength = findShortestPath(nodes, input, isDemo)
 
   return {
     answer2: pathLength,

@@ -126,42 +126,40 @@ const performUnscramble = (
   return ''
 }
 
-export const scramblePassword = (inputKey: string) => {
-  const password = inputKey.startsWith('DEMO') ? 'abcde' : 'abcdefgh'
+export const scramblePassword = (input: string, password = 'abcdefgh') => ({
+  answer1: input
+    .split('\n')
+    .reduce(
+      (toScramble, instruction) => performScramble(toScramble, instruction),
+      password
+    ),
+})
 
-  return {
-    answer1: inputs
-      .get(inputKey)!
-      .split('\n')
-      .reduce(
-        (toScramble, instruction) => performScramble(toScramble, instruction),
-        password
-      ),
-  }
-}
-
-export const unscramblePassword = (inputKey: string) => {
-  const scramble = inputKey.startsWith('DEMO') ? 'decab' : 'fbgdceah'
-
-  return {
-    answer2: inputs
-      .get(inputKey)!
-      .split('\n')
-      .reverse()
-      .reduce(
-        (toScramble, instruction) => performUnscramble(toScramble, instruction),
-        scramble
-      ),
-  }
-}
+export const unscramblePassword = (input: string, scramble = 'fbgdceah') => ({
+  answer2: input
+    .split('\n')
+    .reverse()
+    .reduce(
+      (toScramble, instruction) => performUnscramble(toScramble, instruction),
+      scramble
+    ),
+})
 
 const day21: Omit<DayConfig, 'year'> = {
   answer1Text: 'The scrambled password is answer.',
   answer2Text: 'The descrambled password is answer.',
   buttons: [
     {
+      label: 'Scramble Password Demo',
+      onClick: (input) => scramblePassword(input, 'abcde'),
+    },
+    {
       label: 'Scramble Password',
       onClick: scramblePassword,
+    },
+    {
+      label: 'Unscramble Password Demo',
+      onClick: (input) => unscramblePassword(input, 'decab'),
     },
     {
       label: 'Unscramble Password',

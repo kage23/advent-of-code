@@ -44,18 +44,18 @@ const getStretchedHash = (hashKey: string): string => {
   return stretchedHash
 }
 
-export const generateKeys = (inputKey: string) => {
+export const generateKeys = (input: string) => {
   const keyIndexes: number[] = []
   hashes.clear()
 
   let i = 0
   keySearch: while (keyIndexes.length < 64) {
-    const hashKey = `${inputs.get(inputKey)!}${i}`
+    const hashKey = `${input}${i}`
     const hash = getHash(hashKey)
     const repeat = containsRepeat(hash, 3)
     if (repeat) {
       for (let n = 1; n <= 1000; n++) {
-        const checkHash = getHash(`${inputs.get(inputKey)!}${i + n}`)
+        const checkHash = getHash(`${input}${i + n}`)
         if (containsRepeat(checkHash, 5, repeat)) {
           keyIndexes.push(i)
           i++
@@ -71,18 +71,18 @@ export const generateKeys = (inputKey: string) => {
   }
 }
 
-export const generateStretchedKeys = (inputKey: string) => {
+export const generateStretchedKeys = (input: string) => {
   const keyIndexes: number[] = []
   stretchedHashes.clear()
 
   let i = 0
   keySearch: while (keyIndexes.length < 64) {
-    const hashKey = `${inputs.get(inputKey)!}${i}`
+    const hashKey = `${input}${i}`
     const hash = getStretchedHash(hashKey)
     const repeat = containsRepeat(hash, 3)
     if (repeat) {
       for (let n = 1; n <= 1000; n++) {
-        const checkHash = getStretchedHash(`${inputs.get(inputKey)!}${i + n}`)
+        const checkHash = getStretchedHash(`${input}${i + n}`)
         if (containsRepeat(checkHash, 5, repeat)) {
           keyIndexes.push(i)
           i++

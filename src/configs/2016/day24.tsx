@@ -159,15 +159,15 @@ const getShortestPathLengthToAllNodes = (nodeCount: number, distances: Map<strin
   return shortestPathDistance
 }
 
-export const findShortestPath = (inputKey: string) => {
-  const { distances, nodeLocations } = precompute(inputs.get(inputKey)!)
+export const findShortestPath = (input: string) => {
+  const { distances, nodeLocations } = precompute(input)
   const pathLength = getShortestPathLengthToAllNodes(nodeLocations.size, distances, 1)
 
   return { answer1: pathLength }
 }
 
-export const findShortestPathWithReturn = (inputKey: string) => {
-  const { distances, nodeLocations } = precompute(inputs.get(inputKey)!)
+export const findShortestPathWithReturn = (input: string) => {
+  const { distances, nodeLocations } = precompute(input)
   const pathLength = getShortestPathLengthToAllNodes(nodeLocations.size, distances, 2)
 
   return { answer2: pathLength }

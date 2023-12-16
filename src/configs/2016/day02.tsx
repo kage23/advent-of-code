@@ -1,10 +1,10 @@
 import inputs from '../../inputs/2016/day02'
 import { DayConfig } from '../../routes/Day'
 
-export const findBathroomCodePhonepadNumbers = (inputKey: string) => {
+export const findBathroomCodePhonepadNumbers = (input: string) => {
   const DOOR_BUTTONS = ['123', '456', '789']
 
-  const inputLines = inputs.get(inputKey)!.split('\n')
+  const inputLines = input.split('\n')
   const currentPosition = [1, 1]
   let code = ''
 
@@ -39,7 +39,7 @@ export const findBathroomCodePhonepadNumbers = (inputKey: string) => {
   }
 }
 
-export const findBathroomCodeRealButtons = (inputKey: string) => {
+export const findBathroomCodeRealButtons = (input: string) => {
   const DOOR_BUTTONS = ['  1  ', ' 234 ', '56789', ' ABC ', '  D  ']
   const buttonRowLimits = [
     [2, 2],
@@ -49,7 +49,7 @@ export const findBathroomCodeRealButtons = (inputKey: string) => {
     [2, 2],
   ]
 
-  const inputLines = inputs.get(inputKey)!.split('\n')
+  const inputLines = input.split('\n')
   const currentPosition = [0, 2]
   let code = ''
 

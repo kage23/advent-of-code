@@ -17,11 +17,8 @@ const rotateColumn = (
   return newScreen.map((row) => row.join(''))
 }
 
-export const swipeCard = (inputKey: string) => {
-  const rows = inputKey.startsWith('DEMO') ? 3 : 6
-  const cols = inputKey.startsWith('DEMO') ? 7 : 50
+export const swipeCard = (input: string, rows = 6, cols = 50) => {
   let screen = Array(rows).fill(''.padEnd(cols, ' '))
-  const input = inputs.get(inputKey)!
 
   input.split('\n').forEach((instruction) => {
     if (instruction.startsWith('rect')) {

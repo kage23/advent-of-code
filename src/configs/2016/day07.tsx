@@ -86,19 +86,17 @@ const checkForSSL = (input: string): boolean => {
   return false
 }
 
-export const checkIPsForTLSSupport = (inputKey: string) => {
+export const checkIPsForTLSSupport = (input: string) => {
   return {
-    answer1: inputs
-      .get(inputKey)!
+    answer1: input
       .split('\n')
       .filter((line) => checkForTLS(line)).length,
   }
 }
 
-export const checkIPsForSSLSupport = (inputKey: string) => {
+export const checkIPsForSSLSupport = (input: string) => {
   return {
-    answer2: inputs
-      .get(inputKey)!
+    answer2: input
       .split('\n')
       .filter((line) => checkForSSL(line)).length,
   }

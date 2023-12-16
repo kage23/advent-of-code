@@ -1,8 +1,7 @@
 import inputs from '../../inputs/2016/day09'
 import { DayConfig } from '../../routes/Day'
 
-export const decompressSequence = (inputKey: string) => {
-  const input = inputs.get(inputKey)!
+export const decompressSequence = (input: string) => {
 
   let answer1 = ''
 
@@ -29,8 +28,7 @@ export const decompressSequence = (inputKey: string) => {
   }
 }
 
-export const getDecompressedLength = (inputKey: string) => {
-  const input = inputs.get(inputKey) || inputKey
+export const getDecompressedLength = (input: string) => {
   let remaining = input
   let length = 0
 

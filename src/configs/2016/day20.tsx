@@ -1,9 +1,8 @@
 import inputs from '../../inputs/2016/day20'
 import { DayConfig } from '../../routes/Day'
 
-const generateBannedList = (inputKey: string): number[][] =>
-  inputs
-    .get(inputKey)!
+const generateBannedList = (input: string): number[][] =>
+  input
     .split('\n')
     .map((range) => range.split('-').map((x) => parseInt(x)))
     .sort((a, b) => a[0] - b[0])
@@ -21,17 +20,16 @@ const generateBannedList = (inputKey: string): number[][] =>
       return list
     }, [] as number[][])
 
-export const findLowestUnbannedIP = (inputKey: string) => {
-  const bannedRanges = generateBannedList(inputKey)
+export const findLowestUnbannedIP = (input: string) => {
+  const bannedRanges = generateBannedList(input)
 
   return {
     answer1: bannedRanges[0][1] + 1,
   }
 }
 
-export const findAllUnbannedIPs = (inputKey: string) => {
-  const bannedRanges = generateBannedList(inputKey)
-  const upperLimit = inputKey.startsWith('DEMO') ? 9 : 4294967295
+export const findAllUnbannedIPs = (input: string, upperLimit = 4294967295) => {
+  const bannedRanges = generateBannedList(input)
 
   let allowedCount = bannedRanges[0][0]
 
