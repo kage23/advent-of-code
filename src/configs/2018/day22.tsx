@@ -283,10 +283,10 @@ const calculateRescueTime = (caveMap: Map): { answer: number; map: Map } => {
   }
 }
 
-export const assessRisk = (inputKey: string) => {
-  map = generateMap(parseInput(inputs.get(inputKey)!))
+export const assessRisk = (inputStr: string) => {
+  map = generateMap(parseInput(inputStr))
 
-  const input: Input = parseInput(inputs.get(inputKey)!)
+  const input: Input = parseInput(inputStr)
   const { target } = input
   let riskLevel = 0
 
@@ -302,8 +302,8 @@ export const assessRisk = (inputKey: string) => {
   }
 }
 
-export const calculateTimeForRescue = (inputKey: string) => {
-  map = generateMap(parseInput(inputs.get(inputKey)!))
+export const calculateTimeForRescue = (input: string) => {
+  map = generateMap(parseInput(input))
 
   const result = calculateRescueTime(map)
   map = result.map

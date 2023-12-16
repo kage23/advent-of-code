@@ -1,9 +1,8 @@
 import inputs from '../../inputs/2018/day05'
 import { DayConfig } from '../../routes/Day'
 
-const reactPolymer = (inputKey: string, filter?: string) => {
-  let result = inputs
-    .get(inputKey)!
+const reactPolymer = (input: string, filter?: string) => {
+  let result = input
     .split('')
     .filter(
       (letter) => !filter || letter.toLowerCase() !== filter.toLowerCase()
@@ -25,8 +24,8 @@ const reactPolymer = (inputKey: string, filter?: string) => {
   return result
 }
 
-export const part1 = (inputKey: string) => {
-  const result = reactPolymer(inputKey)
+export const part1 = (input: string) => {
+  const result = reactPolymer(input)
   return {
     answer1: result.length,
   }
@@ -46,8 +45,8 @@ const findPolymerFilter = (input: string) => {
   return shortestPolymer
 }
 
-export const part2 = (inputKey: string) => {
-  const result = findPolymerFilter(inputKey)
+export const part2 = (input: string) => {
+  const result = findPolymerFilter(input)
   return {
     answer2: result.length,
   }

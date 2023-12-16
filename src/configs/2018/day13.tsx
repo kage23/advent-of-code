@@ -2,7 +2,7 @@ import inputs from '../../inputs/2018/day13'
 import { DayConfig } from '../../routes/Day'
 
 interface State {
-  baseTrack: string[],
+  baseTrack: string[]
   carts: Cart[]
 }
 
@@ -14,7 +14,7 @@ interface Cart {
 
 let state: State = {
   baseTrack: [],
-  carts: []
+  carts: [],
 }
 let time = 0
 
@@ -22,12 +22,14 @@ const sortCartsByPosition = (a: Cart, b: Cart): number => {
   const [xa, ya] = a.position
   const [xb, yb] = b.position
 
-  return ya === yb
-    ? xa - xb
-    : ya - yb
+  return ya === yb ? xa - xb : ya - yb
 }
 
-const advanceOneTick = (baseTrack: string[], carts: Cart[], time: number): {
+const advanceOneTick = (
+  baseTrack: string[],
+  carts: Cart[],
+  time: number
+): {
   answer1?: string
   carts: Cart[]
   time: number
@@ -85,7 +87,13 @@ const advanceOneTick = (baseTrack: string[], carts: Cart[], time: number): {
 
         case '+': {
           const oldDirectionIndex = directions.indexOf(direction)
-          direction = directions[(oldDirectionIndex + turnMods[turnsExecuted % turnMods.length] + directions.length) % directions.length]
+          direction =
+            directions[
+              (oldDirectionIndex +
+                turnMods[turnsExecuted % turnMods.length] +
+                directions.length) %
+                directions.length
+            ]
           turnsExecuted++
           break
         }
@@ -98,8 +106,17 @@ const advanceOneTick = (baseTrack: string[], carts: Cart[], time: number): {
       }
 
       // Detect collision here
-      let collision = carts.find(fCart => fCart.position[0] === cart.position[0] && fCart.position[1] === cart.position[1])
-      if (!collision) collision = newCarts.find(fCart => fCart.position[0] === cart.position[0] && fCart.position[1] === cart.position[1])
+      let collision = carts.find(
+        (fCart) =>
+          fCart.position[0] === cart.position[0] &&
+          fCart.position[1] === cart.position[1]
+      )
+      if (!collision)
+        collision = newCarts.find(
+          (fCart) =>
+            fCart.position[0] === cart.position[0] &&
+            fCart.position[1] === cart.position[1]
+        )
       if (collision) {
         answer1 = `${position[0]},${position[1]}`
         direction = 'X'
@@ -109,21 +126,25 @@ const advanceOneTick = (baseTrack: string[], carts: Cart[], time: number): {
       newCarts.push({
         direction,
         position,
-        turnsExecuted
+        turnsExecuted,
       })
     }
   }
 
   newCarts = newCarts.sort(sortCartsByPosition)
 
-  return ({
+  return {
     answer1,
     carts: newCarts,
-    time: time + 1
-  })
+    time: time + 1,
+  }
 }
 
-const advanceToCollision = (baseTrack: string[], carts: Cart[], time: number): {
+const advanceToCollision = (
+  baseTrack: string[],
+  carts: Cart[],
+  time: number
+): {
   carts: Cart[]
   time: number
   answer1?: string
@@ -135,7 +156,7 @@ const advanceToCollision = (baseTrack: string[], carts: Cart[], time: number): {
   } = {
     carts,
     answer1: undefined,
-    time
+    time,
   }
 
   while (!next.answer1) next = advanceOneTick(baseTrack, next.carts, next.time)
@@ -154,7 +175,7 @@ const parseInput = (input: string): State => {
           carts.push({
             direction: char,
             position: [x, y],
-            turnsExecuted: 0
+            turnsExecuted: 0,
           })
           contents += '-'
           break
@@ -164,7 +185,7 @@ const parseInput = (input: string): State => {
           carts.push({
             direction: char,
             position: [x, y],
-            turnsExecuted: 0
+            turnsExecuted: 0,
           })
           contents += '|'
           break
@@ -181,13 +202,22 @@ const parseInput = (input: string): State => {
 
   return {
     baseTrack,
-    carts
+    carts,
   }
 }
 
-const getAnswer2 = (carts: Cart[]) => carts.length > 1 ? undefined : carts.length === 1 ? `${carts[0].position[0]},${carts[0].position[1]}` : undefined
+const getAnswer2 = (carts: Cart[]) =>
+  carts.length > 1
+    ? undefined
+    : carts.length === 1
+    ? `${carts[0].position[0]},${carts[0].position[1]}`
+    : undefined
 
-const advanceOneAndRemove = (baseTrack: string[], carts: Cart[], time: number): {
+const advanceOneAndRemove = (
+  baseTrack: string[],
+  carts: Cart[],
+  time: number
+): {
   carts: Cart[]
   time: number
   answer2: undefined | string | JSX.Element
@@ -244,7 +274,13 @@ const advanceOneAndRemove = (baseTrack: string[], carts: Cart[], time: number): 
 
         case '+': {
           const oldDirectionIndex = directions.indexOf(direction)
-          direction = directions[(oldDirectionIndex + turnMods[turnsExecuted % turnMods.length] + directions.length) % directions.length]
+          direction =
+            directions[
+              (oldDirectionIndex +
+                turnMods[turnsExecuted % turnMods.length] +
+                directions.length) %
+                directions.length
+            ]
           turnsExecuted++
           break
         }
@@ -257,16 +293,33 @@ const advanceOneAndRemove = (baseTrack: string[], carts: Cart[], time: number): 
       }
 
       // Detect collision here
-      let collision = carts.find(fCart => fCart.position[0] === cart.position[0] && fCart.position[1] === cart.position[1])
-      if (!collision) collision = newCarts.find(fCart => fCart.position[0] === cart.position[0] && fCart.position[1] === cart.position[1])
+      let collision = carts.find(
+        (fCart) =>
+          fCart.position[0] === cart.position[0] &&
+          fCart.position[1] === cart.position[1]
+      )
+      if (!collision)
+        collision = newCarts.find(
+          (fCart) =>
+            fCart.position[0] === cart.position[0] &&
+            fCart.position[1] === cart.position[1]
+        )
       if (collision) {
-        carts = carts.filter(fCart => fCart.position[0] !== cart.position[0] || fCart.position[1] !== cart.position[1])
-        newCarts = newCarts.filter(fCart => fCart.position[0] !== cart.position[0] || fCart.position[1] !== cart.position[1])
+        carts = carts.filter(
+          (fCart) =>
+            fCart.position[0] !== cart.position[0] ||
+            fCart.position[1] !== cart.position[1]
+        )
+        newCarts = newCarts.filter(
+          (fCart) =>
+            fCart.position[0] !== cart.position[0] ||
+            fCart.position[1] !== cart.position[1]
+        )
       } else {
         newCarts.push({
           direction,
           position,
-          turnsExecuted
+          turnsExecuted,
         })
       }
     }
@@ -279,51 +332,56 @@ const advanceOneAndRemove = (baseTrack: string[], carts: Cart[], time: number): 
   return {
     answer2,
     carts: newCarts,
-    time: time + 1
+    time: time + 1,
   }
 }
 
-const advanceToFinal = (baseTrack: string[], carts: Cart[], time: number): {
+const advanceToFinal = (
+  baseTrack: string[],
+  carts: Cart[],
+  time: number
+): {
   carts: Cart[]
   time: number
   answer2?: string
 } => {
-  let next: { carts: Cart[], time: number } = {
+  let next: { carts: Cart[]; time: number } = {
     carts,
-    time
+    time,
   }
 
-  while (next.carts.length > 1) next = advanceOneAndRemove(baseTrack, next.carts, next.time)
+  while (next.carts.length > 1)
+    next = advanceOneAndRemove(baseTrack, next.carts, next.time)
 
   const answer2 = getAnswer2(next.carts)
 
   return {
     ...next,
-    answer2
+    answer2,
   }
 }
 
-export const findCollision = (inputKey: string) => {
-  state = parseInput(inputs.get(inputKey)!)
+export const findCollision = (input: string) => {
+  state = parseInput(input)
   time = 0
 
   const next = advanceToCollision(state.baseTrack, state.carts, time)
   state.carts = next.carts
   time = next.time
   return {
-    answer1: next.answer1
+    answer1: next.answer1,
   }
 }
 
-export const goToEnd = (inputKey: string) => {
-  state = parseInput(inputs.get(inputKey)!)
+export const goToEnd = (input: string) => {
+  state = parseInput(input)
   time = 0
 
   const next = advanceToFinal(state.baseTrack, state.carts, time)
   state.carts = next.carts
   time = next.time
   return {
-    answer2: next.answer2
+    answer2: next.answer2,
   }
 }
 
@@ -333,11 +391,11 @@ const day13: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Advance to Collision',
-      onClick: findCollision
+      onClick: findCollision,
     },
     {
       label: 'Advance to Final',
-      onClick: goToEnd
+      onClick: goToEnd,
     },
   ],
   id: 13,

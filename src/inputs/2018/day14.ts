@@ -7,7 +7,6 @@ const inputs: Map<string, string> = new Map([
   ['DEMO_2_2', '01245'],
   ['DEMO_2_3', '92510'],
   ['DEMO_2_4', '59414'],
-  ['REAL', '286051'],
 ])
 
 export default inputs

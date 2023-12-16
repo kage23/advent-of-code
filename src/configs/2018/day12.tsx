@@ -7,46 +7,54 @@ interface IState {
   rules: IRule[]
 }
 
-interface IRule { before: string, after: string }
+interface IRule {
+  before: string
+  after: string
+}
 
 let state: IState = {
   bottomPot: 0,
   pots: '.',
-  rules: []
+  rules: [],
 }
 
-const parseInput = (inputKey: string): IState => {
-  const inputArr = inputs.get(inputKey)!.split('\n')
+const parseInput = (input: string): IState => {
+  const inputArr = input.split('\n')
   const initialState = (inputArr.shift() || '').slice(15)
   inputArr.shift()
-  const rules = inputArr.map(ruleStr => ({
+  const rules = inputArr.map((ruleStr) => ({
     before: ruleStr.slice(0, 5),
-    after: ruleStr.slice(-1)
+    after: ruleStr.slice(-1),
   }))
   return {
     bottomPot: -2,
     pots: `..${initialState}`,
-    rules
+    rules,
   }
 }
 
-const advanceGeneration = (inPots: string, bottomPot: number, rules: IRule[]): {
-  pots: string,
+const advanceGeneration = (
+  inPots: string,
+  bottomPot: number,
+  rules: IRule[]
+): {
+  pots: string
   bottomPot: number
 } => {
   const pots = `..${inPots}..`
   let next = ''
 
   for (let i = 0; i < pots.length; i++) {
-    let checkString = i >= 2
-      ? pots.slice(i - 2, i + 3)
-      : i === 1
+    let checkString =
+      i >= 2
+        ? pots.slice(i - 2, i + 3)
+        : i === 1
         ? `.${pots.slice(i - 1, i + 3)}`
         : i === 0
-          ? `..${pots.slice(i, i + 3)}`
-          : ''
+        ? `..${pots.slice(i, i + 3)}`
+        : ''
     while (checkString.length < 5) checkString += '.'
-    const rule = rules.find(aRule => aRule.before === checkString)
+    const rule = rules.find((aRule) => aRule.before === checkString)
     next += rule ? rule.after : '.'
   }
   let nextBottomPot = bottomPot - 2
@@ -57,42 +65,44 @@ const advanceGeneration = (inPots: string, bottomPot: number, rules: IRule[]): {
 
   return {
     pots: next,
-    bottomPot: nextBottomPot
+    bottomPot: nextBottomPot,
   }
 }
 
-const sum = (pots: string, bottomPot: number): number => (
-  pots.split('').reduce((prevSum, currentPot, index) => (
-    prevSum
-    + (
-      currentPot === '#'
-        ? (index + bottomPot)
-        : 0
+const sum = (pots: string, bottomPot: number): number =>
+  pots
+    .split('')
+    .reduce(
+      (prevSum, currentPot, index) =>
+        prevSum + (currentPot === '#' ? index + bottomPot : 0),
+      0
     )
-  ), 0)
-)
 
-const advanceALot = (inPots: string, bottomPot: number, rules: IRule[]): {
-  pots: string,
+const advanceALot = (
+  inPots: string,
+  bottomPot: number,
+  rules: IRule[]
+): {
+  pots: string
   bottomPot: number
 } => {
   const seen = []
   let next = {
     pots: inPots,
-    bottomPot
+    bottomPot,
   }
 
   let g = 0
   const findRecord = (potRecord: {
-    bottomPot: number;
-    pots: string;
-    time: number;
+    bottomPot: number
+    pots: string
+    time: number
   }) => potRecord.pots === next.pots
   while (g < 50000000000) {
     seen.push({
       bottomPot: next.bottomPot,
       pots: next.pots,
-      time: g
+      time: g,
     })
 
     g++
@@ -103,7 +113,7 @@ const advanceALot = (inPots: string, bottomPot: number, rules: IRule[]): {
       const bottomPotDiffPerLoop = next.bottomPot - seenBefore.bottomPot
       const remainingTime = 50000000000 - g
       const remainingLoops = remainingTime / loopLength
-      next.bottomPot = next.bottomPot + (remainingLoops * bottomPotDiffPerLoop)
+      next.bottomPot = next.bottomPot + remainingLoops * bottomPotDiffPerLoop
       break
     }
   }
@@ -111,8 +121,8 @@ const advanceALot = (inPots: string, bottomPot: number, rules: IRule[]): {
   return next
 }
 
-export const advance20Generations = (inputKey: string) => {
-  state = parseInput(inputKey)
+export const advance20Generations = (input: string) => {
+  state = parseInput(input)
 
   for (let i = 0; i < 20; i++) {
     const next = advanceGeneration(state.pots, state.bottomPot, state.rules)
@@ -120,18 +130,18 @@ export const advance20Generations = (inputKey: string) => {
     state.bottomPot = next.bottomPot
   }
   return {
-    answer1: sum(state.pots, state.bottomPot)
+    answer1: sum(state.pots, state.bottomPot),
   }
 }
 
-export const advance50Billion = (inputKey: string) => {
-  state = parseInput(inputKey)
+export const advance50Billion = (input: string) => {
+  state = parseInput(input)
 
   const next = advanceALot(state.pots, state.bottomPot, state.rules)
   state.pots = next.pots
   state.bottomPot = next.bottomPot
   return {
-    answer2: sum(state.pots, state.bottomPot)
+    answer2: sum(state.pots, state.bottomPot),
   }
 }
 
@@ -141,11 +151,11 @@ const day12: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Advance 20 Generations',
-      onClick: advance20Generations
+      onClick: advance20Generations,
     },
     {
       label: 'Advance Fifty Billion Generations',
-      onClick: advance50Billion
+      onClick: advance50Billion,
     },
   ],
   id: 12,

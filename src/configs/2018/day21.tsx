@@ -58,7 +58,7 @@ const runLines = (
 }
 
 const runProgram = (
-  inputKey: string,
+  input: string,
   breakOnFirstExitCode: boolean
 ): {
   exitCodes: number[]
@@ -66,7 +66,6 @@ const runProgram = (
 } => {
   // Get the IP_BIND so we can skip to the correct instruction
   let IP_BIND = NaN
-  const input = inputs.get(inputKey)!
   const ipInstruction = input.split('\n').shift()
   if (ipInstruction) IP_BIND = parseInt(ipInstruction.split(' ')[1])
 
@@ -80,16 +79,16 @@ const runProgram = (
   return result
 }
 
-export const findFirstExitCode = (inputKey: string) => {
-  const result = runProgram(inputKey, true)
+export const findFirstExitCode = (input: string) => {
+  const result = runProgram(input, true)
   registers = result.registers
   return {
     answer1: result.exitCodes[0],
   }
 }
 
-export const findLastExitCode = (inputKey: string) => {
-  const result = runProgram(inputKey, false)
+export const findLastExitCode = (input: string) => {
+  const result = runProgram(input, false)
   registers = result.registers
   return {
     answer2: result.exitCodes[result.exitCodes.length - 1],

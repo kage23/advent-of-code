@@ -20,34 +20,41 @@ interface Map {
 let map: Map = {
   min: { x: 0, y: 0 },
   max: { x: 0, y: 0 },
-  '0,0': { x: 0, y: 0 }
+  '0,0': { x: 0, y: 0 },
 }
 
 const pathKey = (coord: Coord): string => `${coord.x},${coord.y}`
 
 const addDoor = (position: Coord, door: string, map: Map): Map => {
   const mapSquare = map[pathKey(position)]
-  if (mapSquare.doors !== undefined && mapSquare.doors.indexOf(door) === -1) mapSquare.doors += door
-  const otherRoomPosition = door === 'N'
-    ? { x: position.x, y: position.y - 1 }
-    : door === 'W'
+  if (mapSquare.doors !== undefined && mapSquare.doors.indexOf(door) === -1)
+    mapSquare.doors += door
+  const otherRoomPosition =
+    door === 'N'
+      ? { x: position.x, y: position.y - 1 }
+      : door === 'W'
       ? { x: position.x - 1, y: position.y }
       : door === 'E'
-        ? { x: position.x + 1, y: position.y }
-        : { x: position.x, y: position.y + 1 }
+      ? { x: position.x + 1, y: position.y }
+      : { x: position.x, y: position.y + 1 }
   if (!map[pathKey(otherRoomPosition)]) {
     map[pathKey(otherRoomPosition)] = {
       x: otherRoomPosition.x,
       y: otherRoomPosition.y,
-      doors: ''
+      doors: '',
     }
   }
   const otherMapSquare = map[pathKey(otherRoomPosition)]
-  otherMapSquare.doors += door === 'W' ? 'E'
-    : door === 'E' ? 'W'
-      : door === 'N' ? 'S'
-        : door === 'S' ? 'N'
-          : ''
+  otherMapSquare.doors +=
+    door === 'W'
+      ? 'E'
+      : door === 'E'
+      ? 'W'
+      : door === 'N'
+      ? 'S'
+      : door === 'S'
+      ? 'N'
+      : ''
   return map
 }
 
@@ -57,7 +64,7 @@ const updateMap = (position: Coord, path: string, map: Map): Map => {
     map[pathKey(position)] = {
       ...position,
       doors: '',
-      path
+      path,
     }
     mapSquare = map[pathKey(position)]
   }
@@ -70,15 +77,19 @@ const updateMap = (position: Coord, path: string, map: Map): Map => {
   return map
 }
 
-const calulateSplit = (input: string, map: Map, inPosition: Coord, inPath: string): { map: Map; remaining: string } => {
+const calulateSplit = (
+  input: string,
+  map: Map,
+  inPosition: Coord,
+  inPath: string
+): { map: Map; remaining: string } => {
   const paths: string[] = [inPath]
   let pathIndex = 0
   let position = inPosition
   let char = input.charAt(0)
   let remaining = input.slice(1)
 
-  charLoop:
-  while (char) {
+  charLoop: while (char) {
     if (char !== ')') {
       if (!paths[pathIndex]) paths[pathIndex] = inPath
     }
@@ -137,14 +148,17 @@ const calulateSplit = (input: string, map: Map, inPosition: Coord, inPath: strin
 
   return {
     map,
-    remaining
+    remaining,
   }
 }
 
-const createMap = (input: string, inMap?: Map): { map: Map; remaining: string } => {
+const createMap = (
+  input: string,
+  inMap?: Map
+): { map: Map; remaining: string } => {
   let map: Map = inMap || {
     min: { x: 0, y: 0 },
-    max: { x: 0, y: 0 }
+    max: { x: 0, y: 0 },
   }
 
   let position: Coord = { x: 0, y: 0 }
@@ -152,8 +166,7 @@ const createMap = (input: string, inMap?: Map): { map: Map; remaining: string } 
   let remaining = input.slice(1)
   let currentPath = ''
 
-  charLoop:
-  while (char) {
+  charLoop: while (char) {
     switch (char) {
       case '^':
         break
@@ -206,12 +219,12 @@ const createMap = (input: string, inMap?: Map): { map: Map; remaining: string } 
 
   return {
     map,
-    remaining
+    remaining,
   }
 }
 
-export const findFarthestRoom = (inputKey: string) => {
-  map = createMap(inputs.get(inputKey)!).map
+export const findFarthestRoom = (input: string) => {
+  map = createMap(input).map
 
   let farthestDistance = 0
   const { min, max } = map
@@ -219,16 +232,17 @@ export const findFarthestRoom = (inputKey: string) => {
   for (let xi = min.x; xi <= max.x; xi++)
     for (let yi = min.y; yi <= max.y; yi++) {
       const room = map[pathKey({ x: xi, y: yi })]
-      if (room && room.path && room.path.length > farthestDistance) farthestDistance = room.path.length
+      if (room && room.path && room.path.length > farthestDistance)
+        farthestDistance = room.path.length
     }
 
   return {
-    answer1: farthestDistance
+    answer1: farthestDistance,
   }
 }
 
-export const countFarRooms = (inputKey: string) => {
-  map = createMap(inputs.get(inputKey)!).map
+export const countFarRooms = (input: string) => {
+  map = createMap(input).map
 
   let farRooms = 0
   const { min, max } = map
@@ -240,22 +254,23 @@ export const countFarRooms = (inputKey: string) => {
     }
 
   return {
-    answer2: farRooms
+    answer2: farRooms,
   }
 }
 
 const day20: Omit<DayConfig, 'year'> = {
   answer1Text: 'The farthest room is answer doors away.',
-  answer2Text: 'answer rooms have a path that requires passing through at least 1000 doors.',
+  answer2Text:
+    'answer rooms have a path that requires passing through at least 1000 doors.',
   buttons: [
     {
       label: 'Find Farthest Room',
-      onClick: findFarthestRoom
+      onClick: findFarthestRoom,
     },
     {
       label: 'Count Far Rooms',
-      onClick: countFarRooms
-    }
+      onClick: countFarRooms,
+    },
   ],
   id: 20,
   inputs,

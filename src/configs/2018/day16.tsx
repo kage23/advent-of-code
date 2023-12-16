@@ -24,13 +24,14 @@ interface State {
 }
 
 export const Operations: {
-  [key:string]: (operation: Operation, registers: number[]) => number[]
+  [key: string]: (operation: Operation, registers: number[]) => number[]
 } = {
   // Add Register
   addr: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] + registers[operation.inputB]
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] + registers[operation.inputB]
 
     return newRegisters
   },
@@ -38,7 +39,8 @@ export const Operations: {
   addi: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] + operation.inputB
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] + operation.inputB
 
     return newRegisters
   },
@@ -47,7 +49,8 @@ export const Operations: {
   mulr: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] * registers[operation.inputB]
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] * registers[operation.inputB]
 
     return newRegisters
   },
@@ -55,7 +58,8 @@ export const Operations: {
   muli: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] * operation.inputB
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] * operation.inputB
 
     return newRegisters
   },
@@ -64,7 +68,8 @@ export const Operations: {
   banr: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] & registers[operation.inputB]
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] & registers[operation.inputB]
 
     return newRegisters
   },
@@ -72,7 +77,8 @@ export const Operations: {
   bani: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] & operation.inputB
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] & operation.inputB
 
     return newRegisters
   },
@@ -81,7 +87,8 @@ export const Operations: {
   borr: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] | registers[operation.inputB]
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] | registers[operation.inputB]
 
     return newRegisters
   },
@@ -89,7 +96,8 @@ export const Operations: {
   bori: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] | operation.inputB
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] | operation.inputB
 
     return newRegisters
   },
@@ -115,7 +123,8 @@ export const Operations: {
   gtir: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = operation.inputA > registers[operation.inputB] ? 1 : 0
+    newRegisters[operation.outputC] =
+      operation.inputA > registers[operation.inputB] ? 1 : 0
 
     return newRegisters
   },
@@ -123,7 +132,8 @@ export const Operations: {
   gtri: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] > operation.inputB ? 1 : 0
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] > operation.inputB ? 1 : 0
 
     return newRegisters
   },
@@ -131,7 +141,8 @@ export const Operations: {
   gtrr: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] > registers[operation.inputB] ? 1 : 0
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] > registers[operation.inputB] ? 1 : 0
 
     return newRegisters
   },
@@ -140,7 +151,8 @@ export const Operations: {
   eqir: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = operation.inputA === registers[operation.inputB] ? 1 : 0
+    newRegisters[operation.outputC] =
+      operation.inputA === registers[operation.inputB] ? 1 : 0
 
     return newRegisters
   },
@@ -148,7 +160,8 @@ export const Operations: {
   eqri: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] === operation.inputB ? 1 : 0
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] === operation.inputB ? 1 : 0
 
     return newRegisters
   },
@@ -156,10 +169,11 @@ export const Operations: {
   eqrr: (operation: Operation, registers: number[]): number[] => {
     const newRegisters = [...registers]
 
-    newRegisters[operation.outputC] = registers[operation.inputA] === registers[operation.inputB] ? 1 : 0
+    newRegisters[operation.outputC] =
+      registers[operation.inputA] === registers[operation.inputB] ? 1 : 0
 
     return newRegisters
-  }
+  },
 }
 
 const state: State = {
@@ -168,38 +182,31 @@ const state: State = {
   resultsTested: false,
   samples: [],
   testResults: 0,
-  code: ''
+  code: '',
 }
 
 const parseInputSamples = (input: string): Sample[] => {
-  return input.split('\n\n')
-    .map((sample: string) => {
-      const sampleArr = sample.split('\n')
-      const [
+  return input.split('\n\n').map((sample: string) => {
+    const sampleArr = sample.split('\n')
+    const [code, inputA, inputB, outputC] = sampleArr[1]
+      .split(' ')
+      .map((x) => parseInt(x))
+
+    return {
+      before: JSON.parse(sampleArr[0].slice(8)),
+      operation: {
         code,
         inputA,
         inputB,
-        outputC
-      ] = sampleArr[1].split(' ').map(x => parseInt(x))
-
-      return {
-        before: JSON.parse(sampleArr[0].slice(8)),
-        operation: {
-          code,
-          inputA,
-          inputB,
-          outputC
-        },
-        after: JSON.parse(sampleArr[2].slice(8))
-      }
-    })
+        outputC,
+      },
+      after: JSON.parse(sampleArr[2].slice(8)),
+    }
+  })
 }
 
-const reset = (inputKey: string) => {
-  const [
-    samplesRaw,
-    codeRaw
-  ] = inputs.get(inputKey)!.split('\n\n\n\n')
+const reset = (input: string) => {
+  const [samplesRaw, codeRaw] = input.split('\n\n\n\n')
   state.samples = parseInputSamples(samplesRaw)
   state.code = codeRaw
 }
@@ -218,8 +225,12 @@ const threeOrMoreOps = (sample: Sample): boolean => {
 
   for (const operation in Operations) {
     if (
-      numArrEq(sample.after, Operations[operation](sample.operation, sample.before))
-    ) matchCount++
+      numArrEq(
+        sample.after,
+        Operations[operation](sample.operation, sample.before)
+      )
+    )
+      matchCount++
     if (matchCount >= 3) return true
   }
 
@@ -231,8 +242,12 @@ const matchingOps = (sample: Sample): string[] => {
 
   for (const method in Operations) {
     if (
-      numArrEq(sample.after, Operations[method](sample.operation, sample.before))
-    ) result.push(method)
+      numArrEq(
+        sample.after,
+        Operations[method](sample.operation, sample.before)
+      )
+    )
+      result.push(method)
   }
 
   return result
@@ -242,12 +257,19 @@ const figureOutOpCodes = (samples: Sample[]): string[] => {
   const opCodes: string[] = []
   let currentSample = samples.shift()
 
-  const filterOp = (op: string) => currentSample && !(opCodes.indexOf(op) !== -1 && opCodes.indexOf(op) !== currentSample.operation.code)
+  const filterOp = (op: string) =>
+    currentSample &&
+    !(
+      opCodes.indexOf(op) !== -1 &&
+      opCodes.indexOf(op) !== currentSample.operation.code
+    )
   while (currentSample !== undefined) {
-    const whichMatchingOps = matchingOps(currentSample)
-      .filter(filterOp)
+    const whichMatchingOps = matchingOps(currentSample).filter(filterOp)
 
-    if (whichMatchingOps.length === 1 && currentSample.operation.code !== undefined) {
+    if (
+      whichMatchingOps.length === 1 &&
+      currentSample.operation.code !== undefined
+    ) {
       opCodes[currentSample.operation.code] = whichMatchingOps[0]
     }
 
@@ -257,29 +279,32 @@ const figureOutOpCodes = (samples: Sample[]): string[] => {
   return opCodes
 }
 
-export const threeOrMoreTest = (inputKey: string) => {
-  reset(inputKey)
+export const threeOrMoreTest = (input: string) => {
+  reset(input)
 
   const { samples } = state
 
-  const testResults = samples.map(sample => threeOrMoreOps(sample)).filter(sample => sample).length
+  const testResults = samples
+    .map((sample) => threeOrMoreOps(sample))
+    .filter((sample) => sample).length
 
   return {
-    answer1: testResults
+    answer1: testResults,
   }
 }
 
-export const runTheInputCode = (inputKey: string) => {
-  reset(inputKey)
+export const runTheInputCode = (input: string) => {
+  reset(input)
   state.opCodes = figureOutOpCodes(state.samples)
 
-  const instructions: Operation[] = state.code.split('\n')
-    .map(line => line.split(' '))
-    .map(line => ({
+  const instructions: Operation[] = state.code
+    .split('\n')
+    .map((line) => line.split(' '))
+    .map((line) => ({
       code: Number(line[0]),
       inputA: Number(line[1]),
       inputB: Number(line[2]),
-      outputC: Number(line[3])
+      outputC: Number(line[3]),
     }))
 
   state.registers = [0, 0, 0, 0]
@@ -288,7 +313,7 @@ export const runTheInputCode = (inputKey: string) => {
     state.registers = Operations[state.opCodes[op.code!]](op, state.registers)
 
   return {
-    answer2: state.registers[0]
+    answer2: state.registers[0],
   }
 }
 
@@ -298,11 +323,11 @@ const day16: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Three or More Test',
-      onClick: threeOrMoreTest
+      onClick: threeOrMoreTest,
     },
     {
       label: 'Run the Input Code!',
-      onClick: runTheInputCode
+      onClick: runTheInputCode,
     },
   ],
   id: 16,

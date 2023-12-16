@@ -29,8 +29,8 @@ const makeClaimsMap = (claims: number[][]): Map<string, number[]> => {
   return claimsMap
 }
 
-export const determineFabricOverlap = (inputKey: string) => {
-  const claims = parseInput(inputs.get(inputKey)!)
+export const determineFabricOverlap = (input: string) => {
+  const claims = parseInput(input)
   const claimsMap = makeClaimsMap(claims)
 
   let overlappingSquares = 0
@@ -40,8 +40,8 @@ export const determineFabricOverlap = (inputKey: string) => {
   }
 }
 
-export const determineClaimOverlap = (inputKey: string) => {
-  const claims = parseInput(inputs.get(inputKey)!)
+export const determineClaimOverlap = (input: string) => {
+  const claims = parseInput(input)
   const claimsMap = makeClaimsMap(claims)
   const claimOverlaps = [true]
 

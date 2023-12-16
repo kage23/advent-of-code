@@ -24,7 +24,7 @@ const pathKey = ({ x, y }: Coord): string => `${x},${y}`
 
 const getCoord = (xy: string): Coord => ({
   x: parseInt(xy.split(',')[0]),
-  y: parseInt(xy.split(',')[1])
+  y: parseInt(xy.split(',')[1]),
 })
 
 const parseInput = (input: string): Field => {
@@ -37,9 +37,12 @@ const parseInput = (input: string): Field => {
 
   for (const row of field) {
     const things = row.split(', ')
-    let xStr = '', yStr = '',
-      localMinX = Number.MAX_VALUE, localMinY = Number.MAX_VALUE,
-      localMaxX = Number.MIN_VALUE, localMaxY = Number.MIN_VALUE
+    let xStr = '',
+      yStr = '',
+      localMinX = Number.MAX_VALUE,
+      localMinY = Number.MAX_VALUE,
+      localMaxX = Number.MIN_VALUE,
+      localMaxY = Number.MIN_VALUE
     for (const thing of things) {
       if (thing.slice(0, 1) === 'x') xStr = thing.split('=')[1]
       if (thing.slice(0, 1) === 'y') yStr = thing.split('=')[1]
@@ -70,20 +73,24 @@ const parseInput = (input: string): Field => {
   return {
     occupied,
     min: { x: minX, y: minY },
-    max: { x: maxX, y: maxY }
+    max: { x: maxX, y: maxY },
   }
 }
 
-const isEmpty = (coord: Coord, occupied: OccupiedTiles): boolean => !occupied[pathKey(coord)]
+const isEmpty = (coord: Coord, occupied: OccupiedTiles): boolean =>
+  !occupied[pathKey(coord)]
 
-const isClay = (coord: Coord, occupied: OccupiedTiles): boolean => occupied[pathKey(coord)] === '#'
+const isClay = (coord: Coord, occupied: OccupiedTiles): boolean =>
+  occupied[pathKey(coord)] === '#'
 
-const isFull = (coord: Coord, occupied: OccupiedTiles): boolean => (
-  occupied[pathKey(coord)] === '~'
-  || isClay(coord, occupied)
-)
+const isFull = (coord: Coord, occupied: OccupiedTiles): boolean =>
+  occupied[pathKey(coord)] === '~' || isClay(coord, occupied)
 
-const hasWall = (coord: Coord, occupied: OccupiedTiles, dir: 'l' | 'r'): Coord | false => {
+const hasWall = (
+  coord: Coord,
+  occupied: OccupiedTiles,
+  dir: 'l' | 'r'
+): Coord | false => {
   let offset = dir === 'l' ? -1 : 1
   const offsetMod = dir === 'l' ? -1 : 1
   // eslint-disable-next-line no-constant-condition
@@ -132,7 +139,10 @@ const flow = (field: Field, water: WaterState): Field => {
   }
 
   // If the water can't flow down, but it can flow right, it should do so
-  if (isFull(downCoord, field.occupied) && isEmpty(rightCoord, field.occupied)) {
+  if (
+    isFull(downCoord, field.occupied) &&
+    isEmpty(rightCoord, field.occupied)
+  ) {
     const nextState = '|'
     field.occupied[pathKey(rightCoord)] = nextState
     flow(field, { ...rightCoord, type: nextState })
@@ -148,13 +158,16 @@ const flow = (field: Field, water: WaterState): Field => {
   return field
 }
 
-const countWater = (field: Field): {
+const countWater = (
+  field: Field
+): {
   totalWater: number
   settledWater: number
 } => {
-  const { occupied,
+  const {
+    occupied,
     min: { y: minY },
-    max: { y: maxY }
+    max: { y: maxY },
   } = field
   let totalWater = 0
   let settledWater = 0
@@ -162,8 +175,9 @@ const countWater = (field: Field): {
   for (const xy in occupied) {
     const { y } = getCoord(xy)
     if (
-      (y <= maxY && y >= minY)
-      && (occupied[xy] === '|' || occupied[xy] === '~')
+      y <= maxY &&
+      y >= minY &&
+      (occupied[xy] === '|' || occupied[xy] === '~')
     ) {
       totalWater++
       if (occupied[xy] === '~') settledWater++
@@ -172,21 +186,18 @@ const countWater = (field: Field): {
 
   return {
     totalWater,
-    settledWater
+    settledWater,
   }
 }
 
-export const flowWater = (inputKey: string) => {
-  let field = parseInput(inputs.get(inputKey)!)
+export const flowWater = (input: string) => {
+  let field = parseInput(input)
 
   field = flow(field, { x: 500, y: 0, type: '+' })
-  const {
-    totalWater,
-    settledWater
-  } = countWater(field)
+  const { totalWater, settledWater } = countWater(field)
   return {
     answer1: totalWater,
-    answer2: settledWater
+    answer2: settledWater,
   }
 }
 
@@ -196,7 +207,7 @@ const day17: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Flow',
-      onClick: flowWater
+      onClick: flowWater,
     },
   ],
   id: 17,

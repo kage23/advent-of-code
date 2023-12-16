@@ -15,7 +15,7 @@ const calculateChecksum = (numbers: number[]) => {
     metadataNodes--
   }
   return {
-    answer1: total
+    answer1: total,
   }
 }
 
@@ -37,7 +37,8 @@ const calculateNodeValue = (numbers: number[]): number => {
     }
     while (metadataNodeCount > 0) {
       const childID = numbers.shift()
-      total += typeof childID === 'number' ? childNodeValues[childID - 1] || 0 : 0
+      total +=
+        typeof childID === 'number' ? childNodeValues[childID - 1] || 0 : 0
       metadataNodeCount--
     }
   }
@@ -45,12 +46,13 @@ const calculateNodeValue = (numbers: number[]): number => {
   return total
 }
 
-export const getChecksum = (inputKey: string) => calculateChecksum(inputs.get(inputKey)!.split(' ').map(x => parseInt(x)))
+export const getChecksum = (input: string) =>
+  calculateChecksum(input.split(' ').map((x) => parseInt(x)))
 
-export const getRootNodeValue = (inputKey: string) => {
-  const numbers: number[] = inputs.get(inputKey)!.split(' ').map(x => parseInt(x))
+export const getRootNodeValue = (input: string) => {
+  const numbers: number[] = input.split(' ').map((x) => parseInt(x))
   return {
-    answer2: calculateNodeValue(numbers)
+    answer2: calculateNodeValue(numbers),
   }
 }
 

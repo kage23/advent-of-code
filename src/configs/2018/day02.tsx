@@ -1,8 +1,8 @@
 import inputs from '../../inputs/2018/day02'
 import { DayConfig } from '../../routes/Day'
 
-export const findChecksum = (inputKey: string) => {
-  const boxIDs = inputs.get(inputKey)!.split('\n')
+export const findChecksum = (input: string) => {
+  const boxIDs = input.split('\n')
   let twoCount = 0
   let threeCount = 0
   boxIDs.forEach((boxID) => {
@@ -26,8 +26,8 @@ export const findChecksum = (inputKey: string) => {
   }
 }
 
-export const findCommonLetters = (inputKey: string) => {
-  const boxIDs = inputs.get(inputKey)!.split('\n')
+export const findCommonLetters = (input: string) => {
+  const boxIDs = input.split('\n')
   const n = boxIDs.length
   const l = boxIDs[0].length
   for (const boxID of boxIDs) {

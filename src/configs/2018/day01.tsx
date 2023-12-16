@@ -1,14 +1,11 @@
 import inputs from '../../inputs/2018/day01'
 import { DayConfig } from '../../routes/Day'
 
-const parseInput = (inputKey: string): number[] =>
-  inputs
-    .get(inputKey)!
-    .split('\n')
-    .map((a) => parseInt(a))
+const parseInput = (input: string): number[] =>
+  input.split('\n').map((a) => parseInt(a))
 
-export const findFrequency = (inputKey: string) => {
-  const input = parseInput(inputKey)
+export const findFrequency = (inputStr: string) => {
+  const input = parseInput(inputStr)
   let count = 0
   input.forEach((n) => (count += n))
   return {
@@ -16,8 +13,8 @@ export const findFrequency = (inputKey: string) => {
   }
 }
 
-export const findRepeatedFrequency = (inputKey: string) => {
-  const input = parseInput(inputKey)
+export const findRepeatedFrequency = (inputStr: string) => {
+  const input = parseInput(inputStr)
   const n = input.length
   let freq = 0
   const foundFreqs: boolean[] = []

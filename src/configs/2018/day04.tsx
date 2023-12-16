@@ -1,11 +1,11 @@
 import inputs from '../../inputs/2018/day04'
 import { DayConfig } from '../../routes/Day'
 
-const parseInput = (inputKey: string) =>
-  inputKey.split('\n').sort((a, b) => (a < b ? -1 : 1))
+const parseInput = (input: string) =>
+  input.split('\n').sort((a, b) => (a < b ? -1 : 1))
 
-export const strategy1 = (inputKey: string) => {
-  const records = parseInput(inputs.get(inputKey)!)
+export const strategy1 = (input: string) => {
+  const records = parseInput(input)
   const guardSleepyMinutesMap: number[][] = []
   let currentGuardId = 0
   let sleepMinute = 0
@@ -69,8 +69,8 @@ const unPathKey = (input: string): { id: number; minute: number } => {
   return { id: parseInt(id), minute: parseInt(minute) }
 }
 
-export const strategy2 = (inputKey: string) => {
-  const records = parseInput(inputs.get(inputKey)!)
+export const strategy2 = (input: string) => {
+  const records = parseInput(input)
   const guardSleepMinuteCount: { [key: string]: number } = {}
 
   let currentGuardId = 0

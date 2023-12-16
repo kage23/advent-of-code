@@ -4,7 +4,7 @@ import { DayConfig } from '../../routes/Day'
 enum Types {
   Open = '.',
   Trees = '|',
-  LumberYard = '#'
+  LumberYard = '#',
 }
 
 interface Coord {
@@ -34,24 +34,24 @@ let state: State = {
   field: {
     min: {
       x: 0,
-      y: 0
+      y: 0,
     },
     max: {
       x: 0,
-      y: 0
+      y: 0,
     },
-    data: []
+    data: [],
   },
   time: 0,
   trees: 0,
-  lys: 0
+  lys: 0,
 }
 
 const parseInput = (input: string): State => {
   const field: Field = {
     min: { x: 0, y: 0 },
     max: { x: 0, y: 0 },
-    data: input.split('\n')
+    data: input.split('\n'),
   }
   let trees = 0
   let lys = 0
@@ -70,11 +70,11 @@ const parseInput = (input: string): State => {
     field,
     time: 0,
     trees,
-    lys
+    lys,
   }
 }
 
-const getNeighbors = (xi: number, yi: number, field: Field): string[] => (
+const getNeighbors = (xi: number, yi: number, field: Field): string[] =>
   [
     { x: xi - 1, y: yi - 1 },
     { x: xi, y: yi - 1 },
@@ -85,11 +85,20 @@ const getNeighbors = (xi: number, yi: number, field: Field): string[] => (
     { x: xi, y: yi + 1 },
     { x: xi + 1, y: yi + 1 },
   ]
-    .filter(({ x, y }) => x >= field.min.x && x <= field.max.x && y >= field.min.y && y <= field.max.y)
+    .filter(
+      ({ x, y }) =>
+        x >= field.min.x &&
+        x <= field.max.x &&
+        y >= field.min.y &&
+        y <= field.max.y
+    )
     .map(({ x, y }) => field.data[y].charAt(x))
-)
 
-const getNext = (current: string, treeNeighbors: number, lyNeighbors: number): string => {
+const getNext = (
+  current: string,
+  treeNeighbors: number,
+  lyNeighbors: number
+): string => {
   switch (current) {
     case Types.Open:
       return treeNeighbors >= 3 ? Types.Trees : Types.Open
@@ -98,14 +107,18 @@ const getNext = (current: string, treeNeighbors: number, lyNeighbors: number): s
       return lyNeighbors >= 3 ? Types.LumberYard : Types.Trees
 
     case Types.LumberYard:
-      return (treeNeighbors >= 1 && lyNeighbors >= 1) ? Types.LumberYard : Types.Open
+      return treeNeighbors >= 1 && lyNeighbors >= 1
+        ? Types.LumberYard
+        : Types.Open
 
     default:
       return ''
   }
 }
 
-const step = (field: Field): {
+const step = (
+  field: Field
+): {
   field: Field
   trees: number
   lys: number
@@ -118,8 +131,8 @@ const step = (field: Field): {
     for (let yi = min.y; yi <= max.y; yi++) {
       newData[yi] = newData[yi] || ''
       const neighbors = getNeighbors(xi, yi, field)
-      const treeNeighbors = neighbors.filter(i => i === Types.Trees).length
-      const lyNeighbors = neighbors.filter(i => i === Types.LumberYard).length
+      const treeNeighbors = neighbors.filter((i) => i === Types.Trees).length
+      const lyNeighbors = neighbors.filter((i) => i === Types.LumberYard).length
       const next = getNext(data[yi].charAt(xi), treeNeighbors, lyNeighbors)
       newData[yi] += next
       if (next === Types.Trees) trees++
@@ -129,37 +142,32 @@ const step = (field: Field): {
   return {
     field: {
       ...field,
-      data: newData
+      data: newData,
     },
     trees,
-    lys
+    lys,
   }
 }
 
-export const advanceTenMinutes = (inputKey: string) => {
-  state = parseInput(inputs.get(inputKey)!)
+export const advanceTenMinutes = (input: string) => {
+  state = parseInput(input)
 
   for (let i = 0; i < 10; i++) {
     state = {
       time: state.time + 1,
-      ...step(state.field)
+      ...step(state.field),
     }
   }
 
   return {
-    answer1: state.trees * state.lys
+    answer1: state.trees * state.lys,
   }
 }
 
-export const skipToMinuteOneBillion = (inputKey: string) => {
-  state = parseInput(inputs.get(inputKey)!)
+export const skipToMinuteOneBillion = (input: string) => {
+  state = parseInput(input)
 
-  const {
-    field,
-    time,
-    trees,
-    lys
-  } = state
+  const { field, time, trees, lys } = state
 
   const seenBefore: FieldHash = {}
   let skippedYet = false
@@ -169,7 +177,7 @@ export const skipToMinuteOneBillion = (inputKey: string) => {
   let next = {
     field,
     trees,
-    lys
+    lys,
   }
 
   for (let i = 0; i < advance; i++) {
@@ -184,26 +192,27 @@ export const skipToMinuteOneBillion = (inputKey: string) => {
 
   state = {
     ...next,
-    time: time + advance
+    time: time + advance,
   }
 
   return {
-    answer2: state.trees * state.lys
+    answer2: state.trees * state.lys,
   }
 }
 
 const day18: Omit<DayConfig, 'year'> = {
   answer1Text: 'The total resource value after 10 minutes is answer.',
-  answer2Text: 'The total resource value after 1,000,000,000 minutes is answer.',
+  answer2Text:
+    'The total resource value after 1,000,000,000 minutes is answer.',
   buttons: [
     {
       label: 'Advance Ten Minutes',
-      onClick: advanceTenMinutes
+      onClick: advanceTenMinutes,
     },
     {
       label: 'Skip to Minute 1,000,000,000',
-      onClick: skipToMinuteOneBillion
-    }
+      onClick: skipToMinuteOneBillion,
+    },
   ],
   id: 18,
   inputs,

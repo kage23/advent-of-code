@@ -18,25 +18,28 @@ const resetRecipes = (): RecipeList => {
 
 const resetState = (): State => {
   const recipes = resetRecipes()
-  const elves = [recipes.head, recipes.head ? recipes.head.next : undefined] as [RecipeNode | undefined, RecipeNode | undefined]
+  const elves = [
+    recipes.head,
+    recipes.head ? recipes.head.next : undefined,
+  ] as [RecipeNode | undefined, RecipeNode | undefined]
 
   return {
     elves,
-    recipes
+    recipes,
   }
 }
 
 let state: State = resetState()
 
-const createRecipesAndAdvance = (elves: [RecipeNode | undefined, RecipeNode | undefined], recipes: RecipeList): {
+const createRecipesAndAdvance = (
+  elves: [RecipeNode | undefined, RecipeNode | undefined],
+  recipes: RecipeList
+): {
   elves: [RecipeNode | undefined, RecipeNode | undefined]
   newRecipes: number[]
   recipes: RecipeList
 } => {
-  let [
-    elf1,
-    elf2
-  ] = elves
+  let [elf1, elf2] = elves
   const newRecipes = []
 
   if (elf1 && elf2) {
@@ -59,11 +62,13 @@ const createRecipesAndAdvance = (elves: [RecipeNode | undefined, RecipeNode | un
   return {
     elves: [elf1, elf2],
     newRecipes,
-    recipes
+    recipes,
   }
 }
 
-const part1 = (betterAfter: number): {
+const part1 = (
+  betterAfter: number
+): {
   answer1?: string
   elves: [RecipeNode | undefined, RecipeNode | undefined]
   recipes: RecipeList
@@ -82,11 +87,13 @@ const part1 = (betterAfter: number): {
 
   return {
     answer1,
-    ...myState
+    ...myState,
   }
 }
 
-const part2 = (lookingFor: string): {
+const part2 = (
+  lookingFor: string
+): {
   answer2?: number
   elves: [RecipeNode | undefined, RecipeNode | undefined]
   recipes: RecipeList
@@ -103,13 +110,14 @@ const part2 = (lookingFor: string): {
   } = {
     elves,
     newRecipes: [],
-    recipes
+    recipes,
   }
 
   while (checkString.indexOf(lookingFor) === -1) {
     nextSet = createRecipesAndAdvance(nextSet.elves, nextSet.recipes)
     checkString += nextSet.newRecipes.join('')
-    while (checkString.length > lookingFor.length * 2) checkString = checkString.slice(1)
+    while (checkString.length > lookingFor.length * 2)
+      checkString = checkString.slice(1)
   }
 
   return {
@@ -117,27 +125,27 @@ const part2 = (lookingFor: string): {
       ? nextSet.recipes.length - targetLength
       : nextSet.recipes.length - targetLength - 1,
     elves: nextSet.elves,
-    recipes: nextSet.recipes
+    recipes: nextSet.recipes,
   }
 }
 
-export const findGoodRecipes = (inputKey: string) => {
+export const findGoodRecipes = (input: string) => {
   state = resetState()
-  const result = part1(parseInt(inputs.get(inputKey)!))
+  const result = part1(parseInt(input))
   state.elves = result.elves
   state.recipes = result.recipes
   return {
-    answer1: result.answer1
+    answer1: result.answer1,
   }
 }
 
-export const findTargetRecipe = (inputKey: string) => {
+export const findTargetRecipe = (input: string) => {
   state = resetState()
-  const result = part2(inputs.get(inputKey)!)
+  const result = part2(input)
   state.elves = result.elves
   state.recipes = result.recipes
   return {
-    answer2: result.answer2
+    answer2: result.answer2,
   }
 }
 
@@ -147,11 +155,11 @@ const day14: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Find Good Recipes (Part 1)',
-      onClick: findGoodRecipes
+      onClick: findGoodRecipes,
     },
     {
       label: 'Find Good Recipes (Part 2)',
-      onClick: findTargetRecipe
+      onClick: findTargetRecipe,
     },
   ],
   id: 14,

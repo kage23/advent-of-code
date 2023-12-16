@@ -6,12 +6,12 @@ enum DamageTypes {
   Bludgeoning = 'bludgeoning',
   Fire = 'fire',
   Slashing = 'slashing',
-  Cold = 'cold'
+  Cold = 'cold',
 }
 
 enum UnitTypes {
   ImmuneSystem = 'Immune System',
-  Infection = 'Infection'
+  Infection = 'Infection',
 }
 
 interface Group {
@@ -37,62 +37,69 @@ let immuneSystem: Group[] = []
 let infection: Group[] = []
 let rounds = 0
 
-const getImmunitiesAndWeaknesses = (input: string): {
+const getImmunitiesAndWeaknesses = (
+  input: string
+): {
   immune: DamageTypes[]
   weak: DamageTypes[]
 } => {
   const immune: DamageTypes[] = []
   const weak: DamageTypes[] = []
 
-  input.split('; ').forEach(inputStr => {
+  input.split('; ').forEach((inputStr) => {
     const words = inputStr.split(')')[0].split(' ')
-    const pushOnto = words.shift() === 'immune'
-      ? immune
-      : weak
+    const pushOnto = words.shift() === 'immune' ? immune : weak
 
     words.shift()
 
     let word = words.shift()
 
     while (word) {
-      if (word.indexOf(DamageTypes.Bludgeoning) !== -1) pushOnto.push(DamageTypes.Bludgeoning)
+      if (word.indexOf(DamageTypes.Bludgeoning) !== -1)
+        pushOnto.push(DamageTypes.Bludgeoning)
       if (word.indexOf(DamageTypes.Cold) !== -1) pushOnto.push(DamageTypes.Cold)
       if (word.indexOf(DamageTypes.Fire) !== -1) pushOnto.push(DamageTypes.Fire)
-      if (word.indexOf(DamageTypes.Radiation) !== -1) pushOnto.push(DamageTypes.Radiation)
-      if (word.indexOf(DamageTypes.Slashing) !== -1) pushOnto.push(DamageTypes.Slashing)
+      if (word.indexOf(DamageTypes.Radiation) !== -1)
+        pushOnto.push(DamageTypes.Radiation)
+      if (word.indexOf(DamageTypes.Slashing) !== -1)
+        pushOnto.push(DamageTypes.Slashing)
       word = words.shift()
     }
   })
 
   return {
     immune,
-    weak
+    weak,
   }
 }
 
-const getGroup = (line: string, type: UnitTypes, boost: number, id: number): Group => {
+const getGroup = (
+  line: string,
+  type: UnitTypes,
+  boost: number,
+  id: number
+): Group => {
   const units = parseInt(line)
   let remain = line.split('units each with ')[1]
   const hp = parseInt(remain)
-  const {
-    immune,
-    weak
-  } = remain.indexOf('(') !== -1
+  const { immune, weak } =
+    remain.indexOf('(') !== -1
       ? getImmunitiesAndWeaknesses(remain.split('(')[1])
       : { immune: [], weak: [] }
   remain = remain.split('with an attack that does ')[1]
   const attackPower = parseInt(remain)
   const remainingWords = remain.split(' ')
   const attack = remainingWords[1]
-  const attackType = attack === DamageTypes.Bludgeoning
-    ? DamageTypes.Bludgeoning
-    : attack === DamageTypes.Cold
+  const attackType =
+    attack === DamageTypes.Bludgeoning
+      ? DamageTypes.Bludgeoning
+      : attack === DamageTypes.Cold
       ? DamageTypes.Cold
       : attack === DamageTypes.Fire
-        ? DamageTypes.Fire
-        : attack === DamageTypes.Radiation
-          ? DamageTypes.Radiation
-          : DamageTypes.Slashing
+      ? DamageTypes.Fire
+      : attack === DamageTypes.Radiation
+      ? DamageTypes.Radiation
+      : DamageTypes.Slashing
   const initiative = parseInt(remainingWords[remainingWords.length - 1])
 
   return {
@@ -104,29 +111,32 @@ const getGroup = (line: string, type: UnitTypes, boost: number, id: number): Gro
     weak,
     attackPower: attackPower + (type === UnitTypes.ImmuneSystem ? boost : 0),
     attackType,
-    initiative
+    initiative,
   }
 }
 
-const parseInput = (inputKey: string, boost: number): {
-  immuneSystem: Group[],
+const parseInput = (
+  input: string,
+  boost: number
+): {
+  immuneSystem: Group[]
   infection: Group[]
 } => {
   const immuneSystem: Group[] = []
   const infection: Group[] = []
-  const input = inputs.get(inputKey)!.split('\n')
+  const inputLines = input.split('\n')
   let currentType = UnitTypes.ImmuneSystem
   let count = 0
 
-  inputLoop:
-  while (input.length) {
-    const line = input.shift()
+  inputLoop: while (inputLines.length) {
+    const line = inputLines.shift()
     if (line && line.length) {
       for (const type of Object.values(UnitTypes)) {
         if (line.indexOf(type) !== -1) {
-          currentType = type === UnitTypes.Infection
-            ? UnitTypes.Infection
-            : UnitTypes.ImmuneSystem
+          currentType =
+            type === UnitTypes.Infection
+              ? UnitTypes.Infection
+              : UnitTypes.ImmuneSystem
           continue inputLoop
         }
       }
@@ -139,7 +149,7 @@ const parseInput = (inputKey: string, boost: number): {
 
   return {
     immuneSystem,
-    infection
+    infection,
   }
 }
 
@@ -150,36 +160,37 @@ const calculateHPDamage = (attacker: Group, defender: Group): number => {
   return damage
 }
 
-const fightRound = (immuneSystem: Group[], infection: Group[]): { immuneSystem: Group[], infection: Group[] } => {
+const fightRound = (
+  immuneSystem: Group[],
+  infection: Group[]
+): { immuneSystem: Group[]; infection: Group[] } => {
   // Target selection phase
-  const groups = [
-    ...immuneSystem,
-    ...infection
-  ]
-    .map(group => ({
+  const groups = [...immuneSystem, ...infection]
+    .map((group) => ({
       ...group,
       effectivePower: group.units * group.attackPower,
-      picked: false
+      picked: false,
     }))
-    .sort((a, b) => (
+    .sort((a, b) =>
       a.effectivePower !== b.effectivePower
         ? b.effectivePower - a.effectivePower
         : b.initiative - a.initiative
-    ))
+    )
 
   const enemiesMap = new Map()
 
   for (let i = 0; i < groups.length; i++) {
     const group = groups[i]
     let bestEnemy
-    const enemies = groups.filter(fGroup => (
-      // Different type
-      fGroup.type !== group.type
-      // Not already picked
-      && !fGroup.picked
-      // Not immune to attacker's attack type
-      && fGroup.immune.indexOf(group.attackType) === -1
-    ))
+    const enemies = groups.filter(
+      (fGroup) =>
+        // Different type
+        fGroup.type !== group.type &&
+        // Not already picked
+        !fGroup.picked &&
+        // Not immune to attacker's attack type
+        fGroup.immune.indexOf(group.attackType) === -1
+    )
     const enemyDamageMap = new Map()
     for (let j = 0; j < enemies.length; j++) {
       const enemy = enemies[j]
@@ -187,9 +198,17 @@ const fightRound = (immuneSystem: Group[], infection: Group[]): { immuneSystem: 
       enemyDamageMap.set(enemy, damage)
       if (!bestEnemy || damage >= enemyDamageMap.get(bestEnemy)) {
         if (damage > enemyDamageMap.get(bestEnemy)) bestEnemy = enemy
-        else if (bestEnemy && enemy.effectivePower !== bestEnemy.effectivePower) {
-          bestEnemy = enemy.effectivePower > bestEnemy.effectivePower ? enemy : bestEnemy
-        } else bestEnemy = bestEnemy && bestEnemy.initiative > enemy.initiative ? bestEnemy : enemy
+        else if (
+          bestEnemy &&
+          enemy.effectivePower !== bestEnemy.effectivePower
+        ) {
+          bestEnemy =
+            enemy.effectivePower > bestEnemy.effectivePower ? enemy : bestEnemy
+        } else
+          bestEnemy =
+            bestEnemy && bestEnemy.initiative > enemy.initiative
+              ? bestEnemy
+              : enemy
       }
     }
     if (bestEnemy) {
@@ -199,8 +218,9 @@ const fightRound = (immuneSystem: Group[], infection: Group[]): { immuneSystem: 
   }
 
   // Attack phase
-  groups.sort((a, b) => b.initiative - a.initiative)
-    .forEach(group => {
+  groups
+    .sort((a, b) => b.initiative - a.initiative)
+    .forEach((group) => {
       if (enemiesMap.get(group) && group.units > 0) {
         const enemy = enemiesMap.get(group)
         const damage = calculateHPDamage(group, enemy)
@@ -211,19 +231,33 @@ const fightRound = (immuneSystem: Group[], infection: Group[]): { immuneSystem: 
     })
 
   return {
-    immuneSystem: groups.filter(group => group.type === UnitTypes.ImmuneSystem && group.units > 0),
-    infection: groups.filter(group => group.type === UnitTypes.Infection && group.units > 0)
+    immuneSystem: groups.filter(
+      (group) => group.type === UnitTypes.ImmuneSystem && group.units > 0
+    ),
+    infection: groups.filter(
+      (group) => group.type === UnitTypes.Infection && group.units > 0
+    ),
   }
 }
 
-const fightCombat = (immuneSystem: Group[], infection: Group[], rounds: number): Fight => {
+const fightCombat = (
+  immuneSystem: Group[],
+  infection: Group[],
+  rounds: number
+): Fight => {
   let fight = { immuneSystem, infection }
   let stalemate = false
 
-  let prevUnitCount = [...immuneSystem, ...infection].reduce((total, group) => total + group.units, 0)
+  let prevUnitCount = [...immuneSystem, ...infection].reduce(
+    (total, group) => total + group.units,
+    0
+  )
   while (fight.immuneSystem.length > 0 && fight.infection.length > 0) {
     fight = fightRound(fight.immuneSystem, fight.infection)
-    const afterUnitCount = [...fight.immuneSystem, ...fight.infection].reduce((total, group) => total + group.units, 0)
+    const afterUnitCount = [...fight.immuneSystem, ...fight.infection].reduce(
+      (total, group) => total + group.units,
+      0
+    )
     if (afterUnitCount === prevUnitCount) {
       stalemate = true
       break
@@ -236,56 +270,63 @@ const fightCombat = (immuneSystem: Group[], infection: Group[], rounds: number):
     immuneSystem: fight.immuneSystem,
     infection: fight.infection,
     stalemate,
-    rounds
+    rounds,
   }
 }
 
-const randInt = (min: number, max: number): number => Math.floor(Math.random() * max) + min
+const randInt = (min: number, max: number): number =>
+  Math.floor(Math.random() * max) + min
 
-const findBoost = (inputKey: string): {
-  immuneSystem: Group[],
-  infection: Group[],
-  rounds: number,
+const findBoost = (
+  input: string
+): {
+  immuneSystem: Group[]
+  infection: Group[]
+  rounds: number
   boost: number
 } => {
   let boost = 0
   let highestBad = 0
   let lowestGood = Number.MAX_SAFE_INTEGER
-  let fightInput = parseInput(inputKey, boost)
+  let fightInput = parseInput(input, boost)
   let fightResult: Fight = {
     immuneSystem: fightInput.immuneSystem,
     infection: fightInput.infection,
-    rounds: 0
+    rounds: 0,
   }
 
   while (lowestGood > highestBad + 1) {
-    fightInput = parseInput(inputKey, boost)
+    fightInput = parseInput(input, boost)
     fightResult = fightCombat(fightInput.immuneSystem, fightInput.infection, 0)
-    if (fightResult.infection.length === 0 && fightResult.immuneSystem.length > 0) {
+    if (
+      fightResult.infection.length === 0 &&
+      fightResult.immuneSystem.length > 0
+    ) {
       lowestGood = Math.min(lowestGood, boost)
     }
     if (
-      (fightResult.infection.length > 0 && fightResult.immuneSystem.length === 0)
-      || fightResult.stalemate
+      (fightResult.infection.length > 0 &&
+        fightResult.immuneSystem.length === 0) ||
+      fightResult.stalemate
     ) {
       highestBad = Math.max(highestBad, boost)
     }
     boost = randInt(highestBad, lowestGood)
   }
 
-  const lastFight = parseInput(inputKey, lowestGood)
+  const lastFight = parseInput(input, lowestGood)
   fightResult = fightCombat(lastFight.immuneSystem, lastFight.infection, 0)
 
   return {
     immuneSystem: fightResult.immuneSystem,
     infection: fightResult.infection,
     boost: lowestGood,
-    rounds: fightResult.rounds
+    rounds: fightResult.rounds,
   }
 }
 
-export const fightFullCombat = (inputKey: string) => {
-  const groups = parseInput(inputKey, 0)
+export const fightFullCombat = (input: string) => {
+  const groups = parseInput(input, 0)
   immuneSystem = groups.immuneSystem
   infection = groups.infection
   rounds = 0
@@ -303,28 +344,29 @@ export const fightFullCombat = (inputKey: string) => {
   return { answer1 }
 }
 
-export const findTheBoost = (inputKey: string) => {
-  const next = findBoost(inputKey)
+export const findTheBoost = (input: string) => {
+  const next = findBoost(input)
   immuneSystem = next.immuneSystem
   infection = next.infection
   rounds = next.rounds
   return {
-    answer2: next.immuneSystem.reduce((total, group) => total + group.units, 0)
+    answer2: next.immuneSystem.reduce((total, group) => total + group.units, 0),
   }
 }
 
 const day24: Omit<DayConfig, 'year'> = {
   answer1Text: 'The winner of the combat has answer units remaining.',
-  answer2Text: 'With a boost, the Immune System wins with answer units remaining.',
+  answer2Text:
+    'With a boost, the Immune System wins with answer units remaining.',
   buttons: [
     {
       label: 'Fight Full Combat',
-      onClick: fightFullCombat
+      onClick: fightFullCombat,
     },
     {
       label: 'Find Boost',
-      onClick: findTheBoost
-    }
+      onClick: findTheBoost,
+    },
   ],
   id: 24,
   inputs,

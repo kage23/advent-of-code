@@ -2,12 +2,17 @@ import inputs from '../../inputs/2018/day25'
 import { DayConfig } from '../../routes/Day'
 import manhattanDistance from '../../utils/manhattanDistance'
 
-const parseInput = (input: string) => input.split('\n').map(line => {
-  const [x, y, z, t] = line.split(',')
-  return [parseInt(x), parseInt(y), parseInt(z), parseInt(t)]
-})
+const parseInput = (input: string) =>
+  input.split('\n').map((line) => {
+    const [x, y, z, t] = line.split(',')
+    return [parseInt(x), parseInt(y), parseInt(z), parseInt(t)]
+  })
 
-const visitNeighbors = (star: number[], stars: number[][], visitedMap: Map<number[], boolean>) => {
+const visitNeighbors = (
+  star: number[],
+  stars: number[][],
+  visitedMap: Map<number[], boolean>
+) => {
   for (const sStar of stars) {
     if (!visitedMap.get(sStar) && manhattanDistance(star, sStar) <= 3) {
       visitedMap.set(sStar, true)
@@ -16,10 +21,10 @@ const visitNeighbors = (star: number[], stars: number[][], visitedMap: Map<numbe
   }
 }
 
-export const countConstellations = (inputKey: string) => {
+export const countConstellations = (input: string) => {
   let count = 0
   const visitedMap = new Map<number[], boolean>()
-  const stars = parseInput(inputs.get(inputKey)!)
+  const stars = parseInput(input)
 
   stars.forEach((star) => {
     if (!visitedMap.get(star)) {
@@ -38,8 +43,8 @@ const day25: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Count Constellations',
-      onClick: countConstellations
-    }
+      onClick: countConstellations,
+    },
   ],
   id: 25,
   inputs,

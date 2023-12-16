@@ -5,16 +5,16 @@ import manhattanDistance from '../../utils/manhattanDistance'
 interface CoordMap {
   coords: number[][]
   display: string[]
-  inputKey: string
+  input: string
   max: number[]
   min: number[]
 }
 
-const parseInput = (inputKey: string): CoordMap => {
+const parseInput = (input: string): CoordMap => {
   const coords = []
   const max = [0, 0]
   const min = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER]
-  const coordStrs = inputs.get(inputKey)!.split('\n')
+  const coordStrs = input.split('\n')
   for (const coordStr of coordStrs) {
     const coord = [
       parseInt(coordStr.split(', ')[0]),
@@ -32,7 +32,7 @@ const parseInput = (inputKey: string): CoordMap => {
     for (let x = 0; x <= max[0] + 1; x++) row += '.'
     return row
   })
-  const map = { coords, max, min, display, inputKey }
+  const map = { coords, max, min, display, input }
   markCoordsOnMapDisplay(map)
   return map
 }
@@ -47,8 +47,8 @@ const markCoordsOnMapDisplay = (map: CoordMap) => {
   }
 }
 
-export const findLargestNonInfinite = (inputKey: string) => {
-  const inMap = parseInput(inputKey)
+export const findLargestNonInfinite = (input: string) => {
+  const inMap = parseInput(input)
   const { coords, max, min } = inMap
   const coordSizeMap: Map<number[], number> = new Map()
   const nearestCoordsMap: Map<number[], number[][]> = new Map()
@@ -96,9 +96,11 @@ export const findLargestNonInfinite = (inputKey: string) => {
   return { answer1: largestArea }
 }
 
-export const findAreaClosestToMost = (inputKey: string) => {
-  const inMap = parseInput(inputKey)
-  const targetDistance = inputKey === 'DEMO' ? 32 : 10000
+export const findAreaClosestToMost = (
+  input: string,
+  targetDistance = 10000
+) => {
+  const inMap = parseInput(input)
   const { coords, max, min } = inMap
   let size = 0
   for (let x = min[0]; x <= max[0]; x++) {

@@ -13,7 +13,7 @@ const resetRegisters = () => {
   console.log(`Registers reset: ${registers}`)
 
   return {
-    answer1: 0
+    answer1: 0,
   }
 }
 
@@ -24,7 +24,7 @@ const setupForPart2 = () => {
   console.log(`Registers reset: ${registers}`)
 
   return {
-    answer1: registers[0]
+    answer1: registers[0],
   }
 }
 
@@ -38,7 +38,11 @@ const doInstruction = (inOperation: string, registers: number[]): number[] => {
   return Operations[operation]({ inputA, inputB, outputC }, registers)
 }
 
-const runLines = (input: string, registers: number[], loops?: number): number[] => {
+const runLines = (
+  input: string,
+  registers: number[],
+  loops?: number
+): number[] => {
   const instructions = input.split('\n')
 
   // First set the Instruction Pointer and its bound
@@ -68,10 +72,9 @@ const runLines = (input: string, registers: number[], loops?: number): number[] 
   return registers
 }
 
-const runProgram = (inputKey: string, loops?: number) => {
+const runProgram = (input: string, loops?: number) => {
   // Get the IP_BIND so we can skip to the correct instruction
   IP_BIND = NaN
-  const input = inputs.get(inputKey)!
   const ipInstruction = input.split('\n').shift()
 
   if (ipInstruction) {
@@ -82,41 +85,41 @@ const runProgram = (inputKey: string, loops?: number) => {
   registers = runLines(input, registers, loops)
 
   return {
-    answer1: registers[0]
+    answer1: registers[0],
   }
 }
 
-const runOneLine = (inputKey: string) => runProgram(inputKey, 1)
+const runOneLine = (input: string) => runProgram(input, 1)
 
-const runThreeLines = (inputKey: string) => runProgram(inputKey, 3)
+const runThreeLines = (input: string) => runProgram(input, 3)
 
-const runTenLines = (inputKey: string) => runProgram(inputKey, 10)
+const runTenLines = (input: string) => runProgram(input, 10)
 
-const run100Lines = (inputKey: string) => runProgram(inputKey, 100)
+const run100Lines = (input: string) => runProgram(input, 100)
 
-const run1000Lines = (inputKey: string) => runProgram(inputKey, 1000)
+const run1000Lines = (input: string) => runProgram(input, 1000)
 
 const getExtra = () => (
   <>
     <p>
-      This is capable of running the program, but if you just let it run until it&apos;s complete,
-      that&apos;ll be a super long loop... So use the `Run Until Done` button with care!
+      This is capable of running the program, but if you just let it run until
+      it&apos;s complete, that&apos;ll be a super long loop... So use the `Run
+      Until Done` button with care!
     </p>
     <p>
-      It is left as an exercise for the reader to determine what, exactly, the program is doing,
-      and thus, what the final value of register 0 will be when it completes.
+      It is left as an exercise for the reader to determine what, exactly, the
+      program is doing, and thus, what the final value of register 0 will be
+      when it completes.
     </p>
     <p>
-      Check your console log; there&apos;s useful information in there about what&apos;s happening
-      when you run the program.
+      Check your console log; there&apos;s useful information in there about
+      what&apos;s happening when you run the program.
     </p>
-    <p>
-      Registers: [{registers.join(', ')}]
-    </p>
+    <p>Registers: [{registers.join(', ')}]</p>
   </>
 )
 
-export const runUntilDone = (inputKey: string) => runProgram(inputKey)
+export const runUntilDone = (input: string) => runProgram(input)
 
 const day19: Omit<DayConfig, 'year'> = {
   answer1Text: 'The value currently in register 0 is answer.',
@@ -124,35 +127,35 @@ const day19: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Reset Registers',
-      onClick: resetRegisters
+      onClick: resetRegisters,
     },
     {
       label: 'Setup for Part 2',
-      onClick: setupForPart2
+      onClick: setupForPart2,
     },
     {
       label: 'Run One Line',
-      onClick: runOneLine
+      onClick: runOneLine,
     },
     {
       label: 'Run Three Lines',
-      onClick: runThreeLines
+      onClick: runThreeLines,
     },
     {
       label: 'Run Ten Lines',
-      onClick: runTenLines
+      onClick: runTenLines,
     },
     {
       label: 'Run 100 Lines',
-      onClick: run100Lines
+      onClick: run100Lines,
     },
     {
       label: 'Run 1000 Lines',
-      onClick: run1000Lines
+      onClick: run1000Lines,
     },
     {
       label: 'Run Until Done',
-      onClick: runUntilDone
+      onClick: runUntilDone,
     },
   ],
   extra: getExtra,

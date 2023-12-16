@@ -2,7 +2,7 @@ import inputs from '../../inputs/2018/day11'
 import { DayConfig } from '../../routes/Day'
 
 const calculateCellPower = (x: number, y: number, input: string): number => {
-  const serialNumber = parseInt(inputs.get(input)!)
+  const serialNumber = parseInt(input)
   const rackId = x + 10
   let powerLevel = rackId * y
   powerLevel += serialNumber
@@ -13,7 +13,12 @@ const calculateCellPower = (x: number, y: number, input: string): number => {
   return powerLevel
 }
 
-const calculatePowerGrid = (x: number, y: number, inSize: number, input: string): number => {
+const calculatePowerGrid = (
+  x: number,
+  y: number,
+  inSize: number,
+  input: string
+): number => {
   const size = Math.min(inSize, 301 - x, 301 - y)
   let totalPower = 0
   for (let xi = x; xi < x + size; xi++)
@@ -22,7 +27,7 @@ const calculatePowerGrid = (x: number, y: number, inSize: number, input: string)
   return totalPower
 }
 
-export const findBestGrid = (input: string, size = 3): { answer1: string } => {
+export const findBestGrid = (input: string, size = 3) => {
   const cellPowerMap: Map<string, number> = new Map()
   for (let x = 1; x <= 300; x++) {
     for (let y = 1; y <= 300; y++) {
@@ -38,11 +43,11 @@ export const findBestGrid = (input: string, size = 3): { answer1: string } => {
     }
   }
   return {
-    answer1: bestCell
+    answer1: bestCell,
   }
 }
 
-export const findBestVariableSizeGrid = (input: string): { answer2: string } => {
+export const findBestVariableSizeGrid = (input: string) => {
   const cellPowerMap: Map<string, number> = new Map()
   let prev = Number.MIN_SAFE_INTEGER
   for (let x = 1; x <= 300; x++) {
@@ -66,7 +71,7 @@ export const findBestVariableSizeGrid = (input: string): { answer2: string } => 
     }
   }
   return {
-    answer2: bestCell
+    answer2: bestCell,
   }
 }
 
@@ -76,11 +81,11 @@ const day11: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Find Best 3x3 Grid',
-      onClick: findBestGrid
+      onClick: findBestGrid,
     },
     {
       label: 'Find Best Variable Size Grid',
-      onClick: findBestVariableSizeGrid
+      onClick: findBestVariableSizeGrid,
     },
   ],
   id: 11,
