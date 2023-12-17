@@ -51,8 +51,6 @@
   cursor: pointer;
   text-align: center;
   transition: background 250ms ease-in-out, transform 150ms ease;
-  -webkit-appearance: none;
-  -moz-appearance: none;
 }
 .button:disabled {
   cursor: default;
@@ -118,4 +116,8 @@ code:before {
   margin-top: 0;
   margin-bottom: 0;
   font-family: 'Source Code Pro', monospace;
+}
+
+textarea {
+  background-color: #666666;
 }
