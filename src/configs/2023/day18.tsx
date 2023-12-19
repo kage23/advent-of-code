@@ -8,7 +8,11 @@ interface LineSegment {
   position: number
 }
 
-const writeFieldToConsole = (dugHoles: Set<string>, rowRange: number[], colRange: number[]) => {
+const writeFieldToConsole = (
+  dugHoles: Set<string>,
+  rowRange: number[],
+  colRange: number[]
+) => {
   let field = ''
   for (let row = rowRange[0]; row <= rowRange[1]; row++) {
     for (let col = colRange[0]; col <= colRange[1]; col++) {
@@ -18,13 +22,9 @@ const writeFieldToConsole = (dugHoles: Set<string>, rowRange: number[], colRange
     field += '\n'
   }
   console.log(field)
-  console.log(dugHoles)
 }
 
-const isInside = (testPoint: number[], lineSegments: LineSegment[]) =>
-  lineSegments.filter(({ type, position, start, end }) => type === 'h' && position < testPoint[0] && start < testPoint[1] && end >= testPoint[1]).length % 2 === 1
-
-export const digTrench = (input: string) => {
+export const digLagoon = (input: string) => {
   const position = [0, 0]
   const rowRange = [0, 0]
   const colRange = [0, 0]
@@ -103,7 +103,12 @@ export const digTrench = (input: string) => {
   return { answer1: dugHoles.size }
 }
 
-const experimentation = (input: string) => {
+const getTrenchLength = (lineSegments: LineSegment[]) =>
+  lineSegments.reduce((sum, { start, end }) => {
+    return sum + Math.abs(end - start)
+  }, 0)
+
+const getAreaBetter = (input: string) => {
   const position = [0, 0]
   const instructions = input.split('\n')
 
@@ -129,50 +134,52 @@ const experimentation = (input: string) => {
       vertices.push(position.join(','))
     }
   })
-  console.log('vertices', vertices)
 
-  const area = [...vertices, vertices[0]].reduce((sum, v, i, vArr) => {
-    if (i !== vertices.length) {
-      const vx = v.split(',').map(Number)
-      const vx2 = vArr[i + 1].split(',').map(Number)
-      return sum + (vx[0] * vx2[1]) - (vx2[0] * vx[1])
-    }
-    return sum
-  }, 0)
-  console.log('area', area)
+  const lineSegments: LineSegment[] = []
+  vertices.forEach((vx, i) => {
+    const v = vx.split(',').map(Number)
+    const next = (vertices[i + 1] || vertices[0]).split(',').map(Number)
+    const ls = {
+      type: v[0] === next[0] ? 'h' : 'v',
+    } as LineSegment
+    ls.position = ls.type === 'h' ? v[0] : v[1]
+    ls.start =
+      ls.type === 'h' ? Math.min(v[1], next[1]) : Math.min(v[0], next[0])
+    ls.end = ls.type === 'h' ? Math.max(v[1], next[1]) : Math.max(v[0], next[0])
+    lineSegments.push(ls)
+  })
 
-  // const lineSegments: LineSegment[] = []
-  // vertices.forEach((vx, i) => {
-  //   const v = vx.split(',').map(Number)
-  //   const next = (vertices[i + 1] || vertices[0]).split(',').map(Number)
-  //   const ls = {
-  //     type: v[0] === next[0] ? 'h' : 'v'
-  //   } as LineSegment
-  //   ls.position = ls.type === 'h' ? v[0] : v[1]
-  //   ls.start = ls.type === 'h' ? Math.min(v[1], next[1]) : Math.min(v[0], next[0])
-  //   ls.end = ls.type === 'h' ? Math.max(v[1], next[1]) : Math.max(v[0], next[0])
-  //   lineSegments.push(ls)
-  // })
+  let s1 = BigInt(0)
+  let s2 = BigInt(0)
+  for (let v = 0; v < vertices.length; v++) {
+    const vx1 = vertices[v].split(',').map(Number)
+    const vx2 = (vertices[v + 1] || vertices[0]).split(',').map(Number)
+    s1 += BigInt(vx1[0] * vx2[1])
+    s2 += BigInt(vx1[1] * vx2[0])
+  }
+  let area = ((s1 > s2 ? s1 : s2) - (s1 > s2 ? s2 : s1)) / BigInt(2)
+  area += BigInt(getTrenchLength(lineSegments) / 2)
+  area += BigInt(1)
 
-  // const doubledVertices = [...vertices, ...vertices]
-  // // const innerAreas: number[] = []
-  // // const outerAreas: number[] = []
-  // vertices.forEach((v, i) => {
-  //   const vx = v.split(',').map(Number)
-  //   const vx2 = doubledVertices[i + 2].split(',').map(Number)
-  //   // const inclusiveArea = (Math.abs(vx2[0] - vx[0]) + 1) * (Math.abs(vx2[1] - vx[1]) + 1)
-  //   // const exclusiveArea = (Math.abs(vx2[0] - vx[0])) * (Math.abs(vx2[1] - vx[1]))
-  //   const testPoint = [Math.min(vx[0], vx2[0]) + 1, Math.min(vx[1], vx2[1]) + 1]
-  //   if (isInside(testPoint, lineSegments)) {
-  //     console.log(`(${vx}),(${vx2}) - inner area`)
-  //     // innerAreas.push(inclusiveArea)
-  //   } else {
-  //     console.log(`(${vx}),(${vx2}) - outer area`)
-  //     // outerAreas.push(exclusiveArea)
-  //   }
-  // })
-  // // console.log('inner areas', innerAreas)
-  // // console.log('outer areas', outerAreas)
+  return area
+}
+
+export const digLagoonBetter = (input: string) => ({
+  answer1: getAreaBetter(input).toString(),
+})
+
+export const digGiantLagoon = (input: string) => {
+  const newInput = input
+    .split('\n')
+    .map((line) => {
+      const hexCode = line.match(/[0-9a-f]{6}/)![0]
+      const distance = parseInt(hexCode.slice(0, 5), 16)
+      const x = hexCode.charAt(5)
+      const dir = x === '0' ? 'R' : x === '1' ? 'D' : x === '2' ? 'L' : 'U'
+      return `${dir} ${distance}`
+    })
+    .join('\n')
+  return { answer2: getAreaBetter(newInput).toString() }
 }
 
 const day18: Omit<DayConfig, 'year'> = {
@@ -180,17 +187,17 @@ const day18: Omit<DayConfig, 'year'> = {
   answer2Text: 'The bigger dug-out area is answer cubic meters.',
   buttons: [
     {
-      label: 'Dig Trench',
-      onClick: digTrench,
+      label: 'Dig Lagoon',
+      onClick: digLagoon,
     },
     {
-      label: 'Experimentation',
-      onClick: experimentation
-    }
-    // {
-    //   label: 'Find Path for Ultra Crucibles',
-    //   onClick: findUltraCruciblePath,
-    // },
+      label: 'Dig Lagoon Better',
+      onClick: digLagoonBetter,
+    },
+    {
+      label: 'Dig Giant Lagoon',
+      onClick: digGiantLagoon,
+    },
   ],
   id: 18,
   inputs,
