@@ -1,12 +1,6 @@
 import inputs from '../../inputs/2023/day18'
 import { DayConfig } from '../../routes/Day'
-
-interface LineSegment {
-  type: 'h' | 'v'
-  start: number
-  end: number
-  position: number
-}
+import { bigPolygonArea } from '../../utils/polygonArea'
 
 const writeFieldToConsole = (
   dugHoles: Set<string>,
@@ -103,11 +97,6 @@ export const digLagoon = (input: string) => {
   return { answer1: dugHoles.size }
 }
 
-const getTrenchLength = (lineSegments: LineSegment[]) =>
-  lineSegments.reduce((sum, { start, end }) => {
-    return sum + Math.abs(end - start)
-  }, 0)
-
 const getAreaBetter = (input: string) => {
   const position = [0, 0]
   const instructions = input.split('\n')
@@ -135,33 +124,7 @@ const getAreaBetter = (input: string) => {
     }
   })
 
-  const lineSegments: LineSegment[] = []
-  vertices.forEach((vx, i) => {
-    const v = vx.split(',').map(Number)
-    const next = (vertices[i + 1] || vertices[0]).split(',').map(Number)
-    const ls = {
-      type: v[0] === next[0] ? 'h' : 'v',
-    } as LineSegment
-    ls.position = ls.type === 'h' ? v[0] : v[1]
-    ls.start =
-      ls.type === 'h' ? Math.min(v[1], next[1]) : Math.min(v[0], next[0])
-    ls.end = ls.type === 'h' ? Math.max(v[1], next[1]) : Math.max(v[0], next[0])
-    lineSegments.push(ls)
-  })
-
-  let s1 = BigInt(0)
-  let s2 = BigInt(0)
-  for (let v = 0; v < vertices.length; v++) {
-    const vx1 = vertices[v].split(',').map(Number)
-    const vx2 = (vertices[v + 1] || vertices[0]).split(',').map(Number)
-    s1 += BigInt(vx1[0] * vx2[1])
-    s2 += BigInt(vx1[1] * vx2[0])
-  }
-  let area = ((s1 > s2 ? s1 : s2) - (s1 > s2 ? s2 : s1)) / BigInt(2)
-  area += BigInt(getTrenchLength(lineSegments) / 2)
-  area += BigInt(1)
-
-  return area
+  return bigPolygonArea(vertices.map((v) => v.split(',').map(Number)))
 }
 
 export const digLagoonBetter = (input: string) => ({
