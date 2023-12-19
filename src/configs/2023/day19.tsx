@@ -113,11 +113,6 @@ export const sortPartsSlowly = (input: string) => {
   }
 }
 
-interface Combo {
-  count: number
-  workflow: Rule[]
-}
-
 export const figureOutGoodCombos = (input: string) => {
   const workflows: Map<string, Rule[]> = new Map()
   input
@@ -128,13 +123,99 @@ export const figureOutGoodCombos = (input: string) => {
       const rules = rest.slice(0, -1).split(',').map(getRule)
       workflows.set(id, rules)
     })
-
-  let winners = 0
-  let workflow = workflows.get('in')!
-  const queue: Combo[] = []
-  rulesLoop: for (let i = 0; i < workflow.length; i++) {
-    const rule = workflow[i]
+  const queue = [['in', 1, 4000, 1, 4000, 1, 4000, 1, 4000, 0].join(',')]
+  let winners = BigInt(0)
+  queueLoop:
+  while (queue.length) {
+    const state = queue.shift()!.split(',')
+    const workflowId = state.shift()!
+    const [xMin, xMax, mMin, mMax, aMin, aMax, sMin, sMax, ruleId] = state.map(Number)
+    if (workflowId === 'A') {
+      winners += BigInt((xMax - xMin + 1) * (mMax - mMin + 1) * (aMax - aMin + 1) * (sMax - sMin + 1))
+      continue queueLoop
+    } else if (workflowId === 'R') continue queueLoop
+    const rule = workflows.get(workflowId)![ruleId]
+    if (!rule.category || !rule.comparison || !rule.value) {
+      if (rule.result === 'A') {
+        winners += BigInt((xMax - xMin + 1) * (mMax - mMin + 1) * (aMax - aMin + 1) * (sMax - sMin + 1))
+        continue queueLoop
+      } else if (rule.result === 'R') continue queueLoop
+      else {
+        queue.push([rule.result, xMin, xMax, mMin, mMax, aMin, aMax, sMin, sMax, 0].join(','))
+        continue queueLoop
+      }
+    } else {
+      // Evaluate the rule
+      const range = rule.category === 'x' ? [xMin, xMax] : rule.category === 'm' ? [mMin, mMax] : rule.category === 'a' ? [aMin, aMax] : [sMin, sMax]
+      comparisonSwitch:
+      switch (rule.comparison) {
+        case '<': {
+          if (range[0] < rule.value) {
+            queue.push([
+              rule.result,
+              xMin,
+              rule.category === 'x' ? Math.min(xMax, rule.value - 1) : xMax,
+              mMin,
+              rule.category === 'm' ? Math.min(mMax, rule.value - 1) : mMax,
+              aMin,
+              rule.category === 'a' ? Math.min(aMax, rule.value - 1) : aMax,
+              sMin,
+              rule.category === 's' ? Math.min(sMax, rule.value - 1) : sMax,
+              0
+            ].join(','))
+          }
+          if (range[1] >= rule.value) {
+            queue.push([
+              workflowId,
+              rule.category === 'x' ? Math.max(xMin, rule.value) : xMin,
+              xMax,
+              rule.category === 'm' ? Math.max(mMin, rule.value) : mMin,
+              mMax,
+              rule.category === 'a' ? Math.max(aMin, rule.value) : aMin,
+              aMax,
+              rule.category === 's' ? Math.max(sMin, rule.value) : sMin,
+              sMax,
+              ruleId + 1
+            ].join(','))
+          }
+          break comparisonSwitch
+        }
+        case '>': {
+          if (range[0] <= rule.value) {
+            queue.push([
+              workflowId,
+              xMin,
+              rule.category === 'x' ? Math.min(xMax, rule.value) : xMax,
+              mMin,
+              rule.category === 'm' ? Math.min(mMax, rule.value) : mMax,
+              aMin,
+              rule.category === 'a' ? Math.min(aMax, rule.value) : aMax,
+              sMin,
+              rule.category === 's' ? Math.min(sMax, rule.value) : sMax,
+              ruleId + 1
+            ].join(','))
+          }
+          if (range[1] > rule.value) {
+            queue.push([
+              rule.result,
+              rule.category === 'x' ? Math.max(xMin, rule.value + 1) : xMin,
+              xMax,
+              rule.category === 'm' ? Math.max(mMin, rule.value + 1) : mMin,
+              mMax,
+              rule.category === 'a' ? Math.max(aMin, rule.value + 1) : aMin,
+              aMax,
+              rule.category === 's' ? Math.max(sMin, rule.value + 1) : sMin,
+              sMax,
+              0
+            ].join(','))
+          }
+          break comparisonSwitch
+        }
+      }
+      continue queueLoop
+    }
   }
+  return { answer2: winners.toString() }
 }
 
 const day19: Omit<DayConfig, 'year'> = {

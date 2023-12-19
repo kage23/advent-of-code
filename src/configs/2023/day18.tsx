@@ -102,7 +102,7 @@ const getAreaBetter = (input: string) => {
   const instructions = input.split('\n')
 
   const vertices = [position.join(',')]
-  instructions.forEach((line, i) => {
+  instructions.forEach((line) => {
     const [dir, d] = line.split(' ')
     const dist = Number(d)
     switch (dir) {
