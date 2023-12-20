@@ -82,27 +82,27 @@ const runAmplifiers = (
 
   const phaseSettings = phaseSettingSequence.split('').map((x) => parseInt(x))
 
-  let ampA: Amplifier = {
+  const ampA: Amplifier = {
     inputs: [phaseSettings[0], 0],
     instructionPointer: 0,
     program: JSON.parse(JSON.stringify(program)),
   }
-  let ampB: Amplifier = {
+  const ampB: Amplifier = {
     inputs: [phaseSettings[1]],
     instructionPointer: 0,
     program: JSON.parse(JSON.stringify(program)),
   }
-  let ampC: Amplifier = {
+  const ampC: Amplifier = {
     inputs: [phaseSettings[2]],
     instructionPointer: 0,
     program: JSON.parse(JSON.stringify(program)),
   }
-  let ampD: Amplifier = {
+  const ampD: Amplifier = {
     inputs: [phaseSettings[3]],
     instructionPointer: 0,
     program: JSON.parse(JSON.stringify(program)),
   }
-  let ampE: Amplifier = {
+  const ampE: Amplifier = {
     inputs: [phaseSettings[4]],
     instructionPointer: 0,
     program: JSON.parse(JSON.stringify(program)),
