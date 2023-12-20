@@ -41,7 +41,7 @@ export const findCorrectInputs = (rawInput: string) => {
 }
 
 const day02: Omit<DayConfig, 'year'> = {
-  answer1Text: 'TThe value at position 0 after the program halts is answer.',
+  answer1Text: 'The value at position 0 after the program halts is answer.',
   answer2Text: '`(100 * noun) + verb` is answer.',
   buttons: [
     {

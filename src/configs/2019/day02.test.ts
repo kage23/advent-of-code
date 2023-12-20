@@ -1,7 +1,7 @@
 import inputs from '../../inputs/2019/day02'
 import intcodeComputer from './Intcode'
 
-describe('2019 Day 01', () => {
+describe('2019 Day 02', () => {
   describe('Part 1', () => {
     it('intcode computer should run properly', () => {
       expect(
