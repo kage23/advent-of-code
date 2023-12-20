@@ -93,7 +93,7 @@ const day04: Omit<DayConfig, 'year'> = {
       onClick: findPossibleNewPasswords,
     },
   ],
-  id: 3,
+  id: 4,
   inputs,
   title: 'Secure Container',
 }
