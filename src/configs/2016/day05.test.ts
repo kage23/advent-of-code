@@ -14,7 +14,9 @@ xdescribe('2016 Day 05', () => {
   describe('Part 2', () => {
     describe('findBetterPassword', () => {
       it('should find a better password for a given room ID', () => {
-        expect(findBetterPassword(inputs.get('DEMO_1')!).answer2).toEqual('05ace8e3')
+        expect(findBetterPassword(inputs.get('DEMO_1')!).answer2).toEqual(
+          '05ace8e3'
+        )
       })
     })
   })

@@ -195,7 +195,7 @@ const getBoss = (input: string) => {
     rechargeIsActive: 0,
     shieldIsActive: 0,
   }
-  input.split('\n').forEach(line => {
+  input.split('\n').forEach((line) => {
     const [label, value] = line.split(': ')
     switch (label) {
       case 'Hit Points':

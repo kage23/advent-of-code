@@ -13,7 +13,9 @@ describe('2015 Day 24', () => {
   describe('Part 2', () => {
     describe('sortThePackagesWithTheTrunk', () => {
       it('should determine the quantum entanglement of the ideal package configuration when using the trunk', () => {
-        expect(sortThePackagesWithTheTrunk(inputs.get('DEMO_1')!).answer2).toEqual(44)
+        expect(
+          sortThePackagesWithTheTrunk(inputs.get('DEMO_1')!).answer2
+        ).toEqual(44)
       })
     })
   })

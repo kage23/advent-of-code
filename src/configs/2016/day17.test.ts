@@ -8,8 +8,12 @@ describe('2016 Day 17', () => {
         expect(findShortestVaultPath(inputs.get('DEMO_1')!).answer1).toEqual(
           'There is no path!'
         )
-        expect(findShortestVaultPath(inputs.get('DEMO_2')!).answer1).toEqual('DDRRRD')
-        expect(findShortestVaultPath(inputs.get('DEMO_3')!).answer1).toEqual('DDUDRLRRUDRD')
+        expect(findShortestVaultPath(inputs.get('DEMO_2')!).answer1).toEqual(
+          'DDRRRD'
+        )
+        expect(findShortestVaultPath(inputs.get('DEMO_3')!).answer1).toEqual(
+          'DDUDRLRRUDRD'
+        )
         expect(findShortestVaultPath(inputs.get('DEMO_4')!).answer1).toEqual(
           'DRURDRUDDLLDLUURRDULRLDUUDDDRR'
         )

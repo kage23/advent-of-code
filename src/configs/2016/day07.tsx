@@ -88,17 +88,13 @@ const checkForSSL = (input: string): boolean => {
 
 export const checkIPsForTLSSupport = (input: string) => {
   return {
-    answer1: input
-      .split('\n')
-      .filter((line) => checkForTLS(line)).length,
+    answer1: input.split('\n').filter((line) => checkForTLS(line)).length,
   }
 }
 
 export const checkIPsForSSLSupport = (input: string) => {
   return {
-    answer2: input
-      .split('\n')
-      .filter((line) => checkForSSL(line)).length,
+    answer2: input.split('\n').filter((line) => checkForSSL(line)).length,
   }
 }
 

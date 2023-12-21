@@ -14,7 +14,9 @@ describe('2016 Day 14', () => {
   xdescribe('Part 2', () => {
     describe('generateStretchedKeys', () => {
       it('should determine the 64th stretched one-time pad key', () => {
-        expect(generateStretchedKeys(inputs.get('DEMO_1')!).answer2).toEqual(22551)
+        expect(generateStretchedKeys(inputs.get('DEMO_1')!).answer2).toEqual(
+          22551
+        )
       })
     })
   })

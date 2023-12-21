@@ -13,7 +13,9 @@ describe('2015 Day 15', () => {
   describe('Part 2', () => {
     describe('findBestLowCalRecipe', () => {
       it('should find the score of the best 500-calorie cookie you can make', () => {
-        expect(findBestLowCalRecipe(inputs.get('DEMO_1')!).answer2).toEqual(57600000)
+        expect(findBestLowCalRecipe(inputs.get('DEMO_1')!).answer2).toEqual(
+          57600000
+        )
       })
     })
   })

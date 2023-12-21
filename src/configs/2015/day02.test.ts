@@ -5,8 +5,12 @@ describe('2015 Day 02', () => {
   describe('Part 1', () => {
     describe('getWrappingPaperSize', () => {
       it('should calculate how much wrapping paper we need', () => {
-        expect(calculateWrappingPaper(inputs.get('DEMO_1')!).answer1).toEqual(58)
-        expect(calculateWrappingPaper(inputs.get('DEMO_2')!).answer1).toEqual(43)
+        expect(calculateWrappingPaper(inputs.get('DEMO_1')!).answer1).toEqual(
+          58
+        )
+        expect(calculateWrappingPaper(inputs.get('DEMO_2')!).answer1).toEqual(
+          43
+        )
       })
     })
   })

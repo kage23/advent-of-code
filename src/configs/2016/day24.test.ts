@@ -10,7 +10,9 @@ describe('2016 Day 24', () => {
 
   describe('Part 2', () => {
     it('should find the length of the shortest path with return', () => {
-      expect(findShortestPathWithReturn(inputs.get('DEMO')!).answer2).toEqual(20)
+      expect(findShortestPathWithReturn(inputs.get('DEMO')!).answer2).toEqual(
+        20
+      )
     })
   })
 })

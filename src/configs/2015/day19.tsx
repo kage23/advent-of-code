@@ -140,9 +140,7 @@ const findShortestPathToTarget = (
 
 export const calibrateMachine = (input: string) => {
   const molecule = input.split('\n').reverse()[0]
-  const replacements = parseReplacements(
-    input.split('\n').slice(0, -2)
-  )
+  const replacements = parseReplacements(input.split('\n').slice(0, -2))
   const nextMolecules = getPossibleNextMolecules(molecule, replacements)
   return {
     answer1: nextMolecules.length,
@@ -151,10 +149,7 @@ export const calibrateMachine = (input: string) => {
 
 export const generateMolecule = (input: string) => {
   const molecule = input.split('\n').reverse()[0]
-  const replacements = parseReplacements(
-    input.split('\n').slice(0, -2),
-    true
-  )
+  const replacements = parseReplacements(input.split('\n').slice(0, -2), true)
   return {
     answer2: findShortestPathToTarget(molecule, 'e', replacements),
   }

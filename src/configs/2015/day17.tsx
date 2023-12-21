@@ -39,7 +39,10 @@ export const determineContainerCombos = (input: string, eggnog = 150) => {
   }
 }
 
-export const determineEfficientContainerCombos = (input: string, eggnog = 150) => {
+export const determineEfficientContainerCombos = (
+  input: string,
+  eggnog = 150
+) => {
   const containerSizes = input
     .split('\n')
     .map((x) => parseInt(x))

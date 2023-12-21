@@ -1,9 +1,8 @@
 import inputs from '../../inputs/2016/day25'
 import { DayConfig } from '../../routes/Day'
 
-const halfEvenOdd = (number: number, even: boolean): boolean => (
+const halfEvenOdd = (number: number, even: boolean): boolean =>
   Math.floor(number / 2) % 2 === (even ? 0 : 1)
-)
 
 const evenOddHalves = (number: number, checkEven: boolean): boolean => {
   if (number === 0) {
@@ -22,11 +21,12 @@ export const findAGoodNumber = () => {
   let i = 2551
   while (!evenOddHalves(i, false)) i++
 
-  return { answer1: (i - 2550) }
+  return { answer1: i - 2550 }
 }
 
 const day25: Omit<DayConfig, 'year'> = {
-  answer1Text: 'You should manually analyze the Assembunny program and figure out what it does!',
+  answer1Text:
+    'You should manually analyze the Assembunny program and figure out what it does!',
   answer2Text: 'The number to input is answer.',
   buttons: [
     {
@@ -36,11 +36,11 @@ const day25: Omit<DayConfig, 'year'> = {
     {
       label: 'Find a Good Number',
       onClick: findAGoodNumber,
-    }
+    },
   ],
   id: 25,
   inputs,
-  title: 'Clock Signal'
+  title: 'Clock Signal',
 }
 
 export default day25

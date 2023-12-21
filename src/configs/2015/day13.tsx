@@ -8,17 +8,15 @@ const parseInput = (
 ): Map<string, number> => {
   const happinessUnits: Map<string, number> = new Map()
 
-  input
-    .split('\n')
-    .forEach((line) => {
-      const [firstPerson, , gainOrLose, x, , , , , , , secondPerson] = line
-        .slice(0, -1)
-        .split(' ')
-      happinessUnits.set(
-        `${firstPerson}-${secondPerson}`,
-        parseInt(x) * (gainOrLose === 'lose' ? -1 : 1)
-      )
-    })
+  input.split('\n').forEach((line) => {
+    const [firstPerson, , gainOrLose, x, , , , , , , secondPerson] = line
+      .slice(0, -1)
+      .split(' ')
+    happinessUnits.set(
+      `${firstPerson}-${secondPerson}`,
+      parseInt(x) * (gainOrLose === 'lose' ? -1 : 1)
+    )
+  })
 
   if (part === 2 && attendees) {
     attendees.forEach((attendee) => {

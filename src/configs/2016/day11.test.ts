@@ -5,7 +5,9 @@ describe('2016 Day 11', () => {
   describe('Part 1', () => {
     describe('takeObjectsToFourthFloor', () => {
       it('should determine how many steps it will take to take everything to the fourth floor', () => {
-        expect(takeObjectsToFourthFloor(inputs.get('DEMO_1')!).answer1).toEqual(11)
+        expect(takeObjectsToFourthFloor(inputs.get('DEMO_1')!).answer1).toEqual(
+          11
+        )
       })
     })
   })

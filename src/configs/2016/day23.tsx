@@ -13,7 +13,7 @@ export const runPart1 = (input: string) => {
   bunny.runCode(inputLines)
 
   return {
-    answer1: bunny.registers.get('a')!
+    answer1: bunny.registers.get('a')!,
   }
 }
 
@@ -28,7 +28,7 @@ export const runPart2 = (input: string) => {
   bunny.runCode(inputLines)
 
   return {
-    answer2: bunny.registers.get('a')!
+    answer2: bunny.registers.get('a')!,
   }
 }
 
@@ -43,11 +43,11 @@ const day23: Omit<DayConfig, 'year'> = {
     {
       label: 'Run Assembunny Code, Part 2',
       onClick: runPart2,
-    }
+    },
   ],
   id: 23,
   inputs,
-  title: 'Safe Cracking'
+  title: 'Safe Cracking',
 }
 
 export default day23

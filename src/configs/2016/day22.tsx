@@ -236,11 +236,7 @@ const findShortestPath = (
       }
       // Add this search node to the visited list
       visited.set(currentSearchNode.gridStr, true)
-      const nexts = getPossibleNexts(
-        currentSearchNode.gridStr,
-        visited,
-        isDemo
-      )
+      const nexts = getPossibleNexts(currentSearchNode.gridStr, visited, isDemo)
       nexts.forEach((next) =>
         queue.push({
           gridStr: next,

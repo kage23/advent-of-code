@@ -18,10 +18,18 @@ describe('2016 Day 09', () => {
   describe('Part 2', () => {
     describe('getDecompressedLength', () => {
       it('should determine the length of the final decompressed sequence', () => {
-        expect(getDecompressedLength(inputs.get('DEMO_1_3')!).answer2).toEqual(9)
-        expect(getDecompressedLength(inputs.get('DEMO_1_6')!).answer2).toEqual(20)
-        expect(getDecompressedLength(inputs.get('DEMO_2_1')!).answer2).toEqual(241920)
-        expect(getDecompressedLength(inputs.get('DEMO_2_2')!).answer2).toEqual(445)
+        expect(getDecompressedLength(inputs.get('DEMO_1_3')!).answer2).toEqual(
+          9
+        )
+        expect(getDecompressedLength(inputs.get('DEMO_1_6')!).answer2).toEqual(
+          20
+        )
+        expect(getDecompressedLength(inputs.get('DEMO_2_1')!).answer2).toEqual(
+          241920
+        )
+        expect(getDecompressedLength(inputs.get('DEMO_2_2')!).answer2).toEqual(
+          445
+        )
       })
     })
   })

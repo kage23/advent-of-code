@@ -2,7 +2,6 @@ import inputs from '../../inputs/2016/day09'
 import { DayConfig } from '../../routes/Day'
 
 export const decompressSequence = (input: string) => {
-
   let answer1 = ''
 
   for (let i = 0; i < input.length; i++) {

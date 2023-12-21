@@ -44,10 +44,8 @@ const isTriangleValid = (input: number[]): boolean => {
 }
 
 export const evaluateTriangles = (input: string) => ({
-  answer1: input
-    .split('\n')
-    .map(getTrianglePart1)
-    .filter(isTriangleValid).length,
+  answer1: input.split('\n').map(getTrianglePart1).filter(isTriangleValid)
+    .length,
 })
 
 export const evaluateTrianglesVertically = (input: string) => ({

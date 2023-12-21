@@ -9,18 +9,16 @@ interface Reindeer {
 }
 
 const parseInput = (input: string): Reindeer[] =>
-  input
-    .split('\n')
-    .map((reindeerLine) => {
-      const [name, , , velocity, , , flyTime, , , , , , , restTime] =
-        reindeerLine.split(' ')
-      return {
-        flyTime: parseInt(flyTime),
-        name,
-        restTime: parseInt(restTime),
-        velocity: parseInt(velocity),
-      }
-    })
+  input.split('\n').map((reindeerLine) => {
+    const [name, , , velocity, , , flyTime, , , , , , , restTime] =
+      reindeerLine.split(' ')
+    return {
+      flyTime: parseInt(flyTime),
+      name,
+      restTime: parseInt(restTime),
+      velocity: parseInt(velocity),
+    }
+  })
 
 const getDistance = (reindeer: Reindeer, raceTime: number): number => {
   const fullFlyRestCycles = Math.floor(

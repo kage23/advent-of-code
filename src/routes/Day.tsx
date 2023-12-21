@@ -41,7 +41,8 @@ export async function loader({ params }: { params: Params }) {
 }
 
 const Day = () => {
-  const { answer1Text, answer2Text, buttons, extra, id, inputs, title, year } = useLoaderData() as DayConfig
+  const { answer1Text, answer2Text, buttons, extra, id, inputs, title, year } =
+    useLoaderData() as DayConfig
 
   const [answer1, setAnswer1] = useState<string | number>()
   const [answer2, setAnswer2] = useState<string | number>()
@@ -49,7 +50,10 @@ const Day = () => {
   const [specialRender, setSpecialRender] = useState<ReactNode>(null)
   const [selectedInputKey, setSelectedInputKey] = useState<string>()
 
-  const getInput = (inputKey: string | undefined, inputs: Map<string, string>) => {
+  const getInput = (
+    inputKey: string | undefined,
+    inputs: Map<string, string>
+  ) => {
     if (inputKey === undefined) return ''
     if (inputKey !== 'paste') return inputs.get(inputKey)!
     return paste

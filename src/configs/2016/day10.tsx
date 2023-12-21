@@ -11,43 +11,41 @@ interface Bot {
 const getBots = (input: string): Bot[] => {
   const bots: Bot[] = []
 
-  input
-    .split('\n')
-    .forEach((line) => {
-      const botId = parseInt(line.split('bot ')[1])
-      const bot = bots.find((bot) => bot.id === botId) || { id: botId }
-      if (line.startsWith('value')) {
-        const value = parseInt(line.split('value ')[1])
-        if (!bot.numbers) bot.numbers = []
-        if (bot.numbers) bot.numbers.push(value)
-      } else {
-        if (line.split('gives low to ')[1].startsWith('bot')) {
-          bot.low = {
-            to: 'bot',
-            id: parseInt(line.split('gives low to bot ')[1]),
-          }
-        }
-        if (line.split('gives low to ')[1].startsWith('output')) {
-          bot.low = {
-            to: 'output',
-            id: parseInt(line.split('gives low to output ')[1]),
-          }
-        }
-        if (line.split('and high to ')[1].startsWith('bot')) {
-          bot.high = {
-            to: 'bot',
-            id: parseInt(line.split('and high to bot ')[1]),
-          }
-        }
-        if (line.split('and high to ')[1].startsWith('output')) {
-          bot.high = {
-            to: 'output',
-            id: parseInt(line.split('and high to output ')[1]),
-          }
+  input.split('\n').forEach((line) => {
+    const botId = parseInt(line.split('bot ')[1])
+    const bot = bots.find((bot) => bot.id === botId) || { id: botId }
+    if (line.startsWith('value')) {
+      const value = parseInt(line.split('value ')[1])
+      if (!bot.numbers) bot.numbers = []
+      if (bot.numbers) bot.numbers.push(value)
+    } else {
+      if (line.split('gives low to ')[1].startsWith('bot')) {
+        bot.low = {
+          to: 'bot',
+          id: parseInt(line.split('gives low to bot ')[1]),
         }
       }
-      bots.push(bot)
-    })
+      if (line.split('gives low to ')[1].startsWith('output')) {
+        bot.low = {
+          to: 'output',
+          id: parseInt(line.split('gives low to output ')[1]),
+        }
+      }
+      if (line.split('and high to ')[1].startsWith('bot')) {
+        bot.high = {
+          to: 'bot',
+          id: parseInt(line.split('and high to bot ')[1]),
+        }
+      }
+      if (line.split('and high to ')[1].startsWith('output')) {
+        bot.high = {
+          to: 'output',
+          id: parseInt(line.split('and high to output ')[1]),
+        }
+      }
+    }
+    bots.push(bot)
+  })
 
   return bots
 }

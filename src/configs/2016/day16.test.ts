@@ -13,7 +13,9 @@ describe('2016 Day 16', () => {
   describe('Part 2', () => {
     describe('fillBiggerDisk', () => {
       it('should determine the checksum of the filled bigger disk', () => {
-        expect(fillBiggerDisk(inputs.get('DEMO_1')!).answer2).toEqual('10111110011110111')
+        expect(fillBiggerDisk(inputs.get('DEMO_1')!).answer2).toEqual(
+          '10111110011110111'
+        )
       })
     })
   })

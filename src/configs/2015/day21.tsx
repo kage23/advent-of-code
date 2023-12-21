@@ -231,7 +231,7 @@ const getFighterStatsFromEquipmentCombo = (equipment: Equipment): Fighter => ({
 
 const getBoss = (input: string) => {
   const boss = {} as Fighter
-  input.split('\n').forEach(line => {
+  input.split('\n').forEach((line) => {
     const [label, value] = line.split(': ')
     switch (label) {
       case 'Hit Points':

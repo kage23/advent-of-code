@@ -88,7 +88,10 @@ export const runLightAnimation = (grid: string, animationSteps = 100) => {
   }
 }
 
-export const runLightAnimationWithStuckOnLights = (grid: string, animationSteps = 100) => {
+export const runLightAnimationWithStuckOnLights = (
+  grid: string,
+  animationSteps = 100
+) => {
   // Set the stuck-on lights
   // Top left and bottom right
   grid = `#${grid.slice(1, -1)}#`

@@ -16,24 +16,22 @@ interface RecipeItem {
 }
 
 const parseInput = (input: string): Ingredient[] =>
-  input
-    .split('\n')
-    .map((ingredLine) => {
-      const calories = parseInt(ingredLine.split('calories ')[1])
-      const capacity = parseInt(ingredLine.split('capacity ')[1])
-      const durability = parseInt(ingredLine.split('durability ')[1])
-      const flavor = parseInt(ingredLine.split('flavor ')[1])
-      const name = ingredLine.split(': ')[0]
-      const texture = parseInt(ingredLine.split('texture ')[1])
-      return {
-        calories,
-        capacity,
-        durability,
-        flavor,
-        name,
-        texture,
-      }
-    })
+  input.split('\n').map((ingredLine) => {
+    const calories = parseInt(ingredLine.split('calories ')[1])
+    const capacity = parseInt(ingredLine.split('capacity ')[1])
+    const durability = parseInt(ingredLine.split('durability ')[1])
+    const flavor = parseInt(ingredLine.split('flavor ')[1])
+    const name = ingredLine.split(': ')[0]
+    const texture = parseInt(ingredLine.split('texture ')[1])
+    return {
+      calories,
+      capacity,
+      durability,
+      flavor,
+      name,
+      texture,
+    }
+  })
 
 const generateRecipes = (
   ingredients: Ingredient[],

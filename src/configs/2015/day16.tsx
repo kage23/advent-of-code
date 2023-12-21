@@ -31,45 +31,43 @@ const analysis: Sue = {
 }
 
 const parseInput = (input: string): Sue[] =>
-  input
-    .split('\n')
-    .map((sueLine, i) => {
-      const number = i + 1
-      const sue: Sue = { number }
+  input.split('\n').map((sueLine, i) => {
+    const number = i + 1
+    const sue: Sue = { number }
 
-      if (sueLine.includes('akitas')) {
-        sue.akitas = parseInt(sueLine.split('akitas: ')[1])
-      }
-      if (sueLine.includes('cars')) {
-        sue.cars = parseInt(sueLine.split('cars: ')[1])
-      }
-      if (sueLine.includes('cats')) {
-        sue.cats = parseInt(sueLine.split('cats: ')[1])
-      }
-      if (sueLine.includes('children')) {
-        sue.children = parseInt(sueLine.split('children: ')[1])
-      }
-      if (sueLine.includes('goldfish')) {
-        sue.goldfish = parseInt(sueLine.split('goldfish: ')[1])
-      }
-      if (sueLine.includes('perfumes')) {
-        sue.perfumes = parseInt(sueLine.split('perfumes: ')[1])
-      }
-      if (sueLine.includes('pomeranians')) {
-        sue.pomeranians = parseInt(sueLine.split('pomeranians: ')[1])
-      }
-      if (sueLine.includes('samoyeds')) {
-        sue.samoyeds = parseInt(sueLine.split('samoyeds: ')[1])
-      }
-      if (sueLine.includes('trees')) {
-        sue.trees = parseInt(sueLine.split('trees: ')[1])
-      }
-      if (sueLine.includes('vizslas')) {
-        sue.vizslas = parseInt(sueLine.split('vizslas: ')[1])
-      }
+    if (sueLine.includes('akitas')) {
+      sue.akitas = parseInt(sueLine.split('akitas: ')[1])
+    }
+    if (sueLine.includes('cars')) {
+      sue.cars = parseInt(sueLine.split('cars: ')[1])
+    }
+    if (sueLine.includes('cats')) {
+      sue.cats = parseInt(sueLine.split('cats: ')[1])
+    }
+    if (sueLine.includes('children')) {
+      sue.children = parseInt(sueLine.split('children: ')[1])
+    }
+    if (sueLine.includes('goldfish')) {
+      sue.goldfish = parseInt(sueLine.split('goldfish: ')[1])
+    }
+    if (sueLine.includes('perfumes')) {
+      sue.perfumes = parseInt(sueLine.split('perfumes: ')[1])
+    }
+    if (sueLine.includes('pomeranians')) {
+      sue.pomeranians = parseInt(sueLine.split('pomeranians: ')[1])
+    }
+    if (sueLine.includes('samoyeds')) {
+      sue.samoyeds = parseInt(sueLine.split('samoyeds: ')[1])
+    }
+    if (sueLine.includes('trees')) {
+      sue.trees = parseInt(sueLine.split('trees: ')[1])
+    }
+    if (sueLine.includes('vizslas')) {
+      sue.vizslas = parseInt(sueLine.split('vizslas: ')[1])
+    }
 
-      return sue
-    })
+    return sue
+  })
 
 export const determineTheSue = (input: string) => {
   const sues = parseInput(input)

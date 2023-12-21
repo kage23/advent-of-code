@@ -13,7 +13,9 @@ describe('2016 Day 03', () => {
   describe('Part 2', () => {
     describe('evaluateTrianglesVertically', () => {
       it('should determine how many triangles are in the list when grouping vertically', () => {
-        expect(evaluateTrianglesVertically(inputs.get('DEMO_2_1')!).answer2).toEqual(6)
+        expect(
+          evaluateTrianglesVertically(inputs.get('DEMO_2_1')!).answer2
+        ).toEqual(6)
       })
     })
   })

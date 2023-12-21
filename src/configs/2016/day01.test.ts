@@ -14,7 +14,9 @@ describe('2016 Day 01', () => {
   describe('Part 2', () => {
     describe('findFirstRepeatLocation', () => {
       it('should find the distance to the first location I visited twice', () => {
-        expect(findFirstRepeatLocation(inputs.get('DEMO_2_1')!).answer2).toEqual(4)
+        expect(
+          findFirstRepeatLocation(inputs.get('DEMO_2_1')!).answer2
+        ).toEqual(4)
       })
     })
   })

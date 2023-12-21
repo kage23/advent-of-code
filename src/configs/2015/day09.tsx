@@ -8,19 +8,17 @@ export const findPaths = (input: string) => {
   }
 
   const distances: Map<string, number> = new Map(
-    input
-      .split('\n')
-      .map((inputLine) => {
-        const [places, distance] = inputLine.split(' = ')
+    input.split('\n').map((inputLine) => {
+      const [places, distance] = inputLine.split(' = ')
 
-        return [
-          places
-            .split(' to ')
-            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-            .join(' to '),
-          parseInt(distance),
-        ]
-      })
+      return [
+        places
+          .split(' to ')
+          .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+          .join(' to '),
+        parseInt(distance),
+      ]
+    })
   )
 
   const places = Array.from(distances.keys())
