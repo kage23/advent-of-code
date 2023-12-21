@@ -39,37 +39,26 @@ class SandMachine {
         }
       })
     })
-
-    // this.modules.forEach(module => {
-    //   // if (module instanceof FlipFlop) {
-    //     // console.log(`Module ${module.id} inputs:`, module.inputs)
-    //   // }
-    // })
   }
 
-  pushButton(idsToLookForHighFrom?: string[]) {
+  pushButton(idsToLookForLowFrom?: string[]) {
     const sawPulses: string[] = []
     this.buttonPresses++
-    // if (this.buttonPresses % 1000 === 1) console.log(`Button press #${this.buttonPresses} about to happen:`)
-    let lowRxPulses = 0
     this.sendQueue.push(['button', 'low', 'broadcaster'])
     while (this.sendQueue.length) {
       const [from, pulse, to] = this.sendQueue.shift()!
-      if (idsToLookForHighFrom?.includes(from) && pulse === 'high') sawPulses.push(from)
+      if (idsToLookForLowFrom?.includes(from) && pulse === 'low')
+        sawPulses.push(from)
       if (pulse === 'high') highPulseCount++
       else lowPulseCount++
-      if (pulse === 'low' && to === 'rx') lowRxPulses++
       const module = this.modules.get(to)
       if (module) {
         module.onReceive(pulse, from)
-      // } else {
-        // console.log(`Module ${to} received a ${pulse} pulse.`)
       }
     }
     return {
       buttonPresses: this.buttonPresses,
-      lowRxPulses,
-      sawPulses
+      sawPulses,
     }
   }
 }
@@ -131,7 +120,6 @@ class Conjunction extends Module {
     } else {
       this.memory[inputIndex][1] = pulse
     }
-    // console.log(`Module ${this.id} inputs:`, this.inputs.map(input => input[1]).join(' '))
     if (
       this.memory.map(([, pulse]) => pulse).every((pulse) => pulse === 'high')
     ) {
@@ -162,8 +150,6 @@ export const resetMachine = (input: string) => {
   lowPulseCount = 0
   highPulseCount = 0
 
-  // console.log('Sand Machine', sandMachine)
-
   return {
     specialRender: 'Sand machine reset.',
   }
@@ -179,82 +165,28 @@ export const pushButton1000Times = (input: string) => {
   return { answer1: lowPulseCount * highPulseCount }
 }
 
-export const activateModuleRx = (input: string) => {
+export const bespokeSolution = (input: string) => {
   resetMachine(input)
-  let buttonPushes = 0
-  let lowRxPulses = 0
-  while (lowRxPulses !== 1) {
-    lowRxPulses = pushButtonOnce().extra.lowRxPulses
-    buttonPushes++
-  }
-  return { answer2: buttonPushes }
-}
-
-const findLoops = (input: string) => {
-  resetMachine(input)
-  const allLowsAfterButton = new Map<string, number[]>()
-
-  let node = Array.from(sandMachine.modules.values()).find(module => module.destinationModules.includes('rx'))!
-
-  while ((node as Conjunction).memory.length === 1) {
-    node = sandMachine.modules.get((node as Conjunction).memory[0][0])!
-  }
-
-  (node as Conjunction).memory.forEach(([id]) => {
-    allLowsAfterButton.set(id, [0])
+  const finalNode = Array.from(sandMachine.modules.values()).find((module) =>
+    module.destinationModules.includes('rx')
+  )!
+  const importantModules: string[] = []
+  finalNode.inputs.forEach((id) => {
+    const module = sandMachine.modules.get(id)!
+    if (module.inputs.length === 1) {
+      importantModules.push(...module.inputs)
+    }
   })
-
-  while (Array.from(allLowsAfterButton.values()).some(x => x.length < 2)) {
-    pushButtonOnce()
-    sandMachine.modules.forEach((module) => {
-      if (module instanceof Conjunction) {
-        const prevAllLows = allLowsAfterButton.get(module.id)
-        if (prevAllLows !== undefined) {
-          if (module.memory.map(([, p]) => p).every(p => p === 'low')) {
-            prevAllLows.push(sandMachine.buttonPresses)
-          }
-        }
-      }
-    })
-  }
-
-  // console.log('allLowsAfterButton', allLowsAfterButton)
-}
-
-const calculateCycle = (module: Module, cycles = 1): number => {
-  if (module instanceof FlipFlop) {
-    // if (module.inputs.length > 1) console.log(`This won't work correctly until I figure out how to handle FlipFlops with multiple inputs`)
-    if (module.inputs.length === 0 || (module.inputs.length === 1 && module.inputs[0] === 'broadcaster')) return 2 * cycles
-    return 2 * calculateCycle(sandMachine.modules.get(module.inputs[0])!, cycles)
-  }
-  return cycles
-}
-
-const calculateCycles = (input: string, moduleId: string) => {
-  resetMachine(input)
-  const module = Array.from(sandMachine.modules.values()).find(module => module.destinationModules.includes(moduleId))
-  if (module) {
-    return calculateCycle(module)
-  }
-}
-
-export const activateModuleRxReally = (input: string) => ({
-  answer2: calculateCycles(input, 'output')
-})
-
-const bespokeSolution = (input: string) => {
-  resetMachine(input)
-  const importantModules = ['jv', 'qs', 'jm', 'pr']
-  const pulsedHighOn = new Map(importantModules.map(id => ([id, -1])))
-  while (Array.from(pulsedHighOn.values()).some(x => x === -1)) {
-    const result = sandMachine.pushButton()
-    importantModules.forEach(id => {
+  const pulsedLowOn = new Map(importantModules.map((id) => [id, -1]))
+  while (Array.from(pulsedLowOn.values()).some((x) => x === -1)) {
+    const result = sandMachine.pushButton(importantModules)
+    importantModules.forEach((id) => {
       if (result.sawPulses.includes(id)) {
-        pulsedHighOn.set(id, result.buttonPresses)
+        pulsedLowOn.set(id, result.buttonPresses)
       }
     })
   }
-  console.log('pulsedHighOn', pulsedHighOn)
+  return { answer2: Array.from(pulsedLowOn.values()).reduce((a, b) => a * b) }
 }
 
 const day20: Omit<DayConfig, 'year'> = {
@@ -274,23 +206,10 @@ const day20: Omit<DayConfig, 'year'> = {
       onClick: pushButton1000Times,
     },
     {
-      label: 'Activate Module RX',
-      onClick: activateModuleRx,
-    },
-    {
-      label: 'Find Loops',
-      onClick: findLoops
-    },
-    {
-      label: 'Activate Module RX Really',
-      onClick: activateModuleRxReally
-    },
-    {
       label: 'Bespoke Solution',
-      onClick: bespokeSolution
-    }
+      onClick: bespokeSolution,
+    },
   ],
-  extra: () => `Don't press the Activate Module RX button; it'll run for a very long time.`,
   id: 20,
   inputs,
   title: 'Pulse Propagation',

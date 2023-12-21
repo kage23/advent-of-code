@@ -12,7 +12,8 @@ describe('2023 Day 20', () => {
       )
     })
   })
-  describe('Part 2', () => {
+  // There's no sample, so nothing to test here
+  xdescribe('Part 2', () => {
     it('should ', () => {
       // expect(figureOutGoodCombos(inputs.get('DEMO')!).answer2).toEqual(
       //   '167409079868000'
