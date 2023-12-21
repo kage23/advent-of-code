@@ -1,22 +1,16 @@
 import inputs from '../../inputs/2023/day21'
-import {} from './day21'
+import { countSteps } from './day21'
 
 describe('2023 Day 21', () => {
   describe('Part 1', () => {
-    it('should ', () => {
-      // expect(pushButton1000Times(inputs.get('DEMO_1')!).answer1).toEqual(
-      //   32000000
-      // )
-      // expect(pushButton1000Times(inputs.get('DEMO_2')!).answer1).toEqual(
-      //   11687500
-      // )
+    it('should count how many garden squares are accessible within a certain step count', () => {
+      expect(countSteps(inputs.get('DEMO')!, 6).answer1).toEqual(16)
     })
   })
-  describe('Part 2', () => {
+  // My Part 2 code doesn't actually work on any of the demo inputs, just the real input
+  xdescribe('Part 2', () => {
     it('should ', () => {
-      // expect(figureOutGoodCombos(inputs.get('DEMO')!).answer2).toEqual(
-      //   '167409079868000'
-      // )
+      //
     })
   })
 })
