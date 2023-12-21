@@ -6,10 +6,12 @@ type Pulse = 'high' | 'low'
 class SandMachine {
   sendQueue: [string, Pulse, string][] // [from, Pulse, to]
   modules: Map<string, Module>
+  buttonPresses: number
 
   constructor(input: string) {
     this.sendQueue = []
     this.modules = new Map()
+    this.buttonPresses = 0
 
     input.split('\n').forEach((line) => {
       const [id, destinations] = line.split(' -> ')
@@ -31,41 +33,58 @@ class SandMachine {
     this.modules.forEach((module) => {
       module.destinationModules.forEach((destId) => {
         const destModule = this.modules.get(destId)
+        destModule?.inputs.push(module.id)
         if (destModule instanceof Conjunction) {
-          destModule.inputs.push([module.id, 'low'])
+          destModule.memory.push([module.id, 'low'])
         }
       })
     })
+
+    // this.modules.forEach(module => {
+    //   // if (module instanceof FlipFlop) {
+    //     // console.log(`Module ${module.id} inputs:`, module.inputs)
+    //   // }
+    // })
   }
 
-  pushButton() {
+  pushButton(idsToLookForHighFrom?: string[]) {
+    const sawPulses: string[] = []
+    this.buttonPresses++
+    // if (this.buttonPresses % 1000 === 1) console.log(`Button press #${this.buttonPresses} about to happen:`)
     let lowRxPulses = 0
     this.sendQueue.push(['button', 'low', 'broadcaster'])
     while (this.sendQueue.length) {
       const [from, pulse, to] = this.sendQueue.shift()!
+      if (idsToLookForHighFrom?.includes(from) && pulse === 'high') sawPulses.push(from)
       if (pulse === 'high') highPulseCount++
       else lowPulseCount++
       if (pulse === 'low' && to === 'rx') lowRxPulses++
       const module = this.modules.get(to)
       if (module) {
         module.onReceive(pulse, from)
-      } else {
-        console.log(`Module ${to} received a ${pulse} pulse.`)
+      // } else {
+        // console.log(`Module ${to} received a ${pulse} pulse.`)
       }
     }
-    return lowRxPulses
+    return {
+      buttonPresses: this.buttonPresses,
+      lowRxPulses,
+      sawPulses
+    }
   }
 }
 
 class Module {
   destinationModules: string[]
   id: string
+  inputs: string[]
   machine: SandMachine
 
   constructor(id: string, destinationModules: string[], machine: SandMachine) {
     this.id = id
     this.destinationModules = destinationModules
     this.machine = machine
+    this.inputs = []
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
@@ -97,23 +116,24 @@ class FlipFlop extends Module {
 
 // prefix &
 class Conjunction extends Module {
-  inputs: [string, Pulse][]
+  memory: [string, Pulse][]
 
   constructor(id: string, destinationModules: string[], machine: SandMachine) {
     super(id, destinationModules, machine)
 
-    this.inputs = []
+    this.memory = []
   }
 
   onReceive(pulse: Pulse, from: string) {
-    const inputIndex = this.inputs.findIndex(([id]) => id === from)
+    const inputIndex = this.memory.findIndex(([id]) => id === from)
     if (inputIndex === -1) {
-      this.inputs.push([from, pulse])
+      this.memory.push([from, pulse])
     } else {
-      this.inputs[inputIndex][1] = pulse
+      this.memory[inputIndex][1] = pulse
     }
+    // console.log(`Module ${this.id} inputs:`, this.inputs.map(input => input[1]).join(' '))
     if (
-      this.inputs.map(([, pulse]) => pulse).every((pulse) => pulse === 'high')
+      this.memory.map(([, pulse]) => pulse).every((pulse) => pulse === 'high')
     ) {
       this.send('low')
     } else {
@@ -142,7 +162,7 @@ export const resetMachine = (input: string) => {
   lowPulseCount = 0
   highPulseCount = 0
 
-  console.log('Sand Machine', sandMachine)
+  // console.log('Sand Machine', sandMachine)
 
   return {
     specialRender: 'Sand machine reset.',
@@ -164,16 +184,82 @@ export const activateModuleRx = (input: string) => {
   let buttonPushes = 0
   let lowRxPulses = 0
   while (lowRxPulses !== 1) {
-    lowRxPulses = pushButtonOnce().extra
+    lowRxPulses = pushButtonOnce().extra.lowRxPulses
     buttonPushes++
   }
   return { answer2: buttonPushes }
 }
 
+const findLoops = (input: string) => {
+  resetMachine(input)
+  const allLowsAfterButton = new Map<string, number[]>()
+
+  let node = Array.from(sandMachine.modules.values()).find(module => module.destinationModules.includes('rx'))!
+
+  while ((node as Conjunction).memory.length === 1) {
+    node = sandMachine.modules.get((node as Conjunction).memory[0][0])!
+  }
+
+  (node as Conjunction).memory.forEach(([id]) => {
+    allLowsAfterButton.set(id, [0])
+  })
+
+  while (Array.from(allLowsAfterButton.values()).some(x => x.length < 2)) {
+    pushButtonOnce()
+    sandMachine.modules.forEach((module) => {
+      if (module instanceof Conjunction) {
+        const prevAllLows = allLowsAfterButton.get(module.id)
+        if (prevAllLows !== undefined) {
+          if (module.memory.map(([, p]) => p).every(p => p === 'low')) {
+            prevAllLows.push(sandMachine.buttonPresses)
+          }
+        }
+      }
+    })
+  }
+
+  // console.log('allLowsAfterButton', allLowsAfterButton)
+}
+
+const calculateCycle = (module: Module, cycles = 1): number => {
+  if (module instanceof FlipFlop) {
+    // if (module.inputs.length > 1) console.log(`This won't work correctly until I figure out how to handle FlipFlops with multiple inputs`)
+    if (module.inputs.length === 0 || (module.inputs.length === 1 && module.inputs[0] === 'broadcaster')) return 2 * cycles
+    return 2 * calculateCycle(sandMachine.modules.get(module.inputs[0])!, cycles)
+  }
+  return cycles
+}
+
+const calculateCycles = (input: string, moduleId: string) => {
+  resetMachine(input)
+  const module = Array.from(sandMachine.modules.values()).find(module => module.destinationModules.includes(moduleId))
+  if (module) {
+    return calculateCycle(module)
+  }
+}
+
+export const activateModuleRxReally = (input: string) => ({
+  answer2: calculateCycles(input, 'output')
+})
+
+const bespokeSolution = (input: string) => {
+  resetMachine(input)
+  const importantModules = ['jv', 'qs', 'jm', 'pr']
+  const pulsedHighOn = new Map(importantModules.map(id => ([id, -1])))
+  while (Array.from(pulsedHighOn.values()).some(x => x === -1)) {
+    const result = sandMachine.pushButton()
+    importantModules.forEach(id => {
+      if (result.sawPulses.includes(id)) {
+        pulsedHighOn.set(id, result.buttonPresses)
+      }
+    })
+  }
+  console.log('pulsedHighOn', pulsedHighOn)
+}
+
 const day20: Omit<DayConfig, 'year'> = {
-  answer1Text: 'The good parts total value is answer.',
-  answer2Text:
-    'There are answer distinct combinations of ratings that will be accepted.',
+  answer1Text: 'The 1000-press pulse count checksum is answer.',
+  answer2Text: 'It will take answer button presses.',
   buttons: [
     {
       label: 'Reset Sand Machine',
@@ -191,7 +277,20 @@ const day20: Omit<DayConfig, 'year'> = {
       label: 'Activate Module RX',
       onClick: activateModuleRx,
     },
+    {
+      label: 'Find Loops',
+      onClick: findLoops
+    },
+    {
+      label: 'Activate Module RX Really',
+      onClick: activateModuleRxReally
+    },
+    {
+      label: 'Bespoke Solution',
+      onClick: bespokeSolution
+    }
   ],
+  extra: () => `Don't press the Activate Module RX button; it'll run for a very long time.`,
   id: 20,
   inputs,
   title: 'Pulse Propagation',
