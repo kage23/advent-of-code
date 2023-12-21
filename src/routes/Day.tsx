@@ -9,7 +9,6 @@ import { ChangeEvent, ReactNode, useEffect, useState } from 'react'
 type ButtonClickReturn = {
   answer1?: string | number
   answer2?: string | number
-  extra?: any
   specialRender?: ReactNode
 } | void
 

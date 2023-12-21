@@ -156,7 +156,7 @@ export const resetMachine = (input: string) => {
 }
 
 export const pushButtonOnce = () => {
-  return { extra: sandMachine.pushButton() }
+  sandMachine.pushButton()
 }
 
 export const pushButton1000Times = (input: string) => {
