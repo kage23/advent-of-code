@@ -173,6 +173,7 @@ export const pickOneBrickToDisintegrate = (input: string) => {
 export const chooseChainReactionBrick = (input: string) => {
   let area = new Map<string, number>()
 
+  console.time('Parse the input')
   // Set up bricks
   const bricks: Brick[] = input
     .split('\n')
@@ -206,7 +207,9 @@ export const chooseChainReactionBrick = (input: string) => {
       }
     })
     .sort(sortBricks)
+  console.timeEnd('Parse the input')
 
+  console.time('Let the bricks fall and land')
   // Simulate falling
   while (bricks.some(({ falling }) => falling)) {
     const newArea = new Map<string, number>()
@@ -256,7 +259,9 @@ export const chooseChainReactionBrick = (input: string) => {
     bricks.sort(sortBricks)
     area = newArea
   }
+  console.timeEnd('Let the bricks fall and land')
 
+  console.time('Figure out which bricks support / are supported by which')
   // Figure out support
   bricks.forEach((brick) => {
     const { id, squares } = brick
@@ -289,13 +294,16 @@ export const chooseChainReactionBrick = (input: string) => {
     brick.supportedBy = supportedBy
     brick.supporting = supporting
   })
+  console.timeEnd('Figure out which bricks support / are supported by which')
 
-  return {
-    answer2: bricks.reduce(
-      (sum, brick) => sum + disintegrateAndCountFallers(brick.id, bricks),
-      0
-    ),
-  }
+  console.time('Simulate removing each brick and seeing what falls')
+  const answer2 = bricks.reduce(
+    (sum, brick) => sum + disintegrateAndCountFallers(brick.id, bricks),
+    0
+  )
+  console.timeEnd('Simulate removing each brick and seeing what falls')
+
+  return { answer2 }
 }
 
 const day22: Omit<DayConfig, 'year'> = {
