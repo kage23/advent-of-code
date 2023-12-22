@@ -47,7 +47,7 @@ const getRecipe = (
   }
 
   // Get recipe
-  for (let key in recipes) {
+  for (const key in recipes) {
     if (key.startsWith(`${ingredient}-`)) {
       recipeAmountProduced = parseInt(key.split('-')[1])
       recipe = recipes[key]
@@ -78,7 +78,7 @@ const totalOreCostForOrder = (inOrder: Order, recipes: Converter): number => {
     } else {
       const amountNeededOfOrderIngredient =
         order.amount - inventory[order.ingredient]
-      let { recipe, recipeAmountProduced } = getRecipe(
+      const { recipe, recipeAmountProduced } = getRecipe(
         order.ingredient,
         recipes
       )
@@ -113,7 +113,7 @@ export const calculateOreCost = (input: string) => ({
 
 export const buildAsMuchAsPossible = (input: string) => {
   const converter = parseInput(input)
-  let totalOreAvailable = 1000000000000
+  const totalOreAvailable = 1000000000000
 
   let lowerBound = 0
   let upperBound = totalOreAvailable
@@ -126,7 +126,7 @@ export const buildAsMuchAsPossible = (input: string) => {
   let guess = Math.floor(totalOreAvailable / fuelCost)
 
   while (upperBound > lowerBound + 1) {
-    let costOfGuess = totalOreCostForOrder(
+    const costOfGuess = totalOreCostForOrder(
       { amount: guess, ingredient: 'FUEL' },
       converter
     )

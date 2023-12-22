@@ -30,6 +30,7 @@ export class TreeNode<T> {
   getDepth = (): number => this.getPathToHead().length - 1
 
   getPathToHead(): T[] {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let current: TreeNode<T> = this
     const path = [current.value]
     while (current.parent !== undefined) {
