@@ -148,7 +148,6 @@ export const runUntilRepeat = (input: string) => {
 
   return {
     answer2: lcmMoreThanTwoNumbers([xRepeat, yRepeat, zRepeat])
-    // answer2: lcmTwoNumbers(lcmTwoNumbers(xRepeat, yRepeat), zRepeat)
   }
 }
 
