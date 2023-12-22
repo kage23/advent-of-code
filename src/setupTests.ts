@@ -7,11 +7,14 @@ import '@testing-library/jest-dom'
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const logSpy = jest.spyOn(global.console, 'log').mockImplementation(() => {})
 // eslint-disable-next-line @typescript-eslint/no-empty-function
+const timeSpy = jest.spyOn(global.console, 'time').mockImplementation(() => {})
 const groupSpy = jest
-  .spyOn(global.console, 'group')
+.spyOn(global.console, 'group')
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   .mockImplementation(() => {})
 
 afterAll(() => {
   logSpy.mockRestore()
+  timeSpy.mockRestore()
   groupSpy.mockRestore()
 })
