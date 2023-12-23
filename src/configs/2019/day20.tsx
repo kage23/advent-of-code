@@ -1,31 +1,23 @@
-import {
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2019/day20'
+import { DayConfig } from '../../routes/Day'
+import manhattanDistance from '../../utils/manhattanDistance'
+import SLL from '../../utils/SLL'
 
-import SLL from '../utils/SLL'
-import { manhattanDistance } from '../utils/Various'
-
-import INPUT from '../Inputs/2019/Day20'
-
-const parseGridString = (str: string): number[] => str.split(',').map(i => parseInt(i))
-const renderGridString = (pos: number[]): string => pos.join(',')
-
-interface IMap {
-  edgeColumns: number[]
-  edgeRows: number[]
-  grid: IGridSpot[][]
-  portalConnections: Map<string, Map<string, number>>
-  portals: Map<string, string[]>
-}
-
-interface IGridSpot {
+interface GridSpot {
   distanceFromStart: number
   portal: false | string
   spot: string
 }
 
-let map: IMap = {
+interface TheMap {
+  edgeColumns: number[]
+  edgeRows: number[]
+  grid: GridSpot[][]
+  portalConnections: Map<string, Map<string, number>>
+  portals: Map<string, string[]>
+}
+
+let map: TheMap = {
   edgeColumns: [],
   edgeRows: [],
   grid: [],
@@ -33,153 +25,15 @@ let map: IMap = {
   portals: new Map()
 }
 
-const parseInput = (inputKey: string): IMap => {
-  map = {
-    edgeColumns: [],
-    edgeRows: [],
-    grid: [],
-    portalConnections: new Map(),
-    portals: new Map()
-  }
-
-  const getSpotFromInput = ([x, y]: [number, number], inputKey: string): string => {
-    const input = INPUT[inputKey]
-    const width = input.split('').indexOf('\n')
-    const charAt = x + (width * y) + y
-    return input.charAt(charAt)
-  }
-
-  const getPortalName = ([x, y]: [number, number], inputKey: string): string => {
-    const firstLetter = getSpotFromInput([x, y], inputKey)
-    const secondLetterPositions = [
-      [x + 1, y],
-      [x, y + 1]
-    ]
-    const secondLetters = secondLetterPositions.map(([x, y]: number[]) => getSpotFromInput([x, y], inputKey))
-
-    let secondLetterPosition = -1
-    if ('A' <= secondLetters[0] && secondLetters[0] <= 'Z') {
-      secondLetterPosition = 0
-    } else {
-      secondLetterPosition = 1
-    }
-    seenPortals.push(renderGridString(secondLetterPositions[secondLetterPosition]))
-
-    const portalName = `${firstLetter}${secondLetters[secondLetterPosition]}`
-
-    if (!map.grid[y]) map.grid[y] = []
-    map.grid[y][x] = {
-      distanceFromStart: Number.MAX_SAFE_INTEGER,
-      portal: portalName,
-      spot: firstLetter
-    }
-    if (!map.grid[secondLetterPositions[secondLetterPosition][1]]) map.grid[secondLetterPositions[secondLetterPosition][1]] = []
-    map.grid[secondLetterPositions[secondLetterPosition][1]][secondLetterPositions[secondLetterPosition][0]] = {
-      distanceFromStart: Number.MAX_SAFE_INTEGER,
-      portal: portalName,
-      spot: secondLetters[secondLetterPosition]
-    }
-
-    return portalName
-  }
-
-  const getPortalSpot = ([x, y]: [number, number], inputKey: string): string => {
-    const potentialSpots: [number, number][] = [
-      [x, y - 1,],
-      [x, y + 2],
-      [x + 2, y],
-      [x - 1, y]
-    ]
-    for (let i = 0; i < potentialSpots.length; i++) {
-      if (getSpotFromInput(potentialSpots[i], inputKey) === '.') {
-        return renderGridString(potentialSpots[i])
-      }
-    }
-    throw new Error('fuck')
-  }
-
-  const seenPortals: string[] = []
-
-  let x = 0
-  let y = 0
-
-  let width = 0
-  let height = 0
-
-  INPUT[inputKey].split('').forEach(char => {
-    if (!map.grid[y]) map.grid[y] = []
-
-    if (!seenPortals.includes(renderGridString([x, y]))) {
-      if (char === '\n') {
-        y++
-        if (!width) width = x
-        x = -1
-      }
-      else if (char === '.' || char === '#' || char === ' ') {
-        const gridSpot: IGridSpot = map.grid[y][x] || {
-          distanceFromStart: Number.MAX_SAFE_INTEGER,
-          portal: false,
-          spot: char
-        }
-        map.grid[y][x] = gridSpot
-      }
-      else if ('A' <= char && char <= 'Z') {
-        const portalName = getPortalName([x, y], inputKey)
-        const portalSpot = getPortalSpot([x, y], inputKey)
-        const [px, py] = parseGridString(portalSpot)
-        const portalEnds: string[] = map.portals.get(portalName) || []
-        portalEnds.push(renderGridString([px, py]))
-        map.portals.set(portalName, portalEnds)
-      }
-    }
-    x++
-  })
-
-  height = map.grid.length
-
-  map.edgeColumns = [2, width - 3]
-  map.edgeRows = [2, height - 3]
-
-  const portalEndsForEach = (portalEnd: string, portalName: string) => {
-    const [pex, pey] = parseGridString(portalEnd)
-    const name = `${portalName}${isOuterLayer(pex, pey) ? '-' : '+'}`
-    for (let [otherPortalName, otherPortalEnds] of map.portals) {
-      if (portalName !== otherPortalName) {
-        otherPortalEnds.forEach(otherPortalEnd => { otherPortalEndsForEach(otherPortalEnd, name, otherPortalName, portalEnd) }
-        )
-      }
-    }
-    if (portalName !== 'AA' && portalName !== 'ZZ') {
-      const prevConnections = map.portalConnections.get(name) || new Map()
-      const otherEnd = `${portalName}${name.slice(-1) === '-' ? '+' : '-'}`
-      prevConnections.set(otherEnd, 1)
-      map.portalConnections.set(name, prevConnections)
-    }
-  }
-  const otherPortalEndsForEach = (otherPortalEnd: string, name: string, otherPortalName: string, portalEnd: string) => {
-    const prevConnections = map.portalConnections.get(name) || new Map()
-    const [opex, opey] = parseGridString(otherPortalEnd)
-    const otherPortalEndName = `${otherPortalName}${isOuterLayer(opex, opey) ? '-' : '+'}`
-    const pathLength = findShortestPathLength(`${portalEnd},0`, `${otherPortalEnd},0`, false, false)
-    if (pathLength && pathLength < Number.MAX_SAFE_INTEGER) {
-      prevConnections.set(otherPortalEndName, pathLength)
-      map.portalConnections.set(name, prevConnections)
-    }
-  }
-
-  for (let [portalName, portalEnds] of map.portals) {
-    portalEnds.forEach(portalEnd => { portalEndsForEach(portalEnd, portalName) })
-  }
-
-  return map
-}
+const parseGridString = (str: string): number[] => str.split(',').map(i => parseInt(i))
+const renderGridString = (pos: number[]): string => pos.join(',')
 
 const isOuterLayer = (x: number, y: number): boolean =>
   map.edgeColumns.includes(x) || map.edgeRows.includes(y)
 
 const findShortestPathLength = (start: string, end: string, portals = true, recursive?: boolean): number | undefined => {
   // Each search node has current position and steps to reach that position.
-  interface ISearchNode {
+  interface SearchNode {
     distance: number
     position: string
   }
@@ -245,7 +99,7 @@ const findShortestPathLength = (start: string, end: string, portals = true, recu
   const searchQueue = new SLL({
     distance: 0,
     position: start
-  } as ISearchNode)
+  } as SearchNode)
   // Make a cache of shortest known distances to each position (Map<positionString, distanceNumber>). This functions as the VISITED SEARCH NODES list.
   const visitedDistances: Map<string, number> = new Map()
   // Make a shortestKnownPathLength set to Number.MAX
@@ -253,7 +107,7 @@ const findShortestPathLength = (start: string, end: string, portals = true, recu
 
   while (searchQueue.length) {
     // Shift the first node off the search queue
-    const currentNode: ISearchNode = searchQueue.shift()
+    const currentNode: SearchNode = searchQueue.shift()!
     // For each node...
     if (currentNode.position === end) {
       // If it's the end node, you have a valid path.
@@ -275,7 +129,7 @@ const findShortestPathLength = (start: string, end: string, portals = true, recu
           const adjacents = getValidAdjacents(currentNode.position)
           adjacents.forEach(adjacent => {
             // Sort each valid adjacent into the search queue, priority being shortest current distance, second priority being manhattan distance to the end.
-            const adjacentSearchNode: ISearchNode = {
+            const adjacentSearchNode: SearchNode = {
               distance: currentNode.distance + 1,
               position: adjacent
             }
@@ -311,6 +165,157 @@ const findShortestPathLength = (start: string, end: string, portals = true, recu
   return shortestKnownPathLength
 }
 
+const parseInput = (input: string): TheMap => {
+  map = {
+    edgeColumns: [],
+    edgeRows: [],
+    grid: [],
+    portalConnections: new Map(),
+    portals: new Map()
+  }
+
+  const getSpotFromInput = ([x, y]: [number, number]): string => {
+    const width = input.split('').indexOf('\n')
+    const charAt = x + (width * y) + y
+    return input.charAt(charAt)
+  }
+
+  const getPortalName = ([x, y]: [number, number]): string => {
+    const firstLetter = getSpotFromInput([x, y])
+    const secondLetterPositions = [
+      [x + 1, y],
+      [x, y + 1]
+    ]
+    const secondLetters = secondLetterPositions.map(([x, y]: number[]) => getSpotFromInput([x, y]))
+
+    let secondLetterPosition = -1
+    if ('A' <= secondLetters[0] && secondLetters[0] <= 'Z') {
+      secondLetterPosition = 0
+    } else {
+      secondLetterPosition = 1
+    }
+    seenPortals.push(renderGridString(secondLetterPositions[secondLetterPosition]))
+
+    const portalName = `${firstLetter}${secondLetters[secondLetterPosition]}`
+
+    if (!map.grid[y]) map.grid[y] = []
+    map.grid[y][x] = {
+      distanceFromStart: Number.MAX_SAFE_INTEGER,
+      portal: portalName,
+      spot: firstLetter
+    }
+    if (!map.grid[secondLetterPositions[secondLetterPosition][1]]) map.grid[secondLetterPositions[secondLetterPosition][1]] = []
+    map.grid[secondLetterPositions[secondLetterPosition][1]][secondLetterPositions[secondLetterPosition][0]] = {
+      distanceFromStart: Number.MAX_SAFE_INTEGER,
+      portal: portalName,
+      spot: secondLetters[secondLetterPosition]
+    }
+
+    return portalName
+  }
+
+  const getPortalSpot = ([x, y]: [number, number]): string => {
+    const potentialSpots: [number, number][] = [
+      [x, y - 1,],
+      [x, y + 2],
+      [x + 2, y],
+      [x - 1, y]
+    ]
+    for (let i = 0; i < potentialSpots.length; i++) {
+      if (getSpotFromInput(potentialSpots[i]) === '.') {
+        return renderGridString(potentialSpots[i])
+      }
+    }
+    throw new Error('fuck')
+  }
+
+  const seenPortals: string[] = []
+
+  let x = 0
+  let y = 0
+
+  let width = 0
+  let height = 0
+
+  input.split('').forEach(char => {
+    if (!map.grid[y]) map.grid[y] = []
+
+    if (!seenPortals.includes(renderGridString([x, y]))) {
+      if (char === '\n') {
+        y++
+        if (!width) width = x
+        x = -1
+      }
+      else if (char === '.' || char === '#' || char === ' ') {
+        const gridSpot: GridSpot = map.grid[y][x] || {
+          distanceFromStart: Number.MAX_SAFE_INTEGER,
+          portal: false,
+          spot: char
+        }
+        map.grid[y][x] = gridSpot
+      }
+      else if ('A' <= char && char <= 'Z') {
+        const portalName = getPortalName([x, y])
+        const portalSpot = getPortalSpot([x, y])
+        const [px, py] = parseGridString(portalSpot)
+        const portalEnds: string[] = map.portals.get(portalName) || []
+        portalEnds.push(renderGridString([px, py]))
+        map.portals.set(portalName, portalEnds)
+      }
+    }
+    x++
+  })
+
+  height = map.grid.length
+
+  map.edgeColumns = [2, width - 3]
+  map.edgeRows = [2, height - 3]
+
+  const portalEndsForEach = (portalEnd: string, portalName: string) => {
+    const [pex, pey] = parseGridString(portalEnd)
+    const name = `${portalName}${isOuterLayer(pex, pey) ? '-' : '+'}`
+    for (const [otherPortalName, otherPortalEnds] of map.portals) {
+      if (portalName !== otherPortalName) {
+        otherPortalEnds.forEach(otherPortalEnd => { otherPortalEndsForEach(otherPortalEnd, name, otherPortalName, portalEnd) }
+        )
+      }
+    }
+    if (portalName !== 'AA' && portalName !== 'ZZ') {
+      const prevConnections = map.portalConnections.get(name) || new Map()
+      const otherEnd = `${portalName}${name.slice(-1) === '-' ? '+' : '-'}`
+      prevConnections.set(otherEnd, 1)
+      map.portalConnections.set(name, prevConnections)
+    }
+  }
+  const otherPortalEndsForEach = (otherPortalEnd: string, name: string, otherPortalName: string, portalEnd: string) => {
+    const prevConnections = map.portalConnections.get(name) || new Map()
+    const [opex, opey] = parseGridString(otherPortalEnd)
+    const otherPortalEndName = `${otherPortalName}${isOuterLayer(opex, opey) ? '-' : '+'}`
+    const pathLength = findShortestPathLength(`${portalEnd},0`, `${otherPortalEnd},0`, false, false)
+    if (pathLength && pathLength < Number.MAX_SAFE_INTEGER) {
+      prevConnections.set(otherPortalEndName, pathLength)
+      map.portalConnections.set(name, prevConnections)
+    }
+  }
+
+  for (const [portalName, portalEnds] of map.portals) {
+    portalEnds.forEach(portalEnd => { portalEndsForEach(portalEnd, portalName) })
+  }
+
+  return map
+}
+
+const parseTheInput = (input: string) => {
+  console.time('Parse the input')
+
+  map.grid.length = 0
+  map.portals.clear()
+
+  map = parseInput(input)
+
+  console.timeEnd('Parse the input')
+}
+
 const findShortestRecursiveNodePath = (): number | undefined => {
   interface ISearchNode {
     distance: number
@@ -326,7 +331,7 @@ const findShortestRecursiveNodePath = (): number | undefined => {
   const visitedNodes: Map<string, true> = new Map()
 
   while (searchQueue.length) {
-    const currentNode: ISearchNode = searchQueue.shift()
+    const currentNode: ISearchNode = searchQueue.shift()!
     if (!visitedNodes.get(currentNode.position)) {
       visitedNodes.set(currentNode.position, true)
       const zIndex = parseInt(currentNode.position.slice(3))
@@ -372,89 +377,50 @@ const findShortestRecursiveNodePath = (): number | undefined => {
   }
 }
 
-const renderPortalList = (): string => {
-  let portalList = ''
-  Array.from(map.portals.entries()).forEach(([portalName, portalEnds]) => {
-    portalList += `${portalName}: ${portalEnds.map(p => `[${p}]`).join(', ')}\n`
-  })
-  return portalList
-}
+export const findShortestPath = (input: string) => {
+  parseTheInput(input)
 
-const renderDay = (dayConfig: IDayConfig, inputKey: string) => {
-  return (
-    <div className="render-box">
-      <div>
-        <h3>INPUT:</h3>
-        <pre>{dayConfig.INPUT[inputKey]}</pre>
-      </div>
-      <div className="render-box--left-margin">
-        <h3>Portals:</h3>
-        <pre>{renderPortalList()}</pre>
-      </div>
-    </div>
-  )
-}
+  const startNode = map.portals.get('AA')
+  const endNode = map.portals.get('ZZ')
+  if (!startNode || !endNode) throw new Error('fuck')
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Parse Input',
-    onClick: (inputKey: string) => {
-      map.grid.length = 0
-      map.portals.clear()
+  console.time('Pathing time')
+  const path = findShortestPathLength(`${startNode[0]},0`, `${endNode[0]},0`)
+  console.timeEnd('Pathing time')
 
-      const startTime = new Date().getTime()
-      map = parseInput(inputKey)
-      console.log(`Total parsing time: ${new Date().getTime() - startTime}.`)
-
-      return {}
-    }
-  },
-  {
-    label: 'Find Shortest Path',
-    onClick: () => {
-      const startNode = map.portals.get('AA')
-      const endNode = map.portals.get('ZZ')
-      if (!startNode || !endNode) throw new Error('fuck')
-
-      const startTime = new Date().getTime()
-      const path = findShortestPathLength(`${startNode[0]},0`, `${endNode[0]},0`)
-      console.log(`Total pathing time: ${new Date().getTime() - startTime}.`)
-
-      return {
-        answer1: path ? path.toString() : ''
-      }
-    }
-  },
-  {
-    label: 'Find Shortest Path in Recursive Maze',
-    onClick: () => {
-      const startTime = new Date().getTime()
-      const path = findShortestRecursiveNodePath()
-      console.log(`Total pathing time: ${new Date().getTime() - startTime}.`)
-
-      return {
-        answer2: path ? path.toString() : ''
-      }
-    }
+  return {
+    answer1: path
   }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The shortest path is <code>{answer}</code> steps long.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The shortest path through the recursive version is <code>{answer}</code> steps long.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 20,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => renderDay(dayConfig, inputKey),
-  title: 'Donut Maze'
 }
 
-export default config
+export const findShortestPathRecursive = (input: string) => {
+  parseTheInput(input)
+
+  console.time('Recursive pathing time')
+  const path = findShortestRecursiveNodePath()
+  console.timeEnd('Recursive pathing time')
+
+  return {
+    answer2: path
+  }
+}
+
+const day20: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The shortest path is answer steps long.',
+  answer2Text: 'The shortest path through the recursive version is answer steps long.',
+  buttons: [
+    {
+      label: 'Find Shortest Path',
+      onClick: findShortestPath
+    },
+    {
+      label: 'Find Shortest Path in Recursive Maze',
+      onClick: findShortestPathRecursive
+    }
+  ],
+  id: 20,
+  inputs,
+  title: 'Donut Maze',
+}
+
+export default day20
