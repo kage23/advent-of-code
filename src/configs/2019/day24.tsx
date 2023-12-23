@@ -22,9 +22,13 @@ const getXYFromIndex = (index: number): [number, number] => {
   return [x, y]
 }
 
-const getIndexFromXY = ([x, y]: [number, number]): number => (y * SIZE) + x
+const getIndexFromXY = ([x, y]: [number, number]): number => y * SIZE + x
 
-const countAdjacentBugs = (index: number, part2?: boolean, level?: number): number => {
+const countAdjacentBugs = (
+  index: number,
+  part2?: boolean,
+  level?: number
+): number => {
   const [x, y] = getXYFromIndex(index)
   if (part2) {
     if (level === undefined) throw new Error('fuck')
@@ -32,7 +36,7 @@ const countAdjacentBugs = (index: number, part2?: boolean, level?: number): numb
       [x - 1, y],
       [x + 1, y],
       [x, y - 1],
-      [x, y + 1]
+      [x, y + 1],
     ].reduce((list, [ax, ay]) => {
       if (ax < 0) {
         list.push([1, 2, level - 1])
@@ -85,13 +89,10 @@ const countAdjacentBugs = (index: number, part2?: boolean, level?: number): numb
       [x - 1, y],
       [x + 1, y],
       [x, y - 1],
-      [x, y + 1]
+      [x, y + 1],
     ]
     return adjacents.filter(([ax, ay]) => {
-      if (
-        ax < 0 || ax >= SIZE
-        || ay < 0 || ay >= SIZE
-      ) return false
+      if (ax < 0 || ax >= SIZE || ay < 0 || ay >= SIZE) return false
       return field.charAt(getIndexFromXY([ax, ay])) === '#'
     }).length
   }
@@ -102,7 +103,7 @@ const advanceOneMinute = (inField: string, part2?: boolean, level?: number) => {
   let newField = ''
 
   for (let i = 0; i < length; i++) {
-    if (i === 12) {
+    if (part2 && i === 12) {
       newField += '?'
     } else {
       const char = inField.charAt(i)
@@ -121,17 +122,39 @@ const advanceOneMinute = (inField: string, part2?: boolean, level?: number) => {
   return newField
 }
 
+const renderField = (inField: string) => {
+  let render = ''
+  const { length } = inField
+  for (let i = 0; i < length; i++) {
+    const char = inField.charAt(i)
+    const [x, y] = getXYFromIndex(i)
+    if (x % SIZE === 0 && y !== 0) render += '\n'
+    render += char
+  }
+  return render
+}
+
 const oneMinuteAdvance = () => {
   field = advanceOneMinute(field)
 
   minutes++
+
+  return {
+    specialRender: () => (
+      <>
+        <h3>Minutes passed: {minutes}</h3>
+        <pre>{renderField(field)}</pre>
+      </>
+    ),
+  }
 }
 
-const calculateBiodiversity = (): number => field.split('').reduce((rating, char, index) => {
-  if (char === '#') {
-    return rating + Math.pow(2, index)
-  } else return rating
-}, 0)
+const calculateBiodiversity = (): number =>
+  field.split('').reduce((rating, char, index) => {
+    if (char === '#') {
+      return rating + Math.pow(2, index)
+    } else return rating
+  }, 0)
 
 export const advanceUntilRepeat = () => {
   while (!statesSeen.get(field)) {
@@ -140,7 +163,7 @@ export const advanceUntilRepeat = () => {
   }
 
   return {
-    answer1: calculateBiodiversity()
+    answer1: calculateBiodiversity(),
   }
 }
 
@@ -167,11 +190,13 @@ const advanceOneMinutePart2 = () => {
   fieldPart2 = newFieldPart2
 }
 
-const countTotalBugs = (): number => (
-  Array.from(fieldPart2.values()).reduce((totalCount, localField) => (
-    totalCount + localField.split('').filter((x, i) => x === '#' && i !== 12).length
-  ), 0)
-)
+const countTotalBugs = (): number =>
+  Array.from(fieldPart2.values()).reduce(
+    (totalCount, localField) =>
+      totalCount +
+      localField.split('').filter((x, i) => x === '#' && i !== 12).length,
+    0
+  )
 
 const oneMinuteAdvance2 = () => {
   advanceOneMinutePart2()
@@ -179,7 +204,7 @@ const oneMinuteAdvance2 = () => {
   minutes++
 
   return {
-    answer2: countTotalBugs()
+    answer2: countTotalBugs(),
   }
 }
 
@@ -191,7 +216,7 @@ export const advanceTo200 = (_: string, time = 200) => {
   }
 
   return {
-    answer2: countTotalBugs()
+    answer2: countTotalBugs(),
   }
 }
 
@@ -201,32 +226,32 @@ const day24: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Reset',
-      onClick: reset
+      onClick: reset,
     },
     {
       label: 'Advance One Minute',
-      onClick: oneMinuteAdvance
+      onClick: oneMinuteAdvance,
     },
     {
       label: 'Advance Until Repeat',
-      onClick: advanceUntilRepeat
+      onClick: advanceUntilRepeat,
     },
     {
       label: 'Reset for Part Two',
-      onClick: reset2
+      onClick: reset2,
     },
     {
       label: 'Advance One Minute, Part 2',
-      onClick: oneMinuteAdvance2
+      onClick: oneMinuteAdvance2,
     },
     {
       label: 'Advance to 10 Minutes, Part 2',
-      onClick: () => advanceTo200('', 10)
+      onClick: () => advanceTo200('', 10),
     },
     {
       label: 'Advance to 200 Minutes, Part 2',
-      onClick: advanceTo200
-    }
+      onClick: advanceTo200,
+    },
   ],
   id: 24,
   inputs,
