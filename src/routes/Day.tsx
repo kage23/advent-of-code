@@ -140,6 +140,15 @@ const Day = () => {
           href={`https://adventofcode.com/${year.id}/day/${id}`}
         >
           View Challenge
+        </a>{' '}
+        ---{' '}
+        <a
+          className={styles.link}
+          rel="noreferrer"
+          target="_blank"
+          href={`https://adventofcode.com/${year.id}/day/${id}/input`}
+        >
+          Get Input
         </a>
       </h2>
       {extra && <div>{extra()}</div>}
