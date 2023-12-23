@@ -26,7 +26,7 @@ import day23 from './day23'
 import day24 from './day24'
 import day25 from './day25'
 
-const year2023: YearConfig = {
+const year2019: YearConfig = {
   cover,
   days: new Map([
     [1, day01],
@@ -60,4 +60,4 @@ const year2023: YearConfig = {
   id: 2019,
 }
 
-export default year2023
+export default year2019
