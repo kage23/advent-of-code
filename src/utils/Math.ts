@@ -39,3 +39,6 @@ export const reduceFraction = (numerator: number, denominator: number) => {
   const gcd = gcdFunc(numerator, denominator)
   return [numerator / gcd, denominator / gcd]
 }
+
+export const binToDec = (x: string): number => parseInt(x, 2)
+export const decToBin = (x: number): string => x.toString(2)
