@@ -12,6 +12,7 @@ interface Equation {
   x: number
   y: number
 }
+
 // y = m * x + b
 const getEquation = (
   position: [number, number],
@@ -129,13 +130,11 @@ export const lookForCrossingPaths = (
 
 export const throwTheRock = (
   input: string,
-  // testArea = [200000000000000, 400000000000000],
   // We'll assume a possible velocity range of -1000 to 1000, based on the input
   velocityRange = [-1000, 1000]
 ) => {
   const hailstones: Hailstone[] = input
     .split('\n')
-    // .slice(0, 4)
     .map((line) => {
       const [position, velocity] = line.split(' @ ')
       const [px, py, pz] = position.split(', ').map(Number)
@@ -144,15 +143,13 @@ export const throwTheRock = (
     })
 
   // Solve x and y first, ignoring z
+  console.time('Solve for x and y')
   let rx: number | undefined
   let ry: number | undefined
   let rvx: number | undefined
   let rvy: number | undefined
   vxLoop: for (let vx = velocityRange[0]; vx <= velocityRange[1]; vx++) {
     vyLoop: for (let vy = velocityRange[0]; vy <= velocityRange[1]; vy++) {
-      // console.log('vx, vy', vx, vy)
-      // eslint-disable-next-line no-debugger
-      // if (vx === -3 && vy === 1) debugger
       const adjustedHailstones: {
         position: [number, number]
         velocity: [number, number]
@@ -164,8 +161,6 @@ export const throwTheRock = (
       let intersectionPoint: string | undefined
       for (let i = 0; i < adjustedHailstones.length; i++) {
         for (let j = i + 1; j < adjustedHailstones.length; j++) {
-          // eslint-disable-next-line no-debugger
-          // if (j === 4 && i === 3 && vy === 1 && vx === -3) debugger
           const equationI = getEquation(
             adjustedHailstones[i].position,
             adjustedHailstones[i].velocity
@@ -177,9 +172,6 @@ export const throwTheRock = (
           // We only need to check the intersection if the m's and b's are actually different
           if (equationI.b !== equationJ.b || equationI.m !== equationJ.m) {
             const intersection = findIntersection(equationI, equationJ)
-            // console.log(`hailstones ${i} ${j} intersection: ${intersection}`)
-            // eslint-disable-next-line no-debugger
-            // if (isNaN(intersection[0]) || isNaN(intersection[1])) debugger
             if (
               // NaN means there wasn't an intersection
               (isNaN(intersection[0]) || isNaN(intersection[1])) ||
@@ -192,29 +184,22 @@ export const throwTheRock = (
               if (intersectionPoint === undefined) {
                 intersectionPoint = intersection.join(',')
               } else if (intersection.join(',') !== intersectionPoint) {
-                // break vyLoop
                 continue vyLoop
               }
             }
           }
         }
-        // if (intersectionPoint === undefined) {
-        //   intersectionPoint = intersection.join(',')
-        // } else if (intersection.join(',') !== intersectionPoint) {
-        //   break vyLoop
-        // }
       }
       if (intersectionPoint === undefined) throw new Error('fuck')
-      // // if (intersectionPoints.size === 1) {
       const thePoint = intersectionPoint.split(',').map(Number)
       rx = thePoint[0]
       ry = thePoint[1]
       rvx = vx
       rvy = vy
       break vxLoop
-      // }
     }
   }
+  console.timeEnd('Solve for x and y')
 
   if (
     rx === undefined ||
@@ -228,6 +213,7 @@ export const throwTheRock = (
 
   // Now that we've got the x and y vectors, we need to get the z
   // This is going to be similar to getting the x and y, we just brute force it :P
+  console.time('Solve for z')
   let rz: number | undefined
   let rvz: number | undefined
   vzLoop:
@@ -267,7 +253,6 @@ export const throwTheRock = (
             if (intersectionPoint === undefined) {
               intersectionPoint = intersection.join(',')
             } else if (intersection.join(',') !== intersectionPoint) {
-              // break vyLoop
               continue vzLoop
             }
           }
@@ -280,76 +265,13 @@ export const throwTheRock = (
     rvz = vz
     break vzLoop
   }
+  console.timeEnd('Solve for z')
 
   if (rz === undefined || rvz === undefined) throw new Error('fuck')
 
   console.log(rz, rvz)
 
   return { answer2: rx + ry + rz }
-
-  // X Axis
-  // for (
-  //   let velocityOffset = velocityRange[0];
-  //   velocityOffset <= velocityRange[1];
-  //   velocityOffset++
-  // ) {
-  //   const adjustedHailstoneXs = hailstones.map(({ position, velocity }) => ({
-  //     position: position[0],
-  //     velocity: velocity[0] - velocityOffset,
-  //   }))
-  //   // We have two axes, x and time. So we can do equations.
-  //   // If all hailstones intersect at any point (and they're integers), that's our rock's x.
-  //   let px: number | undefined
-  //   let vx: number | undefined
-  //   const hailstone1 = adjustedHailstoneXs[0]
-  //   const hailstone2 = adjustedHailstoneXs[1]
-  //   const hailstone3 = adjustedHailstoneXs[2]
-  //   // We'll treat x-axis as x and time as y
-  //   const equation1 = getEquation(
-  //     [hailstone1.position, 0],
-  //     [hailstone1.velocity, 1]
-  //   )
-  //   const equation2 = getEquation(
-  //     [hailstone2.position, 0],
-  //     [hailstone2.velocity, 1]
-  //   )
-  //   const equation3 = getEquation(
-  //     [hailstone3.position, 0],
-  //     [hailstone3.velocity, 1]
-  //   )
-  //   const intersection12 = findIntersection(equation1, equation2)
-  //   const intersection13 = findIntersection(equation1, equation3)
-  //   const intersection23 = findIntersection(equation2, equation3)
-  //   // intersection = [x point of intersect, time of intersect]
-  //   if (
-  //     // so we need to make sure they're both integers,
-  //     intersection12[0] === Math.floor(intersection12[0]) &&
-  //     intersection12[1] === Math.floor(intersection12[1]) &&
-  //     // and intersection[0] is in the test range,
-  //     intersection12[0] >= testArea[0] &&
-  //     intersection12[0] <= testArea[1] &&
-  //     // and intersection[1] is greater than zero
-  //     intersection12[1] > 0
-  //   ) {
-  //     // if we meet those conditions, the current velocityOffset and
-  //     // the x point of intersect represent our rock
-  //     px = intersection12[0]
-  //     vx = velocityOffset
-  //   }
-  // }
-
-  // There are rocks that are parallel in each dimension; we might use that
-  // const xVelocities = new Set<number>()
-  // const yVelocities = new Set<number>()
-  // const zVelocities = new Set<number>()
-  // hailstones.forEach(({ velocity: [x, y, z] }) => {
-  //   xVelocities.add(x)
-  //   yVelocities.add(y)
-  //   zVelocities.add(z)
-  // })
-  // console.log('xVelocities', xVelocities)
-  // console.log('yVelocities', yVelocities)
-  // console.log('zVelocities', zVelocities)
 }
 
 const day24: Omit<DayConfig, 'year'> = {
@@ -366,7 +288,7 @@ const day24: Omit<DayConfig, 'year'> = {
     },
     {
       label: 'Throw the Rock (Demo)',
-      onClick: (input) => throwTheRock(input, /* [7, 27], */ [-4, 4]),
+      onClick: (input) => throwTheRock(input, [-5, 5]),
     },
     {
       label: 'Throw the Rock',
