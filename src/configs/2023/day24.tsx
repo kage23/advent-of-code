@@ -128,11 +128,9 @@ export const lookForCrossingPaths = (
   return { answer1: count }
 }
 
-export const throwTheRock = (
-  input: string,
-  // We'll assume a possible velocity range of -1000 to 1000, based on the input
-  velocityRange = [-1000, 1000]
-) => {
+export const throwTheRockDemo = (input: string) => {
+  const velocityRange = [-5, 5]
+
   const hailstones: Hailstone[] = input
     .split('\n')
     .map((line) => {
@@ -274,6 +272,83 @@ export const throwTheRock = (
   return { answer2: rx + ry + rz }
 }
 
+// I'm not proud of this; the next few functions are just copied from https://pastebin.com/gzRpVNU1
+// Which I found from redditor Goues after trying other stuff like messing with bigints and Z3
+// It's the same principle as I tried, just brute forcing it basically, but being smarter about
+// the way you go through the brute force, and using matrix math that I don't really understand
+// to find the intersection points.
+const findLineLambda = (a: number, b: number, c: number, d: number, p: number, q: number, r: number, s: number) => {
+  const det = (c - a) * (s - q) - (r - p) * (d - b)
+  if (det === 0) return null
+  return Math.round(((s - q) * (r - a) + (p - r) * (s - b)) / det)
+}
+
+const findIntersectionPoint = (a: { position: number[], velocity: number[] }, b: { position: number[], velocity: number[] }) => {
+  const lambda = findLineLambda(
+    a.position[0], a.position[1], a.position[0] + a.velocity[0], a.position[1] + a.velocity[1],
+    b.position[0], b.position[1], b.position[0] + b.velocity[0], b.position[1] + b.velocity[1],
+  )
+  if (lambda === null) return null
+
+  const f = a.position[0] + lambda * a.velocity[0]
+  const g = a.position[1] + lambda * a.velocity[1]
+  return [f, g]
+}
+
+const findCommonIntersection = (v: [number, number], hailstones: Hailstone[], secondDimension: 'y' | 'z') => {
+  let viable = true
+  let current: number[] | undefined
+  const adjustedHailstones = hailstones.map(({ position, velocity }) => {
+    const xv = velocity[0] + v[0]
+    const p2 = secondDimension === 'y' ? position[1] : position[2]
+    const v2 = secondDimension === 'y' ? velocity[1] + v[1] : velocity[2] + v[1]
+    return { position: [position[0], p2], velocity: [xv, v2] }
+  })
+  for (let i = 0; i < adjustedHailstones.length; i++) {
+    for (let j = i + 1; j < adjustedHailstones.length; j++) {
+      if (!viable) continue
+      const point = findIntersectionPoint(adjustedHailstones[i], adjustedHailstones[j])
+      if (point === null) continue
+      if (!current) current = point
+
+      viable = point[0] === current![0] && point[1] === current![1]
+    }
+  }
+  if (!viable) return false
+  return current
+}
+
+export const throwTheRock = (input: string) => {
+  const hailstones: Hailstone[] = input
+  .split('\n')
+  .slice(0, 10)
+  .map((line) => {
+    const [position, velocity] = line.split(' @ ')
+    const [px, py, pz] = position.split(', ').map(Number)
+    const [vx, vy, vz] = velocity.split(', ').map(Number)
+    return { position: [px, py, pz], velocity: [vx, vy, vz] }
+  })
+
+  for (let x = 0; x <= Infinity; x++) {
+    for (let y = 0; y <= x; y++) {
+      for (const [sx, sy] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+        // Check for an intersection
+        const xy = findCommonIntersection([x * sx, y * sy], hailstones, 'y')
+        if (!xy) continue
+
+        for (let z = 0; z <= Infinity; z++) {
+          for (const sz of [1, -1]) {
+            // If there's an xz intersection, we've found the answer
+            const xz = findCommonIntersection([x * sx, z * sz], hailstones, 'z')
+            if (!xz) continue
+            return { answer2: xy[0] + xy[1] + xz[1] }
+          }
+        }
+      }
+    }
+  }
+}
+
 const day24: Omit<DayConfig, 'year'> = {
   answer1Text: `answer hailstones' paths will cross in the test area.`,
   answer2Text: `The sum of the rock's starting coords is answer.`,
@@ -288,7 +363,7 @@ const day24: Omit<DayConfig, 'year'> = {
     },
     {
       label: 'Throw the Rock (Demo)',
-      onClick: (input) => throwTheRock(input, [-5, 5]),
+      onClick: throwTheRockDemo,
     },
     {
       label: 'Throw the Rock',
