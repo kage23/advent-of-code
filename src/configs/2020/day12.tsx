@@ -53,7 +53,7 @@ export const followNavigationInstructions = (inputRaw: string) => {
         const currentFacingIndex = directionsTurningRight.findIndex(
           (x) => x === facing
         )
-        let newFacingIndex =
+        const newFacingIndex =
           (currentFacingIndex + (amount === 90 ? 1 : amount === 180 ? 2 : 3)) %
           directionsTurningRight.length
         facing = directionsTurningRight[newFacingIndex]
