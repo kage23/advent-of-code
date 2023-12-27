@@ -1,9 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-import INPUT from '../Inputs/2020/Day18'
+import inputs from '../../inputs/2020/day18'
+import { DayConfig } from '../../routes/Day'
 
 const solveProblem = (problem: string): number => {
   let ongoing = 0
@@ -53,6 +49,14 @@ const solveProblem = (problem: string): number => {
   }
 
   return ongoing
+}
+
+export const calculateEachLine = (input: string) => {
+  const problems = input.split('\n')
+
+  return {
+    answer1: problems.reduce((sum, problem) => sum + solveProblem(problem), 0)
+  }
 }
 
 const solveProblem__v2 = (problem: string): number => {
@@ -146,47 +150,32 @@ const reduceParens = (problem: string): string => {
   return problem
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Calculate Each Line',
-    onClick: (inputKey: string) => {
-      const problems = INPUT[inputKey].split('\n')
+export const properlyCalculateEachLine = (input: string) => {
+  const problems = input.split('\n')
 
-      return {
-        answer1: problems.reduce((sum, problem) => sum + solveProblem(problem), 0).toString()
-      }
-    }
-  },
-  {
-    label: 'Properly Calculate Each Line',
-    onClick: (inputKey: string) => {
-      const problems = INPUT[inputKey].split('\n')
-
-      return {
-        answer2: problems
-          .map(reduceParens)
-          .reduce((sum, problem) => sum + solveProblem__v2(problem), 0).toString()
-      }
-    }
+  return {
+    answer2: problems
+      .map(reduceParens)
+      .reduce((sum, problem) => sum + solveProblem__v2(problem), 0)
   }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The sum of the answers from each line is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The sum of the answers from each line when solved properly is <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 18,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Operation Order'
 }
 
-export default config
+const day18: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The sum of the answers from each line is answer.',
+  answer2Text: 'The sum of the answers from each line when solved properly is answer.',
+  buttons: [
+    {
+      label: 'Calculate Each Line',
+      onClick: calculateEachLine
+    },
+    {
+      label: 'Properly Calculate Each Line',
+      onClick: properlyCalculateEachLine
+    },
+  ],
+  id: 18,
+  inputs,
+  title: 'Operation Order',
+}
+
+export default day18
