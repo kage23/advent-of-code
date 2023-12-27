@@ -1,9 +1,9 @@
 import inputs from '../../inputs/2018/day14'
 import { DayConfig } from '../../routes/Day'
-import DLL, { IDLLNode } from '../../utils/DLL'
+import DLL, { DLLNode } from '../../utils/DLL'
 
 type RecipeList = DLL<number>
-type RecipeNode = IDLLNode<number>
+type RecipeNode = DLLNode<number>
 
 interface State {
   elves: [RecipeNode | undefined, RecipeNode | undefined]
