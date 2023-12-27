@@ -1,7 +1,7 @@
 import inputs from '../../inputs/2020/day24'
 import { flipTiles, conwaysGameOfTiles } from './day24'
 
-describe('2020 Day 2423', () => {
+describe('2020 Day 24', () => {
   describe('Part 1', () => {
     it('should count black tiles', () => {
       expect(flipTiles(inputs.get('DEMO')!).answer1).toEqual(10)
