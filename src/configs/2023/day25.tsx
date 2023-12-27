@@ -28,8 +28,6 @@ const findWiresToCut = (modules: Map<string, string[]>) => {
     }
   }
 
-  const group1: string[] = [modulesIterated[0][0]]
-
   return Array.from(wires.entries())
     .sort(([, aCount], [, bCount]) => bCount - aCount)
     .map(([id]) => id)
