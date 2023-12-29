@@ -1,10 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2021/Day13'
+import inputs from '../../inputs/2021/day13'
+import { DayConfig } from '../../routes/Day'
 
 interface Field {
   field: Map<string, '#'>
@@ -63,6 +58,16 @@ const doAFold = (field: Field, fold: string) => {
   })
 }
 
+export const firstFold = (input: string) => {
+  const [dots, folds] = input.split('\n\n').map(group => group.split('\n'))
+  const field = initializeField(dots)
+  doAFold(field, folds[0])
+
+  return {
+    answer1: field.field.size
+  }
+}
+
 const drawTheFieldInConsole = (field: Field) => {
   const { field: actualField, minX, maxX, minY, maxY } = field
   let drawing = ''
@@ -77,52 +82,35 @@ const drawTheFieldInConsole = (field: Field) => {
   console.log(drawing)
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'First Fold!',
-    onClick: (inputKey: string) => {
-      const [dots, folds] = INPUT[inputKey].split('\n\n').map(input => input.split('\n'))
-      const field = initializeField(dots)
-      doAFold(field, folds[0])
+export const foldItUp = (input: string) => {
+  const [dots, folds] = input.split('\n\n').map(group => group.split('\n'))
+  const field = initializeField(dots)
+  folds.forEach(fold => {
+    doAFold(field, fold)
+  })
+  drawTheFieldInConsole(field)
 
-      return {
-        answer1: field.field.size.toString()
-      }
-    }
-  },
-  {
-    label: 'Fold It Up!',
-    onClick: (inputKey: string) => {
-      const [dots, folds] = INPUT[inputKey].split('\n\n').map(input => input.split('\n'))
-      const field = initializeField(dots)
-      folds.forEach(fold => {
-        doAFold(field, fold)
-      })
-      drawTheFieldInConsole(field)
-
-      return {
-        answer2: ':)'
-      }
-    }
+  return {
+    answer2: ''
   }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      There are <code>{answer}</code> dots after doing the first fold.
-    </span>
-  ),
-  answer2Text: () => (
-    <span>
-      The answer should be in your <code>console</code>!!!
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 13,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Transparent Origami'
 }
 
-export default config
+const day13: Omit<DayConfig, 'year'> = {
+  answer1Text: 'There are answer dots after doing the first fold.',
+  answer2Text: 'Check your console!!!',
+  buttons: [
+    {
+      label: 'First Fold!',
+      onClick: firstFold
+    },
+    {
+      label: 'Fold It Up!',
+      onClick: foldItUp
+    }
+  ],
+  id: 13,
+  inputs,
+  title: 'Transparent Origami',
+}
+
+export default day13
