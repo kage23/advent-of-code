@@ -1,10 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2021/Day12'
+import inputs from '../../inputs/2021/day12'
+import { DayConfig } from '../../routes/Day'
 
 interface Cave {
   id: string
@@ -53,7 +48,7 @@ const findThePaths = (caves: Map<string, Cave>, part: 1 | 2): {
   const startCave = caves.get('start')
   if (startCave === undefined) throw new Error('something fucked up')
 
-  let possiblePaths: {
+  const possiblePaths: {
     path: string[]
     revisitSmallsAllowed: boolean
   }[] = startCave.neighbors.map(neighborId => ({
@@ -123,50 +118,40 @@ const findThePaths = (caves: Map<string, Cave>, part: 1 | 2): {
   return paths
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Count the Possible Paths',
-    onClick: (inputKey: string) => {
-      const caves = mapTheCaves(INPUT[inputKey].split('\n'))
-      const paths = findThePaths(caves, 1)
+export const countPaths = (input: string) => {
+  const caves = mapTheCaves(input.split('\n'))
+  const paths = findThePaths(caves, 1)
 
-      return {
-        answer1: paths.length.toString()
-      }
-    }
-  },
-  {
-    label: 'Count the Possible Paths, Part 2',
-    onClick: (inputKey: string) => {
-      const caves = mapTheCaves(INPUT[inputKey].split('\n'))
-      const startTime = new Date()
-      const paths = findThePaths(caves, 2)
-      const endTime = new Date()
-      console.log(`Total time: ${(endTime.getTime() - startTime.getTime()) / 1000} seconds.`)
-
-      return {
-        answer2: paths.length.toString()
-      }
-    }
+  return {
+    answer1: paths.length
   }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      There are <code>{answer}</code> valid paths through the cave system.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      There are <code>{answer}</code> valid paths through the cave system under the new rules.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 12,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Passage Pathing'
 }
 
-export default config
+export const countPaths2 = (input: string) => {
+  const caves = mapTheCaves(input.split('\n'))
+  const paths = findThePaths(caves, 2)
+
+  return {
+    answer2: paths.length
+  }
+}
+
+const day12: Omit<DayConfig, 'year'> = {
+  answer1Text: 'There are answer valid paths through the cave system.',
+  answer2Text: 'There are answer valid paths through the cave system under the new rules.',
+  buttons: [
+    {
+      label: 'Count the Possible Paths',
+      onClick: countPaths
+    },
+    {
+      label: 'Count the Possible Paths, Part 2',
+      onClick: countPaths2
+    }
+  ],
+  id: 12,
+  inputs,
+  title: 'Passage Pathing',
+}
+
+export default day12

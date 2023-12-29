@@ -11,7 +11,7 @@ import day08 from './day08'
 import day09 from './day09'
 import day10 from './day10'
 import day11 from './day11'
-// import day12 from './day12'
+import day12 from './day12'
 // import day13 from './day13'
 // import day14 from './day14'
 // import day15 from './day15'
@@ -40,7 +40,7 @@ const year2020: YearConfig = {
     [9, day09],
     [10, day10],
     [11, day11],
-    // [12, day12],
+    [12, day12],
     // [13, day13],
     // [14, day14],
     // [15, day15],
