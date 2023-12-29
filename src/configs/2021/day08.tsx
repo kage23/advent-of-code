@@ -1,10 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2021/Day08'
+import inputs from '../../inputs/2021/day08'
+import { DayConfig } from '../../routes/Day'
 
 const actualSignalCombos = [
   ['AAA', 'BBB', 'CCC', 'EEE', 'FFF', 'GGG'], // 0
@@ -18,6 +13,21 @@ const actualSignalCombos = [
   ['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF', 'GGG'], // 8
   ['AAA', 'BBB', 'CCC', 'DDD', 'FFF', 'GGG'] // 9
 ]
+
+export const countSomeNumbers = (input: string) => {
+  const data = input.split('\n')
+  const count = data.reduce((acc, curr) => {
+    const [, output] = curr.split(' | ')
+    const nums = output.split(' ')
+    return acc + nums.filter(n => (
+      n.length === 2 || n.length === 3 || n.length === 4 || n.length === 7
+    )).length
+  }, 0)
+
+  return {
+    answer1: count
+  }
+}
 
 const understandTheSignals = (inputSigs: string[]) => {
   const knownSigs: { [key: string]: string | undefined } = {}
@@ -100,61 +110,39 @@ const understandANumber = (
   return actualDigit
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Count the 1s, 4s, 7s, and 8s',
-    onClick: (inputKey: string) => {
-      const data = INPUT[inputKey].split('\n')
-      const count = data.reduce((acc, curr) => {
-        const [, output] = curr.split(' | ')
-        const nums = output.split(' ')
-        return acc + nums.filter(n => (
-          n.length === 2 || n.length === 3 || n.length === 4 || n.length === 7
-        )).length
-      }, 0)
+export const addThemAllUp = (input: string) => {
+  const data = input.split('\n')
+  const total = data.reduce((accTotal, display) => {
+    const [signals, output] = display.split(' | ')
+    const parsedSignals = understandTheSignals(signals.split(' '))
+    const outputNumberString = output.split(' ').reduce((acc, curr) =>
+      `${acc}${understandANumber(curr, parsedSignals)}`, ''
+    )
+    const outputNumber = Number(outputNumberString)
+    return accTotal + outputNumber
+  }, 0)
 
-      return {
-        answer1: count.toString()
-      }
-    }
-  },
-  {
-    label: 'Add Them All Up',
-    onClick: (inputKey: string) => {
-      const data = INPUT[inputKey].split('\n')
-      const total = data.reduce((accTotal, display) => {
-        const [signals, output] = display.split(' | ')
-        const parsedSignals = understandTheSignals(signals.split(' '))
-        const outputNumberString = output.split(' ').reduce((acc, curr) =>
-          `${acc}${understandANumber(curr, parsedSignals)}`, ''
-        )
-        const outputNumber = Number(outputNumberString)
-        return accTotal + outputNumber
-      }, 0)
-
-      return {
-        answer2: total.toString()
-      }
-    }
+  return {
+    answer2: total
   }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      There are <code>{answer}</code> 1s, 4s, 7s, and 8s.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The sum of all the outputs is <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 8,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Seven Segment Search'
 }
 
-export default config
+const day08: Omit<DayConfig, 'year'> = {
+  answer1Text: 'There are answer 1s, 4s, 7s, and 8s.',
+  answer2Text: 'The sum of all the outputs is answer.',
+  buttons: [
+    {
+      label: 'Count the 1s, 4s, 7s, and 8s',
+      onClick: countSomeNumbers
+    },
+    {
+      label: 'Add Them All Up',
+      onClick: addThemAllUp
+    }
+  ],
+  id: 8,
+  inputs,
+  title: 'Seven Segment Search',
+}
+
+export default day08
