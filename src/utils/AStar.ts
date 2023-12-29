@@ -6,10 +6,29 @@ import BinaryHeap from './BinaryHeap'
 const AStar = (
   startKey: string,
   endKey: string,
+  /**
+   * Weight/distance to one node from another
+   */
   dFn: (to: string, from: string) => number,
-  h: (startKey: string, endKey: string) => number,
-  getNeighbors: (current: string) => string[]
-): number => {
+  /**
+   * Heuristic for estimating weight/distance from one node to another
+   */
+  h: (from: string, to: string) => number,
+  /**
+   * Method for getting neighbor nodes from current node
+   */
+  getNeighbors: (current: string) => string[],
+  /**
+   * Handy to identify if a given node is the end, aside from string equality
+   * (Normally, we just check current === endKey)
+   */
+  isEnd?: (current: string) => boolean
+): {
+  cost: number
+  path: string[]
+} => {
+  const parentNodes = new Map<string, string>()
+
   // For node n, gScore[n] is the cost of the cheapest path from start to n currently known.
   // gScore := map with default value of Infinity
   // gScore[start] := 0
@@ -28,26 +47,38 @@ const AStar = (
   // This is usually implemented as a min-heap or priority queue rather than a hash-set.
   // openSet := {start}
   const openSet = new BinaryHeap<string>(
-    (node: string) => fScores.get(node) as number,
-    'min'
+    (node: string) => fScores.get(node)!,
+    'min',
+    startKey
   )
-  openSet.push(startKey)
 
   let whileLoopRuns = 0
+
+  const reconstructPath = (current: string) => {
+    const path = [current]
+    let parent = parentNodes.get(current)
+    while (parent) {
+      path.push(parent)
+      parent = parentNodes.get(parent)
+    }
+    return path.reverse()
+  }
 
   // while openSet is not empty
   while (openSet.size()) {
     // This operation can occur in O(1) time if openSet is a min-heap or a priority queue
     // current := the node in openSet having the lowest fScore[] value
-    const current = openSet.pop()
-    if (current === undefined) throw new Error('something fucked up')
+    const current = openSet.pop()!
 
     // if current = goal
-    if (current === endKey) {
-      // return reconstruct_path(cameFrom, current)
-      // (except I don't care about the path, just the riskiness)
-      console.log(`The main while loop ran ${whileLoopRuns} times.`)
-      return gScores.get(current) as number
+    if (current === endKey || (isEnd && isEnd(current))) {
+      const path = reconstructPath(current)
+      // console.log('path:', path)
+      // console.log(`The main while loop ran ${whileLoopRuns} times.`)
+      return {
+        cost: gScores.get(current)!,
+        path,
+      }
     }
 
     // for each neighbor of current
@@ -57,16 +88,17 @@ const AStar = (
 
       // tentative_gScore is the distance from start to the neighbor through current
       // tentative_gScore := gScore[current] + d(current, neighbor)
-      const tentative_gScore = (gScores.get(current) as number) + d
+      const tentative_gScore = gScores.get(current)! + d
 
       // if tentative_gScore < gScore[neighbor]
       if (
         gScores.get(nKey) === undefined ||
-        tentative_gScore < (gScores.get(nKey) as number)
+        tentative_gScore < gScores.get(nKey)!
       ) {
         // This path to neighbor is better than any previous one. Record it!
         // gScore[neighbor] := tentative_gScore
         gScores.set(nKey, tentative_gScore)
+        parentNodes.set(nKey, current)
         // fScore[neighbor] := tentative_gScore + h(neighbor)
         const fScore = tentative_gScore + h(nKey, endKey)
         fScores.set(nKey, fScore)
