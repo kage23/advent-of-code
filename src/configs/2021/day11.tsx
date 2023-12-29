@@ -1,10 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2021/Day11'
+import inputs from '../../inputs/2021/day11'
+import { DayConfig } from '../../routes/Day'
 
 const getAdjacents = (i: number, j: number, width: number, height: number) => {
   return [
@@ -57,64 +52,55 @@ const doOneStep = (octopuses: number[][]): number => {
   return flashed.length
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Watch the Octopuses',
-    onClick: (inputKey: string) => {
-      const octopuses =
-        INPUT[inputKey].split('\n').map(octoRow => octoRow.split('').map(n => Number(n)))
+export const watchOctopuses = (input: string) => {
+  const octopuses = input.split('\n').map(octoRow => octoRow.split('').map(n => Number(n)))
 
-      let flashCount = 0
+  let flashCount = 0
 
-      for (let i = 0; i < 100; i++) {
-        flashCount += doOneStep(octopuses)
-      }
-
-      return {
-        answer1: flashCount.toString()
-      }
-    }
-  },
-  {
-    label: 'Wait for Synchronized Flash',
-    onClick: (inputKey: string) => {
-      const octopuses =
-        INPUT[inputKey].split('\n').map(octoRow => octoRow.split('').map(n => Number(n)))
-
-      const width = octopuses[0].length
-      const height = octopuses.length
-
-      let flashCount = 0
-      let step = 0
-
-      while (flashCount !== width * height) {
-        flashCount = doOneStep(octopuses)
-        step++
-      }
-
-      return {
-        answer2: step.toString()
-      }
-    }
+  for (let i = 0; i < 100; i++) {
+    flashCount += doOneStep(octopuses)
   }
-]
 
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      After 100 steps, there have been <code>{answer}</code> flashes.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The flashes synchronize on Step <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 11,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Dumbo Octopus'
+  return {
+    answer1: flashCount
+  }
 }
 
-export default config
+export const waitForSynchronizedFlash = (input: string) => {
+  const octopuses = input.split('\n').map(octoRow => octoRow.split('').map(n => Number(n)))
+
+  const width = octopuses[0].length
+  const height = octopuses.length
+
+  let flashCount = 0
+  let step = 0
+
+  while (flashCount !== width * height) {
+    flashCount = doOneStep(octopuses)
+    step++
+  }
+
+  return {
+    answer2: step
+  }
+}
+
+const day11: Omit<DayConfig, 'year'> = {
+  answer1Text: 'After 100 steps, there have been answer flashes.',
+  answer2Text: 'The flashes synchronize on Step answer.',
+  buttons: [
+    {
+      label: 'Watch the Octopuses',
+      onClick: watchOctopuses
+    },
+    {
+      label: 'Wait for Synchronized Flash',
+      onClick: waitForSynchronizedFlash
+    }
+  ],
+  id: 11,
+  inputs,
+  title: 'Dumbo Octopus',
+}
+
+export default day11
