@@ -53,7 +53,7 @@ const takeAStep = (map: string): string => {
 
 export const watchCucumbers = (input: string) => {
   let map = input
-  let prevMap: string = ''
+  let prevMap = ''
 
   let steps = 0
   while (prevMap !== map) {

@@ -9,7 +9,9 @@ describe('2021 Day 23', () => {
     })
   })
   // This presumably works but when I was doing my rebuild I let it run for like
-  // five or six minutes without it finishing
+  // five or six minutes without it finishing.
+  // According to my git commits, the demo takes 17 minutes to complete, and my
+  // real input takes about 7 minutes.
   xdescribe('Part 2', () => {
     it('should calculate energy to organize all of the amphipods', () => {
       expect(organizeMoreAmphipods(inputs.get('DEMO')!).answer2).toEqual(44169)
