@@ -1,13 +1,8 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2021/Day25'
+import inputs from '../../inputs/2021/day25'
+import { DayConfig } from '../../routes/Day'
 
 const takeAStep = (map: string): string => {
-  const field = map.split('\n').map(row => row.split(''))
+  const field = map.split('\n').map((row) => row.split(''))
   const rows = field.length
   const cols = field[0].length
   // First the ones moving right
@@ -24,7 +19,7 @@ const takeAStep = (map: string): string => {
         }
       }
     }
-    onesToMove.forEach(fromCol => {
+    onesToMove.forEach((fromCol) => {
       let nextCol = fromCol + 1
       if (nextCol === cols) nextCol = 0
       row[fromCol] = '.'
@@ -45,7 +40,7 @@ const takeAStep = (map: string): string => {
         }
       }
     }
-    onesToMove.forEach(fromRow => {
+    onesToMove.forEach((fromRow) => {
       let nextRow = fromRow + 1
       if (nextRow === rows) nextRow = 0
       field[fromRow][colI] = '.'
@@ -53,46 +48,37 @@ const takeAStep = (map: string): string => {
     })
   }
 
-  return field.map(row => row.join('')).join('\n')
+  return field.map((row) => row.join('')).join('\n')
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Watch the Cucumbers',
-    onClick: (inputKey: string) => {
-      let map = INPUT[inputKey]
-      let prevMap: string = ''
+export const watchCucumbers = (input: string) => {
+  let map = input
+  let prevMap: string = ''
 
-      let steps = 0
-      while (prevMap !== map) {
-        prevMap = map
-        map = takeAStep(map)
-        steps++
-      }
+  let steps = 0
+  while (prevMap !== map) {
+    prevMap = map
+    map = takeAStep(map)
+    steps++
+  }
 
-      return {
-        answer1: steps.toString()
-      }
-    }
-  },
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The sea cucumbers will stop moving after <code>{answer}</code> steps.
-    </span>
-  ),
-  answer2Text: () => (
-    <span>
-      You did it!
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 25,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Sea Cucumber'
+  return {
+    answer1: steps,
+  }
 }
 
-export default config
+const day25: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The sea cucumbers will stop moving after answer steps.',
+  answer2Text: '',
+  buttons: [
+    {
+      label: 'Watch the Cucumbers',
+      onClick: watchCucumbers,
+    },
+  ],
+  id: 25,
+  inputs,
+  title: 'Sea Cucumber',
+}
+
+export default day25
