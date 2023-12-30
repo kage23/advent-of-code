@@ -23,7 +23,7 @@ import day20 from './day20'
 import day21 from './day21'
 import day22 from './day22'
 import day23 from './day23'
-// import day24 from './day24'
+import day24 from './day24'
 // import day25 from './day25'
 
 const year2020: YearConfig = {
@@ -52,7 +52,7 @@ const year2020: YearConfig = {
     [21, day21],
     [22, day22],
     [23, day23],
-    // [24, day24],
+    [24, day24],
     // [25, day25],
   ]),
   extraText: 'Deep sea adventure!',
