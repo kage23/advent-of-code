@@ -1,10 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2021/Day17'
+import inputs from '../../inputs/2021/day17'
+import { DayConfig } from '../../routes/Day'
 
 interface TargetArea {
   minX: number
@@ -19,6 +14,52 @@ const parseInput = (input: string): TargetArea => {
   const [minX, maxX] = xStr.split('..').map(n => Number(n))
   const [minY, maxY] = yStr.split('..').map(n => Number(n))
   return { minX, maxX, minY, maxY }
+}
+
+const doesItFallThrough = ({ minY, maxY }: TargetArea, startingYVelocity: number) => {
+  const velocityAtZero = (startingYVelocity + 1) * -1
+
+  // Watch it fall
+  let currentHeight = 0
+  let i = velocityAtZero
+  while (currentHeight >= minY) {
+    currentHeight += i
+    i--
+    if (currentHeight >= minY && currentHeight <= maxY) {
+      return true
+    }
+  }
+  return false
+}
+
+const getMaxHeight = (y: number): number => {
+  let sum = 0
+  for (let i = y; i >= 0; i--) sum += i
+  return sum
+}
+
+const findTrickShot = (targetArea: TargetArea): { yVelocity: number, yHeight: number } => {
+  const goodShots: { yVelocity: number, yHeight: number }[] = []
+
+  for (let y = 0; y <= targetArea.minY * -1; y++) {
+    if (doesItFallThrough(targetArea, y)) {
+      goodShots.push({ yVelocity: y, yHeight: getMaxHeight(y) })
+    }
+  }
+
+  const maxYHeight = Math.max(...goodShots.map(({ yHeight }) => yHeight))
+
+  return goodShots.find(
+    ({ yHeight }) => yHeight === maxYHeight
+  ) as { yVelocity: number, yHeight: number }
+}
+
+export const findBestTrickShot = (input: string) => {
+  const targetArea = parseInput(input)
+
+  return {
+    answer1: findTrickShot(targetArea).yHeight
+  }
 }
 
 const fireShot = ({ minX, maxX, minY, maxY }: TargetArea, x: number, y: number): {
@@ -64,28 +105,6 @@ const fireShot = ({ minX, maxX, minY, maxY }: TargetArea, x: number, y: number):
   return { hit, overshot, path, velocity }
 }
 
-const getMaxHeight = (y: number): number => {
-  let sum = 0
-  for (let i = y; i >= 0; i--) sum += i
-  return sum
-}
-
-const findTrickShot = (targetArea: TargetArea): { yVelocity: number, yHeight: number } => {
-  const goodShots: { yVelocity: number, yHeight: number }[] = []
-
-  for (let y = 0; y <= targetArea.minY * -1; y++) {
-    if (doesItFallThrough(targetArea, y)) {
-      goodShots.push({ yVelocity: y, yHeight: getMaxHeight(y) })
-    }
-  }
-
-  const maxYHeight = Math.max(...goodShots.map(({ yHeight }) => yHeight))
-
-  return goodShots.find(
-    ({ yHeight }) => yHeight === maxYHeight
-  ) as { yVelocity: number, yHeight: number }
-}
-
 const findAllShots = (targetArea: TargetArea): number => {
   const goodShots: {
     velocity: [number, number]
@@ -109,61 +128,30 @@ const findAllShots = (targetArea: TargetArea): number => {
   return goodShots.length
 }
 
-const doesItFallThrough = ({ minY, maxY }: TargetArea, startingYVelocity: number) => {
-  const velocityAtZero = (startingYVelocity + 1) * -1
+export const findAllTheShots = (input: string) => {
+  const targetArea = parseInput(input)
 
-  // Watch it fall
-  let currentHeight = 0
-  let i = velocityAtZero
-  while (currentHeight >= minY) {
-    currentHeight += i
-    i--
-    if (currentHeight >= minY && currentHeight <= maxY) {
-      return true
-    }
+  return {
+    answer2: findAllShots(targetArea)
   }
-  return false
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Find the Best Trick Shot',
-    onClick: (inputKey: string) => {
-      const targetArea = parseInput(INPUT[inputKey])
-
-      return {
-        answer1: findTrickShot(targetArea).yHeight.toString()
-      }
+const day17: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The best trick shot reaches a height of answer.',
+  answer2Text: 'There are answer good shots.',
+  buttons: [
+    {
+      label: 'Find the Best Trick Shot',
+      onClick: findBestTrickShot
+    },
+    {
+      label: 'Find All the Shots',
+      onClick: findAllTheShots
     }
-  },
-  {
-    label: 'Find All the Shots',
-    onClick: (inputKey: string) => {
-      const targetArea = parseInput(INPUT[inputKey])
-
-      return {
-        answer2: findAllShots(targetArea).toString()
-      }
-    }
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The best trick shot reaches a height of <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      There are <code>{answer}</code> good shots.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 17,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Trick Shot'
+  ],
+  id: 17,
+  inputs,
+  title: 'Trick Shot',
 }
 
-export default config
+export default day17
