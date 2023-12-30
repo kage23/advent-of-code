@@ -93,17 +93,10 @@ export const playRealGame = (input: string) => {
   }) as [Player, Player]
   let currentPlayer: 0 | 1 = 0
 
-  const startTime = new Date().getTime()
-
   const [player0Wins, player1Wins] = recurseGame(
     { players, currentPlayer },
     new Map(),
     [0, 0]
-  )
-
-  console.log([player0Wins, player1Wins])
-  console.log(
-    `Total run time: ${(new Date().getTime() - startTime) / 1000} seconds.`
   )
 
   return {
