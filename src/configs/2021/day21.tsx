@@ -91,7 +91,7 @@ export const playRealGame = (input: string) => {
       score: 0,
     } as Player
   }) as [Player, Player]
-  let currentPlayer: 0 | 1 = 0
+  const currentPlayer: 0 | 1 = 0
 
   const [player0Wins, player1Wins] = recurseGame(
     { players, currentPlayer },
