@@ -1,11 +1,6 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-import { manhattanDistance } from '../utils/Various'
-
-import INPUT from '../Inputs/2021/Day19'
+import inputs from '../../inputs/2021/day19'
+import { DayConfig } from '../../routes/Day'
+import manhattanDistance from '../../utils/manhattanDistance'
 
 const orientPoint = (
   [x, y, z]: [x: number, y: number, z: number],
@@ -244,68 +239,61 @@ const findAllBeaconsAndScanners = (scannerSetsOfBeacons: [number, number, number
   }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Count the Beacons',
-    onClick: (inputKey: string) => {
-      const scannerSetsOfBeacons = INPUT[inputKey]
-        .split('\n\n')
-        .map(s => (
-          s
-            .split('\n')
-            .slice(1)
-            .map(b => b.split(',').map(n => Number(n)) as [number, number, number])
-        ))
-      const { allBeacons } = findAllBeaconsAndScanners(scannerSetsOfBeacons)
+export const countBeacons = (input: string) => {
+  const scannerSetsOfBeacons = input
+    .split('\n\n')
+    .map(s => (
+      s
+        .split('\n')
+        .slice(1)
+        .map(b => b.split(',').map(n => Number(n)) as [number, number, number])
+    ))
+  const { allBeacons } = findAllBeaconsAndScanners(scannerSetsOfBeacons)
 
-      return {
-        answer1: allBeacons.size.toString()
-      }
-    }
-  },
-  {
-    label: 'Find the Largest Distance',
-    onClick: (inputKey: string) => {
-      const scannerSetsOfBeacons = INPUT[inputKey]
-        .split('\n\n')
-        .map(s => (
-          s
-            .split('\n')
-            .slice(1)
-            .map(b => b.split(',').map(n => Number(n)) as [number, number, number])
-        ))
-      const { scanners } = findAllBeaconsAndScanners(scannerSetsOfBeacons)
-      const scannerPositions = scanners.map(s => s.slice(0, 3))
-      let maxDistance = 0
-      for (let i = 0; i < scannerPositions.length; i++) {
-        for (let j = i + 1; j < scannerPositions.length; j++) {
-          maxDistance = Math.max(maxDistance, manhattanDistance(scannerPositions[i], scannerPositions[j]))
-        }
-      }
-
-      return {
-        answer2: maxDistance.toString()
-      }
-    }
-  },
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      There are <code>{answer}</code> beacons.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The largest distance between two scanners is <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 19,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Beacon Scanner'
+  return {
+    answer1: allBeacons.size
+  }
 }
 
-export default config
+export const findLargestDistance = (input: string) => {
+  const scannerSetsOfBeacons = input
+    .split('\n\n')
+    .map(s => (
+      s
+        .split('\n')
+        .slice(1)
+        .map(b => b.split(',').map(n => Number(n)) as [number, number, number])
+    ))
+  const { scanners } = findAllBeaconsAndScanners(scannerSetsOfBeacons)
+  const scannerPositions = scanners.map(s => s.slice(0, 3))
+  let maxDistance = 0
+  for (let i = 0; i < scannerPositions.length; i++) {
+    for (let j = i + 1; j < scannerPositions.length; j++) {
+      maxDistance = Math.max(maxDistance, manhattanDistance(scannerPositions[i], scannerPositions[j]))
+    }
+  }
+
+  return {
+    answer2: maxDistance
+  }
+}
+
+const day19: Omit<DayConfig, 'year'> = {
+  answer1Text: 'There are answer beacons.',
+  answer2Text: 'The largest distance between two scanners is answer.',
+  buttons: [
+    {
+      label: 'Count the Beacons',
+      onClick: countBeacons
+    },
+    {
+      label: 'Find the Largest Distance',
+      onClick: findLargestDistance
+    }
+  ],
+  id: 19,
+  inputs,
+  title: 'Beacon Scanner',
+}
+
+export default day19
