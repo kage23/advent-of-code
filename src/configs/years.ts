@@ -6,6 +6,7 @@ import year2018 from './2018/config'
 import year2019 from './2019/config'
 import year2020 from './2020/config'
 import year2021 from './2021/config'
+import year2022 from './2022/config'
 
 const years: Map<number, YearConfig> = new Map([
   [2015, year2015],
@@ -15,6 +16,7 @@ const years: Map<number, YearConfig> = new Map([
   [2019, year2019],
   [2020, year2020],
   [2021, year2021],
+  [2022, year2022],
 ])
 
 export default years
