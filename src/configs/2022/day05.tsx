@@ -1,13 +1,8 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2022/day05'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2022/Day05'
-
-const runStacks = (inputKey: string) => {
-  const input = INPUT[inputKey].split('\n')
+const runStacks = (inputRaw: string) => {
+  const input = inputRaw.split('\n')
   const stacks: string[][] = []
   for (let i = 0; i < input.length; i++) {
     const row = input[i]
@@ -42,8 +37,12 @@ const runStacks = (inputKey: string) => {
   return stacks
 }
 
-const runStacks9001 = (inputKey: string) => {
-  const input = INPUT[inputKey].split('\n')
+export const runTheStacks = (input: string) => ({
+  answer1: runStacks(input).reduce((answer, stack) => answer + stack.pop(), '')
+})
+
+const runStacks9001 = (inputRaw: string) => {
+  const input = inputRaw.split('\n')
   const stacks: string[][] = []
   for (let i = 0; i < input.length; i++) {
     const row = input[i]
@@ -76,47 +75,26 @@ const runStacks9001 = (inputKey: string) => {
   return stacks
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Run the Stacks',
-    onClick: (inputKey: string) => {
-      const stacks = runStacks(inputKey)
+export const runTheStacks9001 = (input: string) => ({
+  answer2: runStacks9001(input).reduce((answer, stack) => answer + stack.pop(), '')
+})
 
-      return {
-        answer1: stacks.reduce((answer, stack) => answer + stack.pop(), '')
-      }
-    }
-  },
-  {
-    label: 'Run the Stacks 9001',
-    onClick: (inputKey: string) => {
-      const stacks = runStacks9001(inputKey)
-
-      return {
-        answer2: stacks.reduce((answer, stack) => answer + stack.pop(), '')
-      }
-    }
-  },
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The top crates are{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The top crates are actually{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 5,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Supply Stacks'
+const day05: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The top crates are answer.',
+  answer2Text: 'The top crates are actually answer.',
+  buttons: [
+    {
+      label: 'Run the Stacks',
+      onClick: runTheStacks
+    },
+    {
+      label: 'Run the Stacks 9001',
+      onClick: runTheStacks9001
+    },
+  ],
+  id: 5,
+  inputs,
+  title: 'Supply Stacks',
 }
 
-export default config
+export default day05
