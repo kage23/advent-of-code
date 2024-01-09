@@ -1,15 +1,11 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2022/Day07'
+import inputs from '../../inputs/2022/day07'
+import { DayConfig } from '../../routes/Day'
 
 interface File {
   id: string
   size: number
 }
+
 interface Directory {
   parent?: Directory
   children: (File | Directory)[]
@@ -19,13 +15,13 @@ interface Directory {
 const directories: Map<string, { directory: Directory, size?: number }> = new Map()
 const files: Map<string, number> = new Map()
 
-const parseInput = (inputKey: string) => {
+const parseInput = (input: string) => {
   directories.clear()
   files.clear()
   const root: Directory = { children: [], id: '/' }
   directories.set('/', { directory: root })
   let currDir = root
-  INPUT[inputKey].split('\n').forEach(line => {
+  input.split('\n').forEach(line => {
     const x = line.split(' ')
     if (x[0] === '$') {
       // It's an instruction, either cd or ls
@@ -36,6 +32,7 @@ const parseInput = (inputKey: string) => {
         } else if (x[2] === '..') {
           currDir = currDir.parent!
         } else {
+          // eslint-disable-next-line no-prototype-builtins
           currDir = currDir.children.find(y => y.hasOwnProperty('children') && y.id.endsWith(x[2])) as Directory
         }
       }
@@ -63,6 +60,7 @@ const getDirectorySize = (id: string): number => {
   const { directory, size } = directories.get(id)!
   if (size) return size
   const dirSize = directory.children.reduce((accum, child) => (
+    // eslint-disable-next-line no-prototype-builtins
     child.hasOwnProperty('size')
       ? accum + (child as File).size
       : accum + getDirectorySize(child.id)
@@ -71,59 +69,49 @@ const getDirectorySize = (id: string): number => {
   return dirSize
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Analyze Disk Space',
-    onClick: (inputKey: string) => {
-      parseInput(inputKey)
+export const analyzeDiskSpace = (input: string) => {
+  parseInput(input)
 
-      return {
-        answer1: Array.from(directories.keys())
-          .map(dirId => getDirectorySize(dirId))
-          .filter(x => x <= 100000)
-          .reduce((a, b) => a + b)
-          .toString()
-      }
-    }
-  },
-  {
-    label: 'Choose Directory to Delete',
-    onClick: (inputKey: string) => {
-      parseInput(inputKey)
-      const totalUsedSpace = getDirectorySize('/')
-      const totalFreeSpace = 70000000 - totalUsedSpace
-      const spaceToClear = 30000000 - totalFreeSpace
-
-      const possibleDirsToDelete = Array.from(directories.keys())
-        .map(dirId => getDirectorySize(dirId))
-        .filter(x => x >= spaceToClear)
-        .sort((a, b) => a - b)
-
-      return {
-        answer2: possibleDirsToDelete[0].toString()
-      }
-    }
+  return {
+    answer1: Array.from(directories.keys())
+      .map(dirId => getDirectorySize(dirId))
+      .filter(x => x <= 100000)
+      .reduce((a, b) => a + b)
   }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The sum of the size of the smaller directories is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The size of the directory to delete is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 7,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'No Space Left On Device'
 }
 
-export default config
+export const chooseDirectoryToDelete = (input: string) => {
+  parseInput(input)
+  const totalUsedSpace = getDirectorySize('/')
+  const totalFreeSpace = 70000000 - totalUsedSpace
+  const spaceToClear = 30000000 - totalFreeSpace
+
+  const possibleDirsToDelete = Array.from(directories.keys())
+    .map(dirId => getDirectorySize(dirId))
+    .filter(x => x >= spaceToClear)
+    .sort((a, b) => a - b)
+
+  return {
+    answer2: possibleDirsToDelete[0]
+  }
+}
+
+const day07: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The sum of the size of the smaller directories is answer.',
+  answer2Text: 'The size of the directory to delete is answer.',
+  buttons: [
+    {
+      label: 'Analyze Disk Space',
+      onClick: analyzeDiskSpace
+    },
+    {
+      label: 'Choose Directory to Delete',
+      onClick: chooseDirectoryToDelete
+    },
+  ],
+  id: 7,
+  inputs,
+  title: 'No Space Left On Device',
+}
+
+export default day07
