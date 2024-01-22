@@ -1,7 +1,6 @@
-import { defaultRenderDay, IButton, IDayConfig } from '../Config'
-
-import INPUT from '../Inputs/2022/Day15'
-import { manhattanDistance } from '../utils/Various'
+import inputs from '../../inputs/2022/day15'
+import { DayConfig } from '../../routes/Day'
+import manhattanDistance from '../../utils/manhattanDistance'
 
 class Field {
   xMin: number
@@ -17,7 +16,7 @@ class Field {
     beaconsOnRow: number[]
   }>
 
-  constructor(inputKey: string, rowWeCareAbout: number, part2?: boolean) {
+  constructor(input: string, rowWeCareAbout: number, part2?: boolean) {
     this.xMin = Number.MAX_SAFE_INTEGER
     this.xMax = Number.MIN_SAFE_INTEGER
     this.yMin = Number.MAX_SAFE_INTEGER
@@ -42,7 +41,7 @@ class Field {
       }
     }
 
-    INPUT[inputKey].split('\n').forEach((line) => {
+    input.split('\n').forEach((line) => {
       const [sensorText, beaconText] = line.split(': ')
       const sensorX = Number(sensorText.slice(12).split(',')[0])
       const sensorY = Number(sensorText.split('y=')[1])
@@ -173,69 +172,49 @@ class Field {
   }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Check for Beacons',
-    onClick: (inputKey: string) => {
-      const startTime = new Date().getTime()
+export const checkForBeacons = (input: string, rowWeCareAbout = 2000000) => {
+  const field = new Field(input, rowWeCareAbout)
 
-      const rowWeCareAbout = inputKey === 'DEMO' ? 10 : 2000000
+  const answer = field.countNoBeaconsOnRow(rowWeCareAbout)
 
-      const field = new Field(inputKey, rowWeCareAbout)
-
-      const answer = field.countNoBeaconsOnRow(rowWeCareAbout)
-
-      console.log(`Part 1 run time: ${new Date().getTime() - startTime}ms`)
-
-      return {
-        answer1: answer.toString(),
-      }
-    },
-  },
-  {
-    label: 'Find Distress Beacon',
-    onClick: (inputKey: string) => {
-      const startTime = new Date().getTime()
-
-      const rowWeCareAbout = inputKey === 'DEMO' ? 10 : 2000000
-
-      const field = new Field(inputKey, rowWeCareAbout, true)
-
-      const rowWithGap = Array.from(field.rowInfo.keys()).find(key => {
-        const { rangesOfNoBeaconsOnRow } = field.rowInfo.get(key)!
-        return rangesOfNoBeaconsOnRow.length === 2
-      })!
-
-      const { rangesOfNoBeaconsOnRow } = field.rowInfo.get(rowWithGap)!
-
-      const x = rangesOfNoBeaconsOnRow[0][1] + 1
-
-      console.log(`Part 2 run time: ${new Date().getTime() - startTime}ms`)
-
-      return {
-        answer2: ((x * 4000000) + rowWithGap).toString()
-      }
-    }
+  return {
+    answer1: answer
   }
-]
+}
 
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The row has <code>{answer}</code> spaces that can't have a beacon.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The distress beacon's tuning frequency is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 15,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+export const findDistressBeacon = (input: string, rowWeCareAbout = 2000000) => {
+  const field = new Field(input, rowWeCareAbout, true)
+
+  const rowWithGap = Array.from(field.rowInfo.keys()).find(key => {
+    const { rangesOfNoBeaconsOnRow } = field.rowInfo.get(key)!
+    return rangesOfNoBeaconsOnRow.length === 2
+  })!
+
+  const { rangesOfNoBeaconsOnRow } = field.rowInfo.get(rowWithGap)!
+
+  const x = rangesOfNoBeaconsOnRow[0][1] + 1
+
+  return {
+    answer2: ((x * 4000000) + rowWithGap)
+  }
+}
+
+const day15: Omit<DayConfig, 'year'> = {
+  answer1Text: `The row has answer spaces that can't have a beacon.`,
+  answer2Text: `The distress beacon's tuning frequency is answer.`,
+  buttons: [
+    {
+      label: 'Check for Beacons',
+      onClick: checkForBeacons
+    },
+    {
+      label: 'Find Distress Beacon',
+      onClick: findDistressBeacon
+    },
+  ],
+  id: 15,
+  inputs,
   title: 'Beacon Exclusion Zone',
 }
 
-export default config
+export default day15
