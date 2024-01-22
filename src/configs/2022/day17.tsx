@@ -1,6 +1,5 @@
-import { defaultRenderDay, IButton, IDayConfig } from '../Config'
-
-import INPUT from '../Inputs/2022/Day17'
+import inputs from '../../inputs/2022/day17'
+import { DayConfig } from '../../routes/Day'
 
 type RockTypes = '-' | '+' | 'L' | '|' | '*'
 type WindDirections = '<' | '>'
@@ -12,29 +11,9 @@ interface Rock {
   bottom: number
 }
 
-/**
-
-####
-
-.#.
-###
-.#.
-
-..#
-..#
-###
-
-#
-#
-#
-#
-
-##
-##
-
-*/
-
 const rockOrder: RockTypes[] = ['-', '+', 'L', '|', '*']
+const blankRow = '.......'
+
 const getInitialRight = (rockTypeIndex: number): number => {
   switch (rockOrder[rockTypeIndex]) {
     case '-':
@@ -46,36 +25,6 @@ const getInitialRight = (rockTypeIndex: number): number => {
       return 2
     case '*':
       return 3
-  }
-}
-
-const dropOneRock = (
-  jetStream: WindDirections[],
-  tower: Map<number, string>,
-  windIndex: number,
-  rockTypeIndex: number
-): {
-  nextWindIndex: number
-  nextRockTypeIndex: number
-} => {
-  let currentWindIndex = windIndex
-  const rock: Rock = {
-    type: rockOrder[rockTypeIndex],
-    left: 2,
-    right: getInitialRight(rockTypeIndex),
-    bottom: tower.size ? Math.max(...Array.from(tower.keys())) + 4 : 4
-  }
-
-  let areWeDoneYet = false
-  while (!areWeDoneYet) {
-    blowOneWind(rock, jetStream[currentWindIndex], tower)
-    currentWindIndex = (currentWindIndex + 1) % jetStream.length
-    areWeDoneYet = dropItOnce(rock, tower)
-  }
-
-  return {
-    nextWindIndex: currentWindIndex,
-    nextRockTypeIndex: (rockTypeIndex + 1) % rockOrder.length
   }
 }
 
@@ -179,8 +128,6 @@ const blowOneWind = (rock: Rock, wind: WindDirections, tower: Map<number, string
     }
   }
 }
-
-const blankRow = '.......'
 
 // Returns areWeDoneYet: boolean
 const dropItOnce = (rock: Rock, tower: Map<number, string>): boolean => {
@@ -310,11 +257,39 @@ const dropItOnce = (rock: Rock, tower: Map<number, string>): boolean => {
   }
 }
 
-const getTowerHeight = (inputKey: string, howManyRocks: number) => {
-  const jetStream = INPUT[inputKey].split('') as WindDirections[]
-  const seenStates: Map<string, { height: number, rocks: number }> = new Map()
+const dropOneRock = (
+  jetStream: WindDirections[],
+  tower: Map<number, string>,
+  windIndex: number,
+  rockTypeIndex: number
+): {
+  nextWindIndex: number
+  nextRockTypeIndex: number
+} => {
+  let currentWindIndex = windIndex
+  const rock: Rock = {
+    type: rockOrder[rockTypeIndex],
+    left: 2,
+    right: getInitialRight(rockTypeIndex),
+    bottom: tower.size ? Math.max(...Array.from(tower.keys())) + 4 : 4
+  }
 
-  console.time('getTowerHeight')
+  let areWeDoneYet = false
+  while (!areWeDoneYet) {
+    blowOneWind(rock, jetStream[currentWindIndex], tower)
+    currentWindIndex = (currentWindIndex + 1) % jetStream.length
+    areWeDoneYet = dropItOnce(rock, tower)
+  }
+
+  return {
+    nextWindIndex: currentWindIndex,
+    nextRockTypeIndex: (rockTypeIndex + 1) % rockOrder.length
+  }
+}
+
+export const getTowerHeight = (input: string, howManyRocks: number) => {
+  const jetStream = input.split('') as WindDirections[]
+  const seenStates: Map<string, { height: number, rocks: number }> = new Map()
 
   // Map of row numbers to what's on that row
   const tower: Map<number, string> = new Map()
@@ -353,53 +328,34 @@ const getTowerHeight = (inputKey: string, howManyRocks: number) => {
         for (let k = 1; k < plusTheRemainderToDrop; k++) {
           remainderResult = dropOneRock(jetStream, tower, remainderResult.nextWindIndex, remainderResult.nextRockTypeIndex)
         }
-        console.timeEnd('getTowerHeight')
-        return tower.size + heightFromTheLoops
+        const answer = tower.size + heightFromTheLoops
+        return howManyRocks === 2022 ? { answer1: answer } : { answer2: answer }
       } else {
         seenStates.set(state, { height: tower.size, rocks: rockNumber })
       }
     }
   }
 
-  console.timeEnd('getTowerHeight')
-
-  console.log('this was the bad end')
-  return Array.from(tower.keys()).sort((a, b) => b - a)[0]
+  const answer = Array.from(tower.keys()).sort((a, b) => b - a)[0]
+  return howManyRocks === 2022 ? { answer1: answer } : { answer2: answer }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Simulate Falling Rocks',
-    onClick: (inputKey: string) => ({
-      answer1: getTowerHeight(inputKey, 2022).toString()
-    })
-  },
-  {
-    label: 'Simulate Falling Rocks for a Long Time',
-    onClick: (inputKey: string) => ({
-      answer2: getTowerHeight(inputKey, 1000000000000).toString()
-    })
-  },
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      After 2022 rocks, the tower will be{' '}
-      <code>{answer}</code> units tall.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      After one trillion rocks, the tower will be{' '}
-      <code>{answer}</code> units tall.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 17,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+const day17: Omit<DayConfig, 'year'> = {
+  answer1Text: 'After 2022 rocks, the tower will be answer units tall.',
+  answer2Text: 'After one trillion rocks, the tower will be answer units tall.',
+  buttons: [
+    {
+      label: 'Simulate Falling Rocks',
+      onClick: (input) => getTowerHeight(input, 2022)
+    },
+    {
+      label: 'Simulate Falling Rocks for a Long Time',
+      onClick: (input) => getTowerHeight(input, 1000000000000)
+    },
+  ],
+  id: 17,
+  inputs,
   title: 'Pyroclastic Flow',
 }
 
-export default config
+export default day17
