@@ -1,18 +1,13 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2022/Day14'
+import inputs from '../../inputs/2022/day14'
+import { DayConfig } from '../../routes/Day'
 
 class SandDropper {
   field: string[]
   xOffset: number
   yMax: number
 
-  constructor(inputKey: string, floor?: boolean) {
-    const lines = INPUT[inputKey].split('\n')
+  constructor(input: string, floor?: boolean) {
+    const lines = input.split('\n')
     const xRange = [Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER]
     this.yMax = 0
 
@@ -34,8 +29,12 @@ class SandDropper {
     lines.forEach(line => {
       const points = line.split(' -> ')
       for (let i = 1; i < points.length; i++) {
-        let [fromX, fromY] = points[i - 1].split(',').map(n => Number(n))
-        let [toX, toY] = points[i].split(',').map(n => Number(n))
+        const fromPoints = points[i - 1].split(',').map(n => Number(n))
+        let fromX = fromPoints[0]
+        const fromY = fromPoints[1]
+        const toPoints = points[i].split(',').map(n => Number(n))
+        let toX = toPoints[0]
+        const toY = toPoints[1]
         fromX -= this.xOffset
         toX -= this.xOffset
         if (fromX === toX) {
@@ -90,46 +89,38 @@ class SandDropper {
   }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Flow the Sand',
-    onClick: (inputKey: string) => {
-      const sandDropper = new SandDropper(inputKey)
+export const flowTheSand = (input: string) => {
+  const sandDropper = new SandDropper(input)
 
-      return {
-        answer1: sandDropper.flowSand().toString()
-      }
-    }
-  },
-  {
-    label: 'Flow the Sand with a Floor',
-    onClick: (inputKey: string) => {
-      const sandDropper = new SandDropper(inputKey, true)
-
-      return {
-        answer2: sandDropper.flowSand().toString()
-      }
-    }
-  },
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      <code>{answer}</code> grains of sand will come to rest.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      With a floor,{' '}
-      <code>{answer}</code> grains of sand will come to rest.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 14,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Regolith Reservoir'
+  return {
+    answer1: sandDropper.flowSand()
+  }
 }
 
-export default config
+export const flowSandWithFloor = (input: string) => {
+  const sandDropper = new SandDropper(input, true)
+
+  return {
+    answer2: sandDropper.flowSand()
+  }
+}
+
+const day14: Omit<DayConfig, 'year'> = {
+  answer1Text: 'answer grains of sand will come to rest.',
+  answer2Text: 'With a floor, answer grains of sand will come to rest.',
+  buttons: [
+    {
+      label: 'Flow the Sand',
+      onClick: flowTheSand
+    },
+    {
+      label: 'Flow the Sand with a Floor',
+      onClick: flowSandWithFloor
+    },
+  ],
+  id: 14,
+  inputs,
+  title: 'Regolith Reservoir',
+}
+
+export default day14
