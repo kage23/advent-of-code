@@ -1,13 +1,8 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
+import inputs from '../../inputs/2022/day10'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2022/Day10'
-
-const determineSignalStrengths = (inputKey: string) => {
-  const instructions = INPUT[inputKey].split('\n')
+export const determineSignalStrengths = (input: string) => {
+  const instructions = input.split('\n')
   let registerX = 1
   let cycle = 1
   let signalStrengthSum = 0
@@ -34,12 +29,12 @@ const determineSignalStrengths = (inputKey: string) => {
   }
 
   return {
-    answer1: signalStrengthSum.toString()
+    answer1: signalStrengthSum
   }
 }
 
-const runTheProgram = (inputKey: string) => {
-  const instructions = INPUT[inputKey].split('\n')
+export const runTheProgram = (input: string) => {
+  const instructions = input.split('\n')
   let spritePosition = 1
   let cycle = 1
 
@@ -72,39 +67,26 @@ const runTheProgram = (inputKey: string) => {
   console.log(screen)
 
   return {
-    answer2: ''
+    answer2: screen
   }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Determine Signal Strengths',
-    onClick: determineSignalStrengths
-  },
-  {
-    label: 'Run the Program',
-    onClick: runTheProgram
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The sum of the important register cycles is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      Check the console for the answer!
-      {/* <code>{answer}</code> locations. */}
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 10,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Cathode-Ray Tube'
+const day10: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The sum of the important register cycles is answer.',
+  answer2Text: 'Check your console!',
+  buttons: [
+    {
+      label: 'Determine Signal Strengths',
+      onClick: determineSignalStrengths
+    },
+    {
+      label: 'Run the Program',
+      onClick: runTheProgram
+    },
+  ],
+  id: 10,
+  inputs,
+  title: 'Cathode-Ray Tube',
 }
 
-export default config
+export default day10
