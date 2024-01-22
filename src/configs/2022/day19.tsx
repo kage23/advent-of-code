@@ -1,7 +1,6 @@
-import { defaultRenderDay, IButton, IDayConfig } from '../Config'
-import BinaryHeap from '../utils/BinaryHeap'
-
-import INPUT from '../Inputs/2022/Day19'
+import inputs from '../../inputs/2022/day19'
+import { DayConfig } from '../../routes/Day'
+import BinaryHeap from '../../utils/BinaryHeap'
 
 interface Robot {
   ore: number
@@ -51,40 +50,6 @@ const parseBlueprint = (raw: string): Blueprint => {
     obsidianRobot,
     geodeRobot,
   }
-}
-
-const getMostGeodes = (blueprint: Blueprint, totalTime: number): number => {
-  const timerLabel = `Getting geodes with blueprint id ${blueprint.id}`
-  console.time(timerLabel)
-
-  const scoreFunction = (stateToScore: string): number => {
-    const [, , , , , , , , time] = stateToScore.split(',').map((n) => Number(n))
-    return time
-  }
-
-  const searchQueue = new BinaryHeap<string>(
-    scoreFunction,
-    'max',
-    '1,0,0,0,0,0,0,0,0'
-  )
-
-  let maxGeodes = 0
-
-  while (searchQueue.size()) {
-    const state = searchQueue
-      .pop()!
-      .split(',')
-      .map((n) => Number(n))
-    const [, , , , , , , geodes, time] = state
-    if (time >= totalTime) maxGeodes = Math.max(maxGeodes, geodes)
-    getNextStates(state, blueprint, totalTime).forEach((ns) =>
-      searchQueue.push(ns)
-    )
-  }
-
-  console.timeEnd(timerLabel)
-
-  return maxGeodes
 }
 
 const howLongWillItTakeToHarvest = (
@@ -213,85 +178,95 @@ const getNextStates = (
   return nextStates
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Get Blueprint Quality Levels',
-    onClick: (inputKey: string) => {
-      const timerLabel = `Check all the blueprints for ${inputKey}`
+const getMostGeodes = (blueprint: Blueprint, totalTime: number): number => {
+  const timerLabel = `Getting geodes with blueprint id ${blueprint.id}`
+  console.time(timerLabel)
 
-      console.time(timerLabel)
+  const scoreFunction = (stateToScore: string): number => {
+    const [, , , , , , , , time] = stateToScore.split(',').map((n) => Number(n))
+    return time
+  }
 
-      const blueprints = INPUT[inputKey].split('\n').map(parseBlueprint)
+  const searchQueue = new BinaryHeap<string>(
+    scoreFunction,
+    'max',
+    '1,0,0,0,0,0,0,0,0'
+  )
 
-      const geodeCounts: Map<number, number> = new Map(
-        blueprints.map((blueprint) => [
-          blueprint.id,
-          getMostGeodes(blueprint, 24),
-        ])
-      )
+  let maxGeodes = 0
 
-      const totalQualityLevels = Array.from(geodeCounts.entries()).reduce(
-        (currentSum, [id, maxGeodes]) => currentSum + id * maxGeodes,
-        0
-      )
+  while (searchQueue.size()) {
+    const state = searchQueue
+      .pop()!
+      .split(',')
+      .map((n) => Number(n))
+    const [, , , , , , , geodes, time] = state
+    if (time >= totalTime) maxGeodes = Math.max(maxGeodes, geodes)
+    getNextStates(state, blueprint, totalTime).forEach((ns) =>
+      searchQueue.push(ns)
+    )
+  }
 
-      console.timeEnd(timerLabel)
+  console.timeEnd(timerLabel)
 
-      // 1804 is too low
+  return maxGeodes
+}
 
-      return {
-        answer1: totalQualityLevels.toString(),
-      }
+export const getBlueprintQualityLevels = (input: string) => {
+  const blueprints = input.split('\n').map(parseBlueprint)
+
+  const geodeCounts: Map<number, number> = new Map(
+    blueprints.map((blueprint) => [
+      blueprint.id,
+      getMostGeodes(blueprint, 24),
+    ])
+  )
+
+  const totalQualityLevels = Array.from(geodeCounts.entries()).reduce(
+    (currentSum, [id, maxGeodes]) => currentSum + id * maxGeodes,
+    0
+  )
+
+  return {
+    answer1: totalQualityLevels
+  }
+}
+
+export const getGeodesInMoreTime = (input: string) => {
+  const blueprints = input
+    .split('\n')
+    .slice(0, 3)
+    .map(parseBlueprint)
+
+  const geodeCounts: Map<number, number> = new Map(
+    blueprints.map((blueprint) => [
+      blueprint.id,
+      getMostGeodes(blueprint, 32),
+    ])
+  )
+
+  return {
+    answer2: Array.from(geodeCounts.values())
+      .reduce((a, b) => a * b, 1)
+  }
+}
+
+const day19: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The total quality level of all blueprints is answer.',
+  answer2Text: 'The product of the geode count for the first three blueprints in 32 minutes is answer.',
+  buttons: [
+    {
+      label: 'Get Blueprint Quality Levels',
+      onClick: getBlueprintQualityLevels
     },
-  },
-  {
-    label: 'Get Geodes in More Time',
-    onClick: (inputKey: string) => {
-      const timerLabel = `Get geodes in more time for ${inputKey}`
-      console.time(timerLabel)
-
-      const blueprints = INPUT[inputKey]
-        .split('\n')
-        .slice(0, 3)
-        .map(parseBlueprint)
-
-      const geodeCounts: Map<number, number> = new Map(
-        blueprints.map((blueprint) => [
-          blueprint.id,
-          getMostGeodes(blueprint, 32),
-        ])
-      )
-
-      console.log(geodeCounts)
-
-      console.timeEnd(timerLabel)
-
-      return {
-        answer2: Array.from(geodeCounts.values())
-          .reduce((a, b) => a * b, 1)
-          .toString(),
-      }
+    {
+      label: 'Get Geodes in More Time',
+      onClick: getGeodesInMoreTime
     },
-  },
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The total quality level of all blueprints is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The product of the geode count for the first three blueprints in 32
-      minutes is <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 19,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+  ],
+  id: 19,
+  inputs,
   title: 'Not Enough Minerals',
 }
 
-export default config
+export default day19
