@@ -1,9 +1,10 @@
-import { defaultRenderDay, IButton, IDayConfig } from '../Config'
+import inputs from '../../inputs/2022/day18'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2022/Day18'
-
-const findSurfaceArea = (droplets: Map<string, number>): number => {
-  if (droplets.size === 0) return 0
+export const findSurfaceArea = (input: string) => {
+  const droplets: Map<string, number> = new Map(input.split('\n').map(
+    droplet => ([droplet, 6])
+  ))
   Array.from(droplets.keys()).forEach(droplet => {
     const [x, y, z] = droplet.split(',').map(n => Number(n))
     let sides = 6
@@ -18,10 +19,12 @@ const findSurfaceArea = (droplets: Map<string, number>): number => {
       })
     droplets.set(droplet, sides)
   })
-  return Array.from(droplets.values()).reduce((a, b) => a + b)
+  return {
+    answer1: Array.from(droplets.values()).reduce((a, b) => a + b)
+  }
 }
 
-const findOuterSurfaceArea = (inputKey: string): number => {
+export const findOuterSurfaceArea = (input: string) => {
   let xMin = Number.MAX_SAFE_INTEGER
   let xMax = Number.MIN_SAFE_INTEGER
   let yMin = Number.MAX_SAFE_INTEGER
@@ -29,7 +32,7 @@ const findOuterSurfaceArea = (inputKey: string): number => {
   let zMin = Number.MAX_SAFE_INTEGER
   let zMax = Number.MIN_SAFE_INTEGER
 
-  const droplets: Map<string, number> = new Map(INPUT[inputKey].split('\n').map(
+  const droplets: Map<string, number> = new Map(input.split('\n').map(
     droplet => {
       const [x, y, z] = droplet.split(',').map(n => Number(n))
       xMin = Math.min(xMin, x)
@@ -91,47 +94,27 @@ const findOuterSurfaceArea = (inputKey: string): number => {
     droplets.set(droplet, sides)
   })
 
-  return Array.from(droplets.values()).reduce((a, b) => a + b)
+  return {
+    answer2: Array.from(droplets.values()).reduce((a, b) => a + b)
+  }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Find Surface Area',
-    onClick: (inputKey: string) => {
-      const droplets: Map<string, number> = new Map(INPUT[inputKey].split('\n').map(
-        droplet => ([droplet, 6])
-      ))
-      return {
-        answer1: findSurfaceArea(droplets).toString()
-      }
-    }
-  },
-  {
-    label: 'Find Outer Surface Area',
-    onClick: (inputKey: string) => ({
-      answer2: findOuterSurfaceArea(inputKey).toString()
-    })
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The surface area of the exposed droplets is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The outer surface area of the exposed droplets is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 18,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+const day18: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The surface area of the exposed droplets is answer.',
+  answer2Text: 'The outer surface area of the exposed droplets is answer.',
+  buttons: [
+    {
+      label: 'Find Surface Area',
+      onClick: findSurfaceArea
+    },
+    {
+      label: 'Find Outer Surface Area',
+      onClick: findOuterSurfaceArea
+    },
+  ],
+  id: 18,
+  inputs,
   title: 'Boiling Boulders',
 }
 
-export default config
+export default day18
