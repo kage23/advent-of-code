@@ -1,10 +1,5 @@
-import {
-  defaultRenderDay,
-  IButton,
-  IDayConfig
-} from '../Config'
-
-import INPUT from '../Inputs/2022/Day11'
+import inputs from '../../inputs/2022/day11'
+import { DayConfig } from '../../routes/Day'
 
 class Monkey {
   id: number
@@ -51,8 +46,8 @@ class Monkey {
     item % this.testDivisibleBy === 0 ? this.trueThrowTo : this.falseThrowTo
 }
 
-const chaseTheMonkeys = (inputKey: string, rounds: number): number => {
-  const monkeys = INPUT[inputKey].split('\n\n').map(x => new Monkey(x))
+export const chaseMonkeys = (input: string, rounds = 20) => {
+  const monkeys = input.split('\n\n').map(x => new Monkey(x))
 
   const worryLimiter = monkeys.reduce(
     (accumulator, monkey) => accumulator * monkey.testDivisibleBy, 1
@@ -61,7 +56,7 @@ const chaseTheMonkeys = (inputKey: string, rounds: number): number => {
   for (let round = 0; round < rounds; round++) {
     monkeys.forEach(monkey => {
       while (monkey.items.length) {
-        let item = monkey.inspectItem(monkey.items.shift()!, rounds > 20 ? worryLimiter : undefined)
+        const item = monkey.inspectItem(monkey.items.shift()!, rounds > 20 ? worryLimiter : undefined)
         const throwTo = monkey.testItem(item)
         monkeys[throwTo].items.push(item)
       }
@@ -70,42 +65,29 @@ const chaseTheMonkeys = (inputKey: string, rounds: number): number => {
 
   monkeys.sort((a, b) => b.inspectionCount - a.inspectionCount)
 
-  return monkeys[0].inspectionCount * monkeys[1].inspectionCount
+  const answer = monkeys[0].inspectionCount * monkeys[1].inspectionCount
+
+  if (rounds === 20) return { answer1: answer }
+
+  return { answer2: answer }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Chase the Monkeys',
-    onClick: (inputKey: string) => ({
-      answer1: chaseTheMonkeys(inputKey, 20).toString()
-    })
-  },
-  {
-    label: 'Chase the Monkeys for a While',
-    onClick: (inputKey: string) => ({
-      answer2: chaseTheMonkeys(inputKey, 10000).toString()
-    })
-  },
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The level of monkey business after 20 rounds is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The level of monkey business after 10,000 rounds is{' '}
-      <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 11,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
-  title: 'Monkey in the Middle'
+const day11: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The level of monkey business after 20 rounds is answer.',
+  answer2Text: 'The level of monkey business after 10,000 rounds is answer.',
+  buttons: [
+    {
+      label: 'Chase the Monkeys',
+      onClick: chaseMonkeys
+    },
+    {
+      label: 'Chase the Monkeys for a While',
+      onClick: (input) => chaseMonkeys(input, 10000)
+    },
+  ],
+  id: 11,
+  inputs,
+  title: 'Monkey in the Middle',
 }
 
-export default config
+export default day11
