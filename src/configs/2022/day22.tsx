@@ -1,6 +1,5 @@
-import { defaultRenderDay, IButton, IDayConfig } from '../Config'
-
-import INPUT from '../Inputs/2022/Day22'
+import inputs from '../../inputs/2022/day22'
+import { DayConfig } from '../../routes/Day'
 
 interface WarpZone {
   startRange: {
@@ -390,10 +389,10 @@ const WARP_ZONES: {
 }
 
 const cubeWrap = (
-  inputKey: string,
+  input: string,
   [row, col, dir]: [number, number, number]
 ): [number, number, number] => {
-  const warpZones = inputKey.startsWith('DEMO') || inputKey.startsWith('TEST') ?
+  const warpZones = input.split('\n').length < 20 ?
     WARP_ZONES.DEMO : WARP_ZONES.REAL
 
   const warpZone = warpZones.find(({ startRange }) => (
@@ -673,8 +672,8 @@ const takeStep = (
   return position
 }
 
-const getPassword = (inputKey: string, part: 1 | 2) => {
-  const [mapRaw, path] = INPUT[inputKey].split('\n\n')
+export const getPassword = (input: string, part: 1 | 2) => {
+  const [mapRaw, path] = input.split('\n\n')
   const map = mapRaw.split('\n')
 
   // [row, col, dir]
@@ -686,7 +685,7 @@ const getPassword = (inputKey: string, part: 1 | 2) => {
   while (x < path.length) {
     const nextStep = path.slice(x).match(nextStepRegex)
     if (!nextStep) throw new Error('something fucked up')
-    position = takeStep(position, nextStep[0], map, inputKey, part === 2)
+    position = takeStep(position, nextStep[0], map, input, part === 2)
     x += nextStep[0].length
   }
 
@@ -697,40 +696,25 @@ const getPassword = (inputKey: string, part: 1 | 2) => {
   )
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Get the Password',
-    onClick: (inputKey: string) => ({
-      answer1: getPassword(inputKey, 1).toString(),
-    }),
-  },
-  {
-    label: 'Get the Password for the Cube',
-    onClick: (inputKey: string) => ({
-      answer2: getPassword(inputKey, 2).toString()
-    })
-  }
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The password is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The actual password for the cube is <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 22,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+const day22: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The password is answer.',
+  answer2Text: 'The actual password for the cube is answer.',
+  buttons: [
+    {
+      label: 'Get the Password',
+      onClick: (input) => ({ answer1: getPassword(input, 1) })
+    },
+    {
+      label: 'Get the Password for the Cube',
+      onClick: (input) => ({ answer2: getPassword(input, 2) })
+    },
+  ],
+  id: 22,
+  inputs,
   title: 'Monkey Map',
 }
 
-export default config
+export default day22
 
 /**
  * Notes:
