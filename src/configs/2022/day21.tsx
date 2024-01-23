@@ -1,12 +1,7 @@
-import { defaultRenderDay, IButton, IDayConfig } from '../Config'
+import inputs from '../../inputs/2022/day21'
+import { DayConfig } from '../../routes/Day'
 
-import INPUT from '../Inputs/2022/Day21'
-
-interface Monkey {
-  id: string
-  raw: string
-  value: number | Operation
-}
+type OperationSymbol = '+' | '-' | '*' | '/'
 
 interface Operation {
   monkeyA: string
@@ -14,7 +9,11 @@ interface Operation {
   symbol: OperationSymbol
 }
 
-type OperationSymbol = '+' | '-' | '*' | '/'
+interface Monkey {
+  id: string
+  raw: string
+  value: number | Operation
+}
 
 const parseMonkey = (line: string): [string, Monkey] => {
   const [id, value] = line.split(': ')
@@ -72,6 +71,14 @@ const solveMonkey = (
   }
 }
 
+export const listenToMonkeys = (input: string) => {
+  const monkeys: Map<string, Monkey> = new Map(
+    input.split('\n').map(parseMonkey)
+  )
+
+  return { answer1: solveMonkey(monkeys.get('root')!, monkeys)!.value as number }
+}
+
 const solveForMonkey = (
   monkeyId: string,
   monkeys: Map<string, Monkey>,
@@ -100,7 +107,6 @@ const solveForMonkey = (
         case '/':
           return swap ? number / accumulator : accumulator * number
       }
-      return accumulator
     }, siblingValue)
   }
   // Otherwise, add parentMonkey's operation to a list of operations to undo, and solve for the parent
@@ -115,63 +121,32 @@ const solveForMonkey = (
   }
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Listen to the Shouting Monkeys',
-    onClick: (inputKey: string) => {
-      const timerLabel = 'monkey listening timer'
-      console.time(timerLabel)
+export const shoutWithMonkeys = (input: string) => {
+  const monkeys: Map<string, Monkey> = new Map(
+    input.split('\n').map(parseMonkey)
+  )
 
-      const monkeys: Map<string, Monkey> = new Map(
-        INPUT[inputKey].split('\n').map(parseMonkey)
-      )
-
-      const answer1 = (
-        solveMonkey(monkeys.get('root')!, monkeys)!.value as number
-      ).toString()
-
-      console.timeEnd(timerLabel)
-
-      return { answer1 }
-    },
-  },
-  {
-    label: 'Shout With the Monkeys',
-    onClick: (inputKey: string) => {
-      const timerLabel = 'monkey shouting timer'
-      console.time(timerLabel)
-
-      const monkeys: Map<string, Monkey> = new Map(
-        INPUT[inputKey].split('\n').map(parseMonkey)
-      )
-
-      const answer2 = solveForMonkey('humn', monkeys).toString()
-
-      console.timeEnd(timerLabel)
-
-      return {
-        answer2
-      }
-    }
+  return {
+    answer2: solveForMonkey('humn', monkeys)
   }
-]
+}
 
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The root monkey's number is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      If you shout <code>{answer}</code>, the root monkey's equality check will pass.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 21,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+const day21: Omit<DayConfig, 'year'> = {
+  answer1Text: `The root monkey's number is answer.`,
+  answer2Text: `If you shout answer, the root monkey's equality check will pass.`,
+  buttons: [
+    {
+      label: 'Listen to the Shouting Monkeys',
+      onClick: listenToMonkeys
+    },
+    {
+      label: 'Shout With the Monkeys',
+      onClick: shoutWithMonkeys
+    },
+  ],
+  id: 21,
+  inputs,
   title: 'Monkey Math',
 }
 
-export default config
+export default day21
