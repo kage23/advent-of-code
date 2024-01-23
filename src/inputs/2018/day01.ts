@@ -1,0 +1,40 @@
+const inputs: Map<string, string> = new Map([
+  [
+    'DEMO_1',
+    `+1
+-2
++3
++1`,
+  ],
+  [
+    'DEMO_2',
+    `+1
+-1`,
+  ],
+  [
+    'DEMO_3',
+    `+3
++3
++4
+-2
+-4`,
+  ],
+  [
+    'DEMO_4',
+    `-6
++3
++8
++5
+-6`,
+  ],
+  [
+    'DEMO_5',
+    `+7
++7
+-2
+-7
+-4`,
+  ],
+])
+
+export default inputs

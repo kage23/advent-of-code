@@ -1,0 +1,11 @@
+.title {
+  font-size: 1em;
+  font-weight: normal;
+  color: #fff;
+}
+
+.cover {
+  max-width: 640px;
+  margin: 36px auto;
+  display: block;
+}

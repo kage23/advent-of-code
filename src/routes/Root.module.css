@@ -1,0 +1,43 @@
+.header {
+  margin-bottom: 2em;
+}
+
+.title {
+  font-size: 1em;
+  font-weight: normal;
+  margin: 0;
+}
+
+.link {
+  text-decoration: none;
+  color: #1e90ff;
+}
+.link:hover {
+  color: #00bfff;
+}
+
+.nav {
+  padding-left: 33px;
+}
+
+.navLabel {
+  color: #1e90ff;
+  opacity: 0.5;
+}
+
+.navSelect {
+  -webkit-appearance: none;
+  font-size: 14pt;
+  font-family: 'Source Code Pro', monospace;
+  background-color: transparent;
+  color: #1e90ff;
+  text-shadow: 0 0 2px #1e90ff, 0 0 5px #1e90ff;
+  border: none;
+}
+.navSelect:hover {
+  color: #00bfff;
+  text-shadow: 0 0 2px #00bfff, 0 0 5px #00bfff;
+}
+.navSelect:focus {
+  outline: none;
+}

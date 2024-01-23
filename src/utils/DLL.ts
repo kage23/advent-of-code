@@ -1,14 +1,14 @@
-class DLL<T = any> {
-  head: IDLLNode<T> | undefined
+class DLL<T> {
+  head: DLLNode<T> | undefined
   length: number
 
-  private map: Map<T, IDLLNode<T>>
+  private map: Map<T, DLLNode<T>>
 
   constructor(value?: T) {
-    this.map = new Map<T, IDLLNode<T>>()
+    this.map = new Map<T, DLLNode<T>>()
 
     if (typeof value !== 'undefined') {
-      const node: IDLLNode<T> = { value }
+      const node: DLLNode<T> = { value }
       node.next = node
       node.prev = node
       this.head = node
@@ -17,10 +17,10 @@ class DLL<T = any> {
     } else this.length = 0
   }
 
-  getNode = (value: T): IDLLNode<T> | undefined => this.map.get(value)
+  getNode = (value: T): DLLNode<T> | undefined => this.map.get(value)
 
-  insertAfter = (insert: T, after: IDLLNode<T>): IDLLNode<T> => {
-    const node: IDLLNode<T> = {
+  insertAfter = (insert: T, after: DLLNode<T>): DLLNode<T> => {
+    const node: DLLNode<T> = {
       value: insert,
       next: after.next,
       prev: after,
@@ -32,8 +32,8 @@ class DLL<T = any> {
     return node
   }
 
-  insertBefore = (insert: T, before: IDLLNode<T>): IDLLNode<T> => {
-    const node: IDLLNode<T> = {
+  insertBefore = (insert: T, before: DLLNode<T>): DLLNode<T> => {
+    const node: DLLNode<T> = {
       value: insert,
       prev: before.prev,
       next: before,
@@ -49,7 +49,7 @@ class DLL<T = any> {
   }
 
   push = (value: T) => {
-    const node: IDLLNode<T> = { value }
+    const node: DLLNode<T> = { value }
     if (this.head) {
       node.next = this.head
       node.prev = this.head.prev
@@ -64,7 +64,7 @@ class DLL<T = any> {
     this.length++
   }
 
-  removeNode = (node: IDLLNode<T> | undefined): IDLLNode<T> | undefined => {
+  removeNode = (node: DLLNode<T> | undefined): DLLNode<T> | undefined => {
     if (node === undefined) return undefined
 
     this.length--
@@ -85,15 +85,15 @@ class DLL<T = any> {
     }
   }
 
-  setNewHead = (node: IDLLNode<T> | undefined) => {
+  setNewHead = (node: DLLNode<T> | undefined) => {
     this.head = node
   }
 }
 
-export interface IDLLNode<T = any> {
+export interface DLLNode<T> {
   value: T
-  next?: IDLLNode<T>
-  prev?: IDLLNode<T>
+  next?: DLLNode<T>
+  prev?: DLLNode<T>
 }
 
 export default DLL

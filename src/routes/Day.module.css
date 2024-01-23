@@ -1,0 +1,121 @@
+.title {
+  font-size: 1em;
+  font-weight: normal;
+  color: #fff;
+}
+
+.link {
+  opacity: 0.5;
+  text-decoration: none;
+  color: #1e90ff;
+}
+.link:hover {
+  color: #00bfff;
+}
+
+.controlBoxes {
+  display: flex;
+}
+
+.inputSelector,
+.buttons {
+  flex-shrink: 0;
+}
+
+.label {
+  display: block;
+  line-height: 20pt;
+}
+
+.inputItem {
+  margin: 3px 1ex;
+  position: relative;
+  top: -1px;
+}
+
+.button {
+  background: none !important;
+  padding: 0 !important;
+
+  display: block;
+  border-width: 2px;
+  border-style: groove;
+  border-color: threedface;
+  border-image: initial;
+  margin: 0;
+  margin-bottom: 8px;
+  text-decoration: none;
+  color: #cccccc;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 14pt;
+  cursor: pointer;
+  text-align: center;
+  transition: background 250ms ease-in-out, transform 150ms ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.button:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+.button:active {
+  transform: scale(0.95);
+}
+
+.answers {
+  flex-grow: 1;
+}
+.answer {
+  margin-bottom: 4px;
+}
+.answerText {
+  margin: 0;
+}
+
+code {
+  font-family: 'Source Code Pro', monospace;
+  position: relative;
+}
+code:before {
+  z-index: -1;
+  content: '';
+  position: absolute;
+  display: block;
+  left: -2px;
+  right: -2px;
+  top: 3px;
+  bottom: 0px;
+  border: 1px solid #333340;
+  background: #10101a;
+}
+
+.renderBox {
+  margin: 1em 0px;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.inputDisplay {
+  overflow-x: scroll;
+}
+
+.specialRender {
+  margin-left: 24px;
+  overflow-x: scroll;
+}
+
+.inputTitle,
+.specialRender h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.input,
+.specialRender pre,
+.specialRender p {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: 'Source Code Pro', monospace;
+}
