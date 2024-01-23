@@ -1,11 +1,13 @@
-import { defaultRenderDay, IButton, IDayConfig } from '../Config'
-
-import INPUT from '../Inputs/2022/Day23'
+import inputs from '../../inputs/2022/day23'
+import { DayConfig } from '../../routes/Day'
 
 interface Move {
   from: string
   to: string
 }
+
+type Direction = 'N' | 'S' | 'W' | 'E'
+const moveOrder: Direction[] = ['N', 'S', 'W', 'E']
 
 const checkNorth = (
   [row, col]: [number, number],
@@ -80,11 +82,8 @@ const getTo = ([row, col]: [number, number], move: Direction): string => {
   }
 }
 
-type Direction = 'N' | 'S' | 'W' | 'E'
-const moveOrder: Direction[] = ['N', 'S', 'W', 'E']
-
-const positionTheElves = (inputKey: string, part: 1 | 2): number => {
-  const input = INPUT[inputKey].split('\n')
+export const positionTheElves = (inputRaw: string, part: 1 | 2): number => {
+  const input = inputRaw.split('\n')
 
   const elves = new Set<string>()
 
@@ -99,6 +98,7 @@ const positionTheElves = (inputKey: string, part: 1 | 2): number => {
 
   let firstMove = 0
   let i = 1
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     if (part === 1 && i > 10) break
     const proposedMoves: Move[] = []
@@ -202,45 +202,22 @@ const positionTheElves = (inputKey: string, part: 1 | 2): number => {
   return i
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Position the Elves',
-    onClick: (inputKey: string) => {
-      const timerLabel = 'Run ten rounds'
-      console.time(timerLabel)
-      const answer1 = positionTheElves(inputKey, 1).toString()
-      console.timeEnd(timerLabel)
-      return { answer1 }
+const day23: Omit<DayConfig, 'year'> = {
+  answer1Text: 'There is answer empty space after ten rounds.',
+  answer2Text: 'The first round where no elf moves is round answer.',
+  buttons: [
+    {
+      label: 'Position the Elves',
+      onClick: (input) => ({ answer1: positionTheElves(input, 1) })
     },
-  },
-  {
-    label: 'Fully Position the Elves',
-    onClick: (inputKey: string) => {
-      const timerLabel = 'Fully position the elves'
-      console.time(timerLabel)
-      const answer2 = positionTheElves(inputKey, 2).toString()
-      console.timeEnd(timerLabel)
-      return { answer2 }
+    {
+      label: 'Fully Position the Elves',
+      onClick: (input) => ({ answer2: positionTheElves(input, 2) })
     },
-  },
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      There is <code>{answer}</code> empty space after ten rounds.
-    </span>
-  ),
-  answer2Text: (answer) => (
-    <span>
-      The first round where no elf moves is round <code>{answer}</code>.
-    </span>
-  ),
-  buttons: BUTTONS,
-  day: 23,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+  ],
+  id: 23,
+  inputs,
   title: 'Unstable Diffusion',
 }
 
-export default config
+export default day23

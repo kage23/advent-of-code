@@ -1,7 +1,7 @@
 import inputs from '../../inputs/2022/day22'
 import { getPassword } from './day22'
 
-describe('2022 Day 21', () => {
+describe('2022 Day 22', () => {
   describe('Part 1', () => {
     it('should get the password', () => {
       expect(getPassword(inputs.get('DEMO')!, 1)).toEqual(6032)
