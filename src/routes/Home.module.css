@@ -1,0 +1,17 @@
+.title {
+  font-size: 1em;
+  font-weight: normal;
+  color: #fff;
+}
+
+.nope {
+  text-decoration: line-through;
+}
+
+.link {
+  text-decoration: none;
+  color: #1e90ff;
+}
+.link:hover {
+  color: #00bfff;
+}

@@ -3,7 +3,11 @@ class BinaryHeap<T> {
   scoreFunction: (item: T) => number
   type: 'min' | 'max'
 
-  constructor(scoreFunction: (item: T) => number, type: 'min' | 'max', head?: T) {
+  constructor(
+    scoreFunction: (item: T) => number,
+    type: 'min' | 'max',
+    head?: T
+  ) {
     this.content = []
     this.scoreFunction = scoreFunction
     this.type = type
@@ -80,6 +84,7 @@ class BinaryHeap<T> {
     const element = this.content[n]
     const score = this.scoreFunction(element)
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       // Get the child indices
       const child2N = (n + 1) * 2

@@ -1,34 +1,62 @@
 {
-  "name": "kyles-advent-of-code",
+  "name": "advent-of-code",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@types/jest": "^23.3.10",
-    "@types/md5": "^2.1.33",
-    "@types/node": "^10.12.18",
-    "@types/react": "^18.0.25",
-    "@types/react-dom": "^18.0.9",
-    "md5": "^2.2.1",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/jest": "^27.0.1",
+    "@types/md5": "^2.3.2",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "classnames": "^2.3.2",
+    "md5": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "^4.0.1",
+    "react-router-dom": "^6.6.0",
+    "react-scripts": "5.0.1",
     "source-map-explorer": "^2.5.3",
-    "typescript": "^4.9.3"
+    "typescript": "^4.4.2",
+    "web-vitals": "^2.1.0"
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "PORT=1225 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "answers": "react-scripts test --testMatch [ \"**/?(*.)+(answers).[jt]s?(x)\" ]",
+    "eject": "react-scripts eject",
+    "eslint": "eslint src/**",
+    "prettier": "prettier --write .",
+    "precommit": "yarn run prettier"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.47.0",
+    "@typescript-eslint/parser": "^5.47.0",
+    "eslint": "^8.30.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-react": "^7.31.11",
+    "husky": "^8.0.2",
+    "prettier": "2.8.1"
+  }
 }
