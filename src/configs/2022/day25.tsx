@@ -1,6 +1,5 @@
-import { defaultRenderDay, IButton, IDayConfig } from '../Config'
-
-import INPUT from '../Inputs/2022/Day25'
+import inputs from '../../inputs/2022/day25'
+import { DayConfig } from '../../routes/Day'
 
 const desnafify = (snafuNumber: string): number =>
   snafuNumber
@@ -29,13 +28,13 @@ const desnafify = (snafuNumber: string): number =>
       }
     }, 0)
 
-// / What's the biggest snafu number you can make if you have a 2 in this column?
+// What's the biggest snafu number you can make if you have a 2 in this column?
 const getBiggestWithTwo = (howManyDigits: number): number => {
   if (howManyDigits <= 0) return 0
   return 2 * 5 ** (howManyDigits - 1) + getBiggestWithTwo(howManyDigits - 1)
 }
 
-const snafify = (n: number): string => {
+const snafify = (n: number) => {
   let snafuNumber = ''
   let i = 1
   while (n > getBiggestWithTwo(i)) {
@@ -65,33 +64,28 @@ const snafify = (n: number): string => {
   return snafuNumber
 }
 
-const BUTTONS: IButton[] = [
-  {
-    label: 'Get the SNAFU Number',
-    onClick: (inputKey: string) => {
-      const snafuNumbers = INPUT[inputKey].split('\n')
-      const realNumbers = snafuNumbers.map(desnafify)
-      const sum = realNumbers.reduce((a, b) => a + b, 0)
+export const getSnafuNumber = (input: string) => {
+  const snafuNumbers = input.split('\n')
+  const realNumbers = snafuNumbers.map(desnafify)
+  const sum = realNumbers.reduce((a, b) => a + b, 0)
 
-      return {
-        answer1: snafify(sum),
-      }
+  return {
+    answer1: snafify(sum)
+  }
+}
+
+const day25: Omit<DayConfig, 'year'> = {
+  answer1Text: 'The SNAFU number is answer.',
+  answer2Text: '',
+  buttons: [
+    {
+      label: 'Get the SNAFU Number',
+      onClick: getSnafuNumber
     },
-  },
-]
-
-const config: IDayConfig = {
-  answer1Text: (answer) => (
-    <span>
-      The SNAFU number is <code>{answer}</code>.
-    </span>
-  ),
-  answer2Text: () => <span />,
-  buttons: BUTTONS,
-  day: 25,
-  INPUT,
-  renderDay: (dayConfig, inputKey) => defaultRenderDay(dayConfig, inputKey),
+  ],
+  id: 25,
+  inputs,
   title: 'Full of Hot Air',
 }
 
-export default config
+export default day25
