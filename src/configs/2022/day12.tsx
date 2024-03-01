@@ -3,7 +3,11 @@ import { DayConfig } from '../../routes/Day'
 import AStar from '../../utils/AStar'
 import manhattanDistance from '../../utils/manhattanDistance'
 
-const getAPath = (field: string[], start: [number, number], end: [number, number]) => {
+const getAPath = (
+  field: string[],
+  start: [number, number],
+  end: [number, number]
+) => {
   const getNeighbors = (current: string) => {
     const [row, col] = JSON.parse(current) as [number, number]
     const currentLetterAscii = field[row].charCodeAt(col)
@@ -11,18 +15,22 @@ const getAPath = (field: string[], start: [number, number], end: [number, number
       [row - 1, col],
       [row + 1, col],
       [row, col - 1],
-      [row, col + 1]
+      [row, col + 1],
     ]
-    return possibleNeighbors.filter(n => (
-      n[0] >= 0 && n[0] <= field.length - 1 &&
-      n[1] >= 0 && n[1] <= field[0].length - 1 &&
-      field[n[0]].charCodeAt(n[1]) <= currentLetterAscii + 1
-    )).map(x => JSON.stringify(x))
+    return possibleNeighbors
+      .filter(
+        (n) =>
+          n[0] >= 0 &&
+          n[0] <= field.length - 1 &&
+          n[1] >= 0 &&
+          n[1] <= field[0].length - 1 &&
+          field[n[0]].charCodeAt(n[1]) <= currentLetterAscii + 1
+      )
+      .map((x) => JSON.stringify(x))
   }
 
-  const h = (startKey: string, endKey: string) => {
+  const h = (startKey: string) => {
     const start = JSON.parse(startKey) as [number, number]
-    const end = JSON.parse(endKey) as [number, number]
     return manhattanDistance(start, end)
   }
 
@@ -64,7 +72,7 @@ export const findAPath = (input: string) => {
   }
 
   return {
-    answer1: getAPath(field, start, end).cost
+    answer1: getAPath(field, start, end).cost,
   }
 }
 
@@ -92,10 +100,12 @@ export const findShortestPath = (input: string) => {
     }
   }
 
-  const distances = starts.map(start => getAPath(field, start, end).cost).sort((a, b) => a - b)
+  const distances = starts
+    .map((start) => getAPath(field, start, end).cost)
+    .sort((a, b) => a - b)
 
   return {
-    answer2: distances[0]
+    answer2: distances[0],
   }
 }
 
@@ -105,11 +115,11 @@ const day12: Omit<DayConfig, 'year'> = {
   buttons: [
     {
       label: 'Find a Path',
-      onClick: findAPath
+      onClick: findAPath,
     },
     {
       label: 'Find the Shortest Path',
-      onClick: findShortestPath
+      onClick: findShortestPath,
     },
   ],
   id: 12,

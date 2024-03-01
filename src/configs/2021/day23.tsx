@@ -302,7 +302,7 @@ const getNeighbors = (state: string, part: 1 | 2): string[] => {
 }
 
 // d gives the energy cost to get from one state to an (assumed) adjacent state
-const d = (to: string, from: string): number => {
+const d = (from: string, to: string): number => {
   const fromRows = from.split('\n')
   const toRows = to.split('\n')
 

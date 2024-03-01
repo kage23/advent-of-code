@@ -15,7 +15,7 @@ const findWiresToCut = (modules: Map<string, string[]>) => {
         idI,
         idJ,
         () => 1,
-        (from: string, to: string) => (modules.get(from)!.includes(to) ? 1 : 2),
+        (from: string) => (modules.get(from)!.includes(idJ) ? 1 : 2),
         (id) => modules.get(id)!
       )
       for (let k = 0; k < path.length - 1; k++) {

@@ -2,18 +2,17 @@
 
 import BinaryHeap from './BinaryHeap'
 
-// function A_Star(start, goal, h)
 const AStar = (
   startKey: string,
   endKey: string,
   /**
    * Weight/distance to one node from another
    */
-  dFn: (to: string, from: string) => number,
+  dFn: (from: string, to: string) => number,
   /**
-   * Heuristic for estimating weight/distance from one node to another
+   * Heuristic for estimating weight/distance from one node to the end/goal
    */
-  h: (from: string, to: string) => number,
+  h: (node: string) => number,
   /**
    * Method for getting neighbor nodes from current node
    */
@@ -38,9 +37,7 @@ const AStar = (
   // how short a path from start to finish can be if it goes through n.
   // fScore := map with default value of Infinity
   // fScore[start] := h(start)
-  const fScores: Map<string, number> = new Map([
-    [startKey, h(startKey, endKey)],
-  ])
+  const fScores: Map<string, number> = new Map([[startKey, h(startKey)]])
 
   // The set of discovered nodes that may need to be (re-)expanded.
   // Initially, only the start node is known.
@@ -84,7 +81,7 @@ const AStar = (
     // for each neighbor of current
     getNeighbors(current).forEach((nKey) => {
       // d(current,neighbor) is the weight of the edge from current to neighbor
-      const d = dFn(nKey, current)
+      const d = dFn(current, nKey)
 
       // tentative_gScore is the distance from start to the neighbor through current
       // tentative_gScore := gScore[current] + d(current, neighbor)
@@ -100,7 +97,7 @@ const AStar = (
         gScores.set(nKey, tentative_gScore)
         parentNodes.set(nKey, current)
         // fScore[neighbor] := tentative_gScore + h(neighbor)
-        const fScore = tentative_gScore + h(nKey, endKey)
+        const fScore = tentative_gScore + h(nKey)
         fScores.set(nKey, fScore)
         // if neighbor not in openSet
         if (!openSet.content.includes(nKey)) {

@@ -9,15 +9,15 @@ export const findPath = (input: string) => {
   const endKey = [grid.length - 1, grid[grid.length - 1].length - 1].join(',')
 
   // Distance from current to next, ie just heat loss of next
-  const dFn = (to: string) => {
+  const dFn = (_: string, to: string) => {
     const [row, col] = to.split(',').map(Number)
     return Number(grid[row].charAt(col))
   }
 
-  // Heuristic for guessing minimum cost from a to b
-  const h = (from: string, to: string) => {
+  // Heuristic for guessing minimum cost from a to end
+  const h = (from: string) => {
     const [fr, fc] = from.split(',').map(Number)
-    const [tr, tc] = to.split(',').map(Number)
+    const [tr, tc] = endKey.split(',').map(Number)
     return manhattanDistance([fr, fc], [tr, tc])
   }
 
@@ -76,15 +76,15 @@ export const findUltraCruciblePath = (input: string) => {
   const endKey = [grid.length - 1, grid[grid.length - 1].length - 1].join(',')
 
   // Distance from current to next, ie just heat loss of next
-  const dFn = (to: string) => {
+  const dFn = (_: string, to: string) => {
     const [row, col] = to.split(',').map(Number)
     return Number(grid[row].charAt(col))
   }
 
   // Heuristic for guessing minimum cost from a to b
-  const h = (from: string, to: string) => {
+  const h = (from: string) => {
     const [fr, fc] = from.split(',').map(Number)
-    const [tr, tc] = to.split(',').map(Number)
+    const [tr, tc] = endKey.split(',').map(Number)
     return manhattanDistance([fr, fc], [tr, tc])
   }
 
