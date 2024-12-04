@@ -1,11 +1,8 @@
-import re
-
-
 def main():
   with open("src/2024/inputs/day04.txt") as file:
     lines = file.readlines()
     print(f"there are {part_1(lines)} XMASes")
-    # print(f"the result is actually {part_2("".join(lines))}")
+    print(f"there are {part_2(lines)} X-MASes")
 
 
 def part_1(lines):
@@ -13,6 +10,25 @@ def part_1(lines):
   col_count = search_cols(lines)
   diag_count = search_diags(lines)
   return row_count + col_count + diag_count
+
+
+def part_2(lines):
+  GOOD_CORNERS = ["MMSS", "MSMS", "SMSM", "SSMM"]
+  count = 0
+  a_coords = []
+  for row in range(len(lines)):
+    if row == 0 or row == len(lines) - 1:
+      continue
+    for col in range(len(lines[row])):
+      if row == 0 or row == len(lines[row]) - 1:
+        continue
+      if lines[row][col] == 'A':
+        a_coords.append((row, col))
+  for coords in a_coords:
+    corners = get_corners(coords, lines)
+    if corners in GOOD_CORNERS:
+      count += 1
+  return count
 
 
 def search_rows(lines):
@@ -72,6 +88,15 @@ def search_diags(lines):
       line += lines[m][n]
     new_lines.append(line)
   return search_rows(new_lines)
+
+
+def get_corners(coords, lines):
+  row, col = coords
+  directions = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+  corners = ""
+  for row_offset, col_offset in directions:
+    corners += lines[row + row_offset][col + col_offset]
+  return corners
 
 
 if __name__ == "__main__":
