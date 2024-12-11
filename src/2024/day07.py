@@ -20,28 +20,41 @@ def part_2(lines):
 
 
 def evaluate_line(line):
-  r, v = line.split(": ")
-  result = int(r)
-  values = list(map(int, v.split(" ")))
-  line_max = reduce(lambda a, b: a * b, values)
-  if line_max < result:
-    return 0
-  if values[0] > result:
-    return 0
-  if len(values) == 1:
-    return result if values[0] == result else 0
-  for i in range(len(values) - 1):
-    if i + 2 == len(values):
-      if values[i] + values[i + 1] == result or values[i] * values[i + 1] == result:
-        return result
-      else:
-        return 0
+  target, starting_nodes = parse_line(line)
+  search_queue = [*starting_nodes]
+  while len(search_queue) > 0:
+    node = search_queue.pop()
+    if len(node["values"]) == 1:
+      if node["values"][0] == target:
+        return target
     else:
-      plus = evaluate_line(f"{r}: {values[i] + values[i + 1]} {" ".join(list(map(str, values[2:])))}")
-      mult = evaluate_line(f"{r}: {values[i] * values[i + 1]} {" ".join(list(map(str, values[2:])))}")
-      if plus == result or mult == result:
-        return result
+      value = (node["values"][0] + node["values"][1]) if node["next_op"] == "+" else (node["values"][0] * node["values"][1])
+      new_values = [value, *node["values"][2:]]
+      search_queue.append({
+        "values": new_values,
+        "next_op": "+",
+      })
+      search_queue.append({
+        "values": new_values,
+        "next_op": "*",
+      })
   return 0
+
+
+def parse_line(line):
+  t, v = line.split(": ")
+  target = int(t)
+  values = list(map(int, v.split(" ")))
+  return target, [
+    {
+      "values": values,
+      "next_op": "+",
+    },
+    {
+      "values": values,
+      "next_op": "*",
+    }
+  ]
 
 
 if __name__ == "__main__":
