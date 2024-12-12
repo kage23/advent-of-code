@@ -16,7 +16,7 @@ def part_1(lines):
       for y in range(x+1, len(locations)):
         possible_antinodes = get_antinodes(locations[x], locations[y])
         for possible_antinode in possible_antinodes:
-          if 0 <= possible_antinode[0] < len(lines) and 0 <= possible_antinode[1] < len(lines[0]):
+          if 0 <= possible_antinode[0] < len(lines) and 0 <= possible_antinode[1] < len(lines[0].strip()):
             antinodes.add(possible_antinode)
   return len(antinodes)
 
