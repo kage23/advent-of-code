@@ -1,6 +1,3 @@
-from functools import reduce
-
-
 def main():
   with open("src/2024/inputs/day07.txt") as file:
     lines = file.readlines()
