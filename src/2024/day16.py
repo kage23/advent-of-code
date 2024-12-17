@@ -37,7 +37,7 @@ def part_2(field, target_score):
   is_end = lambda key: key.startswith(end_pos)
   search_queue = BinaryHeap(
     lambda node: node["score"],
-    "max",
+    "min",
     {
       "key": start_key,
       "score": 0,
