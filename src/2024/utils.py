@@ -10,3 +10,10 @@ def get_neighbors(plot, field=None, diags=False):
       directions
     )
   ))
+
+
+def manhattan_distance(a, b):
+  distance = 0
+  for i, x in enumerate(a):
+    distance += abs(x - b[i])
+  return distance
