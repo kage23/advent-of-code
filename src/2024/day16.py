@@ -1,6 +1,7 @@
 from AStar import a_star
 from BinaryHeap import BinaryHeap
 from utils import manhattan_distance
+from Dijkstra import Dijkstra
 
 
 def main():
@@ -28,38 +29,25 @@ def part_1(field):
   )
 
 
-def part_2(field, target_score):
+"""
+part 2 is heavily based on this implementation:
+https://github.com/scorixear/AdventOfCode/blob/main/2024/16/2.py
+"""
+def part_2(field, target_cost):
   good_seats = set()
+  dij = Dijkstra(lambda key: get_immediate_neighbors(key, field), d_fn)
   height = len(field)
   width = len(field[0])
   start_key = f"{height - 2},1,>"
   end_pos = f"1,{width - 2},"
-  is_end = lambda key: key.startswith(end_pos)
-  search_queue = BinaryHeap(
-    lambda node: node["score"],
-    "min",
-    {
-      "key": start_key,
-      "score": 0,
-      "path": [start_key]
-    },
-  )
-  while search_queue.size() > 0:
-    node = search_queue.pop()
-    if is_end(node["key"]):
-      for i in range(1, len(node["path"])):
-        for tile in in_betweens(node["path"][i-1], node["path"][i]):
-          good_seats.add(tile)
-    else:
-      for neighbor in get_neighbors(node["key"], field):
-        if neighbor not in node["path"]:
-          score = node["score"] + d_fn(node["key"], neighbor)
-          if score <= target_score:
-            search_queue.push({
-              "key": neighbor,
-              "score": score,
-              "path": [*node["path"], neighbor]
-            })
+  dij.find_path(start_key)
+  end_key = ""
+  for d in ["<", "^", ">", "v"]:
+    if dij.costs[f"{end_pos}{d}"] == target_cost:
+      end_key = f"{end_pos}{d}"
+  for node in dij.get_paths(end_key):
+    r, c, _ = node.split(",")
+    good_seats.add((r, c))
   return len(good_seats)
 
 
@@ -98,6 +86,28 @@ def get_neighbors(key, field):
   if field[next_spot[0]][next_spot[1]] != "#":
     while not is_turning_point(next_spot, field):
       next_spot = (next_spot[0] + direction[0], next_spot[1] + direction[1])
+    neighbors.append(f"{next_spot[0]},{next_spot[1]},{direction_char}")
+  return neighbors
+
+
+def get_immediate_neighbors(key, field):
+  directions = {
+    "^": (-1, 0),
+    ">": (0, 1),
+    "v": (1, 0),
+    "<": (0, -1),
+  }
+  neighbors = []
+  # We can either turn in place, or we can go straight one step
+  r, c, direction_char = key.split(",")
+  direction = directions[direction_char]
+  row, col = int(r), int(c)
+  # turn in place
+  for turn in get_turns(direction_char):
+    neighbors.append(f"{row},{col},{turn}")
+  # go straight one step
+  next_spot = (row + direction[0], col + direction[1])
+  if field[next_spot[0]][next_spot[1]] != "#":
     neighbors.append(f"{next_spot[0]},{next_spot[1]},{direction_char}")
   return neighbors
 
