@@ -1,5 +1,4 @@
-from AStar import a_star
-from BinaryHeap import BinaryHeap
+from AStar import AStar
 from utils import manhattan_distance
 from Dijkstra import Dijkstra
 
@@ -18,15 +17,13 @@ def part_1(field):
   width = len(field[0])
   start_key = f"{height - 2},1,>"
   end_pos = f"1,{width - 2},"
-  is_end = lambda key: key.startswith(end_pos)
-  return a_star(
-    start_key,
-    "",
+  a_star = AStar(
     d_fn,
     lambda key: h(key, end_pos),
     lambda key: get_neighbors(key, field),
-    is_end
+    lambda key: key.startswith(end_pos)
   )
+  return a_star.find_path(start_key)
 
 
 """
