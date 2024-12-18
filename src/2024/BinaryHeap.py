@@ -94,7 +94,3 @@ class BinaryHeap:
       self.content[n] = self.content[swap]
       self.content[swap] = element
       n = swap
-
-
-if __name__ == "__main__":
-  main()
