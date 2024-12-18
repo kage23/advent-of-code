@@ -1,3 +1,5 @@
+from math import sqrt
+
 def get_neighbors(plot, field=None, diags=False):
   directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
   if diags:
@@ -10,6 +12,12 @@ def get_neighbors(plot, field=None, diags=False):
       directions
     )
   ))
+
+
+def diagonal_distance(a, b):
+  diff_x = abs(a[0] - b[0])
+  diff_y = abs(a[1] - b[1])
+  return sqrt(diff_x ** 2 + diff_y ** 2)
 
 
 def manhattan_distance(a, b):
