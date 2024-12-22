@@ -1,5 +1,5 @@
 from AStar import AStar
-from utils import diagonal_distance, get_neighbors
+from utils import diagonal_distance, get_neighbors, manhattan_distance
 
 
 def main():
@@ -7,19 +7,15 @@ def main():
     field = file.read()
     actual_time, actual_path = find_path(field)
     print(f"there are {part_1(actual_path)} cheats that save at least 100 picoseconds")
-    # towel_list, design_list = file.read().split("\n\n")
-    # towels = towel_list.strip().split(", ")
-    # designs = design_list.split("\n")
-    # print(f"only {part_1(towels, designs)} of the designs are possible")
-    # print(f"the sum of all possible ways to make all designs is {part_2(towel_list, designs)}")
+    print(f"there are {part_2(actual_path)} longer cheats that save at least 100 picoseconds")
 
 
 def part_1(path):
   return sum(1 for c in find_cheats(path) if c[1] >= 100)
 
 
-def part_2(towel_list, designs):
-  ...
+def part_2(path):
+  return find_longer_cheats(path)
 
 
 def find_path(field):
@@ -58,6 +54,23 @@ def find_cheats(path):
         if time_saved > 0:
           cheats.append(((coord[0] + d[0], coord[1] + d[1]), time_saved))
   return cheats
+
+
+def find_longer_cheats(path):
+  pairs = []
+  for i, point_1 in enumerate(path):
+    for j in range(i + 1, len(path)):
+      point_2 = path[j]
+      path_distance = j - i
+      cheat_distance = manhattan_distance(point_1, point_2)
+      if cheat_distance <= 20 and cheat_distance < path_distance:
+        time_saved = path_distance - cheat_distance
+        pairs.append({
+          "point_1": point_1,
+          "point_2": point_2,
+          "time_saved": time_saved,
+        })
+  return sum(1 for pair in pairs if pair["time_saved"] >= 100)
 
 
 if __name__ == "__main__":
