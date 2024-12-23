@@ -30,10 +30,10 @@ ARROW_BUTTON_LOCATIONS = {
 def main():
   numpad_directions = generate_all_button_directions(NUMPAD_BUTTON_LOCATIONS, 3, 4)
   arrow_directions = generate_all_button_directions(ARROW_BUTTON_LOCATIONS, 3, 2)
-  with open("src/2024/inputs/day21.txt") as file:
+  with open("src/2024/inputs/day21-sample.txt") as file:
     codes = file.read().split("\n")
     print(f"the sum of the complexities of all codes in the list is {part_1(codes, numpad_directions, arrow_directions)}")
-    # print(f"the sum of the complexities of all codes in the list with more robots is {part_2(codes, numpad_directions, arrow_directions)}")
+    print(f"the sum of the complexities of all codes in the list with more robots is {part_2(codes, numpad_directions, arrow_directions)}")
 
 
 def part_1(codes, numpad_directions, arrow_directions):
@@ -54,7 +54,17 @@ def part_1(codes, numpad_directions, arrow_directions):
 
 
 def part_2(codes, numpad_directions, arrow_directions):
-  ...
+  final_sum = 0
+  for code in codes:
+    targets = [code]
+    for i in range(3):
+      for t in targets:
+        paths = get_robot_instructions(t, numpad_directions if i == 0 else arrow_directions)
+        targets = paths
+    final_path_length = min(list(map(lambda p: len(p), targets)))
+    complexity = final_path_length * int(code[:-1])
+    final_sum += complexity
+  return final_sum
 
 
 def get_robot_instructions(code, button_directions):
