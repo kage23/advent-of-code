@@ -33,7 +33,7 @@ def main():
   with open("src/2024/inputs/day21.txt") as file:
     codes = file.read().split("\n")
     print(f"the sum of the complexities of all codes in the list is {part_1(codes, numpad_directions, arrow_directions)}")
-    # print(f"the sum of all possible ways to make all designs is {part_2(towel_list, designs)}")
+    # print(f"the sum of the complexities of all codes in the list with more robots is {part_2(codes, numpad_directions, arrow_directions)}")
 
 
 def part_1(codes, numpad_directions, arrow_directions):
@@ -53,7 +53,7 @@ def part_1(codes, numpad_directions, arrow_directions):
   return final_sum
 
 
-def part_2(towel_list, designs):
+def part_2(codes, numpad_directions, arrow_directions):
   ...
 
 
