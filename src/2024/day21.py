@@ -1,6 +1,3 @@
-from functools import cache
-
-
 NUMPAD_DIRECTIONS = {
   ("A", "A"): "A",
   ("A", "0"): "<A",
@@ -156,7 +153,7 @@ ARROW_DIRECTIONS = {
 
 
 def main():
-  with open("src/2024/inputs/day21-sample.txt") as file:
+  with open("src/2024/inputs/day21.txt") as file:
     codes = file.read().split("\n")
     print(f"the sum of the complexities of all codes in the list is {part_1(codes)}")
     print(f"the sum of the complexities of all codes in the list with more robots is {part_2(codes)}")
@@ -176,53 +173,47 @@ def part_1(codes):
 def part_2(codes):
   final_sum = 0
   for code in codes:
-    robot_path = get_robot_instructions(code, "numpad")
+    numpad_robot_path = get_robot_instructions(code, "numpad")
+    robot_moves = get_moves_from_path(numpad_robot_path)
     for _ in range(25):
-      robot_path = get_robot_instructions(robot_path, "arrow")
-    complexity = len(robot_path) * int(code[:-1])
+      robot_moves = get_next_moves_from_moves(robot_moves)
+    path_length = 0
+    for path, count in robot_moves.items():
+      path_length += len(path) * count
+    complexity = path_length * int(code[:-1])
     final_sum += complexity
   return final_sum
 
 
-# def build_key_sequence(keys, index, prev_key, curr_path, result):
-#   # print(f"build_key_sequence for {keys}")
-#   if index == len(keys):
-#     # print(f"final return: {[*result, curr_path]}")
-#     return [*result, curr_path]
-#   result_to_flatten = list(map(
-#     lambda path: build_key_sequence(keys, index + 1, keys[index], curr_path + path + 'A', result),
-#     ARROW_DIRECTIONS[(prev_key, keys[index])]
-#   ))
-#   # print(f"in progress return: {[x for xs in result_to_flatten for x in xs]}")
-#   return [x for xs in result_to_flatten for x in xs]
+def get_moves_from_path(path):
+  moves = {}
+  robot_moves = list(map(lambda p: f"{p}A", path.split("A")[:-1]))
+  for move in robot_moves:
+    count = moves[move] if move in moves else 0
+    moves[move] = count + 1
+  return moves
 
 
-# def get_shortest_sequence(keys, depth, cache):
-#   if depth == 0:
-#     if keys == "A":
-#       # print(f"get_shortest_sequence {keys} depth zero return: {0}")
-#       return 0
-#     # print(f"get_shortest_sequence {keys} depth zero return: {len(keys)}")
-#     return len(keys)
-#   if (keys, depth) in cache:
-#     # print(f"get_shortest_sequence {keys} cache return: {cache[(keys, depth)]}")
-#     return cache[(keys, depth)]
-#   sub_keys = keys.strip().split("A")
-#   total = 0
-#   for sub_key in sub_keys:
-#     sub_key += "A"
-#     sequences = build_key_sequence(sub_key, 0, "A", "", [], arrow_directions)
-#     minimum = min(map(
-#       lambda s: get_shortest_sequence(s, depth - 1, cache, arrow_directions),
-#       sequences
-#     ))
-#     total += minimum
-#   cache[(keys, depth)] = total
-#   # print(f"get_shortest_sequence {keys} normal return: {total}")
-#   return total
+def get_next_moves_from_moves(from_moves):
+  next_moves = {}
+  for path, count in from_moves.items():
+    moves = get_moves_from_path(path)
+    for move, sub_count in moves.items():
+      next_robot_moves = get_next_moves(move)
+      for next_move, next_count in next_robot_moves.items():
+        pending_count = next_moves[next_move] if next_move in next_moves else 0
+        next_moves[next_move] = pending_count + (next_count * sub_count * count)
+  return next_moves
+
+def get_next_moves(move):
+  path = ""
+  for i, char in enumerate(move):
+    prev = "A" if i == 0 else move[i - 1]
+    path += ARROW_DIRECTIONS[(prev, char)]
+  next_moves = get_moves_from_path(path)
+  return next_moves
 
 
-@cache
 def get_robot_instructions(code, button_type):
   button_directions = NUMPAD_DIRECTIONS if button_type == "numpad" else ARROW_DIRECTIONS
   path = ""
@@ -230,18 +221,6 @@ def get_robot_instructions(code, button_type):
     from_key = code[i-1] if i != 0 else "A"
     path += button_directions[(from_key, to_key)]
   return path
-
-
-# def fewest_move_sequences(paths):
-#   moves = {}
-#   for path in paths:
-#     path_moves = 0
-#     for i in range(1, len(path)):
-#       if path[i] != path[i - 1]:
-#         path_moves += 1
-#     moves[",".join(path)] = path_moves
-#   fewest_moves = min(moves.values())
-#   return list(filter(lambda p: moves[",".join(p)] == fewest_moves, paths))
 
 
 if __name__ == "__main__":
