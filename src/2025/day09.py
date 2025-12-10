@@ -1,5 +1,5 @@
 def main():
-    with open("./inputs/day09-sample.txt") as file:
+    with open("./inputs/day09.txt") as file:
         coords = file.readlines()
     part_1(coords)
     part_2(coords)
@@ -16,8 +16,6 @@ def part_1(coords):
     print(f"part 1: the largest rectangle area is {areas.pop()}")
 
 
-# not 4738108384
-# not 4582310446 - too high
 def part_2(coords):
     tiles = list(map(lambda line: list(map(int, line.split(','))), coords))
     areas = []
@@ -31,11 +29,26 @@ def part_2(coords):
             if (
                 is_contained(tile3, tiles) and
                 is_contained(tile4, tiles) and
+                all(is_on_or_outside(tile, [tile1, tile3, tile2, tile4]) for tile in tiles) and
                 no_crossing_lines(rectangle_lines, shape_lines)
             ):
                 areas.append(get_area(tile1, tile2))
     areas.sort()
     print(f"part 2: the largest contained rectangle area is {areas.pop()}")
+
+
+def is_on_or_outside(tile, shape):
+    if not is_contained(tile, shape):
+        return True
+    shape_lines = get_lines(shape)
+    return any(on_the_line(tile, line) for line in shape_lines)
+
+
+def on_the_line(tile, line):
+    is_vertical = len(line['x']) == 1
+    if is_vertical:
+        return tile[0] == line['x'][0] and line['y'][0] <= tile[1] <= line['y'][1]
+    return tile[1] == line['y'][0] and line['x'][0] <= tile[0] <= line['x'][1]
 
 
 def get_area(t_1, t_2):
@@ -62,8 +75,8 @@ def is_contained(tile, tiles):
 def not_in(tile, tile1, tile2, tile3, tile4):
     if tile == tile1 or tile == tile2 or tile == tile3 or tile == tile4:
         return True
-    xs = set([tile1[0], tile2[0], tile3[0], tile4[0]])
-    ys = set([tile1[1], tile2[1], tile3[1], tile4[1]])
+    xs = {tile1[0], tile2[0], tile3[0], tile4[0]}
+    ys = {tile1[1], tile2[1], tile3[1], tile4[1]}
     if (
         (tile[0] in xs and min(ys) <= tile[1] <= max(ys)) or
         (tile[1] in ys and min(xs) <= tile[0] <= max(xs))
@@ -81,6 +94,8 @@ def get_lines(coords):
         prev_coord = coords[i - 1]
         line = { 'x': list({prev_coord[0], coord[0]}), 'y': list({prev_coord[1], coord[1]}) }
         if len(line['x']) > 1 or len(line['y']) > 1:
+            line['x'].sort()
+            line['y'].sort()
             str_line = str(line)
             if str_line not in lines:
                 lines.append(str_line)
@@ -101,10 +116,10 @@ def they_cross(l1, l2):
     if l1_is_vertical == l2_is_vertical:
         return False
     if l1_is_vertical:
-        return min(l2['x']) < l1['x'][0] + 0.1 < max(l2['x'])
+        return min(l1['y']) < l2['y'][0] < max(l1['y']) and l2['x'][0] < l1['x'][0] < l2['x'][1]
     else:
-        return min(l2['y']) < l1['y'][0] + 0.1 < max(l2['y'])
+        return min(l2['y']) < l1['y'][0] < max(l2['y']) and l1['x'][0] < l2['x'][0] < l1['x'][1]
 
 
 if __name__ == "__main__":
-  main()
+    main()
