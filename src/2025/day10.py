@@ -4,7 +4,7 @@ import z3
 def main():
     with open("./inputs/day10.txt") as file:
         lines = file.readlines()
-    # part_1(lines)
+    part_1(lines)
     part_2(lines)
 
 
