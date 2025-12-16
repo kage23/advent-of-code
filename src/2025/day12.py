@@ -157,6 +157,21 @@ def can_present_go_here(present, region, w, h):
     return True
 
 
+def can_fit_presents_r(region, presents_list):
+    if sum(region['p']) == 0:
+        return True
+
+    present = None
+    for i, p in enumerate(region['p']):
+        if p > 0:
+            present = presents_list[i]
+            region['p'][i] -= 1
+            break
+
+    possible_fits = get_possible_fits(present, region)
+    ...
+
+
 def can_fit_presents(region, presents_list, i):
     print(f"testing region {i}")
 
@@ -201,17 +216,35 @@ def get_space_remaining(r):
     field = r.split('\n')
     if piece_count == 0:
         return len(field) * len(field[0])
-    space_remaining = 0
-    relevant_area = get_relevant_area(r)
+
+    groups = get_groups(field)
+
+    return sum([len(g) for g in groups if len(g) >= 5])
+
+
+def get_groups(field):
+    groups = []
+    visited = set()
+
     for wi in range(len(field[0])):
-        if wi < relevant_area['w'][1] - 2:
-            relevant_hi = [relevant_area['h'][1] - 2, len(field)]
-        else:
-            relevant_hi = [0, len(field)]
-        for hi in range(*relevant_hi):
-            if field[hi][wi] == '.':
-                space_remaining += 1
-    return space_remaining
+        for hi in range(len(field)):
+            key = f'{wi},{hi}'
+            if key not in visited:
+                visited.add(key)
+                if field[hi][wi] == '.':
+                    group = [key]
+                    for node in group:
+                        w, h = [int(n) for n in node.split(',')]
+                        neighbors = [[w - 1, h], [w + 1, h], [w, h - 1], [w, h + 1]]
+                        for n in neighbors:
+                            nwi, nhi = n
+                            n_key = f'{nwi},{nhi}'
+                            if 0 <= nwi < len(field[0]) and 0 <= nhi < len(field) and n_key not in visited:
+                                visited.add(n_key)
+                                if field[nhi][nwi] == '.':
+                                    group.append(n_key)
+                    groups.append(group)
+    return groups
 
 
 def get_possible_fits(present, region):
