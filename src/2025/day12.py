@@ -1,9 +1,9 @@
-from math import sqrt
+from math import floor, sqrt
 from functools import cache
 
 
 def main():
-    with open("./inputs/day12-sample.txt") as file:
+    with open("./inputs/day12.txt") as file:
         regions, presents_list = parse_input(file.read())
     part_1(regions, presents_list)
 
@@ -173,7 +173,22 @@ def can_fit_presents_r(region, presents_list):
 
 
 def can_fit_presents(region, presents_list, i):
-    print(f"testing region {i}")
+    # print(f"testing region {i}")
+
+    presents_size = sum([pc * presents_list[pi]['piece_count'] for pi, pc in enumerate(region['p'])])
+    region_size = region['h'] * region['w']
+
+    if presents_size > region_size:
+        print(f"region {i}: trivial no")
+        return False
+
+    loosely_packed_present_spaces_in_region = floor(region['w'] / 3) * floor(region['h'] / 3)
+
+    if sum(region['p']) <= loosely_packed_present_spaces_in_region:
+        print(f"region {i}: trivial yes")
+        return True
+
+    print(f'calculating region {i}...')
 
     presents = []
 
@@ -199,6 +214,7 @@ def can_fit_presents(region, presents_list, i):
             )
             if possible_fits:
                 if len(node['remaining_present_ids']) == 1:
+                    print(f'region {i}: calculated yes')
                     return True
                 queue = [
                     *queue,
@@ -208,6 +224,7 @@ def can_fit_presents(region, presents_list, i):
                     } for pf in possible_fits],
                 ]
 
+    print(f'region {i}: calculated no')
     return False
 
 
